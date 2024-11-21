@@ -1,0 +1,20 @@
+<app-mixin-prototype-card-section [className]="'flex flex-col gap-2'">
+    <div class="flex flex-row gap-2 overflow-hidden">
+        <app-cover-image src="" className="w-16 h-16 min-w-16 min-h-16 border border-gray-900 overflow-hidden" />
+        <div class="flex flex-col gap-2 grow overflow-hidden justify-between">
+            <div class="text-sm text-medium overflow-hidden truncate">
+                {{ data.originalFileName }}
+            </div>
+            <app-mixin-button
+                className="ml-auto justify-center"
+                [buttonAttrs]="{
+                    type: 'button'
+                }"
+                (click)="onDelete.emit(data.generatedFileName)"
+                [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }"
+            >
+                Remove
+            </app-mixin-button>
+        </div>
+    </div>
+</app-mixin-prototype-card-section>

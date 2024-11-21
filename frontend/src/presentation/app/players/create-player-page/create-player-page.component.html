@@ -1,0 +1,34 @@
+<div class="mixin-content-grid p-4">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" class="flex flex-col gap-2 w-full shrink-0">
+        <!-- Start Form Fields -->
+        <app-form-field [name]="'name'">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                ></app-char-field>
+            </ng-template>
+        </app-form-field>
+
+        <app-form-field [name]="'images'">
+            <ng-template let-name="name">
+                <app-image-upload-field [formControlName]="name" [onSubmit]="uploadImages" />
+            </ng-template>
+        </app-form-field>
+        <!-- End Form Fields -->
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-base',
+                theme: 'theme-button-generic-green'
+            }"
+            [buttonAttrs]="{
+                type: 'submit'
+            }"
+        >
+            Submit
+        </app-mixin-button>
+    </form>
+</div>

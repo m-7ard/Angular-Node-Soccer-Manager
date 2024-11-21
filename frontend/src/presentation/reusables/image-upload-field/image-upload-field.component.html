@@ -1,0 +1,31 @@
+<app-mixin-prototype-card [options]="{ size: 'mixin-Pcard-base', theme: 'theme-Pcard-generic-white' }">
+    <app-mixin-prototype-card-section>
+        <app-mixin-button
+            [className]="'w-fit overflow-hidden relative'"
+            [buttonAttrs]="{
+                type: 'button'
+            }"
+            [options]="{
+                size: 'mixin-button-sm',
+                theme: 'theme-button-generic-white'
+            }"
+        >
+            <input
+                type="file"
+                multiple
+                class="opacity-0 absolute inset-0 cursor-pointer file:cursor-pointer h-full w-full"
+                (change)="uploadImages($event)"
+            />
+            <div className="pointer-events-none">Upload Images</div>
+        </app-mixin-button>
+    </app-mixin-prototype-card-section>
+    <ng-container *ngFor="let kv of value | keyvalue">
+        <div>
+            <app-image-upload-field-item 
+                [data]="kv.value"
+                [errors]="[]" 
+                (onDelete)="onDelete($event)"
+            />
+        </div>
+    </ng-container>
+</app-mixin-prototype-card>

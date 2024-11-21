@@ -1,0 +1,11 @@
+<button 
+    #buttonRef 
+    [attr.data-active]="isActive" 
+    [ngClass]="['mixin-button-like', options.size, options.theme, className].join(' ')" 
+    [type]="buttonAttrs?.type"
+    [disabled]="buttonAttrs?.disabled"
+    [title]="buttonAttrs?.title"
+    [ariaLabel]="buttonAttrs?.ariaLabel"
+>
+    <ng-content></ng-content>
+</button>

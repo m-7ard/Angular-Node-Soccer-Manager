@@ -1,0 +1,36 @@
+<div class="mixin-page-like mixin-page-base mixin-content-grid">
+    <div data-track="base" class="flex flex-col gap-[inherit]">
+        <header>
+            <div class="text-2xl">All Players</div>
+        </header>
+        <div class="grid grid-cols-4 gap-x-2 gap-y-4">
+            <ng-container *ngFor="let player of players">
+                <app-mixin-prototype-card>
+                    <div>
+                        <app-mixin-prototype-card-section className="flex flex-col gap-1">
+                            <div class="w-full aspect-square relative bg-gray-300 border border-gray-900">
+                                <app-cover-image src=""></app-cover-image>
+                            </div>
+                            <div class="font-bold">
+                                {{ player.name }}
+                            </div>
+                        </app-mixin-prototype-card-section>
+                    </div>
+                    <div>
+                        <app-mixin-prototype-card-section className="flex flex-col gap-1">
+                            <app-mixin-button
+                                [options]="{
+                                    theme: 'theme-button-generic-white',
+                                    size: 'mixin-button-base'
+                                }"
+                                className="w-full justify-center"
+                            >
+                                Update
+                            </app-mixin-button>
+                        </app-mixin-prototype-card-section>
+                    </div>
+                </app-mixin-prototype-card>
+            </ng-container>
+        </div>
+    </div>
+</div>

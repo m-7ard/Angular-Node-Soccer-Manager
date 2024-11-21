@@ -1,0 +1,15 @@
+<ng-content></ng-content>
+
+@if (isOpen) {
+    <div
+        #tooltipPanel
+        [style.position]="'fixed'"
+        [style.top.px]="tooltipPosition.top"
+        [style.left.px]="tooltipPosition.left"
+        [style.zIndex]="1000"
+    >
+        <app-abstract-tooltip-panel>
+            <ng-content select="app-abstract-tooltip-panel"></ng-content>
+        </app-abstract-tooltip-panel>
+    </div>
+}

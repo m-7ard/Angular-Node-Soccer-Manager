@@ -1,0 +1,71 @@
+<div class="mixin-page-like mixin-page-base mixin-content-grid">
+    <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
+        <div class="text-xl">All Teams</div>
+        <a href="/teams/create">
+            <app-mixin-button
+                [options]="{
+                    theme: 'theme-button-generic-green',
+                    size: 'mixin-button-sm'
+                }"
+            >
+                Create
+            </app-mixin-button>
+        </a>
+    </header>
+    <div data-track="base" class="flex flex-col gap-[inherit]">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-x-2 gap-y-4">
+            <ng-container *ngFor="let team of teams">
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-1">
+                        <div class="w-full aspect-square relative bg-gray-300 border border-gray-900">
+                            <app-cover-image src=""></app-cover-image>
+                        </div>
+                        <div class="font-bold">
+                            {{ team.name }}
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <app-mixin-button
+                            [options]="{
+                                theme: 'theme-button-generic-green',
+                                size: 'mixin-button-sm'
+                            }"
+                            className="w-full justify-center"
+                        >
+                            Update
+                        </app-mixin-button>
+                        <app-mixin-button
+                            [options]="{
+                                theme: 'theme-button-generic-white',
+                                size: 'mixin-button-sm'
+                            }"
+                            className="w-full justify-center"
+                        >
+                            See Players
+                        </app-mixin-button>
+                        <a [href]="'/teams/' + team.id + '/add-player'">
+                            <app-mixin-button
+                                [options]="{
+                                    theme: 'theme-button-generic-yellow',
+                                    size: 'mixin-button-sm'
+                                }"
+                                className="w-full justify-center"
+                            >
+                                Add Player
+                            </app-mixin-button>
+                        </a>
+                        <app-mixin-button
+                            [options]="{
+                                theme: 'theme-button-generic-red',
+                                size: 'mixin-button-sm'
+                            }"
+                            className="w-full justify-center"
+                        >
+                            Delete
+                        </app-mixin-button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
