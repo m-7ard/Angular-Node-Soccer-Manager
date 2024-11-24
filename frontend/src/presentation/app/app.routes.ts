@@ -6,6 +6,8 @@ import { CreatePlayerPageComponent } from './players/create-player-page/create-p
 import { CreateTeamPageComponent } from './teams/create-team-page/create-team-page.component';
 import { ListTeamsPageResolver } from './teams/list-teams-page/list-teams-page.resolver';
 import { ListTeamsPageComponent } from './teams/list-teams-page/list-teams-page.component';
+import { CreateTeamMembershipPageComponent } from './teams/create-team-membership-page/create-team-membership-page.component';
+import { NotFoundPageComponent } from './other/not-found-page/not-found-page.component';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -30,5 +32,13 @@ export const routes: Routes = [
     {
         path: 'teams/create',
         component: CreateTeamPageComponent,
+    },
+    {
+        path: 'teams/:id/create-membership',
+        component: CreateTeamMembershipPageComponent,
+    },
+    {
+        path: 'not-found',
+        component: NotFoundPageComponent,
     },
 ];

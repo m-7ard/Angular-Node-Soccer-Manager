@@ -6,6 +6,7 @@ import { MixinPrototypeCardComponent } from '../../../ui-mixins/mixin-prototype-
 import { MixinPrototypeCardSectionComponent } from '../../../ui-mixins/mixin-prototype-card/mixin-prototype-card-section/mixin-prototype-card-section.component';
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import Player from '../../../models/Player';
+import { IListPlayersResolverData } from './list-players-page.resolver';
 
 @Component({
     selector: 'app-list-players-page',
@@ -26,7 +27,8 @@ export class ListPlayersPageComponent {
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            this.players = resolverData['players'];
+            const data = resolverData as IListPlayersResolverData;
+            this.players = data.players;
         });
     }
 }

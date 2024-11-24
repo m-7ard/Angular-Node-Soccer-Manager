@@ -1,8 +1,7 @@
 interface ICreatePlayerRequestDTO {
     name: string;
+    activeSince: Date;
     number: number;
-    teamId: string;
-    images: string[];
 }
 
 export default ICreatePlayerRequestDTO;

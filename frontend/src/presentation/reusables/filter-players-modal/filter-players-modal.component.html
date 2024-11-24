@@ -1,0 +1,12 @@
+<app-modal>
+    <div class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+        <header class="flex flex-row items-center gap-[inherit]">
+            <div class="text-xl">
+                Filter Players
+            </div>
+            <app-mixin-button (click)="this.modalComponent.close()" [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }">
+                Close
+            </app-mixin-button>
+        </header>
+    </div>
+</app-modal>

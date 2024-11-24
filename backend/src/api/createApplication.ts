@@ -9,15 +9,11 @@ import playersRouter from "./routers/playersRouter";
 import PlayerRepository from "infrastructure/repositories/PlayerRepository";
 import cors from "cors";
 
-export default function createApplication(config: {
-    port: number;
-    middleware: Array<(req: Request, res: Response, next: NextFunction) => void>;
-    database: IDatabaseService;
-}) {
+export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService }) {
     const { database } = config;
     const app = express();
-    app.options('*', cors());
-    console.log("----------------------------")
+    app.options("*", cors());
+    console.log("----------------------------");
     app.use(cors());
 
     // Database
@@ -33,6 +29,9 @@ export default function createApplication(config: {
 
     app.use(express.json({ limit: 1028 ** 2 * 100 }));
     app.use(express.urlencoded({ extended: false }));
+    config.middleware.forEach((middleware) => {
+        app.use(middleware);
+    });
 
     // const router = Router();
     // router.get("/", (req, res) => {

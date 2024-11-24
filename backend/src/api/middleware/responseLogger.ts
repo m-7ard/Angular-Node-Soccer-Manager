@@ -3,9 +3,9 @@ import { NextFunction, Request, Response } from "express";
 function responseLogger(req: Request, res: Response, next: NextFunction) {
     res.on("finish", function () {
         const timestamp = `\x1b[33m${new Date().toLocaleTimeString()}\x1b[0m`;
-        const statusCode = `\x1b[34m${res.status}\x1b[0m`;
+        const statusCode = `\x1b[34m${res.statusCode}\x1b[0m`;
         const method = req.method;
-        const url = req.url;
+        const url = req.originalUrl;
         const logMessage = `[${timestamp}] ${method} ${url} ${statusCode}`;
 
         console.log(logMessage);

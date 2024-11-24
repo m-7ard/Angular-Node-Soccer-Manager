@@ -1,7 +1,6 @@
 import {
     Directive,
     Input,
-    OnInit,
     ElementRef,
     ViewContainerRef,
     HostListener,
@@ -16,8 +15,7 @@ import fitFixedContainer from '../../utils/fixedContainers/fitFixedContainer';
     standalone: true,
 })
 export class PopoverTriggerDirective {
-    @Input()
-    public popoverTrigger!: Type<any>;
+    @Input('targetComponent') public targetComponent!: Type<any>;
 
     private targetRef: ComponentRef<any> | null = null;
 
@@ -61,7 +59,7 @@ export class PopoverTriggerDirective {
             return;
         }
 
-        this.targetRef = this.viewContainer.createComponent(this.popoverTrigger);
+        this.targetRef = this.viewContainer.createComponent(this.targetComponent);
 
         this.placeTooltip();
         window.addEventListener('resize', this.placeTooltip);

@@ -22,11 +22,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 interface IFormValue {
     name: string;
-    dateFounded: Date;
-    image: ImageUploadValue;
+    dateFounded: string;
+    number: string;
 }
 
-type ICreateTeamErrorSchema = IPresentationError<{
+type IErrorSchema = IPresentationError<{
     dateFounded: string[];
     name: string[];
 }>;
@@ -48,7 +48,7 @@ type ICreateTeamErrorSchema = IPresentationError<{
 export class CreateTeamPageComponent implements OnInit {
     form!: FormGroup;
     protected TestPopver = TestPopver;
-    errors: ICreateTeamErrorSchema = {};
+    errors: IErrorSchema = {};
 
     constructor(
         private fb: FormBuilder,
@@ -60,6 +60,7 @@ export class CreateTeamPageComponent implements OnInit {
         this.form = this.fb.group({
             name: new FormControl('', [Validators.required]),
             dateFounded: new FormControl('', [Validators.required]),
+            number: new FormControl('', [Validators.required])
         });
     }
 
@@ -81,7 +82,7 @@ export class CreateTeamPageComponent implements OnInit {
     }
 
     onSubmit(): void {
-        const value: IFormValue = this.form.value;
+        const value = this.form.value;
 
         const requestObserver = this._teamDataAccess.createTeam({
             dateFounded: value.dateFounded,

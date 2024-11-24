@@ -19,7 +19,7 @@ export class ListTeamsPageResolver implements Resolve<Team[]>, OnInit {
         console.log('balls onInit -->', this.route.snapshot.data['teams']);
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Team[]> {
+    resolve(route: ActivatedRouteSnapshot): Observable<Team[]> {
         return this._teamDataAccess.listTeams().pipe(
             map((response) => {
                 return response.teams.map((team) => {

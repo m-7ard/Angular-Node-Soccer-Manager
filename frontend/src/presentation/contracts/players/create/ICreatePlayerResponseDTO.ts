@@ -1,5 +1,5 @@
-interface ICreatePlayerRespondDTO {
+interface ICreatePlayerResponseDTO {
     id: string;
 }
 
-export default ICreatePlayerRespondDTO;
+export default ICreatePlayerResponseDTO;

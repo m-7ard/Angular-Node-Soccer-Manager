@@ -1,4 +1,4 @@
-import ICompactTeamApiModel from "../../../app/apiModels/ICompactTeamApiModel";
+import ICompactTeamApiModel from "../../../apiModels/ICompactTeamApiModel";
 
 interface IListTeamsResponseDTO {
     teams: ICompactTeamApiModel[]

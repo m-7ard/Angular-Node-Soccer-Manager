@@ -1,52 +1,92 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { catchError, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
+import IPresentationError from '../../../errors/IPresentationError';
+import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { GeneratedFileName, ImageUploadFieldComponent, ImageUploadValue, RequiredImageData } from '../../../reusables/image-upload-field/image-upload-field.component';
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
+import { CommonModule } from '@angular/common';
+import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { ImageUploadFieldComponent } from '../../../reusables/image-upload-field/image-upload-field.component';
+import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trigger.directive';
+import parsers from '../../../utils/parsers';
+
+interface IFormControls {
+    name: FormControl<string>;
+    activeSince: FormControl<string>;
+    number: FormControl<string>;
+}
+
+type IErrorSchema = IPresentationError<{
+    name: string[];
+    activeSince: string[];
+    number: string[];
+}>;
 
 @Component({
-  selector: 'app-create-player-page',
-  standalone: true,
-  imports: [ReactiveFormsModule, CharFieldComponent, FormFieldComponent, ImageUploadFieldComponent, MixinButtonComponent],
-  templateUrl: './create-player-page.component.html',
+    selector: 'app-create-player-page',
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        ImageUploadFieldComponent,
+        MixinButtonComponent,
+        CommonModule,
+        PopoverTriggerDirective,
+    ],
+    templateUrl: './create-player-page.component.html',
 })
 export class CreatePlayerPageComponent {
-    form: FormGroup = null!;
+    form: FormGroup<IFormControls>;
+    errors: IErrorSchema = {};
 
-    constructor(private fb: FormBuilder) {}
-
-    async uploadImages(files: File[]) {
-        const uploadedImages: RequiredImageData[] = [];
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const generatedFileName = `${crypto.randomUUID()}.jpg`;
-
-            uploadedImages.push({
-                generatedFileName: generatedFileName as GeneratedFileName,
-                originalFileName: file.name,
-                url: '/assets/' + generatedFileName,
-            });
-        }
-
-        return uploadedImages;
-    }
-
-    ngOnInit(): void {
-        this.form = this.fb.group({
-            name: new FormControl<string>('60', []),
-            images: new FormControl<ImageUploadValue>(new Map(), []),
-        });
-
-        this.form.get('name')?.valueChanges.subscribe((value) => {
-            console.log('Char field value changed:', value);
+    constructor(
+        private router: Router,
+        private playerDataAccess: PlayerDataAccessService,
+    ) {
+        this.form = new FormGroup<IFormControls>({
+            name: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
+            activeSince: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
+            number: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
         });
     }
 
     onSubmit(): void {
-        if (this.form.valid) {
-            console.log('Form submitted:', this.form.value);
-        }
+        const rawValue = this.form.getRawValue();
+        
+        this.playerDataAccess
+            .createPlayer({
+                activeSince: parsers.parseDateOrElse(rawValue.activeSince, null),
+                name: rawValue.name,
+                number: parseInt(rawValue.number),
+            })
+            .pipe(
+                catchError((err: HttpErrorResponse) => {
+                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    return of(null);
+                }),
+            )
+            .subscribe({
+                next: (response) => {
+                    if (response === null) {
+                        return;
+                    }
+                    this.router.navigate(['/players']);
+                },
+            });
     }
 }

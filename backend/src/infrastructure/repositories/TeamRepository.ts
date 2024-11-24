@@ -80,7 +80,6 @@ class TeamRepository implements ITeamRepository {
     }
 
     async findAllAsync(): Promise<Team[]> {
-        // TODO: implement criteria
         const sqlEntry = sql`SELECT * FROM team`;
         const rows = await this._db.execute<ITeamSchema>({
             statement: sqlEntry.sql,

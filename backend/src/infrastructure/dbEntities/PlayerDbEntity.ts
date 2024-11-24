@@ -2,16 +2,16 @@ import IPlayerSchema, { IPlayerRelations } from "infrastructure/dbSchemas/IPlaye
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 
 class PlayerDbEntity implements IPlayerSchema, IPlayerRelations {
-    constructor(props: { id: string; name: string; active_since: Date; number: number; }) {
+    constructor(props: { id: string; name: string; activeSince: Date; number: number; }) {
         this.id = props.id;
         this.name = props.name;
-        this.active_since = props.active_since;
+        this.activeSince = props.activeSince;
         this.number = props.number;
     }
 
     public id: string;
     public name: string;
-    public active_since: Date;
+    public activeSince: Date;
     public number: number;
     public team_memberships: ITeamMembershipSchema[] = [];
 }

@@ -53,10 +53,6 @@ class CreateTeamAction implements IAction<ActionRequest, ActionResponse> {
 
 
     bind(request: Request): ActionRequest {
-        console.log("request.body.dateFounded")
-        console.log(new Date(request.body.dateFounded))
-        console.log(request.body.dateFounded)
-        console.log("request.body.dateFounded")
         return {
             dto: {
                 name: request.body.name,

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AbstractTooltipComponent } from './abstract-tooltip.component';
+import { NotFoundPageComponent } from './not-found-page.component';
 
-describe('AbstractTooltipComponent', () => {
-  let component: AbstractTooltipComponent;
-  let fixture: ComponentFixture<AbstractTooltipComponent>;
+describe('NotFoundPageComponent', () => {
+  let component: NotFoundPageComponent;
+  let fixture: ComponentFixture<NotFoundPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AbstractTooltipComponent]
+      imports: [NotFoundPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AbstractTooltipComponent);
+    fixture = TestBed.createComponent(NotFoundPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

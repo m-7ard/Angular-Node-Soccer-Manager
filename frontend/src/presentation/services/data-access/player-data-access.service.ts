@@ -1,48 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import Player from '../../models/Player';
+import { HttpClient } from '@angular/common/http';
+import IListPlayersResponseDTO from '../../contracts/players/list/IListPlayersResponseDTO';
 import ICreatePlayerRequestDTO from '../../contracts/players/create/ICreatePlayerRequestDTO';
-
-const createPlayer = (seed: number) => {
-    return new Player({
-        id: crypto.randomUUID(),
-        name: `player_${seed}`,
-        number: seed,
-        team: {
-            id: crypto.randomUUID(),
-            name: `team_${crypto.randomUUID()}`,
-            dateFounded: new Date(),
-        }
-
-    });
-};
 
 @Injectable({
     providedIn: 'root',
 })
 export class PlayerDataAccessService {
-    private _players: Player[] = [createPlayer(1), createPlayer(2), createPlayer(3), createPlayer(4), createPlayer(5)];
+    private readonly _baseUrl = `http://127.0.0.1:3000/api/players`;
+    constructor(private http: HttpClient) {}
 
-    constructor() {}
-
-    listPlayers(): Observable<Player[]> {
-        return of(this._players);
+    listPlayers() {
+        return this.http.get<IListPlayersResponseDTO>(`${this._baseUrl}/`);
     }
 
-    createPlayer(request: ICreatePlayerRequestDTO): Observable<string> {
-        const player = new Player({
-            id: crypto.randomUUID(),
-            name: request.name,
-            number: request.number,
-            team: {
-                id: request.teamId,
-                name: `team_${crypto.randomUUID()}`,
-                dateFounded: new Date(),
-            },
-        });
-
-        this._players.push(player);
-
-        return of(player.id);
+    createPlayer(request: ICreatePlayerRequestDTO) {
+        return this.http.post<{ id: string; }>(`${this._baseUrl}/create`, request);
     }
 }
