@@ -1,11 +1,11 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
-        <div class="text-xl">Create Team Membership</div>
-    </header>
-    <div class="bg-gray-400 border border-gray-900">
+    <div class="flex flex-col gap-[inherit]" data-track="base">
+        <header class="flex flex-row gap-2 items-center justify-between">
+            <div class="text-xl">Create Team Membership</div>
+        </header>
         <app-form-field [name]="'playerId'" [errors]="errors.playerId">
             <ng-template let-name="name">
-                <app-filter-players-field>
+                <app-filter-players-field [value]="[]">
 
                 </app-filter-players-field>
             </ng-template>

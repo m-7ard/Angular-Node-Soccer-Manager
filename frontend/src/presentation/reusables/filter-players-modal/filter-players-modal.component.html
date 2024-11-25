@@ -1,12 +1,40 @@
 <app-modal>
     <div class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
-        <header class="flex flex-row items-center gap-[inherit]">
-            <div class="text-xl">
-                Filter Players
-            </div>
-            <app-mixin-button (click)="this.modalComponent.close()" [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }">
+        <header class="flex flex-row items-center justify-between gap-2">
+            <div class="text-base font-bold">Filter Players</div>
+            <app-mixin-button
+                (click)="this.modalComponent.close()"
+                [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }"
+            >
                 Close
             </app-mixin-button>
         </header>
+        <div class="w-full h-0 border-t border-gray-900"></div>
+        <nav class="flex flex-row gap-2">
+            <app-mixin-button
+                [isActive]="activeRoute === this.ROUTES.FORM"
+                (click)="changeRoute(this.ROUTES.FORM)"
+                [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }"
+            >
+                Form
+            </app-mixin-button>
+            <app-mixin-button
+                [isActive]="activeRoute === this.ROUTES.RESULT"
+                (click)="changeRoute(this.ROUTES.RESULT)"
+                [options]="{ size: 'mixin-button-sm', theme: 'theme-button-generic-white' }"
+            >
+                Results
+            </app-mixin-button>
+        </nav>
+        <div class="w-full h-0 border-t border-gray-900"></div>
+        <ng-container *ngIf="activeRoute === this.ROUTES.FORM">
+            <app-filter-players-form (onSubmit)="onFormSubmit($event)"></app-filter-players-form>
+        </ng-container>
+        <ng-container *ngIf="activeRoute === this.ROUTES.RESULT">
+            <app-filter-players-result
+                [playerComponentType]="filterPlayersFieldModalItemComponent"
+                [players]="players"
+            ></app-filter-players-result>
+        </ng-container>
     </div>
 </app-modal>

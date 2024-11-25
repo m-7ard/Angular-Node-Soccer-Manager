@@ -5,17 +5,11 @@ import { FilterPlayersModalComponent } from '../filter-players-modal/filter-play
 import Player from '../../models/Player';
 
 @Component({
-  selector: 'app-filter-players-field',
+  selector: 'app-filter-players-field-modal-item',
   standalone: true,
   imports: [MixinButtonComponent, ModalTriggerDirective],
-  templateUrl: './filter-players-field.component.html',
+  templateUrl: './filter-players-field-modal-item.component.html',
 })
-export class FilterPlayersFieldComponent {
-    /* TODO: implement form controller */
-    onUpdate(id: string) {
-        console.log(id);
-    }
-
-    @Input() value!: Player[];
-    panel = FilterPlayersModalComponent;
+export class FilterPlayersFieldModalItemComponent {
+    @Input() player!: Player;
 }

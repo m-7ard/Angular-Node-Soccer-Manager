@@ -41,10 +41,10 @@
     @apply px-2;
   }
   .mixin-page-like {
-    @apply flex flex-col grow overflow-auto border-x border-gray-900;
+    @apply flex flex-col grow overflow-auto;
   }
   .mixin-page-base {
-    @apply px-4 py-4 gap-y-4 max-w-xl w-full;
+    @apply px-4 py-4 gap-y-4;
   }
   .mixin-page-content-like {
     @apply flex flex-col;
@@ -89,6 +89,21 @@
   }
   .mixin-Pcard-base [data-role=section] {
     @apply py-2 px-4;
+  }
+  .mixin-content-grid > [data-track] {
+    @apply w-full mx-auto;
+  }
+  .mixin-content-grid > [data-track=full] {
+    @apply max-w-full;
+  }
+  .mixin-content-grid > [data-track=lg] {
+    @apply max-w-[900px];
+  }
+  .mixin-content-grid > [data-track=base] {
+    @apply max-w-[700px];
+  }
+  .mixin-content-grid > [data-track=sm] {
+    @apply max-w-[450px];
   }
 }
 @layer components {
@@ -153,7 +168,7 @@
     @apply border-gray-900;
   }
   .theme-Pcard-generic-white {
-    @apply bg-white divide-gray-900 border-gray-900;
+    @apply bg-white divide-y divide-gray-900 border-gray-900;
   }
   .theme-panel-generic-white {
     @apply bg-gray-50 border border-gray-900;

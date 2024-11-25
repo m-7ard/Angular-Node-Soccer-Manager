@@ -13,7 +13,7 @@ export class ListPlayersPageResolver implements Resolve<Player[]> {
     constructor(private _playerDataAccess: PlayerDataAccessService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<Player[]> | Promise<Player[]> | Player[] {
-        return this._playerDataAccess.listPlayers().pipe(
+        return this._playerDataAccess.listPlayers({ name: null }).pipe(
             map((response) => {
                 return response.players.map((player) => {
                     return new Player({

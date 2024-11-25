@@ -6,9 +6,9 @@ import { Component, HostListener, Input } from '@angular/core';
         <div
             class="fixed inset-0 bg-black/40 flex flex-row items-center justify-center"
             [style.zIndex]="zIndex"
-            (click)="onBackdropClick($event)"
+            (mousedown)="onBackdropClick($event)"
         >
-            <div (click)="$event.stopPropagation()">
+            <div style="display: contents;" (mousedown)="$event.stopPropagation()">
                 <ng-content></ng-content>
             </div>
         </div>

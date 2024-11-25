@@ -38,10 +38,10 @@
     @apply px-2;
   }
   .mixin-page-like {
-    @apply flex flex-col grow overflow-auto border-x border-gray-900;
+    @apply flex flex-col grow overflow-auto;
   }
   .mixin-page-base {
-    @apply px-4 py-4 gap-y-4 max-w-xl w-full;
+    @apply px-4 py-4 gap-y-4;
   }
   .mixin-page-content-like {
     @apply flex flex-col;
@@ -87,17 +87,19 @@
   .mixin-Pcard-base [data-role=section] {
     @apply py-2 px-4;
   }
-  .mixin-content-grid {
-    display: grid;
-    grid-template-columns: [full-content-start] 1fr [base-content-start] 325px [sm-content-start] 450px [sm-content-end] 325px [base-content-end] 1fr [full-content-end];
+  .mixin-content-grid > [data-track] {
+    @apply w-full mx-auto;
   }
   .mixin-content-grid > [data-track=full] {
-    grid-column: full-content-start/full-content-end;
+    @apply max-w-full;
+  }
+  .mixin-content-grid > [data-track=lg] {
+    @apply max-w-[900px];
   }
   .mixin-content-grid > [data-track=base] {
-    grid-column: base-content-start/base-content-end;
+    @apply max-w-[700px];
   }
   .mixin-content-grid > [data-track=sm] {
-    grid-column: sm-content-start/sm-content-end;
+    @apply max-w-[450px];
   }
 }/*# sourceMappingURL=mixins.css.map */
