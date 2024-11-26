@@ -18,10 +18,10 @@ class ListPlayersAction implements IAction<ActionRequest, ActionResponse> {
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
 
-        const command = new ListPlayersQuery({
+        const query = new ListPlayersQuery({
             name: dto.name
         });
-        const result = await this._requestDispatcher.dispatch(command);
+        const result = await this._requestDispatcher.dispatch(query);
 
         if (result.isErr()) {
             return new JsonResponse({
@@ -41,7 +41,7 @@ class ListPlayersAction implements IAction<ActionRequest, ActionResponse> {
     bind(request: Request): ActionRequest {
         return {
             dto: {
-                name: request.body.name
+                name: request.query.name as string
             },
         };
     }

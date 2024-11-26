@@ -20,7 +20,7 @@ import Player from '../../../../models/Player';
 ],
     templateUrl: './filter-players-result.component.html',
 })
-export class FilterPlayersResultComponent {
-    @Input() playerComponentType!: Type<{ player: Player }>;
-    @Input() players!: Player[];
+export class FilterPlayersResultComponent<T extends { player: Player }> {
+    @Input() playerComponentType!: Type<T>;
+    @Input() playerData!: Array<T>;
 }

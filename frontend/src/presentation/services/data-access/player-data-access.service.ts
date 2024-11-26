@@ -14,6 +14,10 @@ export class PlayerDataAccessService {
     listPlayers(request: IListPlayersRequestDTO) {
         const url = new URL(`${this._baseUrl}/`);
         Object.entries(request).forEach(([key, val]) => {
+            if (val == null) {
+                return;
+            }
+            
             url.searchParams.append(key, val);
         });
 

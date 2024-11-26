@@ -38,6 +38,11 @@ export class FilterPlayersFormComponent {
         name: string;
     }>();
 
+    submitForm() {
+        const data = this.form.getRawValue();
+        this.onSubmit.emit(data);
+    }
+
     constructor() {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {

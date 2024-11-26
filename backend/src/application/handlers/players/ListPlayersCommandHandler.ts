@@ -24,6 +24,7 @@ export default class ListPlayersQueryHandler implements IRequestHandler<ListPlay
     }
 
     async handle(query: ListPlayersQuery): Promise<ListPlayersQueryResult> {
+        console.log(query);
         const players = await this._playerRepository.findAllAsync({
             name: query.name
         });

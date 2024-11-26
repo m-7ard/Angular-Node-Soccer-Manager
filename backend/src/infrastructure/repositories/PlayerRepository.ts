@@ -65,6 +65,9 @@ class PlayerRepository implements IPlayerRepository {
 
     async findAllAsync(criteria: { name: string | null; }): Promise<Player[]> {
         let query = knexQueryBuilder<IPlayerSchema>("player");
+
+        console.log(criteria);
+
         if (criteria.name != null) {
             query = query.whereILike("name", `%${criteria.name}%`);
         }

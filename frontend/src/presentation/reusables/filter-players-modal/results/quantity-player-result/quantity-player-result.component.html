@@ -1,0 +1,11 @@
+<div class="p-2 border border-gray-900 flex flex-col gap-1">
+    <div>
+        {{ player.name }}
+    </div>
+    <div>
+        {{ quantity }}
+    </div>
+    <button (click)="onUpdate(quantity + 1)">
+        Increase
+    </button>
+</div>
