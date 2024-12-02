@@ -9,6 +9,7 @@ import ICreateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/create/ICr
 import ICreateTeamMembershipResponseDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipResponseDTO";
 import createTeamMembershipValidator from "api/validators/createTeamMembershipValidator";
 import { CreateTeamMembershipCommand } from "application/handlers/team_memberships/CreateTeamMembershipCommandHandler";
+import parsers from "api/utils/parsers";
 
 type ActionRequest = { teamId: string; dto: ICreateTeamMembershipRequestDTO };
 type ActionResponse = JsonResponse<ICreateTeamMembershipResponseDTO | IApiError[]>;
@@ -19,11 +20,15 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
 
+        console.log("----------");
+        console.log(dto);
+        console.log("----------");
+
         const validation = createTeamMembershipValidator(dto);
         if (validation.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.typeBoxErrorToApiErrors(validation.error),
+                body: ApiErrorFactory.superstructFailureToApiErrors(validation.error),
             });
         }
 
@@ -53,8 +58,8 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
             teamId: request.params.teamId,
             dto: {
                 playerId: request.body.playerId,
-                activeFrom: new Date(request.body.activeFrom),
-                activeTo: new Date(request.body.activeTo),
+                activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
+                activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),
             },
         };
     }

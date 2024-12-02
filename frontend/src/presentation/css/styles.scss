@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '@angular/cdk/overlay-prebuilt.css';
 @import "./mixins.scss";
 @import "./themes.scss";
 

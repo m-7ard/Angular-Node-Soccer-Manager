@@ -1,3 +1,101 @@
-<div>
-    
+<div class="mixin-panel-like mixin-panel-base theme-panel-generic-white w-[100vw]">
+    <header class="flex flex-row gap-2 justify-between">
+        <div class="font-bold">Filter Players</div>
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-sm',
+                theme: 'theme-button-generic-white'
+            }"
+        >
+            Close
+        </app-mixin-button>
+    </header>
+    <nav class="flex flex-row gap-2">
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-base',
+                theme: 'theme-button-generic-white'
+            }"
+            (click)="changeRoute('form')"
+            class="basis-1/2"
+            className="w-full justify-center"
+            [isActive]="currentRoute === 'form'"
+        >
+            Form
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-base',
+                theme: 'theme-button-generic-white'
+            }"
+            (click)="changeRoute('results')"
+            class="basis-1/2"
+            className="w-full justify-center"
+            [isActive]="currentRoute === 'results'"
+        >
+            Result
+        </app-mixin-button>
+    </nav>
+    <section *ngIf="currentRoute === 'form'">
+        <form [formGroup]="form" class="flex flex-col gap-2" (submit)="onFormSubmit()">
+            <app-form-field [name]="'name'">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+            <app-mixin-button
+                [options]="{
+                    size: 'mixin-button-base',
+                    theme: 'theme-button-generic-green'
+                }"
+            >
+                Filter
+            </app-mixin-button>
+        </form>
+    </section>
+    <section *ngIf="currentRoute === 'results'">
+        <div class="flex flex-col gap-2">
+            <div *ngFor="let player of results" class="flex flex-row gap-2 p-2 border border-black">
+                <app-cover-image className="border border-black w-24 h-24"> </app-cover-image>
+                <div class="flex flex-col">
+                    <div class="text-sm">
+                        <span class="font-bold"> Name: </span>
+                        <span>
+                            {{ player.name }}
+                        </span>
+                    </div>
+                    <!-- Button start -->
+                    <app-mixin-button
+                        *ngIf="isPlayerAlreadySelected(player); else notSelected"
+                        [options]="{
+                            size: 'mixin-button-base',
+                            theme: 'theme-button-generic-green'
+                        }"
+                        class="mt-auto"
+                    >
+                        Already Selected
+                    </app-mixin-button>
+                    <ng-template #notSelected>
+                        <app-mixin-button
+                            (click)="selectPlayer(player)"
+                            [options]="{
+                                size: 'mixin-button-base',
+                                theme: 'theme-button-generic-yellow'
+                            }"
+                            class="mt-auto"
+                        >
+                            Select
+                        </app-mixin-button>
+                    </ng-template>
+                    <!-- Button end -->
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

@@ -1,24 +1,127 @@
 import { Component, Input } from '@angular/core';
 import { MixinButtonComponent } from '../../ui-mixins/mixin-button/mixin-button.component';
-import { ModalTriggerDirective } from '../modal/modal-trigger.directive';
-import { FilterPlayersModalComponent } from '../filter-players-modal/filter-players-modal.component';
 import Player from '../../models/Player';
-import { QuantityPlayerResultComponent } from '../filter-players-modal/results/quantity-player-result/quantity-player-result.component';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CoverImageComponent } from '../cover-image/cover-image.component';
+import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
+
+const ROUTES = {
+    FORM: 'FORM',
+    RESULT: 'RESULT',
+} as const;
 
 @Component({
-  selector: 'app-filter-players-field',
-  standalone: true,
-  imports: [MixinButtonComponent, ModalTriggerDirective],
-  templateUrl: './filter-players-field.component.html',
+    selector: 'app-filter-players-field',
+    standalone: true,
+    imports: [MixinButtonComponent, CommonModule, ReactiveFormsModule, CoverImageComponent],
+    templateUrl: './filter-players-field.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: FilterPlayersFieldComponent,
+        },
+    ],
 })
-export class FilterPlayersFieldComponent {
-    /* TODO: implement form controller */
-    onUpdate(id: string) {
-        console.log(id);
+export class FilterPlayersFieldComponent implements ControlValueAccessor {
+    ROUTES = ROUTES;
+
+    protected activeRoute: keyof typeof ROUTES = ROUTES.FORM;
+    changeRoute = (route: keyof typeof ROUTES) => {
+        this.activeRoute = route;
+    };
+
+    addPlayer = (player: Player) => {
+        const newValue = { ...this.value };
+        newValue[player.id] = { "player":  player};
+        this.value = newValue;
+        this.onChange(newValue);
+        this.onTouched();
+    };
+
+    isAdded = (player: Player) => {
+        return !(this.value[player.id] == null)
     }
 
-    resultComponent = QuantityPlayerResultComponent;
+    // <--ControlValueAccessor
+    onChange: (
+        value: Record<
+            string,
+            {
+                player: Player;
+            }
+        >,
+    ) => void = null!;
+    onTouched: () => void = null!;
 
-    @Input() value!: Player[];
-    panel = FilterPlayersModalComponent;
+    writeValue(
+        obj: Record<
+            string,
+            {
+                player: Player;
+            }
+        >,
+    ): void {
+        this.value = obj;
+    }
+
+    registerOnChange(
+        fn: (
+            value: Record<
+                string,
+                {
+                    player: Player;
+                }
+            >,
+        ) => void,
+    ): void {
+        this.onChange = fn;
+    }
+
+    registerOnTouched(fn: () => void): void {
+        this.onTouched = fn;
+    }
+
+    setDisabledState?(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
+
+    // ControlValueAccessor-->
+
+    protected results: Player[] = [];
+
+    @Input() value!: Record<
+        string,
+        {
+            player: Player;
+        }
+    >;
+    @Input() disabled = false;
+
+    constructor(private playerDataAccess: PlayerDataAccessService) {}
+
+    async onFormSubmit(formData: any) {
+        const response = this.playerDataAccess.listPlayers({
+            name: formData.name,
+        });
+
+        response.subscribe({
+            next: (response) => {
+                if (response === null) {
+                    return;
+                }
+
+                this.results = response.players.map((player) => {
+                    return new Player({
+                        id: player.id,
+                        name: player.name,
+                        number: player.number,
+                    });
+                });
+
+                this.changeRoute(this.ROUTES.RESULT);
+            },
+        });
+    }
 }

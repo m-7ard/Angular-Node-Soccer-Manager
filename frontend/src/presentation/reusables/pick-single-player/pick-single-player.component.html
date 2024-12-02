@@ -1,0 +1,29 @@
+<div class="flex flex-col border border-black divide-y divide-black">
+    <div class="px-4 py-2">
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-white',
+                size: 'mixin-button-base'
+            }"
+            (click)="openPlayerPickerModal()"
+            [buttonAttrs]="{ type: 'button' }"
+        >
+            Filter Players
+        </app-mixin-button>
+    </div>
+    <div *ngIf="value != null" class="px-4 py-2 flex flex-row gap-2">
+        <app-cover-image [src]="" className="border border-black w-24 h-24">
+
+        </app-cover-image>
+        <div>
+            <div class="text-sm">
+                <span class="font-bold">
+                    Name:
+                </span>
+                <span>
+                    {{ value.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

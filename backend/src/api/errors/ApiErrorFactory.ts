@@ -1,5 +1,6 @@
 import { ValueError } from "@sinclair/typebox/build/cjs/errors";
 import API_ERROR_CODES from "./API_ERROR_CODES";
+import { Failure } from "superstruct";
 
 class ApiErrorFactory {
     static typeBoxErrorToApiErrors(errors: ValueError[], pathPrefix: string[] = []) {
@@ -7,6 +8,15 @@ class ApiErrorFactory {
         return errors.map((error) => ({
             message: error.message,
             path: prefix + error.path,
+            code: API_ERROR_CODES.VALIDATION_ERROR,
+        }));
+    }
+
+    static superstructFailureToApiErrors(errors: Array<Failure>, pathPrefix: string[] = []) {
+        const prefix = pathPrefix.length === 0 ? "" : `${pathPrefix.join("/")}`;
+        return errors.map((error) => ({
+            message: error.message,
+            path: "/" + prefix + error.path,
             code: API_ERROR_CODES.VALIDATION_ERROR,
         }));
     }

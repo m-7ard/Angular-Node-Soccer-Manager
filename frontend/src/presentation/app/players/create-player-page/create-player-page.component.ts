@@ -11,8 +11,6 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { ImageUploadFieldComponent } from '../../../reusables/image-upload-field/image-upload-field.component';
-import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trigger.directive';
 import parsers from '../../../utils/parsers';
 
 interface IFormControls {
@@ -34,10 +32,8 @@ type IErrorSchema = IPresentationError<{
         ReactiveFormsModule,
         CharFieldComponent,
         FormFieldComponent,
-        ImageUploadFieldComponent,
         MixinButtonComponent,
         CommonModule,
-        PopoverTriggerDirective,
     ],
     templateUrl: './create-player-page.component.html',
 })
@@ -70,7 +66,7 @@ export class CreatePlayerPageComponent {
         
         this.playerDataAccess
             .createPlayer({
-                activeSince: parsers.parseDateOrElse(rawValue.activeSince, null),
+                activeSince: new Date(rawValue.activeSince),
                 name: rawValue.name,
                 number: parseInt(rawValue.number),
             })

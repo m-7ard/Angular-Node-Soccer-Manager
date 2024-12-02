@@ -1,14 +1,58 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <div class="flex flex-col gap-[inherit]" data-track="base">
+    <div data-track="base" class="flex flex-col gap-2">
         <header class="flex flex-row gap-2 items-center justify-between">
             <div class="text-xl">Create Team Membership</div>
         </header>
-        <app-form-field [name]="'playerId'" [errors]="errors.playerId">
-            <ng-template let-name="name">
-                <app-filter-players-field [value]="[]">
-
-                </app-filter-players-field>
-            </ng-template>
-        </app-form-field>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" (reset)="onReset()" class="flex flex-col gap-2">
+            <app-form-field [name]="'player'" [errors]="errors.playerId">
+                <ng-template let-name="name">
+                    <app-pick-single-player [formControlName]="name"></app-pick-single-player>
+                </ng-template>
+            </app-form-field>
+            <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        type="date"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+            <app-form-field [name]="'activeTo'" [errors]="errors.activeTo">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        type="date"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+            <footer class="flex flex-row gap-2 justify-end">
+                <app-mixin-button
+                    [options]="{
+                        theme: 'theme-button-generic-white',
+                        size: 'mixin-button-base'
+                    }"
+                    [buttonAttrs]="{ type: 'reset' }"
+                >
+                    Reset
+                </app-mixin-button>
+                <app-mixin-button
+                    [options]="{
+                        theme: 'theme-button-generic-green',
+                        size: 'mixin-button-base'
+                    }"
+                    [buttonAttrs]="{ type: 'submit' }"
+                >
+                    Create Membership
+                </app-mixin-button>
+            </footer>
+        </form>
     </div>
 </div>

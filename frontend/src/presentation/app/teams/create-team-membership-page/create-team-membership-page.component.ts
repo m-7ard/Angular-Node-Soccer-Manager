@@ -2,25 +2,21 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, NotFoundError, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import {
-    ImageUploadFieldComponent,
-} from '../../../reusables/image-upload-field/image-upload-field.component';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import { CommonModule } from '@angular/common';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trigger.directive';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import IPresentationError from '../../../errors/IPresentationError';
 import NotFoundException from '../../../exceptions/NotFoundException';
 import parsers from '../../../utils/parsers';
-import { FilterPlayersFieldComponent } from "../../../reusables/filter-players-field/filter-players-field.component";
-import { FilterPlayersModalComponent } from '../../../reusables/filter-players-modal/filter-players-modal.component';
+import Player from '../../../models/Player';
+import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { PickSinglePlayerComponent } from '../../../reusables/pick-single-player/pick-single-player.component';
+import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 
 interface IFormControls {
-    playerId: FormControl<string>;
+    player: FormControl<Player | null>;
     activeFrom: FormControl<string>;
     activeTo: FormControl<string>;
 }
@@ -34,17 +30,7 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-create-team-membership-page',
     standalone: true,
-    imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    ImageUploadFieldComponent,
-    MixinButtonComponent,
-    CommonModule,
-    PopoverTriggerDirective,
-    FilterPlayersFieldComponent,
-    FilterPlayersModalComponent
-],
+    imports: [ReactiveFormsModule, CommonModule, FormFieldComponent, CharFieldComponent, PickSinglePlayerComponent, MixinButtonComponent],
     templateUrl: './create-team-membership-page.component.html',
 })
 export class CreateTeamMembershipPageComponent implements OnInit {
@@ -55,11 +41,11 @@ export class CreateTeamMembershipPageComponent implements OnInit {
     constructor(
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
     ) {
         this.form = new FormGroup<IFormControls>({
-            playerId: new FormControl('', {
-                nonNullable: true,
+            player: new FormControl(null, {
+                nonNullable: false,
                 validators: [Validators.required],
             }),
             activeFrom: new FormControl('', {
@@ -83,14 +69,20 @@ export class CreateTeamMembershipPageComponent implements OnInit {
         this.id = id;
     }
 
-    onSubmit(): void {
+    onReset() {
+        this.form.reset();
+    }
+
+    onSubmit() {
         const rawValue = this.form.getRawValue();
-        /* TODO: finish form */
+        console.log(rawValue);
+
+        /* TODO: implement validator for null */
         this.teamDataAccess
-            .createTeamMembership(this.id, { 
-                activeFrom: parsers.parseDateOrElse(rawValue.activeFrom, null),
-                activeTo: rawValue.activeTo == null ? null : parsers.parseDateOrElse(rawValue.activeTo, "invalid"),
-                playerId: rawValue.playerId,
+            .createTeamMembership(this.id, {
+                activeFrom: new Date(rawValue.activeFrom),
+                activeTo: rawValue.activeTo == null ? null : new Date(rawValue.activeTo),
+                playerId: rawValue.player?.id as string,
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
@@ -103,6 +95,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                     if (response === null) {
                         return;
                     }
+
                     this.router.navigate(['/players']);
                 },
             });

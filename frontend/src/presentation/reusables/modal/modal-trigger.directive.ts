@@ -13,11 +13,7 @@ export class ModalTriggerDirective<T extends AbstractModalDirective> implements 
 
     constructor(private viewContainer: ViewContainerRef) {}
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['modalData'] && this.modalRef) {
-            Object.entries(this.modalData).forEach(([key, value]) => {
-                this.modalRef?.setInput(key, value);
-            });
-        }
+       
     }
 
     ngOnDestroy() {

@@ -16,9 +16,9 @@ export class AppComponent {
     otherTitle = "0";
 
     constructor() {
-        setInterval(() => {
-            this.otherTitle = (parseInt(this.otherTitle) + 1).toString();
-            console.log("new title: ", this.otherTitle)
-        }, 1000);
+        // setInterval(() => {
+        //     this.otherTitle = (parseInt(this.otherTitle) + 1).toString();
+        //     console.log("new title: ", this.otherTitle)
+        // }, 1000);
     }
 }

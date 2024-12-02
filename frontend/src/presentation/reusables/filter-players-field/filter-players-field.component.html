@@ -1,5 +1,41 @@
-<div class="bg-gray-100 px-4 py-2 border border-gray-900">
-    <app-mixin-button [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-white' }" modalTrigger [modalPanel]="panel" [modalData]="{ playerData: [], resultComponent: resultComponent }">
-        Filter Players
-    </app-mixin-button>
+<div class="flex flex-col gap-2 bg-gray-100 px-4 py-2 border border-gray-900">
+    <header class="flex flex-row gap-2 items-center">
+        <app-mixin-button [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-white' }" (click)="changeRoute(ROUTES.FORM)">
+            Form
+        </app-mixin-button>
+        <app-mixin-button [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-white' }" (click)="changeRoute(ROUTES.RESULT)">
+            Results
+        </app-mixin-button>
+    </header>
+    <ng-container *ngIf="activeRoute === this.ROUTES.FORM">
+    </ng-container>
+    <ng-container *ngIf="activeRoute === this.ROUTES.RESULT">
+        <div *ngFor="let result of results; let i = index">
+            <div class="flex flex-row gap-2 p-2 border border-gray-900 bg-white">
+                <app-cover-image className="w-24 h-24 border border-gray-900" [src]="">
+
+                </app-cover-image>
+                <div class="flex flex-col gap-2">
+                    <div class="font-bold">
+                        {{ result.name }}
+                    </div>
+                </div>
+                <ng-container *ngIf="!isAdded(result); else elseBlock">
+                    <app-mixin-button [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-yellow' }" (click)="addPlayer(result)">
+                        Add Player
+                    </app-mixin-button>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <app-mixin-button [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-green' }">
+                        Added
+                    </app-mixin-button>
+                </ng-template>
+            </div>
+        </div>
+    </ng-container>
+    <div *ngFor="let entry of value | keyvalue; let i = index">
+        <div class="bg-yellow-300 p-1">
+            {{ entry.value.player.name }}
+        </div>
+    </div>
 </div>

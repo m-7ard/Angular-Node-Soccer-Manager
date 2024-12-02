@@ -1,9 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
     GeneratedFileName,
-    ImageUploadFieldComponent,
-    ImageUploadValue,
     RequiredImageData,
 } from '../../../reusables/image-upload-field/image-upload-field.component';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
@@ -13,7 +11,7 @@ import { Router } from '@angular/router';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import { CommonModule } from '@angular/common';
 import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trigger.directive';
-import { TestPopver } from './test.component';
+import { TestPopver } from '../../../__obsolete/test.component';
 import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
 import IApiError from '../../../errors/IApiError';
@@ -38,7 +36,6 @@ type IErrorSchema = IPresentationError<{
         ReactiveFormsModule,
         CharFieldComponent,
         FormFieldComponent,
-        ImageUploadFieldComponent,
         MixinButtonComponent,
         CommonModule,
         PopoverTriggerDirective,
