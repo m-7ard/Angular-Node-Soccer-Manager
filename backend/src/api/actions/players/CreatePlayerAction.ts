@@ -21,7 +21,6 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
 
         const validation = createPlayerValidator(dto);
         if (validation.isErr()) {
-            console.log(dto)
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
                 body: ApiErrorFactory.typeBoxErrorToApiErrors(validation.error),

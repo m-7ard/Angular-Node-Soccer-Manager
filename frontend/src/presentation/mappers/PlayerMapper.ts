@@ -6,7 +6,7 @@ class PlayerMapper {
         return new Player({
             id: source.id,
             name: source.name,
-            number: source.number,
+            activeSince: new Date(source.activeSince)
         });
     }
 }

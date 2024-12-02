@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
 import { map, Observable } from 'rxjs';
 import Player from '../../../models/Player';
+import PlayerMapper from '../../../mappers/PlayerMapper';
 
 export interface IListPlayersResolverData {
     players: Player[];
@@ -15,12 +16,7 @@ export class ListPlayersPageResolver implements Resolve<Player[]> {
     resolve(route: ActivatedRouteSnapshot): Observable<Player[]> | Promise<Player[]> | Player[] {
         return this._playerDataAccess.listPlayers({ name: null }).pipe(
             map((response) => {
-                return response.players.map((player) => {
-                    return new Player({
-                        id: player.id,
-                        name: player.name,
-                    });
-                });
+                return response.players.map(PlayerMapper.apiModelToDomain);
             }),
         );
     }

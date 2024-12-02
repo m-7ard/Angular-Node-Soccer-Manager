@@ -1,3 +1,3 @@
-interface IListTeamsRequestDTO {}
+interface IListTeamPlayersRequestDTO {}
 
-export default IListTeamsRequestDTO;
+export default IListTeamPlayersRequestDTO;

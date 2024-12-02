@@ -14,7 +14,6 @@ import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trig
 import { TestPopver } from '../../../__obsolete/test.component';
 import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
-import IApiError from '../../../errors/IApiError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 

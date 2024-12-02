@@ -8,7 +8,6 @@ const validatorSchema = Type.Object({
         maxLength: 255
     }),
     activeSince: Type.Date(),
-    // images: Type.Array(Type.String({ pattern: '.*\.(jpg|jpeg|png)$' }))
 });
 
 function createPlayerValidator(data: ICreatePlayerRequestDTO) {

@@ -9,6 +9,7 @@ class TeamMembershipMapper {
             playerId: source.playerId,
             activeFrom: source.activeFrom,
             activeTo: source.activeTo,
+            number: source.number
         });
     }
 }

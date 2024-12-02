@@ -6,6 +6,7 @@ import PlayerMapper from "infrastructure/mappers/PlayerMapper";
 import PlayerDbEntity from "infrastructure/dbEntities/PlayerDbEntity";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
+import toSqlDate from "utils/toSqlDate";
 
 class PlayerRepository implements IPlayerRepository {
     private readonly _db: IDatabaseService;
@@ -19,7 +20,7 @@ class PlayerRepository implements IPlayerRepository {
             SELECT * FROM player WHERE
                 id = ${id}
         `;
-        
+
         const [player] = await this._db.execute<PlayerDbEntity | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
@@ -29,12 +30,13 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async createAsync(player: Player): Promise<Player> {
+        console.log("xxxXXX: ", toSqlDate(player.activeSince), player.activeSince)
         const sqlEntry = sql`
             INSERT INTO player
                 SET 
                     id = ${player.id},
                     name = ${player.name},
-                    active_since = ${player.activeSince}
+                    active_since = ${toSqlDate(player.activeSince)}
         `;
 
         await this._db.execute({
@@ -68,9 +70,10 @@ class PlayerRepository implements IPlayerRepository {
             query = query.whereILike("name", `%${criteria.name}%`);
         }
 
+        console.log("players: ", query.toString())
         const rows = await this._db.query<IPlayerSchema>({ statement: query.toString() });
         const players = rows.map(PlayerMapper.schemaToDbEntity);
-        
+        console.log("players: ", players)
         return players.map(PlayerMapper.dbEntityToDomain);
     }
 }

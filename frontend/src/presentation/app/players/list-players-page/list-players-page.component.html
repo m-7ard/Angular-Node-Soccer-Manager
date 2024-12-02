@@ -30,30 +30,45 @@
                                 </span>
                             </li>
                             <li class="text-sm">
-                                <span class="font-bold">Active From: </span>
+                                <span class="font-bold">Active Since: </span>
                                 <span>
-                                    {{ player.number }}
-                                </span>
-                            </li>
-                            <li class="text-sm">
-                                <span class="font-bold">Active To: </span>
-                                <span>
-                                    {{ teamPlayer.membership.activeTo | date }}
+                                    {{ player.activeSince | date }}
                                 </span>
                             </li>
                         </ul>
                     </main>
-                    <div class="flex flex-col gap-1">
+                    <footer class="flex flex-col gap-1">
                         <app-mixin-button
                             [options]="{
-                                theme: 'theme-button-generic-white',
-                                size: 'mixin-button-sm'
+                                theme: 'theme-button-generic-green',
+                                size: 'mixin-button-base'
                             }"
                             className="w-full justify-center"
+                            [buttonAttrs]="{ type: 'button' }"
                         >
                             Update
                         </app-mixin-button>
-                    </div>
+                        <app-mixin-button
+                            [options]="{
+                                theme: 'theme-button-generic-red',
+                                size: 'mixin-button-base'
+                            }"
+                            className="w-full justify-center"
+                            [buttonAttrs]="{ type: 'button' }"
+                        >
+                            Delete
+                        </app-mixin-button>
+                        <app-mixin-button
+                            [options]="{
+                                theme: 'theme-button-generic-white',
+                                size: 'mixin-button-base'
+                            }"
+                            className="w-full justify-center"
+                            [buttonAttrs]="{ type: 'button' }"
+                        >
+                            Details
+                        </app-mixin-button>
+                    </footer>
                 </section>
             </ng-container>
         </div>

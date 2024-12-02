@@ -6,3 +6,5 @@ interface ITeamMembershipApiModel {
     activeTo: Date | null;
     number: number;
 }
+
+export default ITeamMembershipApiModel;

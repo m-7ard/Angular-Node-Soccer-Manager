@@ -1,4 +1,5 @@
 import IPlayerApiModel from "./IPlayerApiModel";
+import ITeamMembershipApiModel from "./ITeamMembershipApiModel";
 
 interface ITeamPlayerApiModel {
     player: IPlayerApiModel;

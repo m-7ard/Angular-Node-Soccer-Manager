@@ -3,7 +3,7 @@ import ITeamMembershipSchema from "./ITeamMembershipSchema";
 export default interface IPlayerSchema {
     id: string;
     name: string;
-    activeSince: Date;
+    active_since: Date;
 }
 
 export interface IPlayerRelations {

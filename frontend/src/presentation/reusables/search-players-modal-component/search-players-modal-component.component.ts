@@ -8,6 +8,7 @@ import { FormFieldComponent } from '../form-field/form-field.component';
 import { CharFieldComponent } from '../char-field/char-field.component';
 import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
 import { CoverImageComponent } from "../cover-image/cover-image.component";
+import PlayerMapper from '../../mappers/PlayerMapper';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -67,9 +68,7 @@ export class SearchPlayersModalComponentComponent {
         });
 
         responseObservable.subscribe((dto) => {
-            this.results = dto.players.map((player) => {
-                return new Player({ id: player.id, name: player.name });
-            });
+            this.results = dto.players.map(PlayerMapper.apiModelToDomain);
             this.changeRoute("results");
         });
     }

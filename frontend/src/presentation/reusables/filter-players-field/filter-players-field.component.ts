@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
 import { CommonModule } from '@angular/common';
 import { CoverImageComponent } from '../cover-image/cover-image.component';
 import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
+import PlayerMapper from '../../mappers/PlayerMapper';
 
 const ROUTES = {
     FORM: 'FORM',
@@ -112,13 +113,7 @@ export class FilterPlayersFieldComponent implements ControlValueAccessor {
                     return;
                 }
 
-                this.results = response.players.map((player) => {
-                    return new Player({
-                        id: player.id,
-                        name: player.name,
-                        number: player.number,
-                    });
-                });
+                this.results = response.players.map(PlayerMapper.apiModelToDomain);
 
                 this.changeRoute(this.ROUTES.RESULT);
             },

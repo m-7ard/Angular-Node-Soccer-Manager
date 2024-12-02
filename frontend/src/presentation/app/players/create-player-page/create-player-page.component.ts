@@ -11,18 +11,15 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import parsers from '../../../utils/parsers';
 
 interface IFormControls {
     name: FormControl<string>;
     activeSince: FormControl<string>;
-    number: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
     name: string[];
     activeSince: string[];
-    number: string[];
 }>;
 
 @Component({
@@ -54,10 +51,6 @@ export class CreatePlayerPageComponent {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
-            number: new FormControl('', {
-                nonNullable: true,
-                validators: [Validators.required],
-            }),
         });
     }
 
@@ -68,7 +61,6 @@ export class CreatePlayerPageComponent {
             .createPlayer({
                 activeSince: new Date(rawValue.activeSince),
                 name: rawValue.name,
-                number: parseInt(rawValue.number),
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {

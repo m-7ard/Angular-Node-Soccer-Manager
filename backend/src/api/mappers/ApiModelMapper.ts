@@ -1,5 +1,6 @@
 import IPlayerApiModel from "api/models/IPlayerApiModel";
 import ITeamApiModel from "api/models/ITeamApiModel";
+import ITeamMembershipApiModel from "api/models/ITeamMembershipApiModel";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import TeamMembership from "domain/entities/TeamMembership";

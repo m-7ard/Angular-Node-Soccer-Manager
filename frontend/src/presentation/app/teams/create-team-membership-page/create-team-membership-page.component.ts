@@ -18,12 +18,14 @@ interface IFormControls {
     player: FormControl<Player | null>;
     activeFrom: FormControl<string>;
     activeTo: FormControl<string>;
+    number: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
     playerId: string[];
     activeFrom: string[];
     activeTo: string[];
+    number: string[];
 }>;
 
 @Component({
@@ -55,6 +57,10 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
+            number: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
         });
     }
 
@@ -74,13 +80,13 @@ export class CreateTeamMembershipPageComponent implements OnInit {
 
     onSubmit() {
         const rawValue = this.form.getRawValue();
-        console.log(rawValue);
 
         this.teamDataAccess
             .createTeamMembership(this.id, {
                 activeFrom: new Date(rawValue.activeFrom),
                 activeTo: rawValue.activeTo == null ? null : new Date(rawValue.activeTo),
                 playerId: rawValue.player?.id as string,
+                number: parseInt(rawValue.number)
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {

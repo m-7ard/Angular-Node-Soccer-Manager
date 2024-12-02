@@ -8,7 +8,7 @@ class PlayerMapper {
         return new PlayerDbEntity({
             id: source.id,
             name: source.name,
-            activeSince: source.activeSince,
+            activeSince: source.active_since,
         });
     }
 
