@@ -27,7 +27,6 @@ export class ListTeamsPageResolver implements Resolve<Team[]>, OnInit {
                         id: team.id,
                         name: team.name,
                         dateFounded: new Date(team.dateFounded),
-                        players: [],
                     });
                 });
             }),

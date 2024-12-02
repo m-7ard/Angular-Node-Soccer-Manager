@@ -2,7 +2,7 @@ import mysql, { ResultSetHeader } from "mysql2/promise";
 import IDatabaseService from "../api/interfaces/IDatabaseService";
 
 class MySQLDatabaseService implements IDatabaseService {
-    private readonly _pool: mysql.Pool;
+    private _pool: mysql.Pool;
     private readonly _config: mysql.PoolOptions;
 
     constructor(config: mysql.PoolOptions) {
@@ -13,7 +13,9 @@ class MySQLDatabaseService implements IDatabaseService {
     async initialise(migrations: string[]): Promise<void> {
         await this._pool.query(`DROP DATABASE IF EXISTS football_manager`);
         await this._pool.query(`CREATE DATABASE football_manager`);
-        await this._pool.query(`USE football_manager;`);
+
+        this._pool.end();
+        this._pool = mysql.createPool({ ...this._config, database: "football_manager" });
 
         for (const migration of migrations) {
             await this._pool.query(migration);

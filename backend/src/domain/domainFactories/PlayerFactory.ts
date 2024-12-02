@@ -1,41 +1,19 @@
 import Player from "../entities/Player";
 
 class PlayerFactory {
-    static CreateNew({
-        id,
-        name,
-        activeSince,
-        number,
-    }: {
-        id: string;
-        name: string;
-        activeSince: Date;
-        number: number;
-    }) {
+    static CreateNew({ id, name, activeSince }: { id: string; name: string; activeSince: Date }) {
         return new Player({
             id: id,
             name: name,
             activeSince: activeSince,
-            number: number,
         });
     }
 
-    static CreateExisting({
-        id,
-        name,
-        activeSince,
-        number,
-    }: {
-        id: string;
-        name: string;
-        activeSince: Date;
-        number: number;
-    }) {
+    static CreateExisting({ id, name, activeSince }: { id: string; name: string; activeSince: Date }) {
         return new Player({
             id: id,
             name: name,
             activeSince: activeSince,
-            number: number,
         });
     }
 }

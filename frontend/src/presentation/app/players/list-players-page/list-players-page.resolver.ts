@@ -19,7 +19,6 @@ export class ListPlayersPageResolver implements Resolve<Player[]> {
                     return new Player({
                         id: player.id,
                         name: player.name,
-                        number: player.number,
                     });
                 });
             }),

@@ -1,9 +1,15 @@
 import { err, ok, Result } from "neverthrow";
 import TeamMembership from "./TeamMembership";
 import TeamMembershipFactory from "domain/domainFactories/TeamMembershipFactory";
+import DomainEvent from "domain/domainEvents/DomainEvent";
+import TeamMembershipCreatedEvent from "domain/domainEvents/Team/TeamMembershipCreatedEvent";
 
 class Team {
     private readonly __type: "TEAM_DOMAIN" = null!;
+    domainEvents: DomainEvent[] = [];
+    clearEvents = () => {
+        this.domainEvents = [];
+    };
 
     constructor({ id, name, dateFounded, teamMemberships }: { id: string; name: string; dateFounded: Date; teamMemberships: TeamMembership[] }) {
         this.id = id;
@@ -17,7 +23,7 @@ class Team {
     public dateFounded: Date;
     public teamMemberships: TeamMembership[];
 
-    public tryAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null }): Result<void, IDomainError> {
+    public tryAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, IDomainError> {
         if (this.teamMemberships.find((membership) => membership.playerId === props.playerId) != null) {
             return err({
                 code: "PLAYER_ALREADY_IS_MEMBER",
@@ -32,10 +38,12 @@ class Team {
             playerId: props.playerId,
             activeFrom: props.activeFrom,
             activeTo: props.activeTo,
+            number: props.number,
         });
         this.teamMemberships.push(teamMembership);
+        this.domainEvents.push(new TeamMembershipCreatedEvent(teamMembership));
 
-        return ok(undefined);
+        return ok(teamMembership);
     }
 }
 

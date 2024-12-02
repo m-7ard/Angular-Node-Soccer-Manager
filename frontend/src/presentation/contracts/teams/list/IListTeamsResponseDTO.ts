@@ -1,7 +1,7 @@
-import ICompactTeamApiModel from "../../../apiModels/ICompactTeamApiModel";
+import ITeamApiModel from "../../../apiModels/ITeamApiModel";
 
 interface IListTeamsResponseDTO {
-    teams: ICompactTeamApiModel[]
+    teams: ITeamApiModel[]
 }
 
 export default IListTeamsResponseDTO;

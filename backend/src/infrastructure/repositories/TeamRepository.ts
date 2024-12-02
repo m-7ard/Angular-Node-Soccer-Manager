@@ -1,3 +1,4 @@
+import TeamMembershipCreatedEvent from "domain/domainEvents/Team/TeamMembershipCreatedEvent";
 import IDatabaseService from "../../api/interfaces/IDatabaseService";
 import ITeamRepository from "../../application/interfaces/ITeamRepository";
 import Team from "domain/entities/Team";
@@ -43,25 +44,6 @@ class TeamRepository implements ITeamRepository {
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
-
-        await Promise.all(
-            team.teamMemberships.map(async (teamMembership) => {
-                const sqlEntry = sql`
-                INSERT INTO team
-                    SET 
-                        id = ${teamMembership.id},
-                        team_id = ${teamMembership.teamId},
-                        player_id = ${teamMembership.playerId},
-                        active_from = ${teamMembership.activeFrom},
-                        active_to = ${teamMembership.activeTo}
-            `;
-
-                return await this._db.execute({
-                    statement: sqlEntry.sql,
-                    parameters: sqlEntry.values,
-                });
-            }),
-        );
     }
 
     async updateAsync(team: Team): Promise<void> {
@@ -77,6 +59,32 @@ class TeamRepository implements ITeamRepository {
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
+
+        for (let i = 0; i < team.domainEvents.length; i++) {
+            const event = team.domainEvents[i];
+
+            if (event instanceof TeamMembershipCreatedEvent) {
+                const teamMembership = event.payload;
+            
+                const sqlEntry = sql`
+                    INSERT INTO team_membership
+                        SET 
+                            id = ${teamMembership.id},
+                            team_id = ${teamMembership.teamId},
+                            player_id = ${teamMembership.playerId},
+                            active_from = ${teamMembership.activeFrom},
+                            active_to = ${teamMembership.activeTo},
+                            number = ${teamMembership.number}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            }
+
+            team.clearEvents();
+        }
     }
 
     async findAllAsync(): Promise<Team[]> {

@@ -17,9 +17,9 @@ class PlayerRepository implements IPlayerRepository {
     async getByIdAsync(id: string): Promise<Player | null> {
         const sqlEntry = sql`
             SELECT * FROM player WHERE
-                id = '${id}'
+                id = ${id}
         `;
-
+        
         const [player] = await this._db.execute<PlayerDbEntity | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
@@ -34,8 +34,7 @@ class PlayerRepository implements IPlayerRepository {
                 SET 
                     id = ${player.id},
                     name = ${player.name},
-                    active_since = ${player.activeSince},
-                    number = ${player.number}
+                    active_since = ${player.activeSince}
         `;
 
         await this._db.execute({
@@ -52,7 +51,6 @@ class PlayerRepository implements IPlayerRepository {
                 id = ${player.id}
                 name = ${player.name}
                 active_since = ${player.activeSince}
-                number = ${player.number}
         `;
 
         await this._db.execute({
@@ -65,8 +63,6 @@ class PlayerRepository implements IPlayerRepository {
 
     async findAllAsync(criteria: { name: string | null; }): Promise<Player[]> {
         let query = knexQueryBuilder<IPlayerSchema>("player");
-
-        console.log(criteria);
 
         if (criteria.name != null) {
             query = query.whereILike("name", `%${criteria.name}%`);

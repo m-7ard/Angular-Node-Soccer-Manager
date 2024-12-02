@@ -9,7 +9,6 @@ class PlayerMapper {
             id: source.id,
             name: source.name,
             activeSince: source.activeSince,
-            number: source.number
         });
     }
 
@@ -18,7 +17,6 @@ class PlayerMapper {
             id: source.id,
             name: source.name,
             activeSince: source.activeSince,
-            number: source.number
         })
     }
 
@@ -27,7 +25,6 @@ class PlayerMapper {
             id: source.id,
             name: source.name,
             activeSince: source.activeSince,
-            number: source.number
         })
     }
 }

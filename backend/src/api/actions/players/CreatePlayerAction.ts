@@ -19,8 +19,6 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
 
-        console.log(dto)
-
         const validation = createPlayerValidator(dto);
         if (validation.isErr()) {
             console.log(dto)
@@ -36,7 +34,6 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
             id: guid,
             name: dto.name,
             activeSince: dto.activeSince,
-            number: dto.number,
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -60,7 +57,6 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
             dto: {
                 name: request.body.name,
                 activeSince: new Date(request.body.activeSince),
-                number: parseInt(request.body.number),
             },
         };
     }

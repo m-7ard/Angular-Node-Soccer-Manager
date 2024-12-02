@@ -1,24 +1,15 @@
 import IPlayerApiModel from "api/models/IPlayerApiModel";
-import ICompactTeamApiModel from "api/models/ICompactTeamApiModel";
+import ITeamApiModel from "api/models/ITeamApiModel";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
-import IFullTeamApiModel from "api/models/IFullTeamApiModel";
+import TeamMembership from "domain/entities/TeamMembership";
 
 class ApiModelMapper {
-    public static createCompactTeamApiModel(team: Team): ICompactTeamApiModel {
+    public static createTeamApiModel(team: Team): ITeamApiModel {
         return {
             id: team.id,
             name: team.name,
             dateFounded: team.dateFounded.toJSON(),
-        };
-    }
-
-    public static createFullTeamApiModel(team: Team, players: Player[]): IFullTeamApiModel {
-        return {
-            id: team.id,
-            name: team.name,
-            dateFounded: team.dateFounded.toJSON(),
-            players: players.map(ApiModelMapper.createPlayerApiModel),
         };
     }
 
@@ -27,7 +18,17 @@ class ApiModelMapper {
             id: player.id,
             activeSince: player.activeSince,
             name: player.name,
-            number: player.number,
+        };
+    }
+
+    public static createTeamMembershipApiModel(membership: TeamMembership): ITeamMembershipApiModel {
+        return {
+            id: membership.id,
+            teamId: membership.teamId,
+            playerId: membership.playerId,
+            activeFrom: membership.activeFrom,
+            activeTo: membership.activeTo,
+            number: membership.number
         };
     }
 }

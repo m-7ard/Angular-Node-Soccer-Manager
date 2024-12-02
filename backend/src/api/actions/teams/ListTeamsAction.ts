@@ -28,12 +28,10 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
-        console.log(teamResult.value)
-
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
-                teams: teamResult.value.map(ApiModelMapper.createCompactTeamApiModel),
+                teams: teamResult.value.map(ApiModelMapper.createTeamApiModel),
             },
         });
     }

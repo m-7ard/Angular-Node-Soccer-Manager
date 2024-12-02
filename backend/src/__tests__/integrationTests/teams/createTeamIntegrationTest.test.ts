@@ -2,7 +2,7 @@ import ICreateTeamRequestDTO from "api/DTOs/teams/create/ICreateTeamRequestDTO";
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import supertest from "supertest";
-import { disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
 
 beforeAll(async () => {
     await setUpIntegrationTest();
@@ -30,6 +30,8 @@ describe("Create Team Integration Test;", () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
+        const rows = await db.query({ statement: 'SELECT * FROM team' });
+        expect(rows.length).toBe(1);
     });
     
     it("Create Team; Invalid Data (Empty name); Failure;", async () => {

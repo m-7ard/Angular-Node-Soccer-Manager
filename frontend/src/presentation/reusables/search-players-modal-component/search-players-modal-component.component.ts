@@ -68,7 +68,7 @@ export class SearchPlayersModalComponentComponent {
 
         responseObservable.subscribe((dto) => {
             this.results = dto.players.map((player) => {
-                return new Player({ id: player.id, name: player.name, number: player.number });
+                return new Player({ id: player.id, name: player.name });
             });
             this.changeRoute("results");
         });

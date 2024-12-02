@@ -7,7 +7,7 @@ import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IListPlayersRequestDTO from "api/DTOs/players/list/IListPlayersRequestDTO";
 import IListPlayersResponseDTO from "api/DTOs/players/list/IListPlayersResponseDTO";
-import { ListPlayersQuery } from "application/handlers/players/ListPlayersCommandHandler";
+import { ListPlayersQuery } from "application/handlers/players/ListPlayersQueryHandler";
 
 type ActionRequest = { dto: IListPlayersRequestDTO };
 type ActionResponse = JsonResponse<IListPlayersResponseDTO | IApiError[]>;

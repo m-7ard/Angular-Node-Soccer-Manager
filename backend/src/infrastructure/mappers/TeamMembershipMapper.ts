@@ -9,7 +9,8 @@ class TeamMembershipMapper {
             active_to: source.active_to,
             id: source.id,
             player_id: source.player_id,
-            team_id: source.team_id
+            team_id: source.team_id,
+            number: source.number
         });
     }
 
@@ -20,6 +21,7 @@ class TeamMembershipMapper {
             player_id: source.playerId,
             active_from: source.activeFrom,
             active_to: source.activeTo,
+            number: source.number
         })
     }
 
@@ -30,6 +32,7 @@ class TeamMembershipMapper {
             playerId: source.player_id,
             activeFrom: source.active_from,
             activeTo: source.active_to,
+            number: source.number
         })
     }
 }

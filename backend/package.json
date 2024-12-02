@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
-    "test": "jest --detectOpenHandles --forceExit",
-    "test:coverage": "jest --coverage"
+    "test": "jest --detectOpenHandles --forceExit --runInBand",
+    "test:coverage": "jest --coverage --runInBand"
   },
   "keywords": [],
   "author": "",

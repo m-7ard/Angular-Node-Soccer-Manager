@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
 import ICreateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipRequestDTO";
 import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
@@ -34,29 +34,15 @@ describe("Create TeamMembership Integration Test;", () => {
             playerId: player_001.id,
             activeFrom: new Date(),
             activeTo: null,
+            number: 5
         };
 
         const response = await supertest(server).post(`/api/teams/${team_001.id}/create-membership`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(201);
+        const rows = await db.query({ statement: 'SELECT * FROM team_membership' });
+        expect(rows.length).toBe(1);
     });
-
-    /*
-    it("Create Team Membership; Invalid Data (Validation); Success;", async () => {
-        const request: ICreateTeamMembershipRequestDTO = {
-            teamId: team_001.id,
-            playerId: player_001.id,
-            activeFrom: new Date(),
-            activeTo: null,
-        };
-
-        const response = await supertest(server).post(`/api/teams/${team_001.id}/create-membership`).send(request).set("Content-Type", "application/json");
-
-        expect(response.status).toBe(400);
-        const body: IApiError[] = response.body;
-        expect(body[0].code).toBe(API_ERROR_CODES.VALIDATION_ERROR);
-    });
-    */
 
     it("Create Team Membership; Team does not exist; Failure;", async () => {
         const INVALID_TEAM_ID = "INVALID";
@@ -65,6 +51,7 @@ describe("Create TeamMembership Integration Test;", () => {
             playerId: player_001.id,
             activeFrom: new Date(),
             activeTo: null,
+            number: 5
         };
 
         const response = await supertest(server).post(`/api/teams/${INVALID_TEAM_ID}/create-membership`).send(request).set("Content-Type", "application/json");
@@ -73,19 +60,4 @@ describe("Create TeamMembership Integration Test;", () => {
         const body: IApiError[] = response.body;
         expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
     });
-    /*
-    it("Create Team Membership; Plauer does not exist; Failure;", async () => {
-        const request: ICreateTeamMembershipRequestDTO = {
-            teamId: team_001.id,
-            playerId: "invalid",
-            activeFrom: new Date(),
-            activeTo: null,
-        };
-
-        const response = await supertest(server).post(`/api/teams/${team_001.id}/create-membership`).send(request).set("Content-Type", "application/json");
-
-        expect(response.status).toBe(400);
-        const body: IApiError[] = response.body;
-        expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
-    });*/
 });

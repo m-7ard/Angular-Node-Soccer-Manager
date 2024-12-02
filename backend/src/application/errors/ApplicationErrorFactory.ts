@@ -5,9 +5,17 @@ class ApplicationErrorFactory {
             path: [...pathPrefix, ...error.path],
             code: "DOMAIN_ERROR",
             metadata: {
-                "type": error.code
-            }
+                type: error.code,
+            },
         }));
+    }
+
+    static createSingleListError({ message, path, code }: { message: string; path: string[]; code: string }): [IApplicationError] {
+        return [{
+            message: message,
+            path: path,
+            code: code,
+        }];
     }
 }
 

@@ -11,17 +11,19 @@ export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError
 export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershipCommandResult> {
     __returnType: CreateTeamMembershipCommandResult = null!;
 
-    constructor({ teamId, playerId, activeFrom, activeTo }: { teamId: string; playerId: string; activeFrom: Date; activeTo: Date | null }) {
+    constructor({ teamId, playerId, activeFrom, activeTo, number }: { teamId: string; playerId: string; activeFrom: Date; activeTo: Date | null; number: number }) {
         this.teamId = teamId;
         this.playerId = playerId;
         this.activeFrom = activeFrom;
         this.activeTo = activeTo;
+        this.number = number;
     }
 
     public teamId: string;
     public playerId: string;
     public activeFrom: Date;
     public activeTo: Date | null;
+    public number: number;
 }
 
 export default class CreateTeamMembershipCommandHandler implements IRequestHandler<CreateTeamMembershipCommand, CreateTeamMembershipCommandResult> {
@@ -56,7 +58,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
             ]);
         }
 
-        const memberAdded = team.tryAddMember({ playerId: player.id, activeFrom: command.activeFrom, activeTo: command.activeTo });
+        const memberAdded = team.tryAddMember({ playerId: player.id, activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
         if (memberAdded.isErr()) {
             return err(ApplicationErrorFactory.domainErrorsToApplicationErrors([memberAdded.error]));
         }

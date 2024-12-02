@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import IPresentationError from '../../../errors/IPresentationError';
 import NotFoundException from '../../../exceptions/NotFoundException';
-import parsers from '../../../utils/parsers';
 import Player from '../../../models/Player';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { PickSinglePlayerComponent } from '../../../reusables/pick-single-player/pick-single-player.component';
@@ -77,7 +76,6 @@ export class CreateTeamMembershipPageComponent implements OnInit {
         const rawValue = this.form.getRawValue();
         console.log(rawValue);
 
-        /* TODO: implement validator for null */
         this.teamDataAccess
             .createTeamMembership(this.id, {
                 activeFrom: new Date(rawValue.activeFrom),

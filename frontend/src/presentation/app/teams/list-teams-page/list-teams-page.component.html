@@ -15,7 +15,7 @@
     <div data-track="base" class="flex flex-col gap-[inherit]">
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-x-2 gap-y-4">
             <ng-container *ngFor="let team of teams">
-                <div class="flex flex-col gap-2">
+                <section class="flex flex-col gap-2">
                     <div class="flex flex-col gap-1">
                         <div class="w-full aspect-square relative bg-gray-300 border border-gray-900">
                             <app-cover-image src=""></app-cover-image>
@@ -34,15 +34,17 @@
                         >
                             Update
                         </app-mixin-button>
-                        <app-mixin-button
-                            [options]="{
-                                theme: 'theme-button-generic-white',
-                                size: 'mixin-button-sm'
-                            }"
-                            className="w-full justify-center"
-                        >
-                            See Players
-                        </app-mixin-button>
+                        <a [href]="'/teams/' + team.id + '/players'">
+                            <app-mixin-button
+                                [options]="{
+                                    theme: 'theme-button-generic-white',
+                                    size: 'mixin-button-sm'
+                                }"
+                                className="w-full justify-center"
+                            >
+                                See Players
+                            </app-mixin-button>
+                        </a>
                         <a [href]="'/teams/' + team.id + '/create-membership'">
                             <app-mixin-button
                                 [options]="{
@@ -64,7 +66,7 @@
                             Delete
                         </app-mixin-button>
                     </div>
-                </div>
+                </section>
             </ng-container>
         </div>
     </div>

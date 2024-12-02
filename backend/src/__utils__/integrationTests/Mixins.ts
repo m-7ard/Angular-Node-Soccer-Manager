@@ -3,6 +3,8 @@ import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
 import TeamFactory from "domain/domainFactories/TeamFactory";
+import Player from "domain/entities/Player";
+import Team from "domain/entities/Team";
 
 class Mixins {
     private readonly _teamRepository: ITeamRepository;
@@ -31,12 +33,29 @@ class Mixins {
             id: `${seed}`,
             name: `player_${seed}`,
             activeSince: new Date(),
-            number: (seed % 11) + 1,
         });
 
         await this._playerRepository.createAsync(player);
 
         return player;
+    }
+
+    async createTeamMembership(player: Player, team: Team, activeTo: Date | null, number: number) {
+        const result = team.tryAddMember({
+            activeFrom: new Date(0),
+            activeTo: activeTo,
+            playerId: player.id,
+            number: number
+        });
+
+
+        if (result.isErr()) {
+            throw Error(result.error.message);
+        }
+
+        await this._teamRepository.updateAsync(team);
+
+        return result.value;
     }
 }
 

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import ICreateTeamMembershipRequestDTO from '../../contracts/teamMemberships/create/ICreateTeamMembershipRequestDTO';
 import ICreateTeamMembershipResponseDTO from '../../contracts/teamMemberships/create/ICreateTeamMembershipResponseDTO';
 import IListTeamsResponseDTO from '../../contracts/teams/list/IListTeamsResponseDTO';
+import IListTeamPlayersResponseDTO from '../../contracts/teams/list-team-players/IListTeamPlayersResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -26,5 +27,9 @@ export class TeamDataAccessService {
 
     listTeams() {
         return this.http.get<IListTeamsResponseDTO>(`${this._baseUrl}/`);
+    }
+
+    listTeamPlayers(teamId: string) {
+        return this.http.get<IListTeamPlayersResponseDTO>(`${this._baseUrl}/${teamId}/players`);
     }
 }

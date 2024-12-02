@@ -29,7 +29,7 @@ beforeEach(async () => {
 describe("List Players Integration Test;", () => {
     it("List Players; No Args; Success;", async () => {
         const request: IListPlayersRequestDTO = {
-            name: null
+            name: null,
         };
 
         const response = await supertest(server).get("/api/players/").send(request).set("Content-Type", "application/json");
@@ -41,10 +41,10 @@ describe("List Players Integration Test;", () => {
 
     it("List Players; Like Name; Success;", async () => {
         const request: IListPlayersRequestDTO = {
-            name: player_001.name
+            name: player_001.name,
         };
 
-        const response = await supertest(server).get("/api/players/").send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).get("/api/players/").query(request).send().set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IListPlayersResponseDTO = response.body;

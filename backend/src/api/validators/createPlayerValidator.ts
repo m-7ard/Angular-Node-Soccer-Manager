@@ -8,10 +8,6 @@ const validatorSchema = Type.Object({
         maxLength: 255
     }),
     activeSince: Type.Date(),
-    number: Type.Number({
-        minimum: 1,
-        maximum: 11
-    }),
     // images: Type.Array(Type.String({ pattern: '.*\.(jpg|jpeg|png)$' }))
 });
 

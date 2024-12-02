@@ -18,11 +18,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { dto } = request;
-
-        console.log("----------");
-        console.log(dto);
-        console.log("----------");
+        const { dto, } = request;
 
         const validation = createTeamMembershipValidator(dto);
         if (validation.isErr()) {
@@ -37,6 +33,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
             playerId: dto.playerId,
             activeFrom: dto.activeFrom,
             activeTo: dto.activeTo,
+            number: dto.number
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -60,6 +57,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
                 playerId: request.body.playerId,
                 activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
                 activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),
+                number: parseInt(request.body.number)
             },
         };
     }

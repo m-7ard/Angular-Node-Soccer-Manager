@@ -13,8 +13,6 @@ import { IListPlayersResolverData } from './list-players-page.resolver';
     standalone: true,
     imports: [
         CommonModule,
-        MixinPrototypeCardComponent,
-        MixinPrototypeCardSectionComponent,
         CoverImageComponent,
         MixinButtonComponent,
     ],

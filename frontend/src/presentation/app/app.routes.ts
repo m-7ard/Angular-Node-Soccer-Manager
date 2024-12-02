@@ -8,6 +8,8 @@ import { ListTeamsPageResolver } from './teams/list-teams-page/list-teams-page.r
 import { ListTeamsPageComponent } from './teams/list-teams-page/list-teams-page.component';
 import { NotFoundPageComponent } from './other/not-found-page/not-found-page.component';
 import { CreateTeamMembershipPageComponent } from './teams/create-team-membership-page/create-team-membership-page.component';
+import { ListTeamPlayersPageComponent } from './teams/list-team-players-page/list-team-players-page.component';
+import { ListTeamPlayersPageResolver } from './teams/list-team-players-page/list-team-players-page.resolver';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -27,6 +29,13 @@ export const routes: Routes = [
         component: ListTeamsPageComponent,
         resolve: {
             teams: ListTeamsPageResolver,
+        },
+    },
+    {
+        path: 'teams/:id/players',
+        component: ListTeamPlayersPageComponent,
+        resolve: {
+            data: ListTeamPlayersPageResolver,
         },
     },
     {

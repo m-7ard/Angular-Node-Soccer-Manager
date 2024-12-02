@@ -4,6 +4,7 @@ import registerAction from "../utils/registerAction";
 import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 import CreateTeamMembershipAction from "api/actions/team_memberships/CreateTeamMembershipAction";
 import ListTeamsAction from "api/actions/teams/ListTeamsAction";
+import ListTeamPlayersAction from "api/actions/teams/ListTeamPlayersAction";
 
 const teamsRouter = Router();
 
@@ -34,6 +35,16 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new CreateTeamMembershipAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/players",
+    method: "GET",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new ListTeamPlayersAction(requestDispatcher);
     },
 });
 

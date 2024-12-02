@@ -6,6 +6,7 @@ export default async function getMigrations() {
     const sqlFiles = files.filter((file) => file.endsWith(".sql"));
     const sqlContents = await Promise.all(
         sqlFiles.sort().map(async (file) => {
+            console.log(file)
             const filePath = path.join("sql", file);
             const content = await readFile(filePath, "utf-8");
             return content;
