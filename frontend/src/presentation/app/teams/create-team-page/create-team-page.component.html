@@ -2,7 +2,7 @@
     <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
         <div class="text-xl">Create Team</div>
     </header>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" class="flex flex-col gap-2 w-full shrink-0">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" class="flex flex-col gap-2 p-4 border border-gray-900">
         <!-- Start Form Fields -->
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">

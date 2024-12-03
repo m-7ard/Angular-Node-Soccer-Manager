@@ -1,9 +1,9 @@
-<header class="flex flex-row gap-4 p-4 text-xl border-b border-gray-900">
+<header class="flex flex-row gap-4 p-4 text-xl border-b border-gray-900 overflow-auto">
     <a
         routerLink="/"
         routerLinkActive="active"
         ariaCurrentWhenActive="page"
-        class="mixin-button-like mixin-button-base theme-button-generic-white"
+        class="mixin-button-like mixin-button-base theme-button-generic-white truncate shrink-0"
         [routerLinkActiveOptions]="{ exact: true }"
     >
         Frontpage
@@ -12,30 +12,21 @@
         routerLink="/players"
         routerLinkActive="active"
         ariaCurrentWhenActive="page"
-        class="mixin-button-like mixin-button-base theme-button-generic-white"
+        class="mixin-button-like mixin-button-base theme-button-generic-white truncate shrink-0"
         [routerLinkActiveOptions]="{ exact: true }"
     >
-        All Players
-    </a>
-    <a
-        routerLink="/players/create"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        class="mixin-button-like mixin-button-base theme-button-generic-white"
-        [routerLinkActiveOptions]="{ exact: true }"
-    >
-        Create Player
+        Players
     </a>
     <a
         routerLink="/teams"
         routerLinkActive="active"
         ariaCurrentWhenActive="page"
-        class="mixin-button-like mixin-button-base theme-button-generic-white"
+        class="mixin-button-like mixin-button-base theme-button-generic-white truncate shrink-0"
         [routerLinkActiveOptions]="{ exact: true }"
     >
         Teams
     </a>
-    <div class="mixin-button-like mixin-button-base theme-button-generic-white" modalTrigger [modalPanel]="exampleModal" [modalData]="{ title: otherTitle }">
+    <div class="mixin-button-like mixin-button-base theme-button-generic-white truncate shrink-0" modalTrigger [modalPanel]="exampleModal" [modalData]="{ title: otherTitle }">
         Test
     </div>
 </header>

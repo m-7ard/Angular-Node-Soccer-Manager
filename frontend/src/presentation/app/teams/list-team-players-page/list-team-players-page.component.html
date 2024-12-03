@@ -1,11 +1,11 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
     <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
-        <div class="text-xl">All Teams</div>
+        <div class="text-xl">List Team Members</div>
         <a [href]="'/teams/' + team.id + '/create-membership'">
             <app-mixin-button
                 [options]="{
                     theme: 'theme-button-generic-green',
-                    size: 'mixin-button-sm'
+                    size: 'mixin-button-base'
                 }"
                 [buttonAttrs]="{ type: 'button' }"
             >
@@ -13,7 +13,7 @@
             </app-mixin-button>
         </a>
     </header>
-    <div data-track="base" class="flex flex-col gap-[inherit]">
+    <div data-track="base" class="flex flex-col gap-[inherit] p-4 border border-gray-900">
         <div class="grid grid-cols-2 gap-x-2 gap-y-4">
             <ng-container *ngFor="let teamPlayer of teamPlayers">
                 <section class="flex flex-col gap-2">

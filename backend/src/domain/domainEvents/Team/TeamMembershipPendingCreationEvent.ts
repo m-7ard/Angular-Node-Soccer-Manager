@@ -1,7 +1,7 @@
 import TeamMembership from "domain/entities/TeamMembership";
 import DomainEvent from "../DomainEvent";
 
-class TeamMembershipCreatedEvent extends DomainEvent {
+class TeamMembershipPendingCreationEvent extends DomainEvent {
     payload: TeamMembership;
 
     constructor(teamMembership: TeamMembership) {
@@ -13,4 +13,4 @@ class TeamMembershipCreatedEvent extends DomainEvent {
     readonly EVENT_TYPE = "TEAM_MEMBERSHIP_CREATED";
 }
 
-export default TeamMembershipCreatedEvent;
+export default TeamMembershipPendingCreationEvent;

@@ -13,7 +13,7 @@ export default function createApplication(config: { port: number; middleware: Ar
     const { database } = config;
     const app = express();
     app.options("*", cors());
-    console.log("----------------------------");
+    // console.log("----------------------------");
     app.use(cors());
 
     // Database

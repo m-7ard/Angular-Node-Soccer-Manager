@@ -4,6 +4,7 @@ interface ITeamRepository {
     createAsync(team: Team): Promise<void>;
     updateAsync(team: Team): Promise<void>;
     getByIdAsync(id: string): Promise<Team | null>;
+    deleteAsync(team: Team): Promise<void>;
     findAllAsync(): Promise<Team[]>;
 }
 

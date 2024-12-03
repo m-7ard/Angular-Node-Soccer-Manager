@@ -32,7 +32,7 @@ class Mixins {
         const player = PlayerFactory.CreateNew({
             id: `${seed}`,
             name: `player_${seed}`,
-            activeSince: new Date(),
+            activeSince: new Date(Date.now()),
         });
 
         await this._playerRepository.createAsync(player);

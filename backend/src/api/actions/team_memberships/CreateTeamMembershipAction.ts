@@ -18,7 +18,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { dto, } = request;
+        const { dto, teamId } = request;
 
         const validation = createTeamMembershipValidator(dto);
         if (validation.isErr()) {
@@ -29,7 +29,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
         }
 
         const command = new CreateTeamMembershipCommand({
-            teamId: request.teamId,
+            teamId: teamId,
             playerId: dto.playerId,
             activeFrom: dto.activeFrom,
             activeTo: dto.activeTo,

@@ -86,7 +86,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                 activeFrom: new Date(rawValue.activeFrom),
                 activeTo: rawValue.activeTo == null ? null : new Date(rawValue.activeTo),
                 playerId: rawValue.player?.id as string,
-                number: parseInt(rawValue.number)
+                number: parseInt(rawValue.number),
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
@@ -100,7 +100,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                         return;
                     }
 
-                    this.router.navigate(['/players']);
+                    this.router.navigate([`/teams/${this.id}/players`]);
                 },
             });
     }

@@ -2,7 +2,7 @@ import { err, ok, Result } from "neverthrow";
 import TeamMembership from "./TeamMembership";
 import TeamMembershipFactory from "domain/domainFactories/TeamMembershipFactory";
 import DomainEvent from "domain/domainEvents/DomainEvent";
-import TeamMembershipCreatedEvent from "domain/domainEvents/Team/TeamMembershipCreatedEvent";
+import TeamMembershipPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipPendingCreationEvent";
 
 class Team {
     private readonly __type: "TEAM_DOMAIN" = null!;
@@ -41,7 +41,7 @@ class Team {
             number: props.number,
         });
         this.teamMemberships.push(teamMembership);
-        this.domainEvents.push(new TeamMembershipCreatedEvent(teamMembership));
+        this.domainEvents.push(new TeamMembershipPendingCreationEvent(teamMembership));
 
         return ok(teamMembership);
     }

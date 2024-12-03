@@ -36,8 +36,6 @@ export default class CreateTeamCommandHandler
             activeSince: command.activeSince,
         });
 
-        console.log(player)
-
         await this._playerRepository.createAsync(player);
         return ok(undefined);
     }

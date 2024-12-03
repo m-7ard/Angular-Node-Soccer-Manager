@@ -32,9 +32,9 @@ class MySQLDatabaseService implements IDatabaseService {
         return query;
     }
 
-    async execute<T = mysql.ResultSetHeader>(args: { statement: string; parameters: Array<unknown> }): Promise<T> {
+    async execute<T = undefined>(args: { statement: string; parameters: Array<unknown> }): Promise<T extends undefined ? ResultSetHeader : T[]> {
         const { statement, parameters } = args;
-        const [query] = await this._pool.execute<T & mysql.RowDataPacket[]>(statement, parameters);
+        const [query] = await this._pool.execute<(T extends undefined ? ResultSetHeader : T[]) & mysql.RowDataPacket[]>(statement, parameters);
         return query;
     }
 }

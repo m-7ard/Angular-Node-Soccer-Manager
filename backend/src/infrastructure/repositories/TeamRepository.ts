@@ -1,4 +1,4 @@
-import TeamMembershipCreatedEvent from "domain/domainEvents/Team/TeamMembershipCreatedEvent";
+import TeamMembershipPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipPendingCreationEvent";
 import IDatabaseService from "../../api/interfaces/IDatabaseService";
 import ITeamRepository from "../../application/interfaces/ITeamRepository";
 import Team from "domain/entities/Team";
@@ -63,9 +63,9 @@ class TeamRepository implements ITeamRepository {
         for (let i = 0; i < team.domainEvents.length; i++) {
             const event = team.domainEvents[i];
 
-            if (event instanceof TeamMembershipCreatedEvent) {
+            if (event instanceof TeamMembershipPendingCreationEvent) {
                 const teamMembership = event.payload;
-            
+
                 const sqlEntry = sql`
                     INSERT INTO team_membership
                         SET 
@@ -98,8 +98,42 @@ class TeamRepository implements ITeamRepository {
         for (const team of teams) {
             await team.loadTeamMemberships(this._db);
         }
-        
+
         return teams.map(TeamMapper.dbEntityToDomain);
+    }
+
+    async deleteAsync(team: Team): Promise<void> {
+        for (let i = 0; i < team.teamMemberships.length; i++) {
+            const teamMembership = team.teamMemberships[i];
+
+            const sqlEntry = sql`
+                DELETE FROM team_teamship WHERE
+                    id = ${teamMembership.id}
+            `;
+
+            const headers = await this._db.execute({
+                statement: sqlEntry.sql,
+                parameters: sqlEntry.values,
+            });
+
+            if (headers.affectedRows === 0) {
+                throw Error(`No team_membership of id "${teamMembership.id}" was deleted."`);
+            }
+        }
+
+        const sqlEntry = sql`
+            DELETE FROM team WHERE
+                id = ${team.id}
+        `;
+
+        const headers = await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        if (headers.affectedRows === 0) {
+            throw Error(`No team of id "${team.id} was deleted."`);
+        }
     }
 }
 

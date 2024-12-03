@@ -15,6 +15,22 @@ class PlayerRepository implements IPlayerRepository {
         this._db = db;
     }
 
+    async deleteAsync(player: Player): Promise<void> {
+        const sqlEntry = sql`
+            DELETE FROM player WHERE
+                id = ${player.id}
+        `;
+
+        const headers = await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        if (headers.affectedRows === 0) {
+            throw Error(`No Player of id "${player.id} was deleted."`);
+        }
+    }
+
     async getByIdAsync(id: string): Promise<Player | null> {
         const sqlEntry = sql`
             SELECT * FROM player WHERE
@@ -30,7 +46,6 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async createAsync(player: Player): Promise<Player> {
-        console.log("xxxXXX: ", toSqlDate(player.activeSince), player.activeSince)
         const sqlEntry = sql`
             INSERT INTO player
                 SET 
@@ -50,9 +65,10 @@ class PlayerRepository implements IPlayerRepository {
     async updateAsync(player: Player): Promise<Player> {
         const sqlEntry = sql`
             UPDATE player
-                id = ${player.id}
-                name = ${player.name}
-                active_since = ${player.activeSince}
+                SET
+                    id = ${player.id},
+                    name = ${player.name},
+                    active_since = ${player.activeSince}
         `;
 
         await this._db.execute({
@@ -63,17 +79,15 @@ class PlayerRepository implements IPlayerRepository {
         return player;
     }
 
-    async findAllAsync(criteria: { name: string | null; }): Promise<Player[]> {
+    async findAllAsync(criteria: { name: string | null }): Promise<Player[]> {
         let query = knexQueryBuilder<IPlayerSchema>("player");
 
         if (criteria.name != null) {
             query = query.whereILike("name", `%${criteria.name}%`);
         }
 
-        console.log("players: ", query.toString())
         const rows = await this._db.query<IPlayerSchema>({ statement: query.toString() });
         const players = rows.map(PlayerMapper.schemaToDbEntity);
-        console.log("players: ", players)
         return players.map(PlayerMapper.dbEntityToDomain);
     }
 }
