@@ -3,7 +3,7 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import validationErrorCodes from "application/errors/validationErrorCodes";
+import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 export type DeleteTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -31,7 +31,7 @@ export default class DeleteTeamCommandHandler implements IRequestHandler<DeleteT
                 ApplicationErrorFactory.createSingleListError({
                     message: `Team of id "${command.id}" does not exist.`,
                     path: ["_"],
-                    code: validationErrorCodes.ModelAlreadyExists,
+                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
                 }),
             );
         }

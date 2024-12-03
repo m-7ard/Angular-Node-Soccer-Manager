@@ -9,7 +9,7 @@ import ApiModelMapper from "api/mappers/ApiModelMapper";
 import IListTeamPlayersResponseDTO from "api/DTOs/teams/list-team-players/IListTeamPlayersResponseDTO";
 import IListTeamPlayersRequestDTO from "api/DTOs/teams/list-team-players/IListTeamPlayersRequestDTO";
 import { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
-import { ReadPlayersQuery } from "application/handlers/players/ReadPlayerQueryHandler";
+import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
 
 type ActionRequest = { dto: IListTeamPlayersRequestDTO; params: { teamId: string } };
 type ActionResponse = JsonResponse<IListTeamPlayersResponseDTO | IApiError[]>;
@@ -38,7 +38,7 @@ class ListTeamPlayersAction implements IAction<ActionRequest, ActionResponse> {
 
         for (let i = 0; i < team.teamMemberships.length; i++) {
             const membership = team.teamMemberships[i];
-            const readPlayerQuery = new ReadPlayersQuery({
+            const readPlayerQuery = new ReadPlayerQuery({
                 id: membership.playerId,
             });
 

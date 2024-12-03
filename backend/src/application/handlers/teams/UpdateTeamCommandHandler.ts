@@ -4,7 +4,7 @@ import { err, ok } from "neverthrow";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import TeamFactory from "domain/domainFactories/TeamFactory";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import validationErrorCodes from "application/errors/validationErrorCodes";
+import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 export type UpdateTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -36,7 +36,7 @@ export default class UpdateTeamCommandHandler implements IRequestHandler<UpdateT
                 ApplicationErrorFactory.createSingleListError({
                     message: `Team of id "${command.id}" does not exist.`,
                     path: ["_"],
-                    code: validationErrorCodes.ModelAlreadyExists,
+                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
                 }),
             );
         }

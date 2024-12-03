@@ -7,6 +7,7 @@ import ListTeamsAction from "api/actions/teams/ListTeamsAction";
 import ListTeamPlayersAction from "api/actions/teams/ListTeamPlayersAction";
 import UpdateTeamAction from "api/actions/teams/UpdateTeamAction";
 import DeleteTeamAction from "api/actions/teams/DeleteTeamAction";
+import ReadTeamAction from "api/actions/teams/ReadTeamAction";
 
 const teamsRouter = Router();
 
@@ -69,5 +70,16 @@ registerAction({
         return new DeleteTeamAction(requestDispatcher);
     },
 });
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId",
+    method: "GET",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new ReadTeamAction(requestDispatcher);
+    },
+});
+
 
 export default teamsRouter;

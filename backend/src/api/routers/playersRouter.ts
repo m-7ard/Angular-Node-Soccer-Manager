@@ -5,6 +5,7 @@ import CreatePlayerAction from "api/actions/players/CreatePlayerAction";
 import ListPlayersAction from "api/actions/players/ListPlayersAction";
 import UpdatePlayerAction from "api/actions/players/UpdatePlayerAction";
 import DeletePlayerAction from "api/actions/players/DeletePlayerAction";
+import ReadPlayerAction from "api/actions/players/ReadPlayerAction";
 
 const playersRouter = Router();
 
@@ -38,7 +39,6 @@ registerAction({
     },
 });
 
-
 registerAction({
     router: playersRouter,
     path: "/:playerId/delete",
@@ -49,5 +49,14 @@ registerAction({
     },
 });
 
+registerAction({
+    router: playersRouter,
+    path: "/:playerId",
+    method: "GET",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new ReadPlayerAction(requestDispatcher);
+    },
+});
 
 export default playersRouter;

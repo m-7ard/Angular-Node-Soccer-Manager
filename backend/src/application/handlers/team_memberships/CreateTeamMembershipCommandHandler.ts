@@ -4,7 +4,7 @@ import { err, ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import validationErrorCodes from "application/errors/validationErrorCodes";
+import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -40,7 +40,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         if (team == null) {
             return err([
                 {
-                    code: validationErrorCodes.ModelDoesNotExist,
+                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
                     path: ["_"],
                     message: `Team with id ${command.teamId} does not exist.`,
                 },
@@ -51,7 +51,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         if (player == null) {
             return err([
                 {
-                    code: validationErrorCodes.ModelDoesNotExist,
+                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
                     path: ["_"],
                     message: `Player with id ${command.teamId} does not exist.`,
                 },

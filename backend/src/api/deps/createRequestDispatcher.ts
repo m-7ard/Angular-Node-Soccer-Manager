@@ -5,7 +5,7 @@ import CreatePlayerCommandHandler, { CreatePlayerCommand } from "application/han
 import CreateTeamMembershipCommandHandler, { CreateTeamMembershipCommand } from "application/handlers/team_memberships/CreateTeamMembershipCommandHandler";
 import ListTeamsQueryHandler, { ListTeamsQuery } from "application/handlers/teams/ListTeamsQueryHandler";
 import ListPlayersQueryHandler, { ListPlayersQuery } from "application/handlers/players/ListPlayersQueryHandler";
-import ReadPlayersQueryHandler, { ReadPlayersQuery } from "application/handlers/players/ReadPlayerQueryHandler";
+import ReadPlayerQueryHandler, { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
 import ReadTeamQueryHandler, { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
 import UpdatePlayerCommandHandler, { UpdatePlayerCommand } from "application/handlers/players/UpdatePlayerCommandHandler";
 import DeletePlayerCommandHandler, { DeletePlayerCommand } from "application/handlers/players/DeletePlayerCommandHandler";
@@ -20,7 +20,7 @@ function createRequestDispatcher() {
     // Players
     requestDispatcher.registerHandler(CreatePlayerCommand, new CreatePlayerCommandHandler({ playerRepository: playerRepository }));
     requestDispatcher.registerHandler(ListPlayersQuery, new ListPlayersQueryHandler({ playerRepository: playerRepository }));
-    requestDispatcher.registerHandler(ReadPlayersQuery, new ReadPlayersQueryHandler({ playerRepository: playerRepository }));
+    requestDispatcher.registerHandler(ReadPlayerQuery, new ReadPlayerQueryHandler({ playerRepository: playerRepository }));
     requestDispatcher.registerHandler(UpdatePlayerCommand, new UpdatePlayerCommandHandler({ playerRepository: playerRepository }));
     requestDispatcher.registerHandler(DeletePlayerCommand, new DeletePlayerCommandHandler({ playerRepository: playerRepository }));
 

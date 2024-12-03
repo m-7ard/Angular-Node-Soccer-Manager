@@ -1,4 +1,4 @@
-const validationErrorCodes = {
+const VALIDATION_ERROR_CODES = {
     IsNull: "IsNull",
     StateMismatch: "StateMismatch",
     ModelDoesNotExist: "ModelDoesNotExist",
@@ -11,4 +11,4 @@ const validationErrorCodes = {
     FileNoFiles: "FileNoFiles",
 } as const;
 
-export default validationErrorCodes;
+export default VALIDATION_ERROR_CODES;

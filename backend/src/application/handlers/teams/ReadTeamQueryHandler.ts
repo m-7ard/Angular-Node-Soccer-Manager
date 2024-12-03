@@ -3,7 +3,7 @@ import IQuery, { IQueryResult } from "../IQuery";
 import Team from "../../../domain/entities/Team";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import { err, ok } from "neverthrow";
-import validationErrorCodes from "application/errors/validationErrorCodes";
+import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 
 export type ReadTeamQueryResult = IQueryResult<Team, IApplicationError[]>;
@@ -32,7 +32,7 @@ export default class ReadTeamQueryHandler implements IRequestHandler<ReadTeamQue
         if (team == null) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
-                    code: validationErrorCodes.ModelDoesNotExist,
+                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
                     path: ["_"],
                     message: `Team of id ${command.id} does not exist.`,
                 }),

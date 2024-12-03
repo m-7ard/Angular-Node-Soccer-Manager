@@ -1,4 +1,4 @@
-import IPlayerApiModel from "api/models/IPlayerApiModel";
+import IPlayerApiModel from "@apiModels/IPlayerApiModel";
 
 interface IListPlayersResponseDTO {
     players: IPlayerApiModel[];

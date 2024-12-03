@@ -3,6 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import IListPlayersResponseDTO from '../../contracts/players/list/IListPlayersResponseDTO';
 import ICreatePlayerRequestDTO from '../../contracts/players/create/ICreatePlayerRequestDTO';
 import IListPlayersRequestDTO from '../../contracts/players/list/IListPlayersRequestDTO';
+import IUpdatePlayerRequestDTO from '../../contracts/players/update/IUpdatePlayerRequestDTO';
+import ICreatePlayerResponseDTO from '../../contracts/players/create/ICreatePlayerResponseDTO';
+import IUpdatePlayerResponseDTO from '../../contracts/players/update/IUpdatePlayerResponseDTO';
+import IDeletePlayerRequestDTO from '../../contracts/players/delete/IDeletePlayerRequestDTO';
+import IDeletePlayerResponseDTO from '../../contracts/players/delete/IDeletePlayerResponseDTO';
+import Player from '../../models/Player';
 
 @Injectable({
     providedIn: 'root',
@@ -25,6 +31,18 @@ export class PlayerDataAccessService {
     }
 
     createPlayer(request: ICreatePlayerRequestDTO) {
-        return this.http.post<{ id: string; }>(`${this._baseUrl}/create`, request);
+        return this.http.post<ICreatePlayerResponseDTO>(`${this._baseUrl}/create`, request);
+    }
+
+    update(playerId: Player["id"], request: IUpdatePlayerRequestDTO) {
+        return this.http.put<IUpdatePlayerResponseDTO>(`${this._baseUrl}/${playerId}/update`, request);
+    }
+
+    read(playerId: Player["id"], request: IUpdatePlayerRequestDTO) {
+        return this.http.put<IUpdatePlayerResponseDTO>(`${this._baseUrl}/${playerId}/update`, request);
+    }
+
+    delete(playerId: Player["id"], request: IDeletePlayerRequestDTO) {
+        return this.http.delete<IDeletePlayerResponseDTO>(`${this._baseUrl}/${playerId}/delete`, request);
     }
 }
