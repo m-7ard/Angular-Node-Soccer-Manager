@@ -9,6 +9,8 @@ import IUpdatePlayerResponseDTO from '../../contracts/players/update/IUpdatePlay
 import IDeletePlayerRequestDTO from '../../contracts/players/delete/IDeletePlayerRequestDTO';
 import IDeletePlayerResponseDTO from '../../contracts/players/delete/IDeletePlayerResponseDTO';
 import Player from '../../models/Player';
+import IReadPlayerRequestDTO from '../../contracts/players/read/IReadPlayerRequestDTO';
+import IReadPlayerResponseDTO from '../../contracts/players/read/IReadPlayerResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -23,7 +25,7 @@ export class PlayerDataAccessService {
             if (val == null) {
                 return;
             }
-            
+
             url.searchParams.append(key, val);
         });
 
@@ -34,15 +36,15 @@ export class PlayerDataAccessService {
         return this.http.post<ICreatePlayerResponseDTO>(`${this._baseUrl}/create`, request);
     }
 
-    update(playerId: Player["id"], request: IUpdatePlayerRequestDTO) {
+    update(playerId: Player['id'], request: IUpdatePlayerRequestDTO) {
         return this.http.put<IUpdatePlayerResponseDTO>(`${this._baseUrl}/${playerId}/update`, request);
     }
 
-    read(playerId: Player["id"], request: IUpdatePlayerRequestDTO) {
-        return this.http.put<IUpdatePlayerResponseDTO>(`${this._baseUrl}/${playerId}/update`, request);
+    read(playerId: Player['id'], request: IReadPlayerRequestDTO) {
+        return this.http.get<IReadPlayerResponseDTO>(`${this._baseUrl}/${playerId}`, request);
     }
 
-    delete(playerId: Player["id"], request: IDeletePlayerRequestDTO) {
+    delete(playerId: Player['id'], request: IDeletePlayerRequestDTO) {
         return this.http.delete<IDeletePlayerResponseDTO>(`${this._baseUrl}/${playerId}/delete`, request);
     }
 }

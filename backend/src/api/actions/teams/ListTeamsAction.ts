@@ -18,7 +18,10 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
-        const command = new ListTeamsQuery({});
+        const command = new ListTeamsQuery({
+            name: dto.name,
+            teamMembershipPlayerId: dto.teamMembershipPlayerId
+        });
         const teamResult = await this._requestDispatcher.dispatch(command);
 
         if (teamResult.isErr()) {
@@ -38,7 +41,10 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
 
     bind(request: Request): ActionRequest {
         return {
-            dto: {},
+            dto: {
+                name: request.params.name,
+                teamMembershipPlayerId: request.params.teamMembershipPlayerId
+            },
         };
     }
 }

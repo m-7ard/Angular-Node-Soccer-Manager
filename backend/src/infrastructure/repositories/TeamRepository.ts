@@ -5,6 +5,8 @@ import Team from "domain/entities/Team";
 import ITeamSchema from "infrastructure/dbSchemas/ITeamSchema";
 import TeamMapper from "infrastructure/mappers/TeamMapper";
 import sql from "sql-template-tag";
+import knexQueryBuilder from "api/deps/knexQueryBuilder";
+import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -87,11 +89,26 @@ class TeamRepository implements ITeamRepository {
         }
     }
 
-    async findAllAsync(): Promise<Team[]> {
-        const sqlEntry = sql`SELECT * FROM team`;
-        const rows = await this._db.execute<ITeamSchema>({
-            statement: sqlEntry.sql,
-            parameters: sqlEntry.values,
+    async filterAllAsync(criteria: FilterAllTeamsCriteria): Promise<Team[]> {
+        let query = knexQueryBuilder<ITeamSchema>("team");
+
+        if (criteria.name != null) {
+            query.whereILike("team.name", `%${criteria.name}%`);
+        }
+
+        if (criteria.teamMembershipPlayerId != null) {
+            query = query
+                .join("team_membership", "team.id", "team_membership.team_id")
+                .where(
+                    "team_membership.player_id",
+                    criteria.teamMembershipPlayerId,
+                )
+                .select("team.*")
+                .distinct();
+        }
+
+        const rows = await this._db.query<ITeamSchema>({
+            statement: query.toString()
         });
         const teams = rows.map(TeamMapper.schemaToDbEntity);
 
@@ -117,7 +134,9 @@ class TeamRepository implements ITeamRepository {
             });
 
             if (headers.affectedRows === 0) {
-                throw Error(`No team_membership of id "${teamMembership.id}" was deleted."`);
+                throw Error(
+                    `No team_membership of id "${teamMembership.id}" was deleted."`,
+                );
             }
         }
 

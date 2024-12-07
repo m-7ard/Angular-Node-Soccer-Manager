@@ -10,6 +10,8 @@ import { NotFoundPageComponent } from './other/not-found-page/not-found-page.com
 import { CreateTeamMembershipPageComponent } from './teams/create-team-membership-page/create-team-membership-page.component';
 import { ListTeamPlayersPageComponent } from './teams/list-team-players-page/list-team-players-page.component';
 import { ListTeamPlayersPageResolver } from './teams/list-team-players-page/list-team-players-page.resolver';
+import { UpdatePlayerPageComponent } from './players/update-player-page/update-player-page.component';
+import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -47,7 +49,11 @@ export const routes: Routes = [
         component: CreateTeamMembershipPageComponent,
     },
     {
-        path: 'not-found',
-        component: NotFoundPageComponent,
-    },
+        path: 'players/:id/update',
+        component: UpdatePlayerPageComponent,
+        resolve: {
+            data: UpdatePlayerPageResolver,
+        },
+    }
+    
 ];

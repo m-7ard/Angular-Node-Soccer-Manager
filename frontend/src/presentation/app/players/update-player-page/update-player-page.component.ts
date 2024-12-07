@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
@@ -10,6 +10,8 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { IUpdatePlayerResolverData } from './update-player-page.resolver';
+import parsers from '../../../utils/parsers';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -24,22 +26,18 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-update-player-page',
     standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
-        MixinButtonComponent,
-        CommonModule,
-    ],
+    imports: [ReactiveFormsModule, CharFieldComponent, FormFieldComponent, MixinButtonComponent, CommonModule],
     templateUrl: './update-player-page.component.html',
 })
 export class UpdatePlayerPageComponent {
-    form: FormGroup<IFormControls>;
+    form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
+    id: string = null!;
 
     constructor(
         private router: Router,
         private playerDataAccess: PlayerDataAccessService,
+        private _activatedRoute: ActivatedRoute,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -53,11 +51,24 @@ export class UpdatePlayerPageComponent {
         });
     }
 
+    ngOnInit() {
+        this._activatedRoute.data.subscribe((resolverData) => {
+            const data: IUpdatePlayerResolverData = resolverData['data'];
+            this.id = data.id;
+            const player = data.player;
+
+            this.form.patchValue({
+                name: player.name,
+                activeSince: parsers.parseJsDateToInputDate(player.activeSince),
+            });
+        });
+    }
+
     onSubmit(): void {
         const rawValue = this.form.getRawValue();
-        
+
         this.playerDataAccess
-            .updarePlayer({
+            .update(this.id, {
                 activeSince: new Date(rawValue.activeSince),
                 name: rawValue.name,
             })

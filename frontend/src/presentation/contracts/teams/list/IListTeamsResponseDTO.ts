@@ -1,4 +1,4 @@
-import ITeamApiModel from "api/models/ITeamApiModel";
+import ITeamApiModel from "@apiModels/ITeamApiModel";
 
 interface IListTeamsResponseDTO {
     teams: ITeamApiModel[]

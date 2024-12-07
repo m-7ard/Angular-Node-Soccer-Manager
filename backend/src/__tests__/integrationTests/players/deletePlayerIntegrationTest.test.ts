@@ -45,4 +45,18 @@ describe("Delete Player Integration Test;", () => {
         const body: IApiError[] = response.body;
         expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
     });
+
+    it("Delete Player; Player has memberships and cannot be deleted; Failure;", async () => {
+        const mixins = new Mixins();
+        const team_001 = await mixins.createTeam(1);
+        const teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
+
+        const request: IDeletePlayerRequestDTO = {};
+
+        const response = await supertest(server).delete(`/api/players/${player_001.id}/delete`).send(request).set("Content-Type", "application/json");
+
+        expect(response.status).toBe(400);
+        const body: IApiError[] = response.body;
+        expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
+    });
 });

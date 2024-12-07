@@ -70,7 +70,7 @@
     }
 
     .mixin-panel-like {
-        @apply flex flex-col grow max-h-full;
+        @apply flex flex-col grow max-h-full w-[100vw];
     }
 
     .mixin-panel-base {

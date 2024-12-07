@@ -28,7 +28,10 @@ beforeEach(async () => {
 
 describe("List Teams Integration Test;", () => {
     it("List Teams; No Args; Success;", async () => {
-        const request: IListTeamsRequestDTO = {};
+        const request: IListTeamsRequestDTO = {
+            name: null,
+            teamMembershipPlayerId: null
+        };
 
         const response = await supertest(server).get("/api/teams/").send(request).set("Content-Type", "application/json");
 

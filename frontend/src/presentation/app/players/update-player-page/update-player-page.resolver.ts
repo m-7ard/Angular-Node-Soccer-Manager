@@ -1,37 +1,35 @@
-import { Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import Team from '../../../models/Team';
-import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Player from '../../../models/Player';
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
+import PlayerMapper from '../../../mappers/PlayerMapper';
 
 export interface IUpdatePlayerResolverData {
     player: Player;
+    id: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class ListTeamsPageResolver implements Resolve<Team[]>, OnInit {
+export class UpdatePlayerPageResolver implements Resolve<IUpdatePlayerResolverData> {
     constructor(
         private _playerDataAccess: PlayerDataAccessService,
-        private route: ActivatedRoute,
     ) {}
 
-    ngOnInit(): void {
-        console.log('balls onInit -->', this.route.snapshot.data['teams']);
-    }
+    resolve(route: ActivatedRouteSnapshot): Observable<IUpdatePlayerResolverData> {
+        const id = route.paramMap.get('id')
 
-    resolve(route: ActivatedRouteSnapshot): Observable<Team[]> {
-        return this._playerDataAccess.read().pipe(
+        if (id == null) {
+            throw new Error('implement a 404');
+        }
+
+        return this._playerDataAccess.read(id, {}).pipe(
             map((response) => {
-                return response.teams.map((team) => {
-                    return new Team({
-                        id: team.id,
-                        name: team.name,
-                        dateFounded: new Date(team.dateFounded),
-                    });
-                });
-            }),
+                return {
+                    player: PlayerMapper.apiModelToDomain(response.player),
+                    id: id
+                }
+            })
         );
     }
 }

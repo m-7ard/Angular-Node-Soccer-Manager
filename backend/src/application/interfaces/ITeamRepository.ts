@@ -1,3 +1,4 @@
+import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import Team from "../../domain/entities/Team";
 
 interface ITeamRepository {
@@ -5,7 +6,7 @@ interface ITeamRepository {
     updateAsync(team: Team): Promise<void>;
     getByIdAsync(id: string): Promise<Team | null>;
     deleteAsync(team: Team): Promise<void>;
-    findAllAsync(): Promise<Team[]>;
+    filterAllAsync(criteria: FilterAllTeamsCriteria): Promise<Team[]>;
 }
 
 export default ITeamRepository;

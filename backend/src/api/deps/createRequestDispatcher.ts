@@ -22,7 +22,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(ListPlayersQuery, new ListPlayersQueryHandler({ playerRepository: playerRepository }));
     requestDispatcher.registerHandler(ReadPlayerQuery, new ReadPlayerQueryHandler({ playerRepository: playerRepository }));
     requestDispatcher.registerHandler(UpdatePlayerCommand, new UpdatePlayerCommandHandler({ playerRepository: playerRepository }));
-    requestDispatcher.registerHandler(DeletePlayerCommand, new DeletePlayerCommandHandler({ playerRepository: playerRepository }));
+    requestDispatcher.registerHandler(DeletePlayerCommand, new DeletePlayerCommandHandler({ playerRepository: playerRepository, teamRepository: teamRepository }));
 
     // Teams
     requestDispatcher.registerHandler(CreateTeamCommand, new CreateTeamCommandHandler({ teamRepository: teamRepository }));

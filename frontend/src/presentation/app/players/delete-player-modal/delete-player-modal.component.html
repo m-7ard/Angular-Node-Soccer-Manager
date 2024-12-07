@@ -1,0 +1,42 @@
+<div class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+    <header class="flex flex-row gap-2 justify-between">
+        <div>
+            <span class="font-bold"> Delete Player </span>
+            <span> "{{ player.name }}" </span>
+        </div>
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-sm',
+                theme: 'theme-button-generic-white'
+            }"
+            (click)="closeModal()"
+        >
+            Close
+        </app-mixin-button>
+    </header>
+    <hr class="border-t border-black w-full h-0" />
+    <section>Are you sure you want to delete "{{ player.name }}"?</section>
+    <hr class="border-t border-black w-full h-0" />
+    <footer class="flex flex-row gap-2 justify-end">
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-base',
+                theme: 'theme-button-generic-white'
+            }"
+            (click)="closeModal()"
+            [buttonAttrs]="{ type: 'button' }"
+        >
+            Cancel
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                size: 'mixin-button-base',
+                theme: 'theme-button-generic-red'
+            }"
+            (click)="onSubmit()"
+            [buttonAttrs]="{ type: 'button' }"
+        >
+            Delete
+        </app-mixin-button>
+    </footer>
+</div>
