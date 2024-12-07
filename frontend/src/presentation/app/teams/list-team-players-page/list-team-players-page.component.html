@@ -16,67 +16,10 @@
     <div data-track="base" class="flex flex-col gap-[inherit] p-4 border border-gray-900">
         <div class="grid grid-cols-2 gap-x-2 gap-y-4">
             <ng-container *ngFor="let teamPlayer of teamPlayers">
-                <section class="flex flex-col gap-2">
-                    <main class="flex flex-row gap-2">
-                        <div class="flex flex-col gap-1">
-                            <div class="w-24 h-24 aspect-square relative bg-gray-300 border border-gray-900">
-                                <app-cover-image src=""></app-cover-image>
-                            </div>
-                        </div>
-                        <ul class="flex flex-col">
-                            <li class="text-sm">
-                                <span class="font-bold"> Name: </span>
-                                <span>
-                                    {{ teamPlayer.player.name }}
-                                </span>
-                            </li>
-                            <li class="text-sm">
-                                <span class="font-bold">Active From: </span>
-                                <span>
-                                    {{ teamPlayer.membership.activeFrom | date }}
-                                </span>
-                            </li>
-                            <li class="text-sm">
-                                <span class="font-bold">Active To: </span>
-                                <span>
-                                    {{ teamPlayer.membership.activeTo | date }}
-                                </span>
-                            </li>
-                        </ul>
-                    </main>
-                    <footer class="flex flex-col gap-1">
-                        <app-mixin-button
-                            [options]="{
-                                theme: 'theme-button-generic-green',
-                                size: 'mixin-button-base'
-                            }"
-                            className="w-full justify-center"
-                            [buttonAttrs]="{ type: 'button' }"
-                        >
-                            Update
-                        </app-mixin-button>
-                        <app-mixin-button
-                            [options]="{
-                                theme: 'theme-button-generic-red',
-                                size: 'mixin-button-base'
-                            }"
-                            className="w-full justify-center"
-                            [buttonAttrs]="{ type: 'button' }"
-                        >
-                            Delete
-                        </app-mixin-button>
-                        <app-mixin-button
-                            [options]="{
-                                theme: 'theme-button-generic-white',
-                                size: 'mixin-button-base'
-                            }"
-                            className="w-full justify-center"
-                            [buttonAttrs]="{ type: 'button' }"
-                        >
-                            See Player
-                        </app-mixin-button>
-                    </footer>
-                </section>
+                <app-list-team-players-page-team-player-element
+                    [teamPlayer]="teamPlayer"
+                    [team]="team"
+                ></app-list-team-players-page-team-player-element>
             </ng-container>
         </div>
     </div>

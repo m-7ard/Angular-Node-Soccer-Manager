@@ -3,6 +3,8 @@ import TeamMembership from "./TeamMembership";
 import TeamMembershipFactory from "domain/domainFactories/TeamMembershipFactory";
 import DomainEvent from "domain/domainEvents/DomainEvent";
 import TeamMembershipPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipPendingCreationEvent";
+import Player from "./Player";
+import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
 
 class Team {
     private readonly __type: "TEAM_DOMAIN" = null!;
@@ -44,6 +46,20 @@ class Team {
         this.domainEvents.push(new TeamMembershipPendingCreationEvent(teamMembership));
 
         return ok(teamMembership);
+    }
+
+    public tryRemoveMemberByPlayerId(playerId: Player["id"]): Result<true, IDomainError> {
+        const membership = this.teamMemberships.find((membership) => membership.playerId === playerId);
+        if (membership == null) {
+            return err({
+                code: "PLAYER_IS_NOT_MEMBER",
+                message: `Player of id "${playerId}" is not a member of the team.`,
+                path: ["_"],
+            });
+        }
+
+        this.domainEvents.push(new TeamMembershipPendingDeletionEvent(membership));
+        return ok(true);
     }
 }
 

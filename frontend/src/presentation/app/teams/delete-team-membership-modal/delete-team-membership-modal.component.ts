@@ -1,37 +1,40 @@
 import { Component, Inject } from '@angular/core';
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import Player from '../../../models/Player';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
 import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import TeamMembership from '../../../models/TeamMembership';
+import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
+import Team from '../../../models/Team';
+import TeamPlayer from '../../../models/TeamPlayer';
 
-export interface DeletePlayerModalProps {
-    player: Player;
+export interface DeleteTeamMembershipModalProps {
+    teamPlayer: TeamPlayer;
+    team: Team;
 }
 
 @Component({
-    selector: 'app-delete-player-modal',
+    selector: 'app-delete-team-membership-modal',
     standalone: true,
     imports: [MixinButtonComponent, CommonModule, FormErrorsComponent],
-    templateUrl: './delete-player-modal.component.html',
+    templateUrl: './delete-team-membership-modal.component.html',
 })
-export class DeletePlayerModal {
+export class DeleteTeamMembershipModal {
     errors: IPresentationError<{}> = {};
-    Object = Object;
-    player: Player;
-    test: string[] = []
+    teamPlayer: TeamPlayer;
+    team: Team;
 
     constructor(
-        public dialogRef: DialogRef<Player>,
-        @Inject(DIALOG_DATA) public data: DeletePlayerModalProps,
-        private playerDataAccess: PlayerDataAccessService,
+        public dialogRef: DialogRef,
+        @Inject(DIALOG_DATA) public data: DeleteTeamMembershipModalProps,
+        private teamDataAccess: TeamDataAccessService,
     ) {
-        this.player = this.data.player;
+        this.teamPlayer = this.data.teamPlayer;
+        this.team = this.data.team;
     }
 
     closeModal() {
@@ -39,8 +42,10 @@ export class DeletePlayerModal {
     }
 
     async onSubmit() {
-        this.playerDataAccess
-            .delete(this.data.player.id, {})
+        const membership = this.data.teamPlayer.membership;
+
+        this.teamDataAccess
+            .removePlayer(membership.teamId, membership.playerId, {})
             .pipe(
                 catchError((err: HttpErrorResponse) => {
                     this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);

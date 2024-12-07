@@ -5,6 +5,8 @@ import ICreateTeamMembershipRequestDTO from '../../contracts/teamMemberships/cre
 import ICreateTeamMembershipResponseDTO from '../../contracts/teamMemberships/create/ICreateTeamMembershipResponseDTO';
 import IListTeamsResponseDTO from '../../contracts/teams/list/IListTeamsResponseDTO';
 import IListTeamPlayersResponseDTO from '../../contracts/teams/list-team-players/IListTeamPlayersResponseDTO';
+import IDeleteTeamMembershipRequestDTO from '../../contracts/teamMemberships/delete/IDeleteTeamMembershipRequestDTO';
+import IDeleteTeamMembershipResponseDTO from '../../contracts/teamMemberships/delete/IDeleteTeamMembershipResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -23,6 +25,10 @@ export class TeamDataAccessService {
 
     addPlayer(teamId: string, request: ICreateTeamMembershipRequestDTO) {
         return this.http.post<{}>(`${this._baseUrl}/${teamId}}`, request);
+    }
+
+    removePlayer(teamId: string, playerId: string, request: IDeleteTeamMembershipRequestDTO) {
+        return this.http.delete<IDeleteTeamMembershipResponseDTO>(`${this._baseUrl}/${teamId}}/remove-player/${playerId}`, request);
     }
 
     listTeams() {

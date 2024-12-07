@@ -5,7 +5,7 @@ import { CoverImageComponent } from '../../../reusables/cover-image/cover-image.
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import Player from '../../../models/Player';
 import { IListPlayersResolverData } from './list-players-page.resolver';
-import { ListPlayersPagePlayerElementComponent } from "./list-players-page.player-element/list-players-page-player-element.component";
+import { ListPlayersPagePlayerElementComponent } from "./list-players-page-player-element/list-players-page-player-element.component";
 
 @Component({
     selector: 'app-list-players-page',

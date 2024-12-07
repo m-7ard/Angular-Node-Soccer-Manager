@@ -7,6 +7,7 @@ import TeamMapper from "infrastructure/mappers/TeamMapper";
 import sql from "sql-template-tag";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
+import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -83,6 +84,18 @@ class TeamRepository implements ITeamRepository {
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
+            } else if (event instanceof TeamMembershipPendingDeletionEvent) {
+                const teamMembership = event.payload;
+
+                const sqlEntry = sql`
+                    DELETE FROM team_membership
+                        WHERE id = ${teamMembership.id}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
             }
 
             team.clearEvents();
@@ -108,7 +121,7 @@ class TeamRepository implements ITeamRepository {
         }
 
         const rows = await this._db.query<ITeamSchema>({
-            statement: query.toString()
+            statement: query.toString(),
         });
         const teams = rows.map(TeamMapper.schemaToDbEntity);
 

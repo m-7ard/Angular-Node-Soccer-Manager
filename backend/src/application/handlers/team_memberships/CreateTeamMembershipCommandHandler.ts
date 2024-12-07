@@ -53,7 +53,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
                 {
                     code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
                     path: ["_"],
-                    message: `Player with id ${command.teamId} does not exist.`,
+                    message: `Player with id ${command.playerId} does not exist.`,
                 },
             ]);
         }

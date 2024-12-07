@@ -8,6 +8,7 @@ import ListTeamPlayersAction from "api/actions/teams/ListTeamPlayersAction";
 import UpdateTeamAction from "api/actions/teams/UpdateTeamAction";
 import DeleteTeamAction from "api/actions/teams/DeleteTeamAction";
 import ReadTeamAction from "api/actions/teams/ReadTeamAction";
+import DeleteTeamMembershipAction from "api/actions/team_memberships/DeleteTeamMembershipAction";
 
 const teamsRouter = Router();
 
@@ -78,6 +79,16 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new ReadTeamAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/remove-membership/:playerId",
+    method: "DELETE",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new DeleteTeamMembershipAction(requestDispatcher);
     },
 });
 
