@@ -12,6 +12,7 @@ import DeletePlayerCommandHandler, { DeletePlayerCommand } from "application/han
 import UpdateTeamCommandHandler, { UpdateTeamCommand } from "application/handlers/teams/UpdateTeamCommandHandler";
 import DeleteTeamCommandHandler, { DeleteTeamCommand } from "application/handlers/teams/DeleteTeamCommandHandler";
 import DeleteTeamMembershipCommandHandler, { DeleteTeamMembershipCommand } from "application/handlers/team_memberships/DeleteTeamMembershipCommandHandler";
+import UpdateTeamMembershipCommandHandler, { UpdateTeamMembershipCommand } from "application/handlers/team_memberships/UpdateTeamMembershipCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -27,12 +28,15 @@ function createRequestDispatcher() {
 
     // Teams
     requestDispatcher.registerHandler(CreateTeamCommand, new CreateTeamCommandHandler({ teamRepository: teamRepository }));
-    requestDispatcher.registerHandler(CreateTeamMembershipCommand, new CreateTeamMembershipCommandHandler({ playerRepository: playerRepository, teamRepository: teamRepository }));
     requestDispatcher.registerHandler(ListTeamsQuery, new ListTeamsQueryHandler({ teamRepository: teamRepository }));
     requestDispatcher.registerHandler(ReadTeamQuery, new ReadTeamQueryHandler({ teamRepository: teamRepository }));
     requestDispatcher.registerHandler(UpdateTeamCommand, new UpdateTeamCommandHandler({ teamRepository: teamRepository }));
     requestDispatcher.registerHandler(DeleteTeamCommand, new DeleteTeamCommandHandler({ teamRepository: teamRepository }));
+    
+    // Team Memberships
+    requestDispatcher.registerHandler(CreateTeamMembershipCommand, new CreateTeamMembershipCommandHandler({ playerRepository: playerRepository, teamRepository: teamRepository }));
     requestDispatcher.registerHandler(DeleteTeamMembershipCommand, new DeleteTeamMembershipCommandHandler({ teamRepository: teamRepository }));
+    requestDispatcher.registerHandler(UpdateTeamMembershipCommand, new UpdateTeamMembershipCommandHandler({ teamRepository: teamRepository }));
 
     return requestDispatcher;
 }

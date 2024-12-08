@@ -1,0 +1,78 @@
+<section class="flex flex-col gap-2 p-4 bg-white outline-1 outline">
+    <main class="flex flex-row gap-2">
+        <div class="flex flex-col gap-1">
+            <div class="w-24 h-24 aspect-square relative bg-gray-300 border border-gray-900">
+                <app-cover-image src=""></app-cover-image>
+            </div>
+        </div>
+        <ul class="flex flex-col">
+            <li class="text-sm">
+                <span class="font-bold"> Name: </span>
+                <span>
+                    {{ team.name }}
+                </span>
+            </li>
+            <li class="text-sm">
+                <span class="font-bold">Date Founded: </span>
+                <span>
+                    {{ team.dateFounded | date }}
+                </span>
+            </li>
+        </ul>
+    </main>
+    <footer class="flex flex-col gap-1">
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-white',
+                size: 'mixin-button-base'
+            }"
+            className="w-full justify-center"
+            [buttonAttrs]="{ type: 'button' }"
+            [routerLink]="'/teams/' + team.id + '/players'"
+        >
+            See Players
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-yellow',
+                size: 'mixin-button-base'
+            }"
+            className="w-full justify-center"
+            [routerLink]="'/teams/' + team.id + '/create-membership'"
+        >
+            Add Player
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-green',
+                size: 'mixin-button-base'
+            }"
+            className="w-full justify-center"
+            [buttonAttrs]="{ type: 'button' }"
+            [routerLink]="'/teams/' + team.id + '/update'"
+        >
+            Update
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-red',
+                size: 'mixin-button-base'
+            }"
+            className="w-full justify-center"
+            [buttonAttrs]="{ type: 'button' }"
+            (click)="openDeleteTeamModal()"
+        >
+            Delete
+        </app-mixin-button>
+        <app-mixin-button
+            [options]="{
+                theme: 'theme-button-generic-white',
+                size: 'mixin-button-base'
+            }"
+            className="w-full justify-center"
+            [buttonAttrs]="{ type: 'button' }"
+        >
+            Details
+        </app-mixin-button>
+    </footer>
+</section>

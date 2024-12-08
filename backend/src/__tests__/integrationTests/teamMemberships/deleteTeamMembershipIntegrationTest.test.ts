@@ -35,7 +35,7 @@ describe("Delete TeamMembership Integration Test;", () => {
     it("Delete Team Membership; Valid Data; Success;", async () => {
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${team_001.id}/remove-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).delete(`/api/teams/${team_001.id}/delete-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const rows = await db.query({ statement: "SELECT * FROM team_membership" });
@@ -47,7 +47,7 @@ describe("Delete TeamMembership Integration Test;", () => {
 
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${INVALID_TEAM_ID}/remove-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).delete(`/api/teams/${INVALID_TEAM_ID}/delete-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
@@ -59,7 +59,7 @@ describe("Delete TeamMembership Integration Test;", () => {
 
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${team_001.id}/remove-membership/${INVALID_ID}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).delete(`/api/teams/${team_001.id}/delete-membership/${INVALID_ID}`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

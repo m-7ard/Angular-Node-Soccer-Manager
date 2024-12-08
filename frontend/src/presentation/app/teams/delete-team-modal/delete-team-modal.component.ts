@@ -9,32 +9,28 @@ import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Team from '../../../models/Team';
-import TeamPlayer from '../../../models/TeamPlayer';
 
-export interface DeleteTeamMembershipModalProps {
-    teamPlayer: TeamPlayer;
+export interface DeleteTeamModalProps {
     team: Team;
     onSuccess: () => void;
 }
 
 @Component({
-    selector: 'app-delete-team-membership-modal',
+    selector: 'app-delete-team-modal',
     standalone: true,
     imports: [MixinButtonComponent, CommonModule, FormErrorsComponent],
-    templateUrl: './delete-team-membership-modal.component.html',
+    templateUrl: './delete-team-modal.component.html',
 })
-export class DeleteTeamMembershipModal {
+export class DeleteTeamModal {
     errors: IPresentationError<{}> = {};
-    teamPlayer: DeleteTeamMembershipModalProps['teamPlayer'];
-    team: DeleteTeamMembershipModalProps['team'];
-    onSuccess: DeleteTeamMembershipModalProps['onSuccess'];
+    team: DeleteTeamModalProps['team'];
+    onSuccess: DeleteTeamModalProps['onSuccess'];
 
     constructor(
         public dialogRef: DialogRef,
-        @Inject(DIALOG_DATA) public data: DeleteTeamMembershipModalProps,
+        @Inject(DIALOG_DATA) public data: DeleteTeamModalProps,
         private teamDataAccess: TeamDataAccessService,
     ) {
-        this.teamPlayer = this.data.teamPlayer;
         this.team = this.data.team;
         this.onSuccess = this.data.onSuccess;
     }
@@ -44,10 +40,8 @@ export class DeleteTeamMembershipModal {
     }
 
     async onSubmit() {
-        const membership = this.data.teamPlayer.membership;
-
         this.teamDataAccess
-            .removePlayer(membership.teamId, membership.playerId, {})
+            .delete(this.team.id)
             .pipe(
                 catchError((err: HttpErrorResponse) => {
                     this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);

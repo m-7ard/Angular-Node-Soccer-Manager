@@ -17,6 +17,7 @@ class DeleteTeamMembershipAction implements IAction<ActionRequest, ActionRespons
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId, playerId } = request;
+        console.log(teamId, playerId)
 
         const command = new DeleteTeamMembershipCommand({
             teamId: teamId,

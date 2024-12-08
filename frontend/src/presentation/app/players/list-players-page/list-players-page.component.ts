@@ -22,6 +22,10 @@ export class ListPlayersPageComponent {
     constructor(private _activatedRoute: ActivatedRoute) {}
 
     players: Player[] = null!;
+    
+    onDeletePlayer(players: Player) {
+        this.players = this.players.filter((value) => value.id !== players.id);
+    }
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {

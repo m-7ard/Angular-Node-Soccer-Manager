@@ -8,6 +8,7 @@ import sql from "sql-template-tag";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
+import TeamMembershipPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipPendingUpdatingEvent";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -90,6 +91,26 @@ class TeamRepository implements ITeamRepository {
                 const sqlEntry = sql`
                     DELETE FROM team_membership
                         WHERE id = ${teamMembership.id}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            } else if (event instanceof TeamMembershipPendingUpdatingEvent) {
+                const teamMembership = event.payload;
+
+                const sqlEntry = sql`
+                    UPDATE team_membership
+                        SET 
+                            id = ${teamMembership.id},
+                            team_id = ${teamMembership.teamId},
+                            player_id = ${teamMembership.playerId},
+                            active_from = ${teamMembership.activeFrom},
+                            active_to = ${teamMembership.activeTo},
+                            number = ${teamMembership.number}
+                        WHERE 
+                            id = ${teamMembership.id}
                 `;
 
                 await this._db.execute({

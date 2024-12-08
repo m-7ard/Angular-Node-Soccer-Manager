@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
 import { map, Observable } from 'rxjs';
 import Player from '../../../models/Player';

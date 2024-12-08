@@ -14,15 +14,11 @@ export interface IListTeamPlayersResolverData {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ListTeamPlayersPageResolver implements Resolve<{ team: Team; teamPlayers: TeamPlayer[] }>, OnInit {
+export class ListTeamPlayersPageResolver implements Resolve<{ team: Team; teamPlayers: TeamPlayer[] }> {
     constructor(
         private _teamDataAccess: TeamDataAccessService,
-        private route: ActivatedRoute,
     ) {}
 
-    ngOnInit(): void {
-        console.log('balls onInit -->', this.route.snapshot.data['teams']);
-    }
 
     resolve(route: ActivatedRouteSnapshot): Observable<{ team: Team; teamPlayers: TeamPlayer[] }> {
         const id = route.paramMap.get('id')

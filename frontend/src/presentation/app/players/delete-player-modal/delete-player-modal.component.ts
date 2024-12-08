@@ -8,10 +8,11 @@ import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 
 export interface DeletePlayerModalProps {
     player: Player;
+    onSuccess: () => void;
 }
 
 @Component({
@@ -22,9 +23,8 @@ export interface DeletePlayerModalProps {
 })
 export class DeletePlayerModal {
     errors: IPresentationError<{}> = {};
-    Object = Object;
-    player: Player;
-    test: string[] = []
+    player: DeletePlayerModalProps['player'];
+    onSuccess: DeletePlayerModalProps['onSuccess'];
 
     constructor(
         public dialogRef: DialogRef<Player>,
@@ -32,6 +32,7 @@ export class DeletePlayerModal {
         private playerDataAccess: PlayerDataAccessService,
     ) {
         this.player = this.data.player;
+        this.onSuccess = this.data.onSuccess;
     }
 
     closeModal() {
@@ -53,6 +54,7 @@ export class DeletePlayerModal {
                         return;
                     }
 
+                    this.onSuccess();
                     this.closeModal();
                 },
             });

@@ -11,7 +11,7 @@ import { ListTeamPlayerPageTeamPlayerElementComponent } from './list-team-player
 @Component({
     selector: 'app-list-team-players-page',
     standalone: true,
-    imports: [MixinButtonComponent, CommonModule, CoverImageComponent, ListTeamPlayerPageTeamPlayerElementComponent],
+    imports: [MixinButtonComponent, CommonModule, ListTeamPlayerPageTeamPlayerElementComponent],
     templateUrl: './list-team-players-page.component.html',
 })
 export class ListTeamPlayersPageComponent {
@@ -19,6 +19,10 @@ export class ListTeamPlayersPageComponent {
 
     teamPlayers: TeamPlayer[] = null!;
     team: Team = null!;
+
+    onDeleteTeamPlayer(teamPlayer: TeamPlayer) {
+        this.teamPlayers = this.teamPlayers.filter((value) => value.membership.id !== teamPlayer.membership.id);
+    }
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {

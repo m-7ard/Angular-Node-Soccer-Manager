@@ -12,6 +12,8 @@ import { ListTeamPlayersPageComponent } from './teams/list-team-players-page/lis
 import { ListTeamPlayersPageResolver } from './teams/list-team-players-page/list-team-players-page.resolver';
 import { UpdatePlayerPageComponent } from './players/update-player-page/update-player-page.component';
 import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
+import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-page.component';
+import { UpdateTeamPageResolver } from './teams/update-team-page/update-team-page.resolver';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -47,6 +49,13 @@ export const routes: Routes = [
     {
         path: 'teams/:id/create-membership',
         component: CreateTeamMembershipPageComponent,
+    },
+    {
+        path: 'teams/:id/update',
+        component: UpdateTeamPageComponent,
+        resolve: {
+            data: UpdateTeamPageResolver,
+        },
     },
     {
         path: 'players/:id/update',

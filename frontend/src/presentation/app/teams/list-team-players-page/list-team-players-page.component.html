@@ -19,6 +19,7 @@
                 <app-list-team-players-page-team-player-element
                     [teamPlayer]="teamPlayer"
                     [team]="team"
+                    (onDelete)="onDeleteTeamPlayer($event)"
                 ></app-list-team-players-page-team-player-element>
             </ng-container>
         </div>

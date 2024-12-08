@@ -1,10 +1,8 @@
 <div class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
     <header class="flex flex-row gap-2 justify-between">
         <div>
-            <span class="font-bold"> Delete Membership for Player </span>
-            <span>"{{ teamPlayer.player.name }}" </span>
-            <span class="font-bold">From Team </span>
-            <span>"{{ team.name }}"</span>
+            <span class="font-bold">Delete Team </span>
+            <span>"{{ team.name }}" </span>
         </div>
         <app-mixin-button
             [options]="{
@@ -18,7 +16,7 @@
     </header>
     <app-form-errors [errors]="errors['_']"></app-form-errors>
     <hr class="border-t border-black w-full h-0" />
-    <section>Are you sure you want to delete the team membership of "{{ teamPlayer.player.name }}" from "{{ team.name }}"?</section>
+    <section>Are you sure you want to delete team "{{ team.name }}"?</section>
     <hr class="border-t border-black w-full h-0" />
     <footer class="flex flex-row gap-2 justify-end">
         <app-mixin-button
@@ -39,7 +37,7 @@
             (click)="onSubmit()"
             [buttonAttrs]="{ type: 'button' }"
         >
-            Delete Team Membership
+            Delete Team
         </app-mixin-button>
     </footer>
 </div>

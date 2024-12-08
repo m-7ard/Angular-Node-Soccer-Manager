@@ -7,6 +7,10 @@ import IListTeamsResponseDTO from '../../contracts/teams/list/IListTeamsResponse
 import IListTeamPlayersResponseDTO from '../../contracts/teams/list-team-players/IListTeamPlayersResponseDTO';
 import IDeleteTeamMembershipRequestDTO from '../../contracts/teamMemberships/delete/IDeleteTeamMembershipRequestDTO';
 import IDeleteTeamMembershipResponseDTO from '../../contracts/teamMemberships/delete/IDeleteTeamMembershipResponseDTO';
+import IReadTeamResponseDTO from '../../contracts/teams/read/IReadTeamResponseDTO';
+import IUpdateTeamRequestDTO from '../../contracts/teams/update/IUpdateTeamRequestDTO';
+import IDeleteTeamRequestDTO from '../../contracts/teams/delete/IDeleteTeamRequestDTO';
+import IDeleteTeamResponseDTO from '../../contracts/teams/delete/IDeleteTeamResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -28,7 +32,7 @@ export class TeamDataAccessService {
     }
 
     removePlayer(teamId: string, playerId: string, request: IDeleteTeamMembershipRequestDTO) {
-        return this.http.delete<IDeleteTeamMembershipResponseDTO>(`${this._baseUrl}/${teamId}}/remove-player/${playerId}`, request);
+        return this.http.delete<IDeleteTeamMembershipResponseDTO>(`${this._baseUrl}/${teamId}/delete-membership/${playerId}`, request);
     }
 
     listTeams() {
@@ -37,5 +41,17 @@ export class TeamDataAccessService {
 
     listTeamPlayers(teamId: string) {
         return this.http.get<IListTeamPlayersResponseDTO>(`${this._baseUrl}/${teamId}/players`);
+    }
+
+    read(teamId: string) {
+        return this.http.get<IReadTeamResponseDTO>(`${this._baseUrl}/${teamId}`);
+    }
+
+    update(teamId: string, request: IUpdateTeamRequestDTO) {
+        return this.http.put<IReadTeamResponseDTO>(`${this._baseUrl}/${teamId}/update`, request);
+    }
+
+    delete(teamId: string) {
+        return this.http.delete<IDeleteTeamResponseDTO>(`${this._baseUrl}/${teamId}/delete`);
     }
 }
