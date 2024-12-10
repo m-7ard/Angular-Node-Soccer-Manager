@@ -67,7 +67,7 @@ export class UpdateTeamPageComponent {
         const rawValue = this.form.getRawValue();
 
         this.teamDataAccess
-            .update(this.id, {
+            .updateTeam(this.id, {
                 dateFounded: new Date(rawValue.dateFounded),
                 name: rawValue.name,
             })

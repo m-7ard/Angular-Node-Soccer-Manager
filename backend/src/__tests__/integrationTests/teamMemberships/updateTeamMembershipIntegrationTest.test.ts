@@ -41,7 +41,7 @@ describe("Update TeamMembership Integration Test;", () => {
             number: 10
         };
 
-        const response = await supertest(server).put(`/api/teams/${team_001.id}/update-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).put(`/api/teams/${team_001.id}/players/${player_001.id}/update`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const [row] = await db.query<ITeamMembershipSchema>({ statement: 'SELECT * FROM team_membership' });
@@ -57,7 +57,7 @@ describe("Update TeamMembership Integration Test;", () => {
             number: 10
         };
 
-        const response = await supertest(server).put(`/api/teams/${INVALID_ID}/update-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).put(`/api/teams/${INVALID_ID}/players/${player_001.id}/update`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
@@ -72,7 +72,7 @@ describe("Update TeamMembership Integration Test;", () => {
             number: 10
         };
 
-        const response = await supertest(server).put(`/api/teams/${team_001.id}/update-membership/${INVALID_ID}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).put(`/api/teams/${team_001.id}/players/${INVALID_ID}/update`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

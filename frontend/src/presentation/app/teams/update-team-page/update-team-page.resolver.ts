@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
-import PlayerMapper from '../../../mappers/PlayerMapper';
 import Team from '../../../models/Team';
 import TeamMapper from '../../../mappers/TeamMapper';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
@@ -25,7 +23,7 @@ export class UpdateTeamPageResolver implements Resolve<IUpdateTeamResolverData> 
             throw new Error('implement a 404');
         }
 
-        return this._teamDataAccess.read(id).pipe(
+        return this._teamDataAccess.readTeam(id).pipe(
             map((response) => {
                 return {
                     team: TeamMapper.apiModelToDomain(response.team),

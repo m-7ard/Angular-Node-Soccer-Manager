@@ -34,6 +34,7 @@
             }"
             className="w-full justify-center"
             [buttonAttrs]="{ type: 'button' }"
+            [routerLink]="'/teams/' + team.id + '/players/' + teamPlayer.player.id + '/update'"
         >
             Update
         </app-mixin-button>

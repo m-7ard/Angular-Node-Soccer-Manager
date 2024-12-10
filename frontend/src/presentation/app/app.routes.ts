@@ -6,7 +6,6 @@ import { CreatePlayerPageComponent } from './players/create-player-page/create-p
 import { CreateTeamPageComponent } from './teams/create-team-page/create-team-page.component';
 import { ListTeamsPageResolver } from './teams/list-teams-page/list-teams-page.resolver';
 import { ListTeamsPageComponent } from './teams/list-teams-page/list-teams-page.component';
-import { NotFoundPageComponent } from './other/not-found-page/not-found-page.component';
 import { CreateTeamMembershipPageComponent } from './teams/create-team-membership-page/create-team-membership-page.component';
 import { ListTeamPlayersPageComponent } from './teams/list-team-players-page/list-team-players-page.component';
 import { ListTeamPlayersPageResolver } from './teams/list-team-players-page/list-team-players-page.resolver';
@@ -14,6 +13,8 @@ import { UpdatePlayerPageComponent } from './players/update-player-page/update-p
 import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
 import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-page.component';
 import { UpdateTeamPageResolver } from './teams/update-team-page/update-team-page.resolver';
+import { UpdateTeamMembershipPageComponent } from './teams/update-team-membership-page/update-team-membership-page.component';
+import { UpdateTeamMembershipPageResolver } from './teams/update-team-membership-page/update-team-membership-page.resolver';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -55,6 +56,13 @@ export const routes: Routes = [
         component: UpdateTeamPageComponent,
         resolve: {
             data: UpdateTeamPageResolver,
+        },
+    },
+    {
+        path: 'teams/:teamId/players/:playerId/update',
+        component: UpdateTeamMembershipPageComponent,
+        resolve: {
+            data: UpdateTeamMembershipPageResolver,
         },
     },
     {

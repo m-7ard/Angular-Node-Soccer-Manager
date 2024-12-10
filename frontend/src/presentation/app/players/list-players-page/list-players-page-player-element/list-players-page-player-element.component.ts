@@ -6,11 +6,13 @@ import { DeletePlayerModal, DeletePlayerModalProps } from '../../delete-player-m
 import { Dialog } from '@angular/cdk/dialog';
 import { MixinButtonComponent } from '../../../../ui-mixins/mixin-button/mixin-button.component';
 import { RouterModule } from '@angular/router';
+import { MixinPrototypeCardSectionDirective } from '../../../../reusables/prototype-card/prototype-card-section';
+import { MixinPrototypeCardDirective } from '../../../../reusables/prototype-card/prototype-card';
 
 @Component({
     selector: 'app-list-players-page-player-element',
     standalone: true,
-    imports: [CoverImageComponent, CommonModule, MixinButtonComponent, RouterModule],
+    imports: [CoverImageComponent, CommonModule, MixinButtonComponent, RouterModule, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
     templateUrl: './list-players-page-player-element.component.html',
 })
 export class ListPlayersPagePlayerElementComponent {

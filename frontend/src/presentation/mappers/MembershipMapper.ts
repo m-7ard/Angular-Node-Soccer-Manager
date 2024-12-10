@@ -7,8 +7,8 @@ class TeamMembershipMapper {
             id: source.id,
             teamId: source.teamId,
             playerId: source.playerId,
-            activeFrom: source.activeFrom,
-            activeTo: source.activeTo,
+            activeFrom: new Date(source.activeFrom),
+            activeTo: source.activeTo == null ? null : new Date(source.activeTo),
             number: source.number
         });
     }

@@ -13,6 +13,7 @@ import UpdateTeamCommandHandler, { UpdateTeamCommand } from "application/handler
 import DeleteTeamCommandHandler, { DeleteTeamCommand } from "application/handlers/teams/DeleteTeamCommandHandler";
 import DeleteTeamMembershipCommandHandler, { DeleteTeamMembershipCommand } from "application/handlers/team_memberships/DeleteTeamMembershipCommandHandler";
 import UpdateTeamMembershipCommandHandler, { UpdateTeamMembershipCommand } from "application/handlers/team_memberships/UpdateTeamMembershipCommandHandler";
+import ReadTeamMembershipQueryHandler, { ReadTeamMembershipQuery } from "application/handlers/team_memberships/ReadTeamMembershipQueryHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -37,6 +38,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(CreateTeamMembershipCommand, new CreateTeamMembershipCommandHandler({ playerRepository: playerRepository, teamRepository: teamRepository }));
     requestDispatcher.registerHandler(DeleteTeamMembershipCommand, new DeleteTeamMembershipCommandHandler({ teamRepository: teamRepository }));
     requestDispatcher.registerHandler(UpdateTeamMembershipCommand, new UpdateTeamMembershipCommandHandler({ teamRepository: teamRepository }));
+    requestDispatcher.registerHandler(ReadTeamMembershipQuery, new ReadTeamMembershipQueryHandler({ teamRepository: teamRepository }));
 
     return requestDispatcher;
 }
