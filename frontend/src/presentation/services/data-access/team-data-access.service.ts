@@ -38,7 +38,7 @@ export class TeamDataAccessService {
     }
 
     listTeams() {
-        return this.http.get<IListTeamsResponseDTO>(`${this._baseUrl}/`);
+        return this.http.get<IListTeamsResponseDTO>(`${this._baseUrl}/`, { observe: 'response' });
     }
 
     listTeamPlayers(teamId: string) {

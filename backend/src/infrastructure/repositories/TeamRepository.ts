@@ -57,6 +57,8 @@ class TeamRepository implements ITeamRepository {
                     id = ${team.id},
                     name = ${team.name},
                     date_founded = ${team.dateFounded}
+                WHERE
+                    id = ${team.id}
         `;
 
         await this._db.execute({
@@ -103,7 +105,6 @@ class TeamRepository implements ITeamRepository {
                 const sqlEntry = sql`
                     UPDATE team_membership
                         SET 
-                            id = ${teamMembership.id},
                             team_id = ${teamMembership.teamId},
                             player_id = ${teamMembership.playerId},
                             active_from = ${teamMembership.activeFrom},

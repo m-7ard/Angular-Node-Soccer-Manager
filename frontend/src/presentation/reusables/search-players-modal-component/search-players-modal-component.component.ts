@@ -7,8 +7,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormFieldComponent } from '../form-field/form-field.component';
 import { CharFieldComponent } from '../char-field/char-field.component';
 import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
-import { CoverImageComponent } from "../cover-image/cover-image.component";
+import { CoverImageComponent } from '../cover-image/cover-image.component';
 import PlayerMapper from '../../mappers/PlayerMapper';
+import { MixinPrototypeCardDirective } from '../prototype-card/prototype-card';
+import { MixinPrototypeCardSectionDirective } from '../prototype-card/prototype-card-section';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -27,7 +29,7 @@ const routes = {
 @Component({
     selector: 'app-search-players-modal-component',
     standalone: true,
-    imports: [MixinButtonComponent, CommonModule, FormFieldComponent, CharFieldComponent, ReactiveFormsModule, CoverImageComponent],
+    imports: [MixinButtonComponent, CommonModule, FormFieldComponent, CharFieldComponent, ReactiveFormsModule, CoverImageComponent, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
     templateUrl: './search-players-modal-component.component.html',
 })
 export class SearchPlayersModalComponentComponent {
@@ -69,7 +71,7 @@ export class SearchPlayersModalComponentComponent {
 
         responseObservable.subscribe((dto) => {
             this.results = dto.players.map(PlayerMapper.apiModelToDomain);
-            this.changeRoute("results");
+            this.changeRoute('results');
         });
     }
 }

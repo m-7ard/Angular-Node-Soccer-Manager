@@ -60,42 +60,66 @@
         </form>
     </section>
     <section *ngIf="currentRoute === 'results'">
-        <div class="flex flex-col gap-2">
-            <div *ngFor="let player of results" class="flex flex-row gap-2 p-2 border border-black">
-                <app-cover-image className="border border-black w-24 h-24"> </app-cover-image>
-                <div class="flex flex-col">
-                    <div class="text-sm">
-                        <span class="font-bold"> Name: </span>
-                        <span>
-                            {{ player.name }}
-                        </span>
-                    </div>
-                    <!-- Button start -->
-                    <app-mixin-button
-                        *ngIf="isPlayerAlreadySelected(player); else notSelected"
-                        [options]="{
-                            size: 'mixin-button-base',
-                            theme: 'theme-button-generic-green'
-                        }"
-                        class="mt-auto"
-                    >
-                        Already Selected
-                    </app-mixin-button>
-                    <ng-template #notSelected>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <ng-content *ngFor="let player of results">
+                <div appMixinPrototypeCard>
+                    <main appMixinPrototypeCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
+                        <div class="aspect-square bg-gray-300 border border-gray-900 h-full">
+                            <section class="relative h-full w-full flex">
+                                <app-cover-image src=""></app-cover-image>
+                            </section>
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="text-lg font-bold">
+                                {{ player.name }}
+                            </div>
+                            <div class="truncate">
+                                Zebras (US: /ˈziːbrəz/, UK: /ˈzɛbrəz, ˈziː-/)[2] (subgenus Hippotigris) are African equines with distinctive black-and-white striped coats. There are three living species: Grévy's zebra (Equus grevyi), the plains zebra (E. quagga), and the mountain zebra (E. zebra). Zebras share the genus Equus with horses and asses, the three groups being the only living members of
+                                the family Equidae. Zebra stripes come in different patterns, unique to each individual. Several theories have been proposed for the function of these patterns, with most evidence supporting them as a deterrent for biting flies. Zebras inhabit eastern and southern Africa and can be found in a variety of habitats such as savannahs, grasslands, woodlands, shrublands,
+                                and mountainous areas.
+                            </div>
+                        </div>
+                    </main>
+                    <section appMixinPrototypeCardSection>
+                        <div class="text-base flex flex-row justify-between gap-3">
+                            <span class="font-bold">Id</span>
+                            <span class="truncate">
+                                {{ player.id }}
+                            </span>
+                        </div>
+                        <div class="text-base flex flex-row justify-between gap-3">
+                            <span class="font-bold">Active Since</span>
+                            <span class="truncate">
+                                {{ player.activeSince | date }}
+                            </span>
+                        </div>
+                    </section>
+                    <footer appMixinPrototypeCardSection class="grid grid-cols-1 gap-1">
                         <app-mixin-button
-                            (click)="selectPlayer(player)"
+                            *ngIf="isPlayerAlreadySelected(player); else notSelected"
                             [options]="{
                                 size: 'mixin-button-base',
-                                theme: 'theme-button-generic-yellow'
+                                theme: 'theme-button-generic-green'
                             }"
                             class="mt-auto"
                         >
-                            Select
+                            Already Selected
                         </app-mixin-button>
-                    </ng-template>
-                    <!-- Button end -->
+                        <ng-template #notSelected>
+                            <app-mixin-button
+                                (click)="selectPlayer(player)"
+                                [options]="{
+                                    size: 'mixin-button-base',
+                                    theme: 'theme-button-generic-yellow'
+                                }"
+                                class="mt-auto"
+                            >
+                                Select
+                            </app-mixin-button>
+                        </ng-template>
+                    </footer>
                 </div>
-            </div>
+            </ng-content>
         </div>
     </section>
 </div>

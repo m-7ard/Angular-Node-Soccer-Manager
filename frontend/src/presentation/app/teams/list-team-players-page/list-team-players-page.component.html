@@ -13,8 +13,8 @@
             </app-mixin-button>
         </a>
     </header>
-    <div data-track="base" class="flex flex-col gap-[inherit] p-4 border border-gray-900">
-        <div class="grid grid-cols-2 gap-x-2 gap-y-4">
+    <div data-track="base" class="flex flex-col gap-[inherit]">
+        <div class="grid grid-cols-2 gap-3">
             <ng-container *ngFor="let teamPlayer of teamPlayers">
                 <app-list-team-players-page-team-player-element
                     [teamPlayer]="teamPlayer"

@@ -14,7 +14,7 @@
     </header>
 
     <div data-track="base" class="flex flex-col gap-[inherit]">
-        <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <ng-container *ngFor="let player of players">
                 <app-list-players-page-player-element [player]="player" (onDelete)="onDeletePlayer($event)"></app-list-players-page-player-element>
             </ng-container>

@@ -1,5 +1,5 @@
-<div class="flex flex-col border border-black divide-y divide-black">
-    <div class="px-4 py-2">
+<div appMixinPrototypeCard>
+    <div appMixinPrototypeCardSection>
         <app-mixin-button
             [options]="{
                 theme: 'theme-button-generic-white',
@@ -11,19 +11,41 @@
             Filter Players
         </app-mixin-button>
     </div>
-    <div *ngIf="value != null" class="px-4 py-2 flex flex-row gap-2">
-        <app-cover-image [src]="" className="border border-black w-24 h-24">
-
-        </app-cover-image>
-        <div>
-            <div class="text-sm">
-                <span class="font-bold">
-                    Name:
-                </span>
-                <span>
-                    {{ value.name }}
-                </span>
+    <ng-content *ngIf="value != null">
+        <section appMixinPrototypeCardSection>
+            <div appMixinPrototypeCard>
+                <main appMixinPrototypeCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
+                    <div class="aspect-square bg-gray-300 border border-gray-900 h-full">
+                        <section class="relative h-full w-full flex">
+                            <app-cover-image src=""></app-cover-image>
+                        </section>
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="text-lg font-bold">
+                            {{ value.name }}
+                        </div>
+                        <div class="truncate">
+                            Zebras (US: /ˈziːbrəz/, UK: /ˈzɛbrəz, ˈziː-/)[2] (subgenus Hippotigris) are African equines with distinctive black-and-white striped coats. There are three living species: Grévy's zebra (Equus grevyi), the plains zebra (E. quagga), and the mountain zebra (E. zebra). Zebras share the genus Equus with horses and asses, the three groups being the only living members of the
+                            family Equidae. Zebra stripes come in different patterns, unique to each individual. Several theories have been proposed for the function of these patterns, with most evidence supporting them as a deterrent for biting flies. Zebras inhabit eastern and southern Africa and can be found in a variety of habitats such as savannahs, grasslands, woodlands, shrublands, and
+                            mountainous areas.
+                        </div>
+                    </div>
+                </main>
+                <section appMixinPrototypeCardSection>
+                    <div class="text-base flex flex-row justify-between gap-3">
+                        <span class="font-bold">Id</span>
+                        <span class="truncate">
+                            {{ value.id }}
+                        </span>
+                    </div>
+                    <div class="text-base flex flex-row justify-between gap-3">
+                        <span class="font-bold">Active Since</span>
+                        <span class="truncate">
+                            {{ value.activeSince | date }}
+                        </span>
+                    </div>
+                </section>
             </div>
-        </div>
-    </div>
+        </section>
+    </ng-content>
 </div>

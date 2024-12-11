@@ -12,8 +12,8 @@
             </app-mixin-button>
         </a>
     </header>
-    <div data-track="base" class="flex flex-col gap-[inherit] border border-gray-900">
-        <div class="grid grid-cols-1 sm:grid-cols-2">
+    <div data-track="base" class="flex flex-col gap-[inherit]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <ng-container *ngFor="let team of teams">
                 <app-list-teams-page-team-element [team]="team" (onDelete)="onDeleteTeam($event)"></app-list-teams-page-team-element>
             </ng-container>

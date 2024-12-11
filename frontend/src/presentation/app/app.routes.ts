@@ -15,6 +15,10 @@ import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-pa
 import { UpdateTeamPageResolver } from './teams/update-team-page/update-team-page.resolver';
 import { UpdateTeamMembershipPageComponent } from './teams/update-team-membership-page/update-team-membership-page.component';
 import { UpdateTeamMembershipPageResolver } from './teams/update-team-membership-page/update-team-membership-page.resolver';
+import { NotFoundPageComponent } from './other/not-found-page/not-found-page.component';
+import { InternalServerErrorPageComponent } from './other/internal-server-error-page.component copy';
+import { UnknownErrorPageComponent } from './other/unknown-error-page.component copy 2';
+import { ClientSideErrorPageComponent } from './other/client-side-error-page.component';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -71,6 +75,11 @@ export const routes: Routes = [
         resolve: {
             data: UpdatePlayerPageResolver,
         },
-    }
-    
+    },
+
+    { path: 'not-found', component: NotFoundPageComponent },
+    { path: 'internal-server-error', component: InternalServerErrorPageComponent },
+    { path: 'unkown-error', component: UnknownErrorPageComponent },
+    { path: 'client-side-error', component: ClientSideErrorPageComponent },
+    { path: '**', redirectTo: 'not-found' },
 ];

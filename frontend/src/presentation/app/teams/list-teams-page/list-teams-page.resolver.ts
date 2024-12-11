@@ -1,8 +1,15 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../models/Team';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
+import NotFoundException from '../../../exceptions/NotFoundException';
+import IListTeamsResponseDTO from '../../../contracts/teams/list/IListTeamsResponseDTO';
+import { HttpErrorResponse } from '@angular/common/http';
+import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
+import InternalServerErrorException from '../../../exceptions/InternalServerErrorException';
+import UnkownErrorException from '../../../exceptions/UnkownErrorException';
+import getRoutableException from '../../../utils/getRoutableException';
 
 export interface IListTeamsResolverData {
     teams: Team[];
@@ -22,13 +29,18 @@ export class ListTeamsPageResolver implements Resolve<Team[]>, OnInit {
     resolve(route: ActivatedRouteSnapshot): Observable<Team[]> {
         return this._teamDataAccess.listTeams().pipe(
             map((response) => {
-                return response.teams.map((team) => {
+                const data = response.body as IListTeamsResponseDTO;
+
+                return data.teams.map((team) => {
                     return new Team({
                         id: team.id,
                         name: team.name,
                         dateFounded: new Date(team.dateFounded),
                     });
                 });
+            }),
+            catchError((error) => {
+                throw getRoutableException(error);
             }),
         );
     }

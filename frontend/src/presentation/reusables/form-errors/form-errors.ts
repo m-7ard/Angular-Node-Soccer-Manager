@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -18,4 +18,8 @@ import { CommonModule } from '@angular/common';
 })
 export class FormErrorsComponent {
     @Input() errors?: string[];
+
+    @HostBinding('style.display') get displayStyle() {
+        return this.errors == null ? 'none' : 'block';
+    }
 }

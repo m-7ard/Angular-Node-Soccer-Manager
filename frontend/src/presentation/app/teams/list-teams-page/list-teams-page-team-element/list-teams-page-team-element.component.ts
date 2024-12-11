@@ -6,11 +6,13 @@ import { CoverImageComponent } from "../../../../reusables/cover-image/cover-ima
 import { MixinButtonComponent } from "../../../../ui-mixins/mixin-button/mixin-button.component";
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MixinPrototypeCardDirective } from '../../../../reusables/prototype-card/prototype-card';
+import { MixinPrototypeCardSectionDirective } from '../../../../reusables/prototype-card/prototype-card-section';
 
 @Component({
   selector: 'app-list-teams-page-team-element',
   standalone: true,
-  imports: [CoverImageComponent, MixinButtonComponent, RouterModule, CommonModule],
+  imports: [CoverImageComponent, MixinButtonComponent, RouterModule, CommonModule, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
   templateUrl: './list-teams-page-team-element.component.html',
 })
 export class ListTeamsPageTeamElementComponent {

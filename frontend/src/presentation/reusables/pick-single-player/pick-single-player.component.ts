@@ -6,11 +6,13 @@ import Player from '../../models/Player';
 import { MixinButtonComponent } from '../../ui-mixins/mixin-button/mixin-button.component';
 import { CoverImageComponent } from '../cover-image/cover-image.component';
 import { SearchPlayersModalComponentComponent, SearchPlayersModalComponentProps } from '../search-players-modal-component/search-players-modal-component.component';
+import { MixinPrototypeCardDirective } from '../prototype-card/prototype-card';
+import { MixinPrototypeCardSectionDirective } from '../prototype-card/prototype-card-section';
 
 @Component({
     selector: 'app-pick-single-player',
     standalone: true,
-    imports: [CommonModule, MixinButtonComponent, CoverImageComponent],
+    imports: [CommonModule, MixinButtonComponent, CoverImageComponent, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
     templateUrl: './pick-single-player.component.html',
     providers: [
         {

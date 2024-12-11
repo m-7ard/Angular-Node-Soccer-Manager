@@ -66,9 +66,10 @@ class PlayerRepository implements IPlayerRepository {
         const sqlEntry = sql`
             UPDATE player
                 SET
-                    id = ${player.id},
                     name = ${player.name},
                     active_since = ${player.activeSince}
+                WHERE
+                    id = ${player.id}
         `;
 
         await this._db.execute({
