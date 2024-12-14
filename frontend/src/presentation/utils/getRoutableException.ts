@@ -6,7 +6,7 @@ import UnkownErrorException from "../exceptions/UnkownErrorException";
 
 export default function getRoutableException(error: unknown) {
     if (!(error instanceof HttpErrorResponse)) {
-        throw new ClientSideErrorException();
+        throw new ClientSideErrorException(JSON.stringify(error));
     }
 
     if (error.status === 404) {
