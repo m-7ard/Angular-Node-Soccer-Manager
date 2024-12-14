@@ -17,7 +17,7 @@ export class UpdateTeamMembershipPageResolver implements Resolve<IUpdateTeamMemb
     constructor(private _teamDataAccess: TeamDataAccessService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<IUpdateTeamMembershipResolverData> {
-        const teamId = route.paramMap.get('teamId');
+        const teamId = route.parent!.paramMap.get('teamId');
 
         if (teamId == null) {
             throw new Error('implement a 404');

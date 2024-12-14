@@ -4,15 +4,24 @@ import Player from '../../../../models/Player';
 import { CommonModule } from '@angular/common';
 import { DeletePlayerModal, DeletePlayerModalProps } from '../../delete-player-modal/delete-player-modal.component';
 import { Dialog } from '@angular/cdk/dialog';
-import { MixinButtonComponent } from '../../../../ui-mixins/mixin-button/mixin-button.component';
 import { RouterModule } from '@angular/router';
-import { MixinPrototypeCardSectionDirective } from '../../../../reusables/prototype-card/prototype-card-section';
-import { MixinPrototypeCardDirective } from '../../../../reusables/prototype-card/prototype-card';
+import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
+import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 
 @Component({
     selector: 'app-list-players-page-player-element',
     standalone: true,
-    imports: [CoverImageComponent, CommonModule, MixinButtonComponent, RouterModule, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
+    imports: [
+        CoverImageComponent,
+        CommonModule,
+        RouterModule,
+        ZeebraTextComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './list-players-page-player-element.component.html',
 })
 export class ListPlayersPagePlayerElementComponent {

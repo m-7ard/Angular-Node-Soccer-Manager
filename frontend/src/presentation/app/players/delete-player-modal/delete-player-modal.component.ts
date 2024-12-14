@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import Player from '../../../models/Player';
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
@@ -9,6 +8,9 @@ import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 
 export interface DeletePlayerModalProps {
     player: Player;
@@ -18,7 +20,13 @@ export interface DeletePlayerModalProps {
 @Component({
     selector: 'app-delete-player-modal',
     standalone: true,
-    imports: [MixinButtonComponent, CommonModule, FormErrorsComponent],
+    imports: [
+        CommonModule,
+        FormErrorsComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './delete-player-modal.component.html',
 })
 export class DeletePlayerModal {

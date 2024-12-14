@@ -7,10 +7,16 @@ import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import parsers from '../../../utils/parsers';
-import { IUpdateTeamResolverData } from './update-team-page.resolver';
-import { MixinButtonComponent } from "../../../ui-mixins/mixin-button/mixin-button.component";
-import { FormFieldComponent } from "../../../reusables/form-field/form-field.component";
-import { CharFieldComponent } from "../../../reusables/char-field/char-field.component";
+import { IUpdateTeamResolverData } from '../../../__obsolete/update-team-page.resolver';
+import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
+import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
+import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
+import { IReadTeamResolverData } from '../read-team-page/read-team-page.resolver';
+import Team from '../../../models/Team';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -25,13 +31,22 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-update-team-page',
     standalone: true,
-    imports: [MixinButtonComponent, FormFieldComponent, CharFieldComponent, ReactiveFormsModule],
+    imports: [
+        MixinButtonComponent,
+        FormFieldComponent,
+        CharFieldComponent,
+        ReactiveFormsModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './update-team-page.component.html',
 })
 export class UpdateTeamPageComponent {
     form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
     id: string = null!;
+    team: Team = null!;
 
     constructor(
         private router: Router,
@@ -51,15 +66,12 @@ export class UpdateTeamPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
-            const data: IUpdateTeamResolverData = resolverData['data'];
-            this.id = data.id;
-            const team = data.team;
+        const data: IReadTeamResolverData = this._activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
+        this.team = data.team;
 
-            this.form.patchValue({
-                name: team.name,
-                dateFounded: parsers.parseJsDateToInputDate(team.dateFounded),
-            });
+        this.form.patchValue({
+            name: this.team.name,
+            dateFounded: parsers.parseJsDateToInputDate(this.team.dateFounded),
         });
     }
 

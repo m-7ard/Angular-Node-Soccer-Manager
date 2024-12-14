@@ -1,0 +1,78 @@
+<section class="grid grid-cols-2 max-[450px]:grid-cols-1 gap-3 items-start">
+    <main appMixinStyledCard>
+        <header appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
+            <div class="aspect-square theme-avatar-any">
+                <section class="relative h-full w-full flex">
+                    <app-cover-image src=""></app-cover-image>
+                </section>
+            </div>
+            <div class="overflow-hidden">
+                <div class="token-card--header--primary-text">
+                    {{ team.name }}
+                </div>
+                <div class="truncate token-card--header--secondary-text">
+                    <app-zeebra-text></app-zeebra-text>
+                </div>
+            </div>
+        </header>
+        <ul appMixinStyledCardSection>
+            <li class="token-card--list">
+                <span class="token-card--list-label--text shrink-0">Team Id</span>
+                <span class="truncate token-card--list-value--text">
+                    {{ team.id }}
+                </span>
+            </li>
+            <li class="token-card--list">
+                <span class="token-card--list-label--text shrink-0">Date Founded</span>
+                <span class="truncate token-card--list-value--text">
+                    {{ team.dateFounded | date }}
+                </span>
+            </li>
+            <li class="token-card--list">
+                <span class="token-card--list-label--text shrink-0">Membership Count</span>
+                <span class="truncate token-card--list-value--text">
+                    {{ teamPlayers.length }}
+                </span>
+            </li>
+            <li class="token-card--list">
+                <span class="token-card--list-label--text shrink-0">Active Members</span>
+                <span class="truncate token-card--list-value--text">
+                    {{ activePlayers.length }}
+                </span>
+            </li>
+        </ul>
+    </main>
+    <main appMixinStyledCard>
+        <section appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between">
+            <div class="text-base">Team Players</div>
+            <button
+                appMixinStyledButton
+                theme="theme-Sbutton-generic-green"
+                size="mixin-Sbutton-sm"
+                [routerLink]="'/teams/' + team.id + '/players'"
+            >
+                See All
+            </button>
+        </section>
+        <section
+            appMixinStyledCardSection
+            *ngFor="let teamPlayer of teamPlayers.slice(0, 3)"
+            class="grid gap-3"
+            style="grid-template: auto / auto 1fr"
+        >
+            <div class="aspect-square theme-avatar-any">
+                <section class="relative h-full w-full flex">
+                    <app-cover-image src=""></app-cover-image>
+                </section>
+            </div>
+            <div class="overflow-hidden">
+                <div class="token-card--header--primary-text">
+                    {{ team.name }}
+                </div>
+                <div class="truncate token-card--header--secondary-text">
+                    <app-zeebra-text></app-zeebra-text>
+                </div>
+            </div>
+        </section>
+    </main>
+</section>

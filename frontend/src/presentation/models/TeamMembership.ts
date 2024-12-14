@@ -14,6 +14,10 @@ class TeamMembership {
     public activeFrom: Date;
     public activeTo: Date | null;
     public number: number;
+
+    isActive() {
+        return this.activeTo == null;
+    }
 }
 
 export default TeamMembership;

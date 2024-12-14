@@ -1,8 +1,8 @@
 import RoutableException from './RoutableException';
 
 class ClientSideErrorException extends RoutableException {
-    constructor() {
-        super("", '/client-side-error/');
+    constructor(message: string) {
+        super(message, '/client-side-error/');
     }
 }
 

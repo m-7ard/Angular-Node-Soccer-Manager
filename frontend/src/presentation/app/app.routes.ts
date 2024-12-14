@@ -6,19 +6,22 @@ import { CreatePlayerPageComponent } from './players/create-player-page/create-p
 import { CreateTeamPageComponent } from './teams/create-team-page/create-team-page.component';
 import { ListTeamsPageResolver } from './teams/list-teams-page/list-teams-page.resolver';
 import { ListTeamsPageComponent } from './teams/list-teams-page/list-teams-page.component';
-import { CreateTeamMembershipPageComponent } from './teams/create-team-membership-page/create-team-membership-page.component';
-import { ListTeamPlayersPageComponent } from './teams/list-team-players-page/list-team-players-page.component';
-import { ListTeamPlayersPageResolver } from './teams/list-team-players-page/list-team-players-page.resolver';
+import { CreateTeamMembershipPageComponent } from './teams/read-team-page/create-team-membership/create-team-membership-page.component';
+import { ListTeamPlayersPageComponent } from './teams/read-team-page/list-team-players-page/list-team-players-page.component';
 import { UpdatePlayerPageComponent } from './players/update-player-page/update-player-page.component';
 import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
 import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-page.component';
-import { UpdateTeamPageResolver } from './teams/update-team-page/update-team-page.resolver';
+import { UpdateTeamPageResolver } from '../__obsolete/update-team-page.resolver';
 import { UpdateTeamMembershipPageComponent } from './teams/update-team-membership-page/update-team-membership-page.component';
 import { UpdateTeamMembershipPageResolver } from './teams/update-team-membership-page/update-team-membership-page.resolver';
-import { NotFoundPageComponent } from './other/not-found-page/not-found-page.component';
+import { NotFoundPageComponent } from './other/not-found-page.component';
 import { InternalServerErrorPageComponent } from './other/internal-server-error-page.component copy';
 import { UnknownErrorPageComponent } from './other/unknown-error-page.component copy 2';
 import { ClientSideErrorPageComponent } from './other/client-side-error-page.component';
+import { ReadTeamPageComponent } from './teams/read-team-page/read-team-page.component';
+import { ReadTeamPageResolver } from './teams/read-team-page/read-team-page.resolver';
+import { TeamHomePageComponent } from './teams/read-team-page/team-home-page/team-home-page.component';
+import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -37,14 +40,7 @@ export const routes: Routes = [
         path: 'teams',
         component: ListTeamsPageComponent,
         resolve: {
-            teams: ListTeamsPageResolver,
-        },
-    },
-    {
-        path: 'teams/:id/players',
-        component: ListTeamPlayersPageComponent,
-        resolve: {
-            data: ListTeamPlayersPageResolver,
+            RESOLVER_DATA: ListTeamsPageResolver,
         },
     },
     {
@@ -52,22 +48,37 @@ export const routes: Routes = [
         component: CreateTeamPageComponent,
     },
     {
-        path: 'teams/:id/create-membership',
-        component: CreateTeamMembershipPageComponent,
-    },
-    {
-        path: 'teams/:id/update',
-        component: UpdateTeamPageComponent,
+        path: 'teams/:teamId',
+        component: ReadTeamPageComponent,
         resolve: {
-            data: UpdateTeamPageResolver,
+            RESOLVER_DATA: ReadTeamPageResolver,
         },
-    },
-    {
-        path: 'teams/:teamId/players/:playerId/update',
-        component: UpdateTeamMembershipPageComponent,
-        resolve: {
-            data: UpdateTeamMembershipPageResolver,
-        },
+        runGuardsAndResolvers: 'always',
+        children: [
+            {
+                path: '',
+                component: TeamHomePageComponent,
+            },
+            {
+                path: 'update',
+                component: UpdateTeamPageComponent,
+            },
+            {
+                path: 'players/add',
+                component: CreateTeamMembershipPageComponent,
+            },
+            {
+                path: 'players',
+                component: ListTeamPlayersPageComponent,
+            },
+            {
+                path: 'players/:playerId/update',
+                component: UpdateTeamMembershipPageComponent,
+                resolve: {
+                    [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver
+                }
+            },
+        ],
     },
     {
         path: 'players/:id/update',

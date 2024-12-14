@@ -1,8 +1,8 @@
-<div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
-        <div class="text-xl">Update Player</div>
+<form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base">
+    <header appMixinStyledCardSection>
+        <div class="text-base text-gray-900">Update Player</div>
     </header>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" class="flex flex-col gap-2 w-full shrink-0">
+    <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">
                 <app-char-field
@@ -26,16 +26,8 @@
                 ></app-char-field>
             </ng-template>
         </app-form-field>
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-base',
-                theme: 'theme-button-generic-green'
-            }"
-            [buttonAttrs]="{
-                type: 'submit'
-            }"
-        >
-            Update
-        </app-mixin-button>
-    </form>
-</div>
+    </fieldset>
+    <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Update</button>
+    </footer>
+</form>

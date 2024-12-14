@@ -1,3 +1,4 @@
+@import "@angular/cdk/overlay-prebuilt.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +10,15 @@
     @apply gap-0.5 px-2 py-1 text-sm leading-none;
   }
   .mixin-button-base {
+    @apply gap-2 px-4 py-1 text-base;
+  }
+  .mixin-Sbutton-like {
+    @apply flex items-center box-border transition-colors cursor-pointer select-none rounded-md shadow;
+  }
+  .mixin-Sbutton-sm {
+    @apply gap-0.5 px-2 py-1 text-sm leading-none;
+  }
+  .mixin-Sbutton-base {
     @apply gap-2 px-4 py-1 text-base;
   }
   .mixin-textarea-any > textarea {
@@ -53,7 +63,7 @@
     @apply gap-4;
   }
   .mixin-panel-like {
-    @apply flex flex-col grow max-h-full;
+    @apply flex flex-col grow max-h-full w-[100vw];
   }
   .mixin-panel-base {
     @apply px-4 py-4 gap-y-4 max-w-72 sm:max-w-prose;
@@ -84,11 +94,17 @@
   .mixin-checkbox-sm > input {
     @apply p-1 text-sm leading-none absolute inset-0 transition-colors;
   }
+  .mixin-Scard-like {
+    @apply divide-y shadow rounded-md overflow-hidden;
+  }
+  .mixin-Scard-base [data-role=section] {
+    @apply p-3;
+  }
   .mixin-Pcard-like {
     @apply divide-y border;
   }
   .mixin-Pcard-base [data-role=section] {
-    @apply py-2 px-4;
+    @apply p-3;
   }
   .mixin-content-grid > [data-track] {
     @apply w-full mx-auto;
@@ -173,9 +189,69 @@
   .theme-panel-generic-white {
     @apply bg-gray-50 border border-gray-900;
   }
+  .theme-Scard-generic-white {
+    @apply shadow-black/30 bg-white divide-gray-300;
+  }
+  .theme-Sbutton-generic-white {
+    @apply shadow-black/30 text-gray-800;
+  }
+  .theme-Sbutton-generic-white:not(.theme-Sbutton-generic-white.active) {
+    @apply bg-white hover:bg-gray-200;
+  }
+  .theme-Sbutton-generic-white.active {
+    @apply bg-gray-200;
+  }
+  .theme-Sbutton-generic-blue {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-blue:not(.theme-Sbutton-generic-blue.active) {
+    @apply bg-sky-500 hover:bg-sky-600;
+  }
+  .theme-Sbutton-generic-blue.active {
+    @apply bg-sky-600;
+  }
+  .theme-Sbutton-generic-yellow {
+    @apply shadow-black/30 text-gray-800;
+  }
+  .theme-Sbutton-generic-yellow:not(.theme-Sbutton-generic-yellow.active) {
+    @apply bg-yellow-300 hover:bg-yellow-400;
+  }
+  .theme-Sbutton-generic-yellow.active {
+    @apply bg-yellow-400;
+  }
+  .theme-Sbutton-generic-green {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-green:not(.theme-Sbutton-generic-green.active) {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+  .theme-Sbutton-generic-green.active {
+    @apply bg-green-600;
+  }
+  .theme-Sbutton-generic-red {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-red:not(.theme-Sbutton-generic-red.active) {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+  .theme-Sbutton-generic-red.active {
+    @apply bg-red-600;
+  }
+  .theme-avatar-any {
+    @apply bg-gray-300 shadow shadow-black/30 rounded-md;
+  }
+}
+@layer components {
+  .token-card-header-primary-text {
+    @apply text-lg font-bold text-gray-900;
+  }
+  .token-card-header-secondary-text {
+    @apply text-sm text-gray-600;
+  }
 }
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
   height: 100%;
 }
 

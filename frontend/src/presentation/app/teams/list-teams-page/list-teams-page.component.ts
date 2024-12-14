@@ -1,19 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IListTeamsResolverData } from './list-teams-page.resolver';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import Team from '../../../models/Team';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
-import { ListTeamsPageTeamElementComponent } from "./list-teams-page-team-element/list-teams-page-team-element.component";
+import { ListTeamsPageTeamElementComponent } from './list-teams-page-team-element/list-teams-page-team-element.component';
+import { MixinButtonDirective } from '../../../ui-mixins/mixin-button-directive/mixin-button.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 
 @Component({
     selector: 'app-list-teams-page',
     standalone: true,
-    imports: [
-    CommonModule,
-    MixinButtonComponent,
-    ListTeamsPageTeamElementComponent
-],
+    imports: [CommonModule, ListTeamsPageTeamElementComponent, RouterModule, MixinStyledButtonDirective, MixinStyledCardDirective, MixinStyledCardSectionDirective],
     templateUrl: './list-teams-page.component.html',
 })
 export class ListTeamsPageComponent {
@@ -28,7 +27,7 @@ export class ListTeamsPageComponent {
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData as IListTeamsResolverData;
-            this.teams = data.teams;
+            this.teams = data.RESOLVER_DATA;
         });
     }
 }

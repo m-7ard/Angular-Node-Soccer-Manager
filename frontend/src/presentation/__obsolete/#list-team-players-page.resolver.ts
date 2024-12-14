@@ -1,12 +1,12 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import Team from '../../../models/Team';
-import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
-import TeamPlayer from '../../../models/TeamPlayer';
-import TeamMembershipMapper from '../../../mappers/MembershipMapper';
-import TeamMapper from '../../../mappers/TeamMapper';
-import PlayerMapper from '../../../mappers/PlayerMapper';
+import Team from '../models/Team';
+import { TeamDataAccessService } from '../services/data-access/team-data-access.service';
+import TeamPlayer from '../models/TeamPlayer';
+import TeamMembershipMapper from '../mappers/MembershipMapper';
+import TeamMapper from '../mappers/TeamMapper';
+import PlayerMapper from '../mappers/PlayerMapper';
 
 export interface IListTeamPlayersResolverData {
     team: Team;

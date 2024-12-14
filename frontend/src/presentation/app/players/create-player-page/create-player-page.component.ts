@@ -8,9 +8,11 @@ import { PlayerDataAccessService } from '../../../services/data-access/player-da
 import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -29,8 +31,10 @@ type IErrorSchema = IPresentationError<{
         ReactiveFormsModule,
         CharFieldComponent,
         FormFieldComponent,
-        MixinButtonComponent,
         CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
     ],
     templateUrl: './create-player-page.component.html',
 })
@@ -56,7 +60,7 @@ export class CreatePlayerPageComponent {
 
     onSubmit(): void {
         const rawValue = this.form.getRawValue();
-        
+
         this.playerDataAccess
             .createPlayer({
                 activeSince: new Date(rawValue.activeSince),

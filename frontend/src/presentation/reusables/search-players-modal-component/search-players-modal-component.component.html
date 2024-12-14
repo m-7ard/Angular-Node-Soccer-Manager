@@ -1,125 +1,110 @@
-<div class="mixin-panel-like mixin-panel-base theme-panel-generic-white w-[100vw]">
-    <header class="flex flex-row gap-2 justify-between">
+<div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+    <header appMixinStyledCardSection class="flex flex-row gap-2 justify-between">
         <div class="font-bold">Filter Players</div>
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-sm',
-                theme: 'theme-button-generic-white'
-            }"
-        >
-            Close
-        </app-mixin-button>
+        <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-white">Close</button>
     </header>
-    <nav class="flex flex-row gap-2">
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-base',
-                theme: 'theme-button-generic-white'
-            }"
+    <nav appMixinStyledCardSection class="flex flex-row gap-3">
+        <button
+            appMixinStyledButton
+            size="mixin-Sbutton-base"
+            theme="theme-Sbutton-generic-white"
             (click)="changeRoute('form')"
-            class="basis-1/2"
-            className="w-full justify-center"
-            [isActive]="currentRoute === 'form'"
+            class="basis-1/2 justify-center"
+            [ngClass]="{ active: currentRoute === 'form' }"
         >
             Form
-        </app-mixin-button>
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-base',
-                theme: 'theme-button-generic-white'
-            }"
+        </button>
+        <button
+            appMixinStyledButton
+            size="mixin-Sbutton-base"
+            theme="theme-Sbutton-generic-white"
             (click)="changeRoute('results')"
-            class="basis-1/2"
-            className="w-full justify-center"
-            [isActive]="currentRoute === 'results'"
+            class="basis-1/2 justify-center"
+            [ngClass]="{ active: currentRoute === 'results' }"
         >
             Result
-        </app-mixin-button>
+        </button>
     </nav>
-    <section *ngIf="currentRoute === 'form'">
-        <form [formGroup]="form" class="flex flex-col gap-2" (submit)="onFormSubmit()">
+    <ng-content *ngIf="currentRoute === 'form'">
+        <form appMixinStyledCardSection [formGroup]="form" class="flex flex-col gap-2">
             <app-form-field [name]="'name'">
                 <ng-template let-name="name">
                     <app-char-field
                         [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
+                        size="mixin-char-input-base"
+                        theme="theme-input-generic-white"
                     ></app-char-field>
                 </ng-template>
             </app-form-field>
-            <app-mixin-button
-                [options]="{
-                    size: 'mixin-button-base',
-                    theme: 'theme-button-generic-green'
-                }"
+        </form>
+        <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+            <button
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-green"
+                (mouseup)="onFormSubmit()"
             >
                 Filter
-            </app-mixin-button>
-        </form>
-    </section>
-    <section *ngIf="currentRoute === 'results'">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            </button>
+        </footer>
+    </ng-content>
+    <ng-content *ngIf="currentRoute === 'results'">
+        <div appMixinStyledCardSection class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <ng-content *ngFor="let player of results">
-                <div appMixinPrototypeCard>
-                    <main appMixinPrototypeCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
-                        <div class="aspect-square bg-gray-300 border border-gray-900 h-full">
+                <div appMixinStyledCard>
+                    <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
+                        <div class="aspect-square theme-avatar-any">
                             <section class="relative h-full w-full flex">
                                 <app-cover-image src=""></app-cover-image>
                             </section>
                         </div>
                         <div class="overflow-hidden">
-                            <div class="text-lg font-bold">
+                            <div class="token-card--header--primary-text">
                                 {{ player.name }}
                             </div>
-                            <div class="truncate">
-                                Zebras (US: /ˈziːbrəz/, UK: /ˈzɛbrəz, ˈziː-/)[2] (subgenus Hippotigris) are African equines with distinctive black-and-white striped coats. There are three living species: Grévy's zebra (Equus grevyi), the plains zebra (E. quagga), and the mountain zebra (E. zebra). Zebras share the genus Equus with horses and asses, the three groups being the only living members of
-                                the family Equidae. Zebra stripes come in different patterns, unique to each individual. Several theories have been proposed for the function of these patterns, with most evidence supporting them as a deterrent for biting flies. Zebras inhabit eastern and southern Africa and can be found in a variety of habitats such as savannahs, grasslands, woodlands, shrublands,
-                                and mountainous areas.
+                            <div class="truncate token-card--header--secondary-text">
+                                <app-zeebra-text></app-zeebra-text>
                             </div>
                         </div>
                     </main>
-                    <section appMixinPrototypeCardSection>
-                        <div class="text-base flex flex-row justify-between gap-3">
-                            <span class="font-bold">Id</span>
-                            <span class="truncate">
+                    <section appMixinStyledCardSection>
+                        <div class="token-card--list">
+                            <span class="token-card--list-label--text">Id</span>
+                            <span class="truncate token-card--list-value--text">
                                 {{ player.id }}
                             </span>
                         </div>
-                        <div class="text-base flex flex-row justify-between gap-3">
-                            <span class="font-bold">Active Since</span>
-                            <span class="truncate">
+                        <div class="token-card--list">
+                            <span class="token-card--list-label--text">Active Since</span>
+                            <span class="truncate token-card--list-value--text">
                                 {{ player.activeSince | date }}
                             </span>
                         </div>
                     </section>
-                    <footer appMixinPrototypeCardSection class="grid grid-cols-1 gap-1">
-                        <app-mixin-button
+                    <footer appMixinStyledCardSection class="grid grid-cols-1 gap-1">
+                        <button
+                            appMixinStyledButton
                             *ngIf="isPlayerAlreadySelected(player); else notSelected"
-                            [options]="{
-                                size: 'mixin-button-base',
-                                theme: 'theme-button-generic-green'
-                            }"
-                            class="mt-auto"
+                            size="mixin-Sbutton-base"
+                            theme="theme-Sbutton-generic-green"
+                            class="justify-center"
                         >
                             Already Selected
-                        </app-mixin-button>
+                        </button>
                         <ng-template #notSelected>
-                            <app-mixin-button
+                            <button
+                                appMixinStyledButton
                                 (click)="selectPlayer(player)"
-                                [options]="{
-                                    size: 'mixin-button-base',
-                                    theme: 'theme-button-generic-yellow'
-                                }"
-                                class="mt-auto"
+                                size="mixin-Sbutton-base"
+                                theme="theme-Sbutton-generic-yellow"
+                                class="justify-center"
                             >
                                 Select
-                            </app-mixin-button>
+                            </button>
                         </ng-template>
                     </footer>
                 </div>
             </ng-content>
         </div>
-    </section>
+    </ng-content>
 </div>

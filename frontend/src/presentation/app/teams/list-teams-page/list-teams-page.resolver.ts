@@ -3,16 +3,11 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } 
 import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../models/Team';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
-import NotFoundException from '../../../exceptions/NotFoundException';
 import IListTeamsResponseDTO from '../../../contracts/teams/list/IListTeamsResponseDTO';
-import { HttpErrorResponse } from '@angular/common/http';
-import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
-import InternalServerErrorException from '../../../exceptions/InternalServerErrorException';
-import UnkownErrorException from '../../../exceptions/UnkownErrorException';
 import getRoutableException from '../../../utils/getRoutableException';
 
 export interface IListTeamsResolverData {
-    teams: Team[];
+    RESOLVER_DATA: Team[];
 }
 
 @Injectable({ providedIn: 'root' })

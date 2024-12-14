@@ -8,6 +8,15 @@
   .mixin-button-base {
     @apply gap-2 px-4 py-1 text-base;
   }
+  .mixin-Sbutton-like {
+    @apply flex items-center box-border transition-colors cursor-pointer select-none rounded-md shadow;
+  }
+  .mixin-Sbutton-sm {
+    @apply gap-0.5 px-2 py-1 text-sm leading-none;
+  }
+  .mixin-Sbutton-base {
+    @apply gap-2 px-4 py-1 text-base;
+  }
   .mixin-textarea-any > textarea {
     @apply block w-full transition-colors leading-none resize-none p-2;
   }
@@ -50,7 +59,7 @@
     @apply gap-4;
   }
   .mixin-panel-like {
-    @apply flex flex-col grow max-h-full;
+    @apply flex flex-col grow max-h-full w-[100vw];
   }
   .mixin-panel-base {
     @apply px-4 py-4 gap-y-4 max-w-72 sm:max-w-prose;
@@ -81,11 +90,17 @@
   .mixin-checkbox-sm > input {
     @apply p-1 text-sm leading-none absolute inset-0 transition-colors;
   }
+  .mixin-Scard-like {
+    @apply divide-y shadow rounded-md overflow-hidden;
+  }
+  .mixin-Scard-base [data-role=section] {
+    @apply p-3;
+  }
   .mixin-Pcard-like {
     @apply divide-y border;
   }
   .mixin-Pcard-base [data-role=section] {
-    @apply py-2 px-4;
+    @apply p-3;
   }
   .mixin-content-grid > [data-track] {
     @apply w-full mx-auto;

@@ -7,7 +7,6 @@ import { Directive, ElementRef, Input, Renderer2, OnInit } from '@angular/core';
 export class MixinPrototypeCardDirective implements OnInit {
     @Input() size: 'mixin-Pcard-base' = 'mixin-Pcard-base';
     @Input() theme: 'theme-Pcard-generic-white' = 'theme-Pcard-generic-white';
-    @Input() className: string | null = null;
 
     constructor(
         private el: ElementRef,
@@ -20,10 +19,5 @@ export class MixinPrototypeCardDirective implements OnInit {
         // Apply size and theme classes
         this.renderer.addClass(this.el.nativeElement, this.size);
         this.renderer.addClass(this.el.nativeElement, this.theme);
-
-        // Apply additional className if provided
-        if (this.className) {
-            this.className.split(' ').forEach((cls) => this.renderer.addClass(this.el.nativeElement, cls));
-        }
     }
 }

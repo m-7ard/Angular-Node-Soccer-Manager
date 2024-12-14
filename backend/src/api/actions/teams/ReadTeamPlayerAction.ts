@@ -21,11 +21,11 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId, playerId } = request;
 
-        const command = new ReadTeamMembershipQuery({
+        const query = new ReadTeamMembershipQuery({
             teamId: teamId,
             playerId: playerId,
         });
-        const result = await this._requestDispatcher.dispatch(command);
+        const result = await this._requestDispatcher.dispatch(query);
 
         if (result.isErr()) {
             const firstError = result.error[0];

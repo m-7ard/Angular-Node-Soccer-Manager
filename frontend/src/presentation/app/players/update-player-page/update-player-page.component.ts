@@ -7,11 +7,13 @@ import { PlayerDataAccessService } from '../../../services/data-access/player-da
 import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { IUpdatePlayerResolverData } from './update-player-page.resolver';
 import parsers from '../../../utils/parsers';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -26,7 +28,15 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-update-player-page',
     standalone: true,
-    imports: [ReactiveFormsModule, CharFieldComponent, FormFieldComponent, MixinButtonComponent, CommonModule],
+    imports: [
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './update-player-page.component.html',
 })
 export class UpdatePlayerPageComponent {

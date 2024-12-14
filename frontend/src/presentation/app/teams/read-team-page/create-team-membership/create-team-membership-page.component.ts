@@ -3,16 +3,21 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
+import PresentationErrorFactory from '../../../../errors/PresentationErrorFactory';
+import { TeamDataAccessService } from '../../../../services/data-access/team-data-access.service';
 import { CommonModule } from '@angular/common';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import IPresentationError from '../../../errors/IPresentationError';
-import NotFoundException from '../../../exceptions/NotFoundException';
-import Player from '../../../models/Player';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { PickSinglePlayerComponent } from '../../../reusables/pick-single-player/pick-single-player.component';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
+import { FormFieldComponent } from '../../../../reusables/form-field/form-field.component';
+import IPresentationError from '../../../../errors/IPresentationError';
+import NotFoundException from '../../../../exceptions/NotFoundException';
+import Player from '../../../../models/Player';
+import { CharFieldComponent } from '../../../../reusables/char-field/char-field.component';
+import { PickSinglePlayerComponent } from '../../../../reusables/pick-single-player/pick-single-player.component';
+import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
+import Team from '../../../../models/Team';
+import { IReadTeamResolverData } from '../read-team-page.resolver';
+import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
 
 interface IFormControls {
     player: FormControl<Player | null>;
@@ -31,18 +36,28 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-create-team-membership-page',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, FormFieldComponent, CharFieldComponent, PickSinglePlayerComponent, MixinButtonComponent],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        FormFieldComponent,
+        CharFieldComponent,
+        PickSinglePlayerComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './create-team-membership-page.component.html',
 })
 export class CreateTeamMembershipPageComponent implements OnInit {
     form: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
     id: string = null!;
+    team: Team = null!;
 
     constructor(
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
-        private route: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
     ) {
         this.form = new FormGroup<IFormControls>({
             player: new FormControl(null, {
@@ -65,11 +80,14 @@ export class CreateTeamMembershipPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get('id');
+        const id = this.activatedRoute.snapshot.parent!.paramMap.get('teamId');
 
         if (id == null) {
             throw new NotFoundException(`Team id in url is invalid. Url: ${id}`);
         }
+
+        const data: IReadTeamResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
+        this.team = data.team;
 
         this.id = id;
     }
@@ -84,7 +102,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
         this.teamDataAccess
             .createTeamMembership(this.id, {
                 activeFrom: new Date(rawValue.activeFrom),
-                activeTo: rawValue.activeTo === "" ? null : new Date(rawValue.activeTo),
+                activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
                 playerId: rawValue.player?.id as string,
                 number: parseInt(rawValue.number),
             })

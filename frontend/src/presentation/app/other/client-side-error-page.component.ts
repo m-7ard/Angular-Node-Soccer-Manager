@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import ClientSideErrorException from '../../exceptions/ClientSideErrorException';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'client-side-error-page',
@@ -11,7 +13,7 @@ import { Component } from '@angular/core';
                     Client Side Error
                 </div>
                 <div class="text-xl">
-                    Client Side Error
+                    {{ error.message }}
                 </div>
             </main>
         </div>
@@ -20,4 +22,21 @@ import { Component } from '@angular/core';
         class: 'flex flex-col grow',
     },
 })
-export class ClientSideErrorPageComponent {}
+export class ClientSideErrorPageComponent {
+    error: ClientSideErrorException;
+    protected FALLBACK = new ClientSideErrorException(
+        "A Client-Side Error has Occurred. State is missing from router.",
+    );
+
+    constructor(private router: Router) {
+        const navigation = this.router.getCurrentNavigation();
+        const state = navigation?.extras.state;
+        if (state == null) {
+            this.error = this.FALLBACK;
+            return;
+        }
+
+        const error: ClientSideErrorException | null = state['error'];
+        this.error = error == null ? this.FALLBACK : error;
+    }
+}

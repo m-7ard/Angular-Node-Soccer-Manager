@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@angular/cdk/overlay-prebuilt.css';
+@import "@angular/cdk/overlay-prebuilt.css";
 @import "./mixins.scss";
 @import "./themes.scss";
+@import "./tokens.scss";
 
 html {
-    font-family: "Sofia Sans", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 400;
     height: 100%;
 }

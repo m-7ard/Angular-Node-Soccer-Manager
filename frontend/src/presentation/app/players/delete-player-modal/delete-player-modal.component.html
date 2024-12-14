@@ -1,43 +1,35 @@
-<div class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
-    <header class="flex flex-row gap-2 justify-between">
+<div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+    <header appMixinStyledCardSection class="flex flex-row gap-3 justify-between items-start">
         <div>
-            <span class="font-bold"> Delete Player </span>
-            <span> "{{ player.name }}" </span>
+            <div class="token-card--header--primary-text">Delete Player</div>
+            <div class="token-card--header--secondary-text">{{ player.name }}</div>
         </div>
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-sm',
-                theme: 'theme-button-generic-white'
-            }"
-            (click)="closeModal()"
-        >
+        <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-white" (click)="closeModal()">
             Close
-        </app-mixin-button>
+        </button>
     </header>
-    <app-form-errors [errors]="errors['_']"></app-form-errors>
-    <hr class="border-t border-black w-full h-0" />
-    <section>Are you sure you want to delete "{{ player.name }}"?</section>
-    <hr class="border-t border-black w-full h-0" />
-    <footer class="flex flex-row gap-2 justify-end">
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-base',
-                theme: 'theme-button-generic-white'
-            }"
+    <section appMixinStyledCardSection *ngIf="errors['_'] != null">
+        <app-form-errors [errors]="errors['_']"></app-form-errors>
+    </section>
+    <section appMixinStyledCardSection>Are you sure you want to delete "{{ player.name }}"?</section>
+    <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+        <button
+            appMixinStyledButton
+            size="mixin-Sbutton-base"
+            theme="theme-Sbutton-generic-white"
             (click)="closeModal()"
-            [buttonAttrs]="{ type: 'button' }"
+            type="button"
         >
             Cancel
-        </app-mixin-button>
-        <app-mixin-button
-            [options]="{
-                size: 'mixin-button-base',
-                theme: 'theme-button-generic-red'
-            }"
+        </button>
+        <button
+            appMixinStyledButton
+            size="mixin-Sbutton-base"
+            theme="theme-Sbutton-generic-red"
             (click)="onSubmit()"
-            [buttonAttrs]="{ type: 'button' }"
+            type="button"
         >
             Delete
-        </app-mixin-button>
+        </button>
     </footer>
 </div>

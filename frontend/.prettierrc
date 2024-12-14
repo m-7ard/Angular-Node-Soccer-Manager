@@ -3,6 +3,6 @@
     "useTabs": false,
     "prettier.singleAttributePerLine": false,
     "semi": true,
-    "printWidth": 400
+    "printWidth": 120
 }
   

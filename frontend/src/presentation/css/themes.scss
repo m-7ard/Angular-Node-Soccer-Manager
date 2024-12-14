@@ -1,6 +1,6 @@
 @layer components {
     .theme-input-generic-white {
-        @apply border border-gray-900 flex flex-grow;
+        @apply border border-gray-300 flex flex-grow ;
 
         > input {
             @apply text-gray-900 bg-white focus:bg-gray-200;
@@ -59,6 +59,8 @@
         }
     }
 
+
+
     .theme-checkbox-generic-white {
         $root: &;
         @apply border border-gray-900 bg-white hover:bg-gray-200;
@@ -89,6 +91,79 @@
     }
 
     .theme-panel-generic-white {
-        @apply bg-gray-50 border border-gray-900;
+        @apply bg-white;
+    }
+
+    .theme-Scard-generic-white {
+        @apply shadow-black/20 bg-white divide-gray-300;
+    }
+
+    .theme-Sbutton-generic-white {
+        $root: &;
+        @apply shadow-black/20 text-gray-800;
+
+        &:not(&.active) {
+            @apply bg-white hover:bg-gray-200;
+        }
+
+        &.active {
+            @apply bg-gray-200;
+        }
+    }
+
+    .theme-Sbutton-generic-blue {
+        $root: &;
+        @apply shadow-black/20 text-white;
+
+        &:not(&.active) {
+            @apply bg-sky-500 hover:bg-sky-600;
+        }
+
+        &.active {
+            @apply bg-sky-600;
+        }
+    }
+
+    .theme-Sbutton-generic-yellow {
+        $root: &;
+        @apply shadow-black/20 text-gray-800;
+
+        &:not(&.active) {
+            @apply bg-yellow-300 hover:bg-yellow-400;
+        }
+
+        &.active {
+            @apply bg-yellow-400;
+        }
+    }
+
+    .theme-Sbutton-generic-green {
+        $root: &;
+        @apply shadow-black/20 text-white;
+
+        &:not(&.active) {
+            @apply bg-green-500 hover:bg-green-600;
+        }
+
+        &.active {
+            @apply bg-green-600;
+        }
+    }
+
+    .theme-Sbutton-generic-red {
+        $root: &;
+        @apply shadow-black/20 text-white;
+
+        &:not(&.active) {
+            @apply bg-red-500 hover:bg-red-600;
+        }
+
+        &.active {
+            @apply bg-red-600;
+        }
+    }
+
+    .theme-avatar-any {
+        @apply bg-gray-300 shadow shadow-black/20 rounded-md;
     }
 }

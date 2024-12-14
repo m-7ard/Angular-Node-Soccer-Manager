@@ -3,16 +3,27 @@ import { CommonModule } from '@angular/common';
 import { Component, forwardRef, inject, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import Player from '../../models/Player';
-import { MixinButtonComponent } from '../../ui-mixins/mixin-button/mixin-button.component';
 import { CoverImageComponent } from '../cover-image/cover-image.component';
-import { SearchPlayersModalComponentComponent, SearchPlayersModalComponentProps } from '../search-players-modal-component/search-players-modal-component.component';
-import { MixinPrototypeCardDirective } from '../prototype-card/prototype-card';
-import { MixinPrototypeCardSectionDirective } from '../prototype-card/prototype-card-section';
+import {
+    SearchPlayersModalComponentComponent,
+    SearchPlayersModalComponentProps,
+} from '../search-players-modal-component/search-players-modal-component.component';
+import { MixinStyledButtonDirective } from '../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
+import { ZeebraTextComponent } from "../zeebra-text/zeebra-text.component";
 
 @Component({
     selector: 'app-pick-single-player',
     standalone: true,
-    imports: [CommonModule, MixinButtonComponent, CoverImageComponent, MixinPrototypeCardDirective, MixinPrototypeCardSectionDirective],
+    imports: [
+    CommonModule,
+    CoverImageComponent,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirective,
+    MixinStyledCardSectionDirective,
+    ZeebraTextComponent
+],
     templateUrl: './pick-single-player.component.html',
     providers: [
         {

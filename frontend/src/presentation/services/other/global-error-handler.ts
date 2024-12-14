@@ -10,7 +10,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         let errorMessage = 'An unexpected error occurred.';
 
         if (error instanceof RoutableException) {
-            this._router.navigate([error.route]);
+            this._router.navigate([error.route], { state: { error: error } });
             return;
         } else if (error instanceof Error) {
             errorMessage = error.message;
@@ -18,6 +18,6 @@ export class GlobalErrorHandler implements ErrorHandler {
             errorMessage = `Unknown error: ${JSON.stringify(error)}`;
         }
 
-        console.error(errorMessage);
+        console.error(error);
     }
 }

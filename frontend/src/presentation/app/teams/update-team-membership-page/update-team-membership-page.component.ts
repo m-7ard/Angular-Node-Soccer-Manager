@@ -11,6 +11,12 @@ import { IUpdateTeamMembershipResolverData } from './update-team-membership-page
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import TeamPlayer from '../../../models/TeamPlayer';
+import Team from '../../../models/Team';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 
 interface IFormControls {
     activeFrom: FormControl<string>;
@@ -27,13 +33,23 @@ type IErrorSchema = IPresentationError<{
 @Component({
     selector: 'app-update-team-membership-page',
     standalone: true,
-    imports: [MixinButtonComponent, FormFieldComponent, CharFieldComponent, ReactiveFormsModule],
+    imports: [
+        MixinButtonComponent,
+        FormFieldComponent,
+        CharFieldComponent,
+        ReactiveFormsModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './update-team-membership-page.component.html',
 })
 export class UpdateTeamMembershipPageComponent {
     form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
     teamId: string = null!;
+    teamPlayer: TeamPlayer = null!;
+    team: Team = null!;
     playerId: string = null!;
 
     constructor(
@@ -59,11 +75,18 @@ export class UpdateTeamMembershipPageComponent {
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            const data: IUpdateTeamMembershipResolverData = resolverData['data'];
+            const data: IUpdateTeamMembershipResolverData = resolverData[RESOLVER_DATA_KEY];
+            console.log(data)
+
             this.teamId = data.team.id;
             this.playerId = data.teamPlayer.player.id;
+
             const teamPlayer = data.teamPlayer;
             const membership = teamPlayer.membership;
+
+
+            this.teamPlayer = teamPlayer;
+            this.team = data.team;
 
             this.form.patchValue({
                 activeFrom: parsers.parseJsDateToInputDate(membership.activeFrom),
@@ -79,7 +102,7 @@ export class UpdateTeamMembershipPageComponent {
         this.teamDataAccess
             .updateTeamMembership(this.teamId, this.playerId, {
                 activeFrom: new Date(rawValue.activeFrom),
-                activeTo: rawValue.activeTo === "" ? null : new Date(rawValue.activeTo),
+                activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
                 number: parseInt(rawValue.number),
             })
             .pipe(

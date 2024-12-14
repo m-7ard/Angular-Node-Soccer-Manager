@@ -1,40 +1,44 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
-        <div class="text-xl">Create Team</div>
-    </header>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" class="flex flex-col gap-2 p-4 border border-gray-900">
-        <!-- Start Form Fields -->
-        <app-form-field [name]="'name'" [errors]="errors.name">
-            <ng-template let-name="name">
-                <app-char-field
-                    [formControlName]="name"
-                    [options]="{
-                        size: 'mixin-char-input-base',
-                        theme: 'theme-input-generic-white'
-                    }"
-                ></app-char-field>
-            </ng-template>
-        </app-form-field>
 
-        <app-form-field [name]="'dateFounded'" [errors]="errors.dateFounded">
-            <ng-template let-name="name">
-                <app-char-field
-                    [formControlName]="name"
-                    [options]="{
-                        size: 'mixin-char-input-base',
-                        theme: 'theme-input-generic-white'
-                    }"
-                    [type]="'date'"
-                ></app-char-field>
-            </ng-template>
-        </app-form-field>
-        <!-- End Form Fields -->
+    <form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base">
+        <section appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between">
+            <div class="token-card--header--primary-text">Create Team</div>
+        </section>
+        <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
+            <app-form-field [name]="'name'" [errors]="errors.name">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
 
-        <app-mixin-button class="w-fit" popoverTrigger [targetComponent]="TestPopver" [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-white' }">
-            Show Popover
-        </app-mixin-button>
-        <app-mixin-button [buttonAttrs]="{ type: 'submit'}" [options]="{ size: 'mixin-button-base', theme: 'theme-button-generic-green' }">
-            Create
-        </app-mixin-button>
+            <app-form-field [name]="'dateFounded'" [errors]="errors.dateFounded">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        [type]="'date'"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+        </fieldset>
+        <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+            <button
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-white"
+            >
+                Show Popover
+            </button>
+            <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Create</button>
+        </footer>
     </form>
 </div>

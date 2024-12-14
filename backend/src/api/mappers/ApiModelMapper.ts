@@ -1,4 +1,5 @@
 import ITeamApiModel from "@apiModels/ITeamApiModel";
+import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import IPlayerApiModel from "api/models/IPlayerApiModel";
 import ITeamMembershipApiModel from "api/models/ITeamMembershipApiModel";
 import Player from "domain/entities/Player";
@@ -31,6 +32,13 @@ class ApiModelMapper {
             activeTo: membership.activeTo,
             number: membership.number
         };
+    }
+
+    public static createTeamPlayerApiModel(membership: TeamMembership, player: Player): ITeamPlayerApiModel {
+        return {
+            player: ApiModelMapper.createPlayerApiModel(player),
+            membership: ApiModelMapper.createTeamMembershipApiModel(membership)
+        }
     }
 }
 

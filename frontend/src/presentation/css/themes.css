@@ -65,4 +65,55 @@
   .theme-panel-generic-white {
     @apply bg-gray-50 border border-gray-900;
   }
+  .theme-Scard-generic-white {
+    @apply shadow-black/30 bg-white divide-gray-300 border;
+  }
+  .theme-Sbutton-generic-white {
+    @apply shadow-black/30 text-gray-800;
+  }
+  .theme-Sbutton-generic-white:not(.theme-Sbutton-generic-white.active) {
+    @apply bg-white hover:bg-gray-200;
+  }
+  .theme-Sbutton-generic-white.active {
+    @apply bg-gray-200;
+  }
+  .theme-Sbutton-generic-blue {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-blue:not(.theme-Sbutton-generic-blue.active) {
+    @apply bg-sky-500 hover:bg-sky-600;
+  }
+  .theme-Sbutton-generic-blue.active {
+    @apply bg-sky-600;
+  }
+  .theme-Sbutton-generic-yellow {
+    @apply shadow-black/30 text-gray-800;
+  }
+  .theme-Sbutton-generic-yellow:not(.theme-Sbutton-generic-yellow.active) {
+    @apply bg-yellow-300 hover:bg-yellow-400;
+  }
+  .theme-Sbutton-generic-yellow.active {
+    @apply bg-yellow-400;
+  }
+  .theme-Sbutton-generic-green {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-green:not(.theme-Sbutton-generic-green.active) {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+  .theme-Sbutton-generic-green.active {
+    @apply bg-green-600;
+  }
+  .theme-Sbutton-generic-red {
+    @apply shadow-black/30 text-white;
+  }
+  .theme-Sbutton-generic-red:not(.theme-Sbutton-generic-red.active) {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+  .theme-Sbutton-generic-red.active {
+    @apply bg-red-600;
+  }
+  .theme-avatar-any {
+    @apply bg-gray-300 shadow shadow-black/30 rounded-md;
+  }
 }/*# sourceMappingURL=themes.css.map */

@@ -9,6 +9,10 @@ class TeamPlayer {
 
     public player: Player;
     public membership: TeamMembership;
+
+    isActive() {
+        return this.membership.isActive();
+    }
 }
 
 export default TeamPlayer;

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import InternalServerErrorException from '../../exceptions/InternalServerErrorException';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'internal-server-error-page',
@@ -11,7 +13,7 @@ import { Component } from '@angular/core';
                     Internal Server Error
                 </div>
                 <div class="text-xl">
-                    Internal Server Error
+                    {{ error.message }}
                 </div>
             </main>
         </div>
@@ -20,4 +22,21 @@ import { Component } from '@angular/core';
         class: 'flex flex-col grow',
     },
 })
-export class InternalServerErrorPageComponent {}
+export class InternalServerErrorPageComponent {
+    error: InternalServerErrorException;
+    protected FALLBACK = new InternalServerErrorException(
+        "An Internal Server Error has Occurred. State is missing from router.",
+    );
+
+    constructor(private router: Router) {
+        const navigation = this.router.getCurrentNavigation();
+        const state = navigation?.extras.state;
+        if (state == null) {
+            this.error = this.FALLBACK;
+            return;
+        }
+
+        const error: InternalServerErrorException | null = state['error'];
+        this.error = error == null ? this.FALLBACK : error;
+    }
+}

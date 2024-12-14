@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
@@ -9,6 +8,9 @@ import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Team from '../../../models/Team';
+import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
+import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 
 export interface DeleteTeamModalProps {
     team: Team;
@@ -18,7 +20,13 @@ export interface DeleteTeamModalProps {
 @Component({
     selector: 'app-delete-team-modal',
     standalone: true,
-    imports: [MixinButtonComponent, CommonModule, FormErrorsComponent],
+    imports: [
+        CommonModule,
+        FormErrorsComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+    ],
     templateUrl: './delete-team-modal.component.html',
 })
 export class DeleteTeamModal {

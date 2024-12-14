@@ -1,0 +1,27 @@
+<header appMixinStyledCard data-track="base">
+    <div appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+        <div>
+            <div class="token-card--header--primary-text">List Team Players</div>
+            <div class="token-card--header--secondary-text">{{ team.name }}</div>
+        </div>
+        <button
+            appMixinStyledButton
+            theme="theme-Sbutton-generic-green"
+            size="mixin-Sbutton-base"
+            [routerLink]="'/teams/' + team.id + '/players/add'"
+        >
+            Add Player
+        </button>
+    </div>
+    <div class="flex flex-col gap-[inherit]" appMixinStyledCardSection>
+        <div class="grid max-[450px]:grid-cols-1 grid-cols-2 gap-3">
+            <ng-container *ngFor="let teamPlayer of teamPlayers">
+                <app-list-team-players-page-team-player-element
+                    [teamPlayer]="teamPlayer"
+                    [team]="team"
+                    (onDelete)="onDeleteTeamPlayer($event)"
+                ></app-list-team-players-page-team-player-element>
+            </ng-container>
+        </div>
+    </div>
+</header>

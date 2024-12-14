@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ListPlayersPagePlayerElementComponent } from '../../../players/list-players-page/list-players-page-player-element/list-players-page-player-element.component';
+import { ListPlayersPagePlayerElementComponent } from '../../../../players/list-players-page/list-players-page-player-element/list-players-page-player-element.component';
 
 describe('ListPlayersPagePlayerElementComponent', () => {
   let component: ListPlayersPagePlayerElementComponent;

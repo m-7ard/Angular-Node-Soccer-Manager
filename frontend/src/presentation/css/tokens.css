@@ -1,0 +1,17 @@
+@layer components {
+  .token-card--header--primary-text {
+    @apply text-lg font-bold text-gray-900;
+  }
+  .token-card--header--secondary-text {
+    @apply text-sm text-gray-600;
+  }
+  .token-card--list {
+    @apply text-base flex flex-row justify-between items-center gap-3;
+  }
+  .token-card--list-label--text {
+    @apply font-semibold text-gray-900;
+  }
+  .token-card--list-value--text {
+    @apply text-gray-600 text-sm;
+  }
+}/*# sourceMappingURL=tokens.css.map */

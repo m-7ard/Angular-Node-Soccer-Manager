@@ -1,21 +1,27 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header class="flex flex-row gap-2 items-center justify-between" data-track="base">
-        <div class="text-xl">List Teams</div>
-        <a href="/teams/create">
-            <app-mixin-button
-                [options]="{
-                    theme: 'theme-button-generic-green',
-                    size: 'mixin-button-base'
-                }"
+    <header appMixinStyledCard data-track="base">
+        <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+            <div>
+                <div class="token-card--header--primary-text">List Teams</div>
+                <div class="token-card--header--secondary-text">All Teams</div>
+            </div>
+            <button
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-green"
+                [routerLink]="'/teams/create'"
             >
-                Create
-            </app-mixin-button>
-        </a>
+                Create Player
+            </button>
+        </section>
     </header>
     <div data-track="base" class="flex flex-col gap-[inherit]">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid max-[450px]:grid-cols-1 grid-cols-2 gap-3">
             <ng-container *ngFor="let team of teams">
-                <app-list-teams-page-team-element [team]="team" (onDelete)="onDeleteTeam($event)"></app-list-teams-page-team-element>
+                <app-list-teams-page-team-element
+                    [team]="team"
+                    (onDelete)="onDeleteTeam($event)"
+                ></app-list-teams-page-team-element>
             </ng-container>
         </div>
     </div>

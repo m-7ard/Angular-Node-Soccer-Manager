@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import Team from '../../../models/Team';
-import TeamMapper from '../../../mappers/TeamMapper';
-import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
+import Team from '../models/Team';
+import TeamMapper from '../mappers/TeamMapper';
+import { TeamDataAccessService } from '../services/data-access/team-data-access.service';
 
 export interface IUpdateTeamResolverData {
     team: Team;
