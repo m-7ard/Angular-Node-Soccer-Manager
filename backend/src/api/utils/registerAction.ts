@@ -1,5 +1,5 @@
 import { IRouterMatcher, NextFunction, Request, Response, Router } from "express";
-import IAction, { IActionResponse } from "../actions/IAction";
+import AbstractAction, { IActionResponse } from "../actions/IAction";
 
 function registerAction({
     router,
@@ -8,12 +8,14 @@ function registerAction({
     method,
 }: {
     router: Router;
-    initialiseAction: () => IAction<unknown, IActionResponse>;
+    initialiseAction: () => AbstractAction<unknown, IActionResponse>;
     path: string;
     method: "POST" | "GET" | "PUT" | "DELETE";
 }) {
     const handleRequest = async (req: Request, res: Response, next: NextFunction) => {
         const action = initialiseAction();
+        const guards = action.guards;
+
         const arg = action.bind(req, res);
         try {
             const result = await action.handle(arg);

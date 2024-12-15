@@ -1,5 +1,5 @@
 import { Request } from "express";
-import IAction from "../IAction";
+import AbstractAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
@@ -14,8 +14,10 @@ import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 type ActionRequest = { dto: IReadPlayerRequestDTO, playerId: string; };
 type ActionResponse = JsonResponse<IReadPlayerResponseDTO | IApiError[]>;
 
-class ReadPlayerAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+class ReadPlayerAction extends AbstractAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
+        super();
+    }
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { playerId } = request;

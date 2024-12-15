@@ -1,5 +1,5 @@
 import { Request } from "express";
-import IAction from "../IAction";
+import AbstractAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
@@ -12,8 +12,10 @@ import { ListPlayersQuery } from "application/handlers/players/ListPlayersQueryH
 type ActionRequest = { dto: IListPlayersRequestDTO };
 type ActionResponse = JsonResponse<IListPlayersResponseDTO | IApiError[]>;
 
-class ListPlayersAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+class ListPlayersAction extends AbstractAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
+        super();
+    }
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;

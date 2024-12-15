@@ -1,6 +1,9 @@
 <form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base">
     <header appMixinStyledCardSection>
-        <div class="text-base text-gray-900">Update Player</div>
+        <div>
+            <div class="token-card--header--primary-text">Update Team</div>
+            <div class="token-card--header--secondary-text">{{ team.name }}</div>
+        </div>
     </header>
     <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
         <app-form-field [name]="'name'" [errors]="errors.name">

@@ -8,10 +8,8 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     handleError(error: any): void {
         if (error instanceof RoutableException) {
-            // Redirect to the "Not Found" page
             this.router.navigate([error.route]);
         } else {
-            // Handle other errors as needed
             console.error('An unexpected error occurred:', error);
         }
     }

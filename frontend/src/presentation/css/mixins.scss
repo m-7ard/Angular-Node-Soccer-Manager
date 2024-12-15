@@ -121,7 +121,7 @@
     }
 
     .mixin-Scard-like {
-        @apply divide-y shadow rounded-md overflow-hidden;
+        @apply divide-y shadow border border-gray-300 overflow-hidden rounded-md;
     }
 
     .mixin-Scard-base {

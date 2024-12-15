@@ -36,7 +36,7 @@ export default class UpdateTeamCommandHandler implements IRequestHandler<UpdateT
                 ApplicationErrorFactory.createSingleListError({
                     message: `Team of id "${command.id}" does not exist.`,
                     path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
+                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
                 }),
             );
         }

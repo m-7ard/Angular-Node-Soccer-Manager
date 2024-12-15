@@ -4,9 +4,10 @@ export interface IActionResponse {
     handle(res: Response): void;
 }
 
-interface IAction<ActionReq, ActionRes = IActionResponse> {
-    handle(request: ActionReq): Promise<ActionRes>;
-    bind(request: Request, response: Response): ActionReq;
+abstract class AbstractAction<ActionReq, ActionRes = IActionResponse> {
+    guards: Array<(req: Request, res: Response) => boolean> = [];
+    abstract handle(request: ActionReq): Promise<ActionRes>;
+    abstract bind(request: Request, response: Response): ActionReq;
 }
 
-export default IAction;
+export default AbstractAction;

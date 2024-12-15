@@ -8,6 +8,10 @@ import errorLogger from "./middleware/errorLogger";
 import playersRouter from "./routers/playersRouter";
 import PlayerRepository from "infrastructure/repositories/PlayerRepository";
 import cors from "cors";
+import usersRouter from "./routers/usersRouter";
+import UserRepository from "infrastructure/repositories/UserRepository";
+import { JsonWebTokenService } from "infrastructure/services/JsonWebTokenService";
+import { BcryptPasswordHasher } from "infrastructure/services/BcryptPasswordHasher";
 
 export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService }) {
     const { database } = config;
@@ -22,6 +26,9 @@ export default function createApplication(config: { port: number; middleware: Ar
     // Repositories
     diContainer.register(DI_TOKENS.TEAM_REPOSITORY, new TeamRepository(database));
     diContainer.register(DI_TOKENS.PLAYER_REPOSITORY, new PlayerRepository(database));
+    diContainer.register(DI_TOKENS.USER_REPOSITORY, new UserRepository(database));
+    diContainer.register(DI_TOKENS.JWT_TOKEN_SERVICE, new JsonWebTokenService("super_secret_key"));
+    diContainer.register(DI_TOKENS.PASSWORD_HASHER, new BcryptPasswordHasher());
 
     // Request Dispatcher
     const dispatcher = createRequestDispatcher();
@@ -41,6 +48,7 @@ export default function createApplication(config: { port: number; middleware: Ar
 
     app.use("/api/teams/", teamsRouter);
     app.use("/api/players/", playersRouter);
+    app.use("/api/users/", usersRouter);
 
     app.use("/media", express.static("media"));
     app.use("/static", express.static("static"));

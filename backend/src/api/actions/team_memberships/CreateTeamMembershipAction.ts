@@ -1,5 +1,5 @@
 import { Request } from "express";
-import IAction from "../IAction";
+import AbstractAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
@@ -14,8 +14,10 @@ import parsers from "api/utils/parsers";
 type ActionRequest = { teamId: string; dto: ICreateTeamMembershipRequestDTO };
 type ActionResponse = JsonResponse<ICreateTeamMembershipResponseDTO | IApiError[]>;
 
-class CreateTeamMembershipAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+class CreateTeamMembershipAction extends AbstractAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
+        super();
+    }
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto, teamId } = request;
