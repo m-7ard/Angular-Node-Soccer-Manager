@@ -1,5 +1,5 @@
 import { Request } from "express";
-import AbstractAction from "../IAction";
+import IAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
@@ -9,14 +9,14 @@ import loginUserValidator from "api/validators/loginUserValidator";
 import { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler";
 import ILoginUserRequestDTO from "api/DTOs/users/login/ILoginUserRequestDTO";
 import ILoginUserResponseDTO from "api/DTOs/users/login/ILoginUserResponseDTO";
+import IHttpService from "api/interfaces/IHttpRequestService";
+import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 type ActionRequest = { dto: ILoginUserRequestDTO };
 type ActionResponse = JsonResponse<ILoginUserResponseDTO | IApiError[]>;
 
-class LoginUserAction extends AbstractAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
-        super();
-    }
+class LoginUserAction implements IAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher, private readonly _httpService: IHttpService) {}
     
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
@@ -36,6 +36,14 @@ class LoginUserAction extends AbstractAction<ActionRequest, ActionResponse> {
         const result = await this._requestDispatcher.dispatch(command);
 
         if (result.isErr()) {
+            const [firstError] = result.error;
+            if (firstError.code === VALIDATION_ERROR_CODES.OperationFailed) {
+                return new JsonResponse({
+                    status: StatusCodes.INTERNAL_SERVER_ERROR,
+                    body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                });
+            }
+
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
                 body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
@@ -43,13 +51,12 @@ class LoginUserAction extends AbstractAction<ActionRequest, ActionResponse> {
         }
 
         return new JsonResponse({
-            status: StatusCodes.CREATED,
+            status: StatusCodes.OK,
             body: {
                 token: result.value.jwtToken
             },
         });
     }
-
 
     bind(request: Request): ActionRequest {
         return {

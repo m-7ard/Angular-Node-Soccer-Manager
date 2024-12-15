@@ -31,10 +31,7 @@ describe("Register User Integration Test;", () => {
             password: "userword",
         };
 
-        const response = await supertest(server)
-            .post(`/api/users/register`)
-            .send(request)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).post(`/api/users/register`).send(request).set("Content-Type", "application/json");
 
         const body: IRegisterUserResponseDTO = response.body;
         expect(response.status).toBe(201);
@@ -45,7 +42,7 @@ describe("Register User Integration Test;", () => {
 
     it("Register User; User Already Exists; Failure;", async () => {
         const mixins = new Mixins();
-        const user = await mixins.createUser(1, false);
+        const { user } = await mixins.createUser(1, false);
 
         const request: IRegisterUserRequestDTO = {
             name: "new_name",
@@ -53,14 +50,11 @@ describe("Register User Integration Test;", () => {
             password: "userword",
         };
 
-        const response = await supertest(server)
-            .post(`/api/users/register`)
-            .send(request)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).post(`/api/users/register`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
     });
-    
+
     it("Register User; Invalid Data (Empty name); Failure;", async () => {
         const request: IRegisterUserRequestDTO = {
             name: "",
@@ -68,10 +62,7 @@ describe("Register User Integration Test;", () => {
             password: "userword",
         };
 
-        const response = await supertest(server)
-            .post(`/api/users/register`)
-            .send(request)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).post(`/api/users/register`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

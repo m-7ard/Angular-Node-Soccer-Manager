@@ -1,5 +1,6 @@
 import IJwtTokenService from "application/interfaces/JwtTokenService";
 import jwt from "jsonwebtoken";
+import { err, ok, Result } from "neverthrow";
 
 export class JsonWebTokenService implements IJwtTokenService {
     private readonly secretKey: string;
@@ -11,20 +12,20 @@ export class JsonWebTokenService implements IJwtTokenService {
         this.secretKey = secretKey;
     }
 
-    async generateToken(payload: object, options?: { expiresIn?: string | number }): Promise<string> {
+    async generateToken(payload: object, options?: { expiresIn?: string | number }): Promise<Result<string, string>> {
         try {
-            return jwt.sign(payload, this.secretKey, { expiresIn: options?.expiresIn || "1h" });
-        } catch (err) {
-            throw new Error(`Token generation failed: ${(err as Error).message}`);
+            return ok(jwt.sign(payload, this.secretKey, { expiresIn: options?.expiresIn || "1h" }));
+        } catch (error) {
+            return err(`Token generation failed: ${(error as Error).message}`);
         }
     }
 
-    async verifyToken<T>(token: string): Promise<T> {
+    async verifyToken<T>(token: string): Promise<Result<T, string>> {
         try {
             const decoded = jwt.verify(token, this.secretKey);
-            return decoded as T;
-        } catch (err) {
-            throw new Error(`Token verification failed: ${(err as Error).message}`);
+            return ok(decoded as T);
+        } catch (error) {
+            return err(`Token verification failed: ${(error as Error).message}`);
         }
     }
 

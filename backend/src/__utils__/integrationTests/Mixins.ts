@@ -1,4 +1,5 @@
 import diContainer, { DI_TOKENS } from "api/deps/diContainer";
+import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import IUserRepository from "application/interfaces/IUserRepository";
@@ -12,11 +13,13 @@ class Mixins {
     private readonly _teamRepository: ITeamRepository;
     private readonly _playerRepository: IPlayerRepository;
     private readonly _userRepository: IUserRepository;
+    private readonly _passwordHasher: IPasswordHasher;
 
     constructor() {
         this._teamRepository = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         this._playerRepository = diContainer.resolve(DI_TOKENS.PLAYER_REPOSITORY);
         this._userRepository = diContainer.resolve(DI_TOKENS.USER_REPOSITORY);
+        this._passwordHasher = diContainer.resolve(DI_TOKENS.PASSWORD_HASHER);
     }
 
     async createTeam(seed: number) {
@@ -63,17 +66,18 @@ class Mixins {
     }
 
     async createUser(seed: number, isAdmin: boolean) {
+        const password = `hashed_password_${seed}`;
         const user = UserFactory.CreateNew({
             id: `${seed}`,
             name: `user_${seed}`,
             email: `user_${seed}@email.com`,
-            hashedPassword: `hashed_password_${seed}`,
+            hashedPassword: await this._passwordHasher.hashPassword(password),
             isAdmin: isAdmin
         });
 
         await this._userRepository.createAsync(user);
 
-        return user;
+        return { user, password };
     } 
 }
 

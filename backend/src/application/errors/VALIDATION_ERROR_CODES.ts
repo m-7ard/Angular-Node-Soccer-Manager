@@ -5,10 +5,11 @@ const VALIDATION_ERROR_CODES = {
     IntegrityError: "IntegrityError",
     ModelAlreadyExists: "ModelAlreadyExists",
     Custom: "Custom",
+    InvalidValue: "InvalidValue",
     FileSizeExceeded: "FileSizeExceeded",
     FileInvalidExtension: "FileInvalidExtension",
     FileCountExceeded: "FileCountExceeded",
-    FileNoFiles: "FileNoFiles",
+    OperationFailed: "OperationFailed",
 } as const;
 
 export default VALIDATION_ERROR_CODES;

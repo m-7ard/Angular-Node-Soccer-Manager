@@ -16,6 +16,7 @@ import UpdateTeamMembershipCommandHandler, { UpdateTeamMembershipCommand } from 
 import ReadTeamMembershipQueryHandler, { ReadTeamMembershipQuery } from "application/handlers/team_memberships/ReadTeamMembershipQueryHandler";
 import RegisterUserCommandHandler, { RegisterUserCommand } from "application/handlers/users/RegisterUserCommandHandler";
 import LoginUserQueryHandler, { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler";
+import CurrentUserQueryHandler, { CurrentUserQuery } from "application/handlers/users/CurrentUserQueryHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -48,6 +49,7 @@ function createRequestDispatcher() {
     // Users
     requestDispatcher.registerHandler(RegisterUserCommand, new RegisterUserCommandHandler({ passwordHasher: passwordHasher, userRepository: userRepository }));
     requestDispatcher.registerHandler(LoginUserQuery, new LoginUserQueryHandler({ passwordHasher: passwordHasher, userRepository: userRepository, jwtTokenService: jwtTokenService }));
+    requestDispatcher.registerHandler(CurrentUserQuery, new CurrentUserQueryHandler({ userRepository: userRepository, jwtTokenService: jwtTokenService }));
 
     return requestDispatcher;
 }

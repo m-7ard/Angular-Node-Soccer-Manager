@@ -1,5 +1,5 @@
 import { Request } from "express";
-import AbstractAction from "../IAction";
+import IAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
@@ -12,10 +12,8 @@ import IDeleteTeamResponseDTO from "api/DTOs/teams/delete/IDeleteTeamResponseDTO
 type ActionRequest = { dto: IDeleteTeamRequestDTO; teamId: string };
 type ActionResponse = JsonResponse<IDeleteTeamResponseDTO | IApiError[]>;
 
-class DeleteTeamAction extends AbstractAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
-        super();
-    }
+class DeleteTeamAction implements IAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
     
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId } = request;

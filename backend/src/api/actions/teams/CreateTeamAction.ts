@@ -1,7 +1,7 @@
 import { Request } from "express";
 import ICreateTeamRequestDTO from "../../DTOs/teams/create/ICreateTeamRequestDTO";
 import ICreateTeamResponseDTO from "../../DTOs/teams/create/ICreateTeamResponseDTO";
-import AbstractAction from "../IAction";
+import IAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
 import createTeamValidator from "../../validators/createTeamValidator";
@@ -13,10 +13,8 @@ import ApiErrorFactory from "api/errors/ApiErrorFactory";
 type ActionRequest = { dto: ICreateTeamRequestDTO };
 type ActionResponse = JsonResponse<ICreateTeamResponseDTO | IApiError[]>;
 
-class CreateTeamAction extends AbstractAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {
-        super();
-    }
+class CreateTeamAction implements IAction<ActionRequest, ActionResponse> {
+    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
     
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;

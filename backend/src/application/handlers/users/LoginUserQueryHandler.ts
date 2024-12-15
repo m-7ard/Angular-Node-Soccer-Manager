@@ -56,11 +56,21 @@ export default class LoginUserQueryHandler implements IRequestHandler<LoginUserQ
             );
         }
 
-        const jwtToken = await this._jwtTokenService.generateToken({
+        const jwtTokenResult = await this._jwtTokenService.generateToken({
             email: user.email,
             role: user.isAdmin ? JWT_ROLES.ADMIN : JWT_ROLES.CLIENT,
         });
 
-        return ok({ jwtToken: jwtToken });
+        if (jwtTokenResult.isErr()) {
+            return err(
+                ApplicationErrorFactory.createSingleListError({
+                    message: jwtTokenResult.error,
+                    path: ["_"],
+                    code: VALIDATION_ERROR_CODES.OperationFailed,
+                }),
+            );
+        }
+
+        return ok({ jwtToken: jwtTokenResult.value });
     }
 }
