@@ -1,0 +1,42 @@
+<div class="mixin-page-like mixin-page-base mixin-content-grid">
+    <form
+        appMixinStyledCard
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        data-track="base"
+    >
+        <header appMixinStyledCardSection>
+            <div class="token-card--header--primary-text">Login User</div>
+        </header>
+        <section appMixinStyledCardSection *ngIf="errors['_'] != null">
+            <app-form-errors [errors]="errors['_']"></app-form-errors>
+        </section>
+        <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
+            <app-form-field [name]="'email'" [errors]="errors.email">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+            <app-form-field [name]="'password'" [errors]="errors.password">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+        </fieldset>
+        <footer class="flex flex-row gap-3 justify-end" appMixinStyledCardSection>
+            <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Login User</button>
+        </footer>
+    </form>
+</div>

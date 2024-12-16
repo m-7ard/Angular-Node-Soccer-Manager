@@ -11,7 +11,6 @@ import { ListTeamPlayersPageComponent } from './teams/read-team-page/list-team-p
 import { UpdatePlayerPageComponent } from './players/update-player-page/update-player-page.component';
 import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
 import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-page.component';
-import { UpdateTeamPageResolver } from '../__obsolete/update-team-page.resolver';
 import { UpdateTeamMembershipPageComponent } from './teams/update-team-membership-page/update-team-membership-page.component';
 import { UpdateTeamMembershipPageResolver } from './teams/update-team-membership-page/update-team-membership-page.resolver';
 import { NotFoundPageComponent } from './other/not-found-page.component';
@@ -22,6 +21,8 @@ import { ReadTeamPageComponent } from './teams/read-team-page/read-team-page.com
 import { ReadTeamPageResolver } from './teams/read-team-page/read-team-page.resolver';
 import { TeamHomePageComponent } from './teams/read-team-page/team-home-page/team-home-page.component';
 import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
+import { RegisterUserPageComponent } from './users/register-user-page/register-user-page.component';
+import { LoginUserPageComponent } from './users/login-user-page/login-user-page.component';
 
 export const routes: Routes = [
     { path: '', component: FrontpageComponent },
@@ -75,8 +76,8 @@ export const routes: Routes = [
                 path: 'players/:playerId/update',
                 component: UpdateTeamMembershipPageComponent,
                 resolve: {
-                    [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver
-                }
+                    [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver,
+                },
             },
         ],
     },
@@ -86,6 +87,14 @@ export const routes: Routes = [
         resolve: {
             data: UpdatePlayerPageResolver,
         },
+    },
+    {
+        path: 'users/register',
+        component: RegisterUserPageComponent,
+    },
+    {
+        path: 'users/login',
+        component: LoginUserPageComponent,
     },
 
     { path: 'not-found', component: NotFoundPageComponent },

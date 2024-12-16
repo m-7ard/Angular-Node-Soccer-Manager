@@ -9,7 +9,6 @@ import IDeleteTeamMembershipRequestDTO from '../../contracts/teamMemberships/del
 import IDeleteTeamMembershipResponseDTO from '../../contracts/teamMemberships/delete/IDeleteTeamMembershipResponseDTO';
 import IReadTeamResponseDTO from '../../contracts/teams/read/IReadTeamResponseDTO';
 import IUpdateTeamRequestDTO from '../../contracts/teams/update/IUpdateTeamRequestDTO';
-import IDeleteTeamRequestDTO from '../../contracts/teams/delete/IDeleteTeamRequestDTO';
 import IDeleteTeamResponseDTO from '../../contracts/teams/delete/IDeleteTeamResponseDTO';
 import IReadTeamPlayerResponseDTO from '../../contracts/teams/read-team-player/IReadTeamPlayerResponseDTO';
 import IUpdateTeamMembershipRequestDTO from '../../contracts/teamMemberships/update/IUpdateTeamMembershipRequestDTO';

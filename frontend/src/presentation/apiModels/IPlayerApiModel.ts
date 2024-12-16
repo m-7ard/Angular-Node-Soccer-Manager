@@ -1,5 +1,5 @@
 export default interface IPlayerApiModel {
     id: string;
     name: string;
-    activeSince: Date;
+    activeSince: string;
 }

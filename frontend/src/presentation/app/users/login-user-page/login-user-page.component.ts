@@ -1,56 +1,58 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
 import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
+import { AuthService } from '../../../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
 
 interface IFormControls {
-    name: FormControl<string>;
-    activeSince: FormControl<string>;
+    email: FormControl<string>;
+    password: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
-    name: string[];
-    activeSince: string[];
+    email: string[];
+    password: string[];
 }>;
 
 @Component({
-    selector: 'app-create-player-page',
+    selector: 'app-login-user-page',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
-        CommonModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-    ],
-    templateUrl: './create-player-page.component.html',
+    ReactiveFormsModule,
+    CharFieldComponent,
+    FormFieldComponent,
+    CommonModule,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirective,
+    MixinStyledCardSectionDirective,
+    FormErrorsComponent
+],
+    templateUrl: './login-user-page.component.html',
 })
-export class CreatePlayerPageComponent {
+export class LoginUserPageComponent {
     form: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
 
     constructor(
         private router: Router,
-        private playerDataAccess: PlayerDataAccessService,
+        private authService: AuthService,
     ) {
         this.form = new FormGroup<IFormControls>({
-            name: new FormControl('', {
+            email: new FormControl('', {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
-            activeSince: new FormControl('', {
+            password: new FormControl('', {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
@@ -60,10 +62,10 @@ export class CreatePlayerPageComponent {
     onSubmit(): void {
         const rawValue = this.form.getRawValue();
 
-        this.playerDataAccess
-            .createPlayer({
-                activeSince: new Date(rawValue.activeSince),
-                name: rawValue.name,
+        this.authService
+            .login({
+                email: rawValue.email,
+                password: rawValue.password,
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
@@ -76,7 +78,8 @@ export class CreatePlayerPageComponent {
                     if (response === null) {
                         return;
                     }
-                    this.router.navigate(['/players']);
+
+                    this.router.navigate(['/']);
                 },
             });
     }

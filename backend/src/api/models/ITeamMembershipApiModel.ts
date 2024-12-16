@@ -2,8 +2,8 @@ interface ITeamMembershipApiModel {
     id: string;
     teamId: string;
     playerId: string;
-    activeFrom: Date;
-    activeTo: Date | null;
+    activeFrom: string;
+    activeTo: string | null;
     number: number;
 }
 

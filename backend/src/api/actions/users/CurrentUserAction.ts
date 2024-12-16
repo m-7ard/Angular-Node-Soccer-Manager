@@ -9,6 +9,7 @@ import IHttpService from "api/interfaces/IHttpRequestService";
 import { CurrentUserQuery } from "application/handlers/users/CurrentUserQueryHandler";
 import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
+import ApiModelMapper from "api/mappers/ApiModelMapper";
 
 type ActionRequest = {};
 type ActionResponse = JsonResponse<ICurrentUserResponseDTO | IApiError[]>;
@@ -49,7 +50,7 @@ class CurrentUserAction implements IAction<ActionRequest, ActionResponse> {
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
-                user: result.value,
+                user: result.value == null ? null : ApiModelMapper.createUserApiModel(result.value),
             },
         });
     }

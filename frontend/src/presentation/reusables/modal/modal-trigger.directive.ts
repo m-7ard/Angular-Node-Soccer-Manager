@@ -1,4 +1,13 @@
-import { Directive, Input, ViewContainerRef, HostListener, ComponentRef, Type, OnChanges, SimpleChanges } from '@angular/core';
+import {
+    Directive,
+    Input,
+    ViewContainerRef,
+    HostListener,
+    ComponentRef,
+    Type,
+    OnChanges,
+    SimpleChanges,
+} from '@angular/core';
 import { AbstractModalDirective } from './abstract-modal.directive';
 
 @Directive({
@@ -12,8 +21,14 @@ export class ModalTriggerDirective<T extends AbstractModalDirective> implements 
     private modalRef: ComponentRef<T> | null = null;
 
     constructor(private viewContainer: ViewContainerRef) {}
+
     ngOnChanges(changes: SimpleChanges): void {
-       
+        // If modal is already open and modalData has changed, update the inputs
+        if (this.modalRef && changes['modalData']) {
+            Object.entries(changes['modalData'].currentValue).forEach(([key, value]) => {
+                this.modalRef?.setInput(key, value);
+            });
+        }
     }
 
     ngOnDestroy() {
@@ -32,6 +47,7 @@ export class ModalTriggerDirective<T extends AbstractModalDirective> implements 
     private openModal() {
         this.modalRef = this.viewContainer.createComponent(this.panel);
 
+        // Set initial inputs
         Object.entries(this.modalData).forEach(([key, value]) => {
             this.modalRef?.setInput(key, value);
         });

@@ -1,5 +1,51 @@
 <header class="mixin-content-grid p-3 shadow shadow-black/20 relative shrink-0 overflow-x-auto">
     <nav class="flex flex-row gap-3" data-track="base">
+        <ng-content *ngIf="authService.isAuthenticated(); else unauthenticatedBlock">
+            <button
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-red"
+                type="button"
+                (mouseup)="authService.logout()"
+            >
+                Logout
+            </button>
+            <a
+                routerLink="/"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-blue"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                User
+            </a>
+        </ng-content>
+        <ng-template #unauthenticatedBlock>
+            <a
+                routerLink="/users/login"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-yellow"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                Login
+            </a>
+            <a
+                routerLink="/users/register"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-green"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                Register
+            </a>
+        </ng-template>
         <a
             routerLink="/"
             routerLinkActive="active"
@@ -45,6 +91,6 @@
         </div>
     </nav>
 </header>
-<main class="bg-white grow">
+<main class="bg-[#f8f8f8] grow">
     <router-outlet />
 </main>

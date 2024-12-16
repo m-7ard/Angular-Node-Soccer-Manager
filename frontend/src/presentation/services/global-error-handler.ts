@@ -1,5 +1,5 @@
 import { Injectable, ErrorHandler } from '@angular/core';
-import RoutableException from '../../exceptions/RoutableException';
+import RoutableException from '../exceptions/RoutableException';
 import { Router } from '@angular/router';
 
 @Injectable()
