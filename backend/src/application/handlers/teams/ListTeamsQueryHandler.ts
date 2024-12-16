@@ -14,13 +14,16 @@ export class ListTeamsQuery implements IQuery<ListTeamsQueryResult> {
     constructor(props: {
         name: string | null;
         teamMembershipPlayerId: TeamMembership["playerId"] | null;
+        limitBy: number | null;
     }) {
         this.name = props.name;
         this.teamMembershipPlayerId = props.teamMembershipPlayerId;
+        this.limitBy = props.limitBy;
     }
 
     public name: string | null;
     public teamMembershipPlayerId: TeamMembership["playerId"] | null;
+    public limitBy: number | null;
 }
 
 export default class ListTeamsQueryHandler implements IRequestHandler<ListTeamsQuery, ListTeamsQueryResult> {
@@ -33,10 +36,16 @@ export default class ListTeamsQueryHandler implements IRequestHandler<ListTeamsQ
     }
 
     async handle(query: ListTeamsQuery): Promise<ListTeamsQueryResult> {
+        if (query.limitBy != null && ![5, 24].includes(query.limitBy)) {
+            query.limitBy = 24;
+        }
+
         const criteria = new FilterAllTeamsCriteria({
-            name: null,
-            teamMembershipPlayerId: null
+            name: query.name,
+            teamMembershipPlayerId: query.teamMembershipPlayerId,
+            limitBy: query.limitBy
         })
+        
         const teams = await this._teamRepository.filterAllAsync(criteria);
         return ok(teams);
     }

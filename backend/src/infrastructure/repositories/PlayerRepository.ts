@@ -7,6 +7,7 @@ import PlayerDbEntity from "infrastructure/dbEntities/PlayerDbEntity";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 import toSqlDate from "utils/toSqlDate";
+import FilterAllPlayersCriteria from "infrastructure/contracts/FilterAllPlayersCriteria";
 
 class PlayerRepository implements IPlayerRepository {
     private readonly _db: IDatabaseService;
@@ -80,14 +81,20 @@ class PlayerRepository implements IPlayerRepository {
         return player;
     }
 
-    async findAllAsync(criteria: { name: string | null }): Promise<Player[]> {
+    async findAllAsync(criteria: FilterAllPlayersCriteria): Promise<Player[]> {
         let query = knexQueryBuilder<IPlayerSchema>("player");
 
         if (criteria.name != null) {
             query = query.whereILike("name", `%${criteria.name}%`);
         }
 
-        const rows = await this._db.query<IPlayerSchema>({ statement: query.toString() });
+        if (criteria.limitBy != null) {
+            query = query.limit(criteria.limitBy);
+        }
+
+        const rows = await this._db.query<IPlayerSchema>({
+            statement: query.toString(),
+        });
         const players = rows.map(PlayerMapper.schemaToDbEntity);
         return players.map(PlayerMapper.dbEntityToDomain);
     }

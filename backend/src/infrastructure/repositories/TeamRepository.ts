@@ -142,6 +142,10 @@ class TeamRepository implements ITeamRepository {
                 .distinct();
         }
 
+        if (criteria.limitBy) {
+            query = query.limit(criteria.limitBy);
+        }
+
         const rows = await this._db.query<ITeamSchema>({
             statement: query.toString(),
         });

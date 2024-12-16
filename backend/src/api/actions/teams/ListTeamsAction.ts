@@ -9,6 +9,7 @@ import IListTeamsRequestDTO from "api/DTOs/teams/list/IListTeamsRequestDTO";
 import IListTeamsResponseDTO from "api/DTOs/teams/list/IListTeamsResponseDTO";
 import { ListTeamsQuery } from "application/handlers/teams/ListTeamsQueryHandler";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
+import listTeamsValidator from "api/validators/listTeamsValidator";
 
 type ActionRequest = { dto: IListTeamsRequestDTO };
 type ActionResponse = JsonResponse<IListTeamsResponseDTO | IApiError[]>;
@@ -18,11 +19,19 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
-        const command = new ListTeamsQuery({
+        const validation = listTeamsValidator(dto);
+        if (validation.isErr()) {
+            validation.error.forEach((error) => {
+                dto[error.key as keyof IListTeamsRequestDTO] = null;
+            });
+        }
+
+        const query = new ListTeamsQuery({
             name: dto.name,
-            teamMembershipPlayerId: dto.teamMembershipPlayerId
+            teamMembershipPlayerId: dto.teamMembershipPlayerId,
+            limitBy: dto.limitBy
         });
-        const teamResult = await this._requestDispatcher.dispatch(command);
+        const teamResult = await this._requestDispatcher.dispatch(query);
 
         if (teamResult.isErr()) {
             return new JsonResponse({
@@ -42,8 +51,9 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
     bind(request: Request): ActionRequest {
         return {
             dto: {
-                name: request.params.name,
-                teamMembershipPlayerId: request.params.teamMembershipPlayerId
+                name: request.query.name as string,
+                teamMembershipPlayerId: request.query.teamMembershipPlayerId as string,
+                limitBy: request.query.limitBy == null ? null : Number(request.query.limitBy) 
             },
         };
     }

@@ -42,7 +42,8 @@ export default class CreateTeamCommandHandler implements IRequestHandler<DeleteP
 
         const criteria = new FilterAllTeamsCriteria({
             name: null,
-            teamMembershipPlayerId: player.id
+            teamMembershipPlayerId: player.id,
+            limitBy: null
         });
         const teamMemberships = await this._teamRepository.filterAllAsync(criteria);
         if (teamMemberships.length > 0) {
