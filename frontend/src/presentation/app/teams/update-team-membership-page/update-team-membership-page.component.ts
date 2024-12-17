@@ -34,7 +34,6 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-update-team-membership-page',
     standalone: true,
     imports: [
-        MixinButtonComponent,
         FormFieldComponent,
         CharFieldComponent,
         ReactiveFormsModule,
@@ -76,14 +75,12 @@ export class UpdateTeamMembershipPageComponent {
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
             const data: IUpdateTeamMembershipResolverData = resolverData[RESOLVER_DATA_KEY];
-            console.log(data)
 
             this.teamId = data.team.id;
             this.playerId = data.teamPlayer.player.id;
 
             const teamPlayer = data.teamPlayer;
             const membership = teamPlayer.membership;
-
 
             this.teamPlayer = teamPlayer;
             this.team = data.team;

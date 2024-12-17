@@ -27,7 +27,6 @@ export class ListTeamPlayersPageComponent {
     teamPlayers!: TeamPlayer[];
 
     constructor(
-        private router: Router,
         private _activatedRoute: ActivatedRoute,
     ) {}
 

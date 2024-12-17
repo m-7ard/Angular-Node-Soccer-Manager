@@ -7,6 +7,7 @@ import { ListPlayersPagePlayerElementComponent } from './list-players-page-playe
 import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 
 @Component({
     selector: 'app-list-players-page',
@@ -32,7 +33,7 @@ export class ListPlayersPageComponent {
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            const data = resolverData as IListPlayersResolverData;
+            const data = resolverData[RESOLVER_DATA_KEY] as IListPlayersResolverData;
             this.players = data.players;
         });
     }

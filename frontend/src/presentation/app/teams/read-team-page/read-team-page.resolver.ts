@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../models/Team';
 import TeamMapper from '../../../mappers/TeamMapper';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import TeamPlayer from '../../../models/TeamPlayer';
 import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import NotFoundException from '../../../exceptions/NotFoundException';
+import getRoutableException from '../../../utils/getRoutableException';
+import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
 export interface IReadTeamResolverData {
     team: Team;
@@ -20,18 +22,17 @@ export class ReadTeamPageResolver implements Resolve<IReadTeamResolverData> {
     resolve(route: ActivatedRouteSnapshot): Observable<IReadTeamResolverData> {
         const teamId = route.paramMap.get('teamId');
 
-        console.log(teamId ?? 'null');
-
         if (teamId == null) {
-            throw new NotFoundException('Read Tea Page: Team Id is null');
+            throw new ClientSideErrorException('Read Team Page: teamId parameter is null.');
         }
 
         return this._teamDataAccess.readTeam(teamId).pipe(
-            map((response) => {
-                return {
-                    team: TeamMapper.apiModelToDomain(response.team),
-                    teamPlayers: response.teamPlayers.map(TeamPlayerMapper.apiModelToDomain),
-                };
+            map((response) => ({
+                team: TeamMapper.apiModelToDomain(response.team),
+                teamPlayers: response.teamPlayers.map(TeamPlayerMapper.apiModelToDomain),
+            })),
+            catchError((error) => {
+                throw getRoutableException(error);
             }),
         );
     }

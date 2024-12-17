@@ -14,6 +14,7 @@ import parsers from '../../../utils/parsers';
 import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -63,7 +64,7 @@ export class UpdatePlayerPageComponent {
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            const data: IUpdatePlayerResolverData = resolverData['data'];
+            const data: IUpdatePlayerResolverData = resolverData[RESOLVER_DATA_KEY];
             this.id = data.id;
             const player = data.player;
 

@@ -1,6 +1,6 @@
 <header class="mixin-content-grid p-3 shadow shadow-black/20 relative shrink-0 overflow-x-auto">
     <nav class="flex flex-row gap-3" data-track="base">
-        <ng-content *ngIf="authService.isAuthenticated(); else unauthenticatedBlock">
+        <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 appMixinStyledButton
                 size="mixin-Sbutton-base"
@@ -63,7 +63,7 @@
             ariaCurrentWhenActive="page"
             appMixinStyledButton
             size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-blue"
+            [theme]="isAuthenticated ? 'theme-Sbutton-generic-blue' : 'theme-Sbutton-generic-yellow'"
             [routerLinkActiveOptions]="{ exact: true }"
         >
             Players
@@ -74,7 +74,7 @@
             ariaCurrentWhenActive="page"
             appMixinStyledButton
             size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-blue"
+            [theme]="isAuthenticated ? 'theme-Sbutton-generic-blue' : 'theme-Sbutton-generic-yellow'"
             [routerLinkActiveOptions]="{ exact: true }"
         >
             Teams
@@ -82,7 +82,7 @@
         <div
             appMixinStyledButton
             size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-blue"
+            theme="theme-Sbutton-generic-white"
             modalTrigger
             [modalPanel]="exampleModal"
             [modalData]="{ title: otherTitle }"
@@ -91,6 +91,6 @@
         </div>
     </nav>
 </header>
-<main class="bg-[#f8f8f8] grow">
+<main class="bg-[#f8f8f8] flex flex-col grow">
     <router-outlet />
 </main>

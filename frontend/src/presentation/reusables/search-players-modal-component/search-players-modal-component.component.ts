@@ -81,6 +81,7 @@ export class SearchPlayersModalComponentComponent {
         const rawValue = this.form.getRawValue();
         const responseObservable = this.playerDataAccess.listPlayers({
             name: rawValue.name,
+            limitBy: null
         });
 
         responseObservable.subscribe((dto) => {

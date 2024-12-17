@@ -1,42 +1,31 @@
-import { Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
 import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../models/Team';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
-import IListTeamsResponseDTO from '../../../contracts/teams/list/IListTeamsResponseDTO';
 import getRoutableException from '../../../utils/getRoutableException';
+import TeamMapper from '../../../mappers/TeamMapper';
 
 export interface IListTeamsResolverData {
-    RESOLVER_DATA: Team[];
+    teams: Team[];
 }
 
 @Injectable({ providedIn: 'root' })
-export class ListTeamsPageResolver implements Resolve<Team[]>, OnInit {
-    constructor(
-        private _teamDataAccess: TeamDataAccessService,
-        private route: ActivatedRoute,
-    ) {}
+export class ListTeamsPageResolver implements Resolve<IListTeamsResolverData> {
+    constructor(private _teamDataAccess: TeamDataAccessService) {}
 
-    ngOnInit(): void {
-        console.log('balls onInit -->', this.route.snapshot.data['teams']);
-    }
-
-    resolve(route: ActivatedRouteSnapshot): Observable<Team[]> {
-        return this._teamDataAccess.listTeams().pipe(
-            map((response) => {
-                const data = response.body as IListTeamsResponseDTO;
-
-                return data.teams.map((team) => {
-                    return new Team({
-                        id: team.id,
-                        name: team.name,
-                        dateFounded: new Date(team.dateFounded),
-                    });
-                });
-            }),
-            catchError((error) => {
-                throw getRoutableException(error);
-            }),
-        );
+    resolve(): Observable<IListTeamsResolverData> {
+        return this._teamDataAccess
+            .listTeams({
+                name: null,
+                limitBy: null,
+                teamMembershipPlayerId: null,
+            })
+            .pipe(
+                map((dto) => ({ teams: dto.teams.map(TeamMapper.apiModelToDomain) })),
+                catchError((error) => {
+                    throw getRoutableException(error);
+                }),
+            );
     }
 }

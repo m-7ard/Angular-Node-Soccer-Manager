@@ -25,7 +25,6 @@ export class ModalComponent {
     }
 
     close() {
-        console.log("backdrop", this.closeFn)
         this.closeFn();
     }
 

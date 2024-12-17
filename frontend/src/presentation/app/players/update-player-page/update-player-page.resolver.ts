@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import Player from '../../../models/Player';
 import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
 import PlayerMapper from '../../../mappers/PlayerMapper';
+import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
 export interface IUpdatePlayerResolverData {
     player: Player;
@@ -20,7 +21,7 @@ export class UpdatePlayerPageResolver implements Resolve<IUpdatePlayerResolverDa
         const id = route.paramMap.get('id')
 
         if (id == null) {
-            throw new Error('implement a 404');
+            throw new ClientSideErrorException("Update Player Page: id parameter is null.")
         }
 
         return this._playerDataAccess.read(id, {}).pipe(

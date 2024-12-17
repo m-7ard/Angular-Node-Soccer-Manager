@@ -22,7 +22,6 @@ import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-b
         RouterModule,
         CoverImageComponent,
         ZeebraTextComponent,
-        MixinButtonDirective,
         MixinStyledButtonDirective
     ],
     templateUrl: './team-home-page.component.html',

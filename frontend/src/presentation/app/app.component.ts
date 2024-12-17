@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
     title = 'frontend';
     exampleModal = DrawerModalComponent;
     otherTitle = '0';
+    isAuthenticated: boolean = null!;
 
     constructor(
         readonly authService: AuthService,
@@ -38,5 +39,9 @@ export class AppComponent implements OnInit {
                 this.authService.loadCurrentUser().subscribe();
             }
         });
+
+        this.authService.isAuthenticated$.subscribe(value => {
+            this.isAuthenticated = value;
+        })
     }
 }

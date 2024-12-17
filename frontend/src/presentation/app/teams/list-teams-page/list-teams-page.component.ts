@@ -8,6 +8,7 @@ import { MixinButtonDirective } from '../../../ui-mixins/mixin-button-directive/
 import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 
 @Component({
     selector: 'app-list-teams-page',
@@ -26,8 +27,8 @@ export class ListTeamsPageComponent {
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            const data = resolverData as IListTeamsResolverData;
-            this.teams = data.RESOLVER_DATA;
+            const data = resolverData[RESOLVER_DATA_KEY] as IListTeamsResolverData;
+            this.teams = data.teams;
         });
     }
 }

@@ -12,6 +12,7 @@ import IUpdateTeamRequestDTO from '../../contracts/teams/update/IUpdateTeamReque
 import IDeleteTeamResponseDTO from '../../contracts/teams/delete/IDeleteTeamResponseDTO';
 import IReadTeamPlayerResponseDTO from '../../contracts/teams/read-team-player/IReadTeamPlayerResponseDTO';
 import IUpdateTeamMembershipRequestDTO from '../../contracts/teamMemberships/update/IUpdateTeamMembershipRequestDTO';
+import IListTeamsRequestDTO from '../../contracts/teams/list/IListTeamsRequestDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -36,8 +37,17 @@ export class TeamDataAccessService {
         return this.http.delete<IDeleteTeamMembershipResponseDTO>(`${this._baseUrl}/${teamId}/delete-membership/${playerId}`, request);
     }
 
-    listTeams() {
-        return this.http.get<IListTeamsResponseDTO>(`${this._baseUrl}/`, { observe: 'response' });
+    listTeams(request: IListTeamsRequestDTO) {
+        const url = new URL(`${this._baseUrl}/`);
+        Object.entries(request).forEach(([key, val]) => {
+            if (val == null) {
+                return;
+            }
+
+            url.searchParams.append(key, val);
+        });
+
+        return this.http.get<IListTeamsResponseDTO>(url.toString());
     }
 
     listTeamPlayers(teamId: string) {

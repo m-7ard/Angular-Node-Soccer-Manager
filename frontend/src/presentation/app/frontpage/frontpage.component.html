@@ -1,1 +1,118 @@
-Frontpage
+<div class="mixin-page-like mixin-page-base mixin-content-grid">
+    <div data-track="full" class="grid grid-cols-12 gap-3 items-start">
+        <div appMixinStyledCard class="col-span-3 max-[640px]:col-span-full max-[640px]:order-2">
+            <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+                <div>
+                    <div class="token-card--header--primary-text">Players</div>
+                    <div class="token-card--header--secondary-text">Recently Added</div>
+                </div>
+                <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/players/">
+                    See All Players
+                </button>
+            </section>
+            <section
+                appMixinStyledCardSection
+                *ngFor="let player of players"
+                class="grid gap-3"
+                style="grid-template: auto / auto 1fr"
+            >
+                <div class="aspect-square theme-avatar-any">
+                    <section class="relative h-full w-full flex">
+                        <app-cover-image src=""></app-cover-image>
+                    </section>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="token-card--header--primary-text">
+                        {{ player.name }}
+                    </div>
+                    <div class="truncate token-card--header--secondary-text">
+                        <app-zeebra-text></app-zeebra-text>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <ul class="col-span-6 flex flex-col gap-3 max-[640px]:col-span-full">
+            <li appMixinStyledCard>
+                <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+                    <div>
+                        <div class="token-card--header--primary-text">Matches</div>
+                        <div class="token-card--header--secondary-text">Recently Finished</div>
+                    </div>
+                    <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/matches/">
+                        See All Matches
+                    </button>
+                </section>
+            </li>
+            <li appMixinStyledCard *ngFor="let i of matchesRange">
+                <section appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between bg-gray-100">
+                    <div class="token-card--header--tertiary-text">All-Stars League</div>
+                    <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-blue" routerLink="/matches/">
+                        See Match Details
+                    </button>
+                </section>
+                <section
+                    appMixinStyledCardSection
+                    class="grid gap-3 items-center"
+                    style="grid-template-columns: 1fr auto auto auto 1fr"
+                >
+                    <div class="overflow-hidden grow token-card--label">
+                        <div class="truncate w-full text-right">Home Team</div>
+                    </div>
+                    <div class="aspect-square h-full theme-avatar-any">
+                        <section class="relative h-full w-full flex">
+                            <app-cover-image src=""></app-cover-image>
+                        </section>
+                    </div>
+                    <div class="flex flex-row gap-3 token-card--label">
+                        <div>
+                            {{ i * 77 % 3 }}
+                        </div>
+                        <div>-</div>
+                        <div>
+                            {{ i * 94 % 7 }}
+                        </div>
+                    </div>
+                    <div class="aspect-square h-full theme-avatar-any">
+                        <section class="relative h-full w-full flex">
+                            <app-cover-image src=""></app-cover-image>
+                        </section>
+                    </div>
+                    <div class="overflow-hidden grow token-card--label">
+                        <div class="truncate">Away Team</div>
+                    </div>
+                </section>
+            </li>
+        </ul>
+        <div appMixinStyledCard class="col-span-3 max-[640px]:col-span-full">
+            <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+                <div>
+                    <div class="token-card--header--primary-text">Teams</div>
+                    <div class="token-card--header--secondary-text">Recently Added</div>
+                </div>
+                <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/teams/">
+                    See All Teams
+                </button>
+            </section>
+            <section
+                appMixinStyledCardSection
+                *ngFor="let team of teams"
+                class="grid gap-3"
+                style="grid-template: auto / auto 1fr"
+            >
+                <div class="aspect-square theme-avatar-any">
+                    <section class="relative h-full w-full flex">
+                        <app-cover-image src=""></app-cover-image>
+                    </section>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="token-card--header--primary-text">
+                        {{ team.name }}
+                    </div>
+                    <div class="truncate token-card--header--secondary-text">
+                        <app-zeebra-text></app-zeebra-text>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

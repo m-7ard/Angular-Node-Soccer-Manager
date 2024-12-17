@@ -4,10 +4,11 @@ import Team from '../../../models/Team';
 import TeamPlayer from '../../../models/TeamPlayer';
 import { IReadTeamResolverData } from './read-team-page.resolver';
 import { CoverImageComponent } from '../../../reusables/cover-image/cover-image.component';
-import { MixinButtonDirective } from '../../../ui-mixins/mixin-button-directive/mixin-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { ZeebraTextComponent } from '../../../reusables/zeebra-text/zeebra-text.component';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 
 @Component({
     selector: 'app-read-team-page',
@@ -17,7 +18,8 @@ import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-butt
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
         CoverImageComponent,
-        MixinStyledButtonDirective
+        MixinStyledButtonDirective,
+        ZeebraTextComponent,
     ],
     templateUrl: './read-team-page.component.html',
 })
@@ -25,13 +27,10 @@ export class ReadTeamPageComponent implements OnInit {
     team!: Team;
     teamPlayers!: TeamPlayer[];
 
-    constructor(
-        private router: Router,
-        private _activatedRoute: ActivatedRoute,
-    ) {}
+    constructor(private _activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        const data: IReadTeamResolverData = this._activatedRoute.snapshot.data['RESOLVER_DATA'];
+        const data: IReadTeamResolverData = this._activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
         this.team = data.team;
         this.teamPlayers = data.teamPlayers;
     }

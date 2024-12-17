@@ -105,6 +105,7 @@ export class FilterPlayersFieldComponent implements ControlValueAccessor {
     async onFormSubmit(formData: any) {
         const response = this.playerDataAccess.listPlayers({
             name: formData.name,
+            limitBy: null
         });
 
         response.subscribe({

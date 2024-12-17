@@ -32,7 +32,6 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-update-team-page',
     standalone: true,
     imports: [
-        MixinButtonComponent,
         FormFieldComponent,
         CharFieldComponent,
         ReactiveFormsModule,

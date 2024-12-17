@@ -30,7 +30,6 @@ export class AuthService {
         return this.userDataAccess.login(request).pipe(
             tap({
                 next: (response) => {
-                    console.log("setting token")
                     localStorage.setItem('auth_token', response.token);
                     this.loadCurrentUser().subscribe();
                 },
@@ -40,7 +39,7 @@ export class AuthService {
 
     loadCurrentUser(): Observable<User | null> {
         const token = localStorage.getItem('auth_token');
-        console.log("token in load current:", token)
+        // console.log("token in load current:", token)
 
         if (!token) {
             this.currentUserSubject.next(null);

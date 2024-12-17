@@ -7,6 +7,14 @@
         @apply text-sm text-gray-600;
     }
 
+    .token-card--header--tertiary-text {
+        @apply text-sm text-gray-900 font-bold;
+    }
+
+    .token-card--label {
+        @apply text-sm text-gray-900 font-semibold;
+    }
+
     .token-card--list {
         @apply text-base flex flex-row justify-between items-center gap-3;
     }

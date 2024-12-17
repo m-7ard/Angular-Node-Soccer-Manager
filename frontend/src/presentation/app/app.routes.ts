@@ -23,38 +23,51 @@ import { TeamHomePageComponent } from './teams/read-team-page/team-home-page/tea
 import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
 import { RegisterUserPageComponent } from './users/register-user-page/register-user-page.component';
 import { LoginUserPageComponent } from './users/login-user-page/login-user-page.component';
+import { FrontpageResolver } from './frontpage/frontpage.resolver';
+import { AuthGuard } from '../guards/auth-guard';
 
 export const routes: Routes = [
-    { path: '', component: FrontpageComponent },
+    {
+        path: '',
+        component: FrontpageComponent,
+        resolve: {
+            [RESOLVER_DATA_KEY]: FrontpageResolver,
+        },
+    },
     {
         path: 'players',
         component: ListPlayersPageComponent,
         resolve: {
-            players: ListPlayersPageResolver,
+            [RESOLVER_DATA_KEY]: ListPlayersPageResolver,
         },
+        canActivate: [AuthGuard]
     },
     {
         path: 'players/create',
         component: CreatePlayerPageComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'teams',
         component: ListTeamsPageComponent,
         resolve: {
-            RESOLVER_DATA: ListTeamsPageResolver,
+            [RESOLVER_DATA_KEY]: ListTeamsPageResolver,
         },
+        canActivate: [AuthGuard]
     },
     {
         path: 'teams/create',
         component: CreateTeamPageComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'teams/:teamId',
         component: ReadTeamPageComponent,
         resolve: {
-            RESOLVER_DATA: ReadTeamPageResolver,
+            [RESOLVER_DATA_KEY]: ReadTeamPageResolver,
         },
         runGuardsAndResolvers: 'always',
+        canActivate: [AuthGuard],
         children: [
             {
                 path: '',
@@ -85,8 +98,9 @@ export const routes: Routes = [
         path: 'players/:id/update',
         component: UpdatePlayerPageComponent,
         resolve: {
-            data: UpdatePlayerPageResolver,
+            [RESOLVER_DATA_KEY]: UpdatePlayerPageResolver,
         },
+        canActivate: [AuthGuard],
     },
     {
         path: 'users/register',
