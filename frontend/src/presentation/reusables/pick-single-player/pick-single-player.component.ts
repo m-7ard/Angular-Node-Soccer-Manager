@@ -8,7 +8,7 @@ import {
     SearchPlayersModalComponentComponent,
     SearchPlayersModalComponentProps,
 } from '../search-players-modal-component/search-players-modal-component.component';
-import { MixinStyledButtonDirective } from '../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
 import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
 import { ZeebraTextComponent } from "../zeebra-text/zeebra-text.component";

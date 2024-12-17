@@ -10,7 +10,7 @@ import {
 } from '../../../delete-team-membership-modal/delete-team-membership-modal.component';
 import TeamPlayer from '../../../../../models/TeamPlayer';
 import { ZeebraTextComponent } from '../../../../../reusables/zeebra-text/zeebra-text.component';
-import { MixinStyledButtonDirective } from '../../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../../../reusables/styled-card/styled-card-section.directive';
 

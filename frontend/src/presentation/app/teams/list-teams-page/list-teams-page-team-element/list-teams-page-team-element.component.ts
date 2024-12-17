@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 import { ZeebraTextComponent } from "../../../../reusables/zeebra-text/zeebra-text.component";
 
 @Component({

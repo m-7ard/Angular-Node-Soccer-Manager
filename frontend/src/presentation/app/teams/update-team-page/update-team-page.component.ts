@@ -11,7 +11,7 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IReadTeamResolverData } from '../read-team-page/read-team-page.resolver';
 import Team from '../../../models/Team';

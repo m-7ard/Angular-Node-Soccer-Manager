@@ -1,20 +1,17 @@
 import { Component, Inject } from '@angular/core';
 import Player from '../../models/Player';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { MixinButtonComponent } from '../../ui-mixins/mixin-button/mixin-button.component';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldComponent } from '../form-field/form-field.component';
 import { CharFieldComponent } from '../char-field/char-field.component';
 import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
 import { CoverImageComponent } from '../cover-image/cover-image.component';
 import PlayerMapper from '../../mappers/PlayerMapper';
-import { MixinPrototypeCardDirective } from '../prototype-card/prototype-card';
-import { MixinPrototypeCardSectionDirective } from '../prototype-card/prototype-card-section';
-import { MixinStyledButtonDirective } from '../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
-import { ZeebraTextComponent } from "../zeebra-text/zeebra-text.component";
+import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -34,16 +31,16 @@ const routes = {
     selector: 'app-search-players-modal-component',
     standalone: true,
     imports: [
-    CommonModule,
-    FormFieldComponent,
-    CharFieldComponent,
-    ReactiveFormsModule,
-    CoverImageComponent,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirective,
-    MixinStyledCardSectionDirective,
-    ZeebraTextComponent
-],
+        CommonModule,
+        FormFieldComponent,
+        CharFieldComponent,
+        ReactiveFormsModule,
+        CoverImageComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+        ZeebraTextComponent,
+    ],
     templateUrl: './search-players-modal-component.component.html',
 })
 export class SearchPlayersModalComponentComponent {
@@ -81,7 +78,7 @@ export class SearchPlayersModalComponentComponent {
         const rawValue = this.form.getRawValue();
         const responseObservable = this.playerDataAccess.listPlayers({
             name: rawValue.name,
-            limitBy: null
+            limitBy: null,
         });
 
         responseObservable.subscribe((dto) => {

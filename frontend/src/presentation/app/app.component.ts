@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ModalTriggerDirective } from '../reusables/modal/modal-trigger.directive';
 import { DrawerModalComponent } from '../reusables/modal/example.component';
-import { MixinStyledButtonDirective } from '../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../reusables/styled-button/styled-button.directive';
 import { AuthService } from '../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';

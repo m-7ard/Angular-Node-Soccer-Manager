@@ -11,7 +11,7 @@ import { CharFieldComponent } from '../../../reusables/char-field/char-field.com
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
 
 interface IFormControls {

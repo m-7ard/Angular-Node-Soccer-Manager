@@ -9,7 +9,7 @@ import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 

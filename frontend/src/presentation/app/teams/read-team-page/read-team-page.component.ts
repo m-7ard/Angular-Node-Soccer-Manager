@@ -6,7 +6,7 @@ import { IReadTeamResolverData } from './read-team-page.resolver';
 import { CoverImageComponent } from '../../../reusables/cover-image/cover-image.component';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ZeebraTextComponent } from '../../../reusables/zeebra-text/zeebra-text.component';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 

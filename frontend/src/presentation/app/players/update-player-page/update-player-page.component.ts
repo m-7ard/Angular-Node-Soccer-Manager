@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { IUpdatePlayerResolverData } from './update-player-page.resolver';
 import parsers from '../../../utils/parsers';
-import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';

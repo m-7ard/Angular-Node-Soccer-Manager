@@ -6,7 +6,7 @@ import { DeletePlayerModal, DeletePlayerModalProps } from '../../delete-player-m
 import { Dialog } from '@angular/cdk/dialog';
 import { RouterModule } from '@angular/router';
 import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
-import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 

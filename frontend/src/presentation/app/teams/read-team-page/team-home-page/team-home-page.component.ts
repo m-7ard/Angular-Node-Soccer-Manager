@@ -7,10 +7,9 @@ import TeamPlayer from '../../../../models/TeamPlayer';
 import { IReadTeamResolverData } from '../read-team-page.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
 import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
-import { MixinButtonDirective } from '../../../../ui-mixins/mixin-button-directive/mixin-button.directive';
 import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 
 @Component({
     selector: 'app-team-home-page',

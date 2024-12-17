@@ -12,7 +12,7 @@ import NotFoundException from '../../../../exceptions/NotFoundException';
 import Player from '../../../../models/Player';
 import { CharFieldComponent } from '../../../../reusables/char-field/char-field.component';
 import { PickSinglePlayerComponent } from '../../../../reusables/pick-single-player/pick-single-player.component';
-import { MixinStyledButtonDirective } from '../../../../ui-mixins/mixin-styled-button-directive/mixin-styled-button.directive';
+import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 import Team from '../../../../models/Team';
