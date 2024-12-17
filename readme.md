@@ -46,10 +46,6 @@ Go to the frontend directory
 
 ## Backend Documentation
 
-Here’s the complete **documentation** for the actions and their related components, focusing on their purpose, functionality, and usage. This document is structured to help developers understand and extend the codebase effectively.
-
----
-
 # Actions and Related Components Documentation
 
 ## Overview
@@ -137,7 +133,7 @@ response.handle(res); // Sends { id: "1234" } with HTTP status 201
 
 ---
 
-## CreatePlayerAction
+## Exammple: CreatePlayerAction
 
 ### Purpose
 
@@ -202,8 +198,6 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
 ---
 
 ## `registerAction` Utility
-
-The `registerAction` function registers an action to an Express router.
 
 **Purpose**: Simplifies the wiring of actions and routes.
 
@@ -272,8 +266,6 @@ registerAction({
 
 ## Example: `playersRouter`
 
-The `playersRouter` is an Express router that registers all player-related actions.
-
 ```typescript
 registerAction({
     router: playersRouter,
@@ -297,22 +289,311 @@ registerAction({
 
 ---
 
-## High-Level Flow
+# Integration Test Documentation
 
-1. **Request** hits the registered route.
-2. **`registerAction`** initializes the appropriate Action.
-3. Action **binds** the request into an ActionRequest.
-4. Action **validates** the request and dispatches commands (if applicable).
-5. Action generates a response (e.g., `JsonResponse`) and sends it back.
+`Here is documentation for the **integration test setup** code and its related components. This documentation is tailored for developers and testers working on this system.
 
 ---
 
-## Conclusion
+# **Integration Test Setup Documentation**
 
-This structure allows for:
-- **Decoupled request handling** through Actions.
-- **Reusable response generation** with `JsonResponse`.
-- **Cleaner route registration** with `registerAction`.
-- Easy extensibility for adding new actions.
+## **Overview**
+This module provides utilities to initialize, manage, and clean up integration tests in an Express-based application. It sets up a MySQL database, creates the application server, applies database migrations, and provides cleanup logic for test environments.
 
-By following this pattern, developers can efficiently maintain and scale the API.
+---
+
+## **Exports**
+The module exports three key functions and two global objects:
+
+1. `setUpIntegrationTest` - Initializes the database and starts the test server.
+2. `disposeIntegrationTest` - Cleans up resources after tests complete.
+3. `resetIntegrationTest` - Resets the database state for clean test runs.
+4. `db` - An instance of the `IDatabaseService` for database operations.
+5. `server` - The running HTTP server instance.
+
+---
+
+## **Global Objects**
+
+### **db**
+- **Type:** `IDatabaseService`  
+- **Description:**  
+  An instance of the database service used to interact with the MySQL database for integration tests.
+
+---
+
+### **server**
+- **Type:** `Server` (Node.js `http.Server`)  
+- **Description:**  
+  The running Express server instance used during tests.
+
+---
+
+## **Functions**
+
+### **1. setUpIntegrationTest**
+Initializes the database service, starts the Express application server, and binds middleware.
+
+**Signature:**
+```typescript
+export async function setUpIntegrationTest(): Promise<void>
+```
+
+**Description:**
+- Creates a new instance of the `MySQLDatabaseService` configured with test credentials.
+- Starts the Express application with `responseLogger` middleware and the database instance.
+- Listens on port `3000`.
+
+**Parameters:**  
+_None_
+
+**Usage Example:**
+```typescript
+beforeAll(async () => {
+    await setUpIntegrationTest();
+});
+```
+
+---
+
+### **2. disposeIntegrationTest**
+Cleans up resources after test execution.
+
+**Signature:**
+```typescript
+export async function disposeIntegrationTest(): Promise<void>
+```
+
+**Description:**
+- Restores the global `console` to its original state.
+- Gracefully stops the Express server.
+- Closes the database connection using `db.dispose()`.
+
+**Parameters:**  
+_None_
+
+**Usage Example:**
+```typescript
+afterAll(async () => {
+    await disposeIntegrationTest();
+});
+```
+
+---
+
+### **3. resetIntegrationTest**
+Resets the database state before running a new test suite.
+
+**Signature:**
+```typescript
+export async function resetIntegrationTest(): Promise<void>
+```
+
+**Description:**
+- Restores the `console` object.
+- Retrieves the list of database migrations using `getMigrations`.
+- Re-initializes the database schema by running all migrations.
+
+**Parameters:**  
+_None_
+
+**Usage Example:**
+```typescript
+beforeEach(async () => {
+    await resetIntegrationTest();
+});
+```
+
+---
+
+## **Test Lifecycle Example**
+
+Here’s a typical test lifecycle using the provided functions:
+
+```typescript
+import { setUpIntegrationTest, disposeIntegrationTest, resetIntegrationTest } from "./testSetup";
+
+describe("Player API Integration Tests", () => {
+    beforeAll(async () => {
+        await setUpIntegrationTest();
+    });
+
+    afterAll(async () => {
+        await disposeIntegrationTest();
+    });
+
+    beforeEach(async () => {
+        await resetIntegrationTest();
+    });
+
+    it("should create a new player", async () => {
+        // Your test logic here
+    });
+
+    it("should return a list of players", async () => {
+        // Your test logic here
+    });
+});
+```
+
+
+Here is the documentation for your **`createApplication`** function and its related components.
+
+---
+
+# **Application Factory - `createApplication`**
+
+## **Overview**
+
+The `createApplication` function creates and configures an Express application. It registers dependencies into a dependency injection (DI) container, configures middleware, initializes repositories, and sets up routers. It also includes error handling and static file serving.
+
+---
+
+## **Signature**
+
+```typescript
+export default function createApplication(config: {
+    port: number;
+    middleware: Array<(req: Request, res: Response, next: NextFunction) => void>;
+    database: IDatabaseService;
+}): Express.Application
+```
+
+---
+
+## **Parameters**
+
+### **`config` (Object)**
+| **Property** | **Type**                                                                                  | **Description**                                      |
+|--------------|-------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `port`       | `number`                                                                                 | Port number for the application. *(Currently unused)*|
+| `middleware` | `Array<(req: Request, res: Response, next: NextFunction) => void>`                       | List of middleware functions to apply globally.      |
+| `database`   | [`IDatabaseService`](#idatabaseservice)                                                  | Database service implementation for queries.         |
+
+---
+
+## **Dependencies**
+
+### **1. Middleware**
+
+- **`cors`**  
+  Configures CORS to allow cross-origin resource sharing.
+
+- **`express.json` and `express.urlencoded`**  
+  Parses incoming JSON and URL-encoded request bodies.
+
+- **Custom Middleware**  
+  Configurable middleware passed via `config.middleware`.
+
+- **`errorLogger`**  
+  Custom error-handling middleware to log errors.
+
+---
+
+### **2. Dependency Injection (DI)**
+
+The DI container registers the following tokens:
+
+| **Token**                  | **Description**                                      | **Implementation**                     |
+|----------------------------|------------------------------------------------------|----------------------------------------|
+| `DI_TOKENS.DATABASE`       | Database service for queries and operations.         | Provided via `config.database`.        |
+| `DI_TOKENS.TEAM_REPOSITORY`| Repository for team data operations.                 | `TeamRepository`                       |
+| `DI_TOKENS.PLAYER_REPOSITORY`| Repository for player data operations.             | `PlayerRepository`                     |
+| `DI_TOKENS.USER_REPOSITORY`| Repository for user data operations.                 | `UserRepository`                       |
+| `DI_TOKENS.JWT_TOKEN_SERVICE` | Service for generating and validating JWT tokens. | `JsonWebTokenService`                  |
+| `DI_TOKENS.PASSWORD_HASHER` | Service for password hashing.                       | `BcryptPasswordHasher`                 |
+| `DI_TOKENS.REQUEST_DISPATCHER` | Custom request dispatcher for handling actions.  | `createRequestDispatcher()`            |
+
+---
+
+### **3. Routers**
+
+The application uses the following routers:
+
+| **Router**                | **Endpoint Prefix** | **Description**                  |
+|---------------------------|---------------------|----------------------------------|
+| `teamsRouter`             | `/api/teams/`       | Routes for team-related actions. |
+| `playersRouter`           | `/api/players/`     | Routes for player-related actions. |
+| `usersRouter`             | `/api/users/`       | Routes for user-related actions. |
+
+---
+
+### **4. Static File Serving**
+
+| **Endpoint** | **Directory**     | **Description**                  |
+|--------------|-------------------|----------------------------------|
+| `/media`     | `media` folder    | Serves files from the `media` folder. |
+| `/static`    | `static` folder   | Serves files from the `static` folder. |
+
+---
+
+## **Return Value**
+
+The function returns an **Express application** instance, configured with all middleware, routers, and dependencies.
+
+---
+
+## **IDatabaseService Interface**
+
+The `IDatabaseService` interface defines a contract for database operations.
+
+```typescript
+interface IDatabaseService {
+    initialise(migrations: string[]): Promise<void>;
+    dispose(): Promise<void>;
+    query<T = ResultSetHeader>(args: { statement: string }): Promise<T[]>;
+    execute<T = undefined>(args: { statement: string; parameters: Array<unknown> }): Promise<T extends undefined ? ResultSetHeader : T[]>;
+}
+```
+
+| **Method**        | **Description**                                             |
+|-------------------|-------------------------------------------------------------|
+| `initialise`      | Initializes the database schema with migrations.           |
+| `dispose`         | Closes the database connection.                            |
+| `query`           | Executes a read-only query.                                |
+| `execute`         | Executes a write operation with parameters.                |
+
+---
+
+## **Usage Example**
+
+```typescript
+import createApplication from "./createApplication";
+import responseLogger from "./middleware/responseLogger";
+import MySQLDatabaseService from "./infrastructure/MySQLDatabaseService";
+
+const db = new MySQLDatabaseService({
+    host: "127.0.0.1",
+    port: 3306,
+    user: "root",
+    password: "adminword",
+});
+
+const app = createApplication({
+    port: 3000,
+    middleware: [responseLogger],
+    database: db,
+});
+
+const server = app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+```
+
+---
+
+## **Notes**
+
+1. **Database Initialization**:  
+   Ensure that the `database` service implements the `IDatabaseService` interface.
+
+2. **Middleware Registration**:  
+   All middleware provided in the `config.middleware` array will be applied globally.
+
+3. **DI Container**:  
+   Repositories and services are registered into the `diContainer` for dependency injection.
+
+4. **Static File Serving**:  
+   Place static files in the `media` and `static` directories as needed.
+
+---
