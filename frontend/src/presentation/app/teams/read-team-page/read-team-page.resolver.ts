@@ -20,8 +20,8 @@ export class ReadTeamPageResolver implements Resolve<IReadTeamResolverData> {
     constructor(private _teamDataAccess: TeamDataAccessService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<IReadTeamResolverData> {
-        const teamId = route.paramMap.get('teamId');
-
+        let teamId = route.paramMap.get('teamId');
+        
         if (teamId == null) {
             throw new ClientSideErrorException('Read Team Page: teamId parameter is null.');
         }

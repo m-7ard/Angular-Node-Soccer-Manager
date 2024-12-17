@@ -1,5 +1,5 @@
 <header class="mixin-content-grid p-3 shadow shadow-black/20 relative shrink-0 overflow-x-auto">
-    <nav class="flex flex-row gap-3" data-track="base">
+    <nav class="flex flex-row gap-3 justify-center" data-track="base">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 appMixinStyledButton
@@ -10,17 +10,6 @@
             >
                 Logout
             </button>
-            <a
-                routerLink="/"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-blue"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                User
-            </a>
         </ng-content>
         <ng-template #unauthenticatedBlock>
             <a

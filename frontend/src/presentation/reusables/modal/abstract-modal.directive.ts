@@ -10,4 +10,8 @@ export abstract class AbstractModalDirective implements AfterViewInit {
     ngAfterViewInit(): void {
         this.afterInit(this.modalComponent);
     }
+
+    close() {
+        this.modalComponent.close()
+    }
 }

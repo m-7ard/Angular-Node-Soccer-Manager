@@ -15,7 +15,7 @@ import { AbstractModalDirective } from './abstract-modal.directive';
                     Drawer content here!
                 </main>
                 <footer>
-                    <button>Close</button>
+                    <button (click)="this.close()">Close</button>
                 </footer>
             </div>
         </app-modal>

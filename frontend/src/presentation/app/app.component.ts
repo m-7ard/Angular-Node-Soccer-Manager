@@ -6,11 +6,13 @@ import { MixinStyledButtonDirective } from '../ui-mixins/mixin-styled-button-dir
 import { AuthService } from '../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
+import { MixinStyledCardDirective } from '../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../reusables/styled-card/styled-card-section.directive';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, RouterModule, ModalTriggerDirective, MixinStyledButtonDirective, CommonModule],
+    imports: [RouterOutlet, RouterModule, ModalTriggerDirective, MixinStyledButtonDirective, CommonModule, MixinStyledCardDirective, MixinStyledCardSectionDirective],
     templateUrl: './app.component.html',
     host: {
         class: 'flex flex-col h-full',

@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-    GeneratedFileName,
-    RequiredImageData,
-} from '../../../reusables/image-upload-field/image-upload-field.component';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { Router } from '@angular/router';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import { CommonModule } from '@angular/common';
-import { PopoverTriggerDirective } from '../../../reusables/popover/popover-trigger.directive';
 import IPresentationError from '../../../errors/IPresentationError';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
@@ -18,10 +13,10 @@ import { MixinStyledButtonDirective } from '../../../ui-mixins/mixin-styled-butt
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 
-interface IFormValue {
-    name: string;
-    dateFounded: string;
-    number: string;
+interface IFormControls {
+    name: FormControl<string>;
+    dateFounded: FormControl<string>;
+    number: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
@@ -37,7 +32,6 @@ type IErrorSchema = IPresentationError<{
         CharFieldComponent,
         FormFieldComponent,
         CommonModule,
-        PopoverTriggerDirective,
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
@@ -55,6 +49,21 @@ export class CreateTeamPageComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.form = new FormGroup<IFormControls>({
+            name: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
+            dateFounded: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
+            number: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            })
+        });
+        
         this.form = this.fb.group({
             name: new FormControl('', [Validators.required]),
             dateFounded: new FormControl('', [Validators.required]),

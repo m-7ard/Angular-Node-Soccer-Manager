@@ -7,8 +7,6 @@ import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import parsers from '../../../utils/parsers';
-import { IUpdateTeamResolverData } from '../../../__obsolete/update-team-page.resolver';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';

@@ -59,8 +59,9 @@ export class CharFieldComponent implements ControlValueAccessor {
         size: 'mixin-char-input-base',
         theme: 'theme-input-generic-white',
     };
-    @Input() type: string = 'text';
-    @Input() disabled = false;
+    @Input() type?: string = 'text';
+    @Input() autocomplete?: boolean = false;
+    @Input() disabled?: boolean = false;
     @Input() placeholder?: string;
     @Input() readonly?: boolean;
     @Input() maxLength?: number;
