@@ -15,6 +15,10 @@
         @apply text-sm text-gray-900 font-semibold;
     }
 
+    .token-card--default-text {
+        @apply text-base text-gray-900;
+    }
+
     .token-card--list {
         @apply text-base flex flex-row justify-between items-center gap-3;
     }

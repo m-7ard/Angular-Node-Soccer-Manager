@@ -1,5 +1,5 @@
 <header class="mixin-content-grid p-3 shadow shadow-black/20 relative shrink-0 overflow-x-auto">
-    <nav class="flex flex-row gap-3 justify-center" data-track="base">
+    <nav class="flex flex-row gap-3">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 appMixinStyledButton
@@ -7,6 +7,7 @@
                 theme="theme-Sbutton-generic-red"
                 type="button"
                 (mouseup)="authService.logout()"
+                class="ml-auto"
             >
                 Logout
             </button>
@@ -20,6 +21,7 @@
                 size="mixin-Sbutton-base"
                 theme="theme-Sbutton-generic-yellow"
                 [routerLinkActiveOptions]="{ exact: true }"
+                class="ml-auto"
             >
                 Login
             </a>
@@ -75,8 +77,9 @@
             modalTrigger
             [modalPanel]="exampleModal"
             [modalData]="{ title: otherTitle }"
+            class="mr-auto truncate shrink-0"
         >
-            Test
+            Modal Sample
         </div>
     </nav>
 </header>

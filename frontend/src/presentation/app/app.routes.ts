@@ -25,6 +25,7 @@ import { RegisterUserPageComponent } from './users/register-user-page/register-u
 import { LoginUserPageComponent } from './users/login-user-page/login-user-page.component';
 import { FrontpageResolver } from './frontpage/frontpage.resolver';
 import { AuthGuard } from '../guards/auth-guard';
+import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
 
 export const routes: Routes = [
     {
@@ -112,8 +113,9 @@ export const routes: Routes = [
     },
 
     { path: 'not-found', component: NotFoundPageComponent },
+    { path: 'page-does-not-exist', component: PageDoesNotExistPageComponent },
     { path: 'internal-server-error', component: InternalServerErrorPageComponent },
     { path: 'unkown-error', component: UnknownErrorPageComponent },
     { path: 'client-side-error', component: ClientSideErrorPageComponent },
-    { path: '**', redirectTo: 'not-found' },
+    { path: '**', redirectTo: 'page-does-not-exist' },
 ];

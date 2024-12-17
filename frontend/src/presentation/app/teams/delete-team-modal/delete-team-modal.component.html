@@ -11,7 +11,9 @@
     <section appMixinStyledCardSection *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <section appMixinStyledCardSection>Are you sure you want to delete team "{{ team.name }}"?</section>
+    <section appMixinStyledCardSection>
+        <div class="token-card--default-text">Are you sure you want to delete team "{{ team.name }}"?</div>
+    </section>
     <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
         <button
             appMixinStyledButton

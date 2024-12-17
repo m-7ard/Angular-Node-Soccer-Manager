@@ -1,26 +1,46 @@
 import { Component, Input } from '@angular/core';
 import { ModalComponent } from './modal.component';
 import { AbstractModalDirective } from './abstract-modal.directive';
+import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
+import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
+import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
 
 @Component({
     selector: 'app-drawer-modal',
-    imports: [ModalComponent],
+    imports: [ModalComponent, MixinStyledCardDirective, MixinStyledCardSectionDirective, MixinStyledButtonDirective],
     template: `
         <app-modal>
-            <div class="h-72 w-72 bg-white">
-                <header>
-                    <h2>{{ title }}</h2>
+            <div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+                <header appMixinStyledCardSection class="flex flex-row gap-3 justify-between items-start">
+                    <div>
+                        <div class="token-card--header--primary-text">Sample Modal</div>
+                    </div>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        (click)="close()"
+                    >
+                        Close
+                    </button>
                 </header>
-                <main>
-                    Drawer content here!
+                <main appMixinStyledCardSection>
+                    <div class="token-card--default-text">Title: {{ title }}</div>
                 </main>
-                <footer>
-                    <button (click)="this.close()">Close</button>
+                <footer appMixinStyledCardSection>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-base"
+                        theme="theme-Sbutton-generic-white"
+                        (click)="close()"
+                    >
+                        Close
+                    </button>
                 </footer>
             </div>
         </app-modal>
     `,
-    standalone: true
+    standalone: true,
 })
 export class DrawerModalComponent extends AbstractModalDirective {
     @Input() title!: string;

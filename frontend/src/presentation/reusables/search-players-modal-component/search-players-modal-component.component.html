@@ -26,7 +26,7 @@
         </button>
     </nav>
     <ng-content *ngIf="currentRoute === 'form'">
-        <form appMixinStyledCardSection [formGroup]="form" class="flex flex-col gap-2">
+        <form appMixinStyledCardSection [formGroup]="form" class="flex flex-col gap-2" (submit)="onFormSubmit()">
             <app-form-field [name]="'name'">
                 <ng-template let-name="name">
                     <app-char-field
