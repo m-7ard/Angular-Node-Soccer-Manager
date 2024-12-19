@@ -6,6 +6,7 @@ import Mixins from "__utils__/integrationTests/Mixins";
 import Player from "domain/entities/Player";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 import IDeletePlayerRequestDTO from "api/DTOs/players/delete/IDeletePlayerRequestDTO";
+import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 
 let player_001: Player;
 
@@ -28,7 +29,10 @@ describe("Delete Player Integration Test;", () => {
     it("Delete Player; Valid Data; Success;", async () => {
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/players/${player_001.id}/delete`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server).delete(`/api/players/${player_001.id}/delete`).send(request).set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(200);
 
@@ -39,7 +43,10 @@ describe("Delete Player Integration Test;", () => {
     it("Delete Player; Player does not exist; Failure;", async () => {
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/players/${"100"}/delete`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server).delete(`/api/players/${"100"}/delete`).send(request).set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
@@ -52,8 +59,10 @@ describe("Delete Player Integration Test;", () => {
         const teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
 
         const request: IDeletePlayerRequestDTO = {};
-
-        const response = await supertest(server).delete(`/api/players/${player_001.id}/delete`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server).delete(`/api/players/${player_001.id}/delete`).send(request).set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

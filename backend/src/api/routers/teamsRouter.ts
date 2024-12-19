@@ -11,6 +11,7 @@ import ReadTeamAction from "api/actions/teams/ReadTeamAction";
 import DeleteTeamMembershipAction from "api/actions/team_memberships/DeleteTeamMembershipAction";
 import UpdateTeamMembershipAction from "api/actions/team_memberships/UpdateTeamMembershipAction";
 import ReadTeamPlayerAction from "api/actions/teams/ReadTeamPlayerAction";
+import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
 
 const teamsRouter = Router();
 
@@ -28,6 +29,7 @@ registerAction({
     router: teamsRouter,
     path: "/create",
     method: "POST",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new CreateTeamAction(requestDispatcher);
@@ -38,6 +40,7 @@ registerAction({
     router: teamsRouter,
     path: "/:teamId/create-membership",
     method: "POST",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new CreateTeamMembershipAction(requestDispatcher);
@@ -58,6 +61,7 @@ registerAction({
     router: teamsRouter,
     path: "/:teamId/update",
     method: "PUT",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new UpdateTeamAction(requestDispatcher);
@@ -68,6 +72,7 @@ registerAction({
     router: teamsRouter,
     path: "/:teamId/delete",
     method: "DELETE",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new DeleteTeamAction(requestDispatcher);
@@ -88,6 +93,7 @@ registerAction({
     router: teamsRouter,
     path: "/:teamId/delete-membership/:playerId",
     method: "DELETE",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new DeleteTeamMembershipAction(requestDispatcher);
@@ -98,6 +104,7 @@ registerAction({
     router: teamsRouter,
     path: "/:teamId/players/:playerId/update",
     method: "PUT",
+    guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new UpdateTeamMembershipAction(requestDispatcher);
@@ -113,6 +120,5 @@ registerAction({
         return new ReadTeamPlayerAction(requestDispatcher);
     },
 });
-
 
 export default teamsRouter;

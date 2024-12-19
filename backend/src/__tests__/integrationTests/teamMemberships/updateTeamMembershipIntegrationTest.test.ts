@@ -1,5 +1,11 @@
 import supertest from "supertest";
-import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import {
+    db,
+    disposeIntegrationTest,
+    resetIntegrationTest,
+    server,
+    setUpIntegrationTest,
+} from "../../../__utils__/integrationTests/integrationTest.setup";
 import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
 import Player from "domain/entities/Player";
@@ -8,6 +14,7 @@ import IApiError from "api/errors/IApiError";
 import IUpdateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/update/IUpdateTeamMembershipRequestDTO";
 import TeamMembership from "domain/entities/TeamMembership";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
+import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 
 let team_001: Team;
 let player_001: Player;
@@ -27,7 +34,12 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
-    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
+    teamMembership_001 = await mixins.createTeamMembership(
+        player_001,
+        team_001,
+        null,
+        1,
+    );
 
     expect(team_001).toBeDefined();
     expect(player_001).toBeDefined();
@@ -38,15 +50,27 @@ describe("Update TeamMembership Integration Test;", () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.activeFrom,
             activeTo: new Date(),
-            number: 10
+            number: 10,
         };
 
-        const response = await supertest(server).put(`/api/teams/${team_001.id}/players/${player_001.id}/update`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .put(
+                    `/api/teams/${team_001.id}/players/${player_001.id}/update`,
+                )
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(200);
-        const [row] = await db.query<ITeamMembershipSchema>({ statement: 'SELECT * FROM team_membership' });
+        const [row] = await db.query<ITeamMembershipSchema>({
+            statement: "SELECT * FROM team_membership",
+        });
         expect(row.active_to).not.toBeNull();
-        expect(row.active_to?.getTime()).toBeGreaterThanOrEqual(row.active_from.getTime());
+        expect(row.active_to?.getTime()).toBeGreaterThanOrEqual(
+            row.active_from.getTime(),
+        );
         expect(row.number).toBe(request.number);
     });
 
@@ -54,10 +78,16 @@ describe("Update TeamMembership Integration Test;", () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.activeFrom,
             activeTo: new Date(),
-            number: 10
+            number: 10,
         };
 
-        const response = await supertest(server).put(`/api/teams/${INVALID_ID}/players/${player_001.id}/update`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .put(`/api/teams/${INVALID_ID}/players/${player_001.id}/update`)
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
@@ -65,14 +95,19 @@ describe("Update TeamMembership Integration Test;", () => {
     });
 
     it("Update Team Membership; Player does not exist; Failure;", async () => {
-
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.activeFrom,
             activeTo: new Date(),
-            number: 10
+            number: 10,
         };
 
-        const response = await supertest(server).put(`/api/teams/${team_001.id}/players/${INVALID_ID}/update`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .put(`/api/teams/${team_001.id}/players/${INVALID_ID}/update`)
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

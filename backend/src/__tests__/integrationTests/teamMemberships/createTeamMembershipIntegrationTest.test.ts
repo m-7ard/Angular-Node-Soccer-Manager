@@ -1,11 +1,18 @@
 import supertest from "supertest";
-import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import {
+    db,
+    disposeIntegrationTest,
+    resetIntegrationTest,
+    server,
+    setUpIntegrationTest,
+} from "../../../__utils__/integrationTests/integrationTest.setup";
 import ICreateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipRequestDTO";
 import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
 import Player from "domain/entities/Player";
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
+import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 
 let team_001: Team;
 let player_001: Player;
@@ -34,13 +41,21 @@ describe("Create TeamMembership Integration Test;", () => {
             playerId: player_001.id,
             activeFrom: new Date(),
             activeTo: null,
-            number: 5
+            number: 5,
         };
 
-        const response = await supertest(server).post(`/api/teams/${team_001.id}/create-membership`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .post(`/api/teams/${team_001.id}/create-membership`)
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(201);
-        const rows = await db.query({ statement: 'SELECT * FROM team_membership' });
+        const rows = await db.query({
+            statement: "SELECT * FROM team_membership",
+        });
         expect(rows.length).toBe(1);
     });
 
@@ -51,10 +66,16 @@ describe("Create TeamMembership Integration Test;", () => {
             playerId: player_001.id,
             activeFrom: new Date(),
             activeTo: null,
-            number: 5
+            number: 5,
         };
 
-        const response = await supertest(server).post(`/api/teams/${INVALID_TEAM_ID}/create-membership`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .post(`/api/teams/${INVALID_TEAM_ID}/create-membership`)
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

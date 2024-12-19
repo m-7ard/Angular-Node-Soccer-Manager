@@ -1,5 +1,11 @@
 import supertest from "supertest";
-import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import {
+    db,
+    disposeIntegrationTest,
+    resetIntegrationTest,
+    server,
+    setUpIntegrationTest,
+} from "../../../__utils__/integrationTests/integrationTest.setup";
 import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
 import Player from "domain/entities/Player";
@@ -7,6 +13,7 @@ import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import TeamMembership from "domain/entities/TeamMembership";
 import IDeletePlayerRequestDTO from "api/DTOs/players/delete/IDeletePlayerRequestDTO";
+import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 
 let team_001: Team;
 let player_001: Player;
@@ -25,7 +32,12 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
-    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
+    teamMembership_001 = await mixins.createTeamMembership(
+        player_001,
+        team_001,
+        null,
+        1,
+    );
 
     expect(team_001).toBeDefined();
     expect(player_001).toBeDefined();
@@ -35,10 +47,20 @@ describe("Delete TeamMembership Integration Test;", () => {
     it("Delete Team Membership; Valid Data; Success;", async () => {
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${team_001.id}/delete-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .delete(
+                    `/api/teams/${team_001.id}/delete-membership/${player_001.id}`,
+                )
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(200);
-        const rows = await db.query({ statement: "SELECT * FROM team_membership" });
+        const rows = await db.query({
+            statement: "SELECT * FROM team_membership",
+        });
         expect(rows.length).toBe(0);
     });
 
@@ -47,7 +69,15 @@ describe("Delete TeamMembership Integration Test;", () => {
 
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${INVALID_TEAM_ID}/delete-membership/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .delete(
+                    `/api/teams/${INVALID_TEAM_ID}/delete-membership/${player_001.id}`,
+                )
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
@@ -59,7 +89,15 @@ describe("Delete TeamMembership Integration Test;", () => {
 
         const request: IDeletePlayerRequestDTO = {};
 
-        const response = await supertest(server).delete(`/api/teams/${team_001.id}/delete-membership/${INVALID_ID}`).send(request).set("Content-Type", "application/json");
+        const response = await adminSuperTest({
+            agent: supertest(server)
+                .delete(
+                    `/api/teams/${team_001.id}/delete-membership/${INVALID_ID}`,
+                )
+                .send(request)
+                .set("Content-Type", "application/json"),
+            seed: 1,
+        });
 
         expect(response.status).toBe(400);
         const body: IApiError[] = response.body;

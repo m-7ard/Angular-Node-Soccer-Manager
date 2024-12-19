@@ -1,6 +1,7 @@
 import { ValueError } from "@sinclair/typebox/build/cjs/errors";
 import API_ERROR_CODES from "./API_ERROR_CODES";
 import { Failure } from "superstruct";
+import IApiError from "./IApiError";
 
 class ApiErrorFactory {
     static typeBoxErrorToApiErrors(errors: ValueError[], pathPrefix: string[] = []) {
@@ -28,6 +29,10 @@ class ApiErrorFactory {
             path: prefix + `/${error.path.join("/")}`,
             code: API_ERROR_CODES.APPLICATION_ERROR,
         }));
+    }
+
+    static createSingleErrorList(props: { message: string; path: string; code: string }): [IApiError] {
+        return [{ message: props.message, path: props.path, code: props.code }];
     }
 }
 
