@@ -3,10 +3,10 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { GlobalErrorHandler } from '../services/global-error-handler';
 import { AuthInterceptor } from '../interceptors/auth-interceptor';
 import { Observable, first } from 'rxjs';
 import { AuthService } from '../services/auth-service';
+import { GlobalErrorHandler } from '../error-handlers/global-error-handler';
 
 function initializeAuth(authService: AuthService) {
     // Used to avoid initial flicker

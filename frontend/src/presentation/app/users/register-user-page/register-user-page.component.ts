@@ -12,7 +12,8 @@ import { AuthService } from '../../../services/auth-service';
 import { catchError, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -30,15 +31,15 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-register-user-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    CommonModule,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirective,
-    MixinStyledCardSectionDirective,
-    FormErrorsComponent
-],
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+        FormErrorsComponent,
+    ],
     templateUrl: './register-user-page.component.html',
 })
 export class RegisterUserPageComponent {
@@ -48,6 +49,7 @@ export class RegisterUserPageComponent {
     constructor(
         private router: Router,
         private authService: AuthService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             email: new FormControl('', {
@@ -76,7 +78,12 @@ export class RegisterUserPageComponent {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )
@@ -89,5 +96,5 @@ export class RegisterUserPageComponent {
                     this.router.navigate(['/users/login']);
                 },
             });
-        }
+    }
 }

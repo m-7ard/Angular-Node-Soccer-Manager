@@ -15,6 +15,7 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -49,6 +50,7 @@ export class UpdatePlayerPageComponent {
         private router: Router,
         private playerDataAccess: PlayerDataAccessService,
         private _activatedRoute: ActivatedRoute,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -85,7 +87,12 @@ export class UpdatePlayerPageComponent {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

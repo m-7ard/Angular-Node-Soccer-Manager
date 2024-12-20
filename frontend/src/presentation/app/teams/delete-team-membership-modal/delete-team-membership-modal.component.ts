@@ -12,6 +12,7 @@ import TeamPlayer from '../../../models/TeamPlayer';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 export interface DeleteTeamMembershipModalProps {
     teamPlayer: TeamPlayer;
@@ -41,6 +42,7 @@ export class DeleteTeamMembershipModal {
         public dialogRef: DialogRef,
         @Inject(DIALOG_DATA) public data: DeleteTeamMembershipModalProps,
         private teamDataAccess: TeamDataAccessService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.teamPlayer = this.data.teamPlayer;
         this.team = this.data.team;
@@ -58,7 +60,12 @@ export class DeleteTeamMembershipModal {
             .removePlayer(membership.teamId, membership.playerId, {})
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

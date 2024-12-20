@@ -11,6 +11,7 @@ import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors'
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 export interface DeletePlayerModalProps {
     player: Player;
@@ -38,6 +39,7 @@ export class DeletePlayerModal {
         public dialogRef: DialogRef<Player>,
         @Inject(DIALOG_DATA) public data: DeletePlayerModalProps,
         private playerDataAccess: PlayerDataAccessService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.player = this.data.player;
         this.onSuccess = this.data.onSuccess;
@@ -52,7 +54,12 @@ export class DeletePlayerModal {
             .delete(this.data.player.id, {})
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

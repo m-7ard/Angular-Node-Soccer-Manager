@@ -12,6 +12,7 @@ import { CharFieldComponent } from '../../../reusables/char-field/char-field.com
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -44,6 +45,7 @@ export class CreatePlayerPageComponent {
     constructor(
         private router: Router,
         private playerDataAccess: PlayerDataAccessService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -67,7 +69,12 @@ export class CreatePlayerPageComponent {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

@@ -12,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -44,8 +45,9 @@ export class CreateTeamPageComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private _router: Router,
-        private _teamDataAccess: TeamDataAccessService,
+        private router: Router,
+        private teamDataAccess: TeamDataAccessService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {}
 
     ngOnInit(): void {
@@ -74,7 +76,7 @@ export class CreateTeamPageComponent implements OnInit {
     onSubmit(): void {
         const value = this.form.value;
 
-        const requestObserver = this._teamDataAccess.createTeam({
+        const requestObserver = this.teamDataAccess.createTeam({
             dateFounded: value.dateFounded,
             name: value.name,
         });
@@ -82,7 +84,12 @@ export class CreateTeamPageComponent implements OnInit {
         requestObserver
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )
@@ -92,7 +99,7 @@ export class CreateTeamPageComponent implements OnInit {
                         return;
                     }
 
-                    this._router.navigate(['/teams']);
+                    this.router.navigate(['/teams']);
                 },
             });
     }

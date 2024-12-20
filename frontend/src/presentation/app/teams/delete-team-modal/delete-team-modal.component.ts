@@ -11,6 +11,7 @@ import Team from '../../../models/Team';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 export interface DeleteTeamModalProps {
     team: Team;
@@ -38,6 +39,7 @@ export class DeleteTeamModal {
         public dialogRef: DialogRef,
         @Inject(DIALOG_DATA) public data: DeleteTeamModalProps,
         private teamDataAccess: TeamDataAccessService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.team = this.data.team;
         this.onSuccess = this.data.onSuccess;
@@ -52,7 +54,12 @@ export class DeleteTeamModal {
             .delete(this.team.id)
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

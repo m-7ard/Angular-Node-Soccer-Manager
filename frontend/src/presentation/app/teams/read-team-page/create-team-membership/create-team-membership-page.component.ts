@@ -18,6 +18,7 @@ import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-ca
 import Team from '../../../../models/Team';
 import { IReadTeamResolverData } from '../read-team-page.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
+import { ExceptionNoticeService } from '../../../../services/exception-notice-service';
 
 interface IFormControls {
     player: FormControl<Player | null>;
@@ -58,6 +59,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
         private activatedRoute: ActivatedRoute,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             player: new FormControl(null, {
@@ -108,7 +110,12 @@ export class CreateTeamMembershipPageComponent implements OnInit {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )

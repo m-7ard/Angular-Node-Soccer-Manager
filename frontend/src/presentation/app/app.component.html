@@ -86,3 +86,6 @@
 <main class="bg-[#f8f8f8] flex flex-col grow">
     <router-outlet />
 </main>
+<ng-content *ngIf="error != null">
+    <app-exception-notice-popover [error]="error" (dismiss)="exceptionNoticeService.clearError()"></app-exception-notice-popover>
+</ng-content>

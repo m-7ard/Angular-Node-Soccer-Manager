@@ -12,7 +12,8 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { FormErrorsComponent } from "../../../reusables/form-errors/form-errors";
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -28,15 +29,15 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-login-user-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    CommonModule,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirective,
-    MixinStyledCardSectionDirective,
-    FormErrorsComponent
-],
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+        FormErrorsComponent,
+    ],
     templateUrl: './login-user-page.component.html',
 })
 export class LoginUserPageComponent {
@@ -46,6 +47,7 @@ export class LoginUserPageComponent {
     constructor(
         private router: Router,
         private authService: AuthService,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             email: new FormControl('', {
@@ -69,7 +71,12 @@ export class LoginUserPageComponent {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )
