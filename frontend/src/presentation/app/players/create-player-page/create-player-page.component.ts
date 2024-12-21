@@ -13,6 +13,7 @@ import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -35,6 +36,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
+        FormErrorsComponent,
     ],
     templateUrl: './create-player-page.component.html',
 })
@@ -86,5 +88,12 @@ export class CreatePlayerPageComponent {
                     this.router.navigate(['/players']);
                 },
             });
+    }
+
+    onReset(): void {
+        this.form.reset({
+            name: '',
+            activeSince: '',
+        });
     }
 }

@@ -45,6 +45,18 @@
                 size="mixin-Sbutton-base"
                 theme="theme-Sbutton-generic-blue"
                 class="justify-center"
+                [routerLink]="'/teams/' + team.id + '/update'"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+            >
+                Update Team
+            </button>
+            <button
+                appMixinStyledButton
+                size="mixin-Sbutton-base"
+                theme="theme-Sbutton-generic-blue"
+                class="justify-center"
                 [routerLink]="'/teams/' + team.id + '/players/add'"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"

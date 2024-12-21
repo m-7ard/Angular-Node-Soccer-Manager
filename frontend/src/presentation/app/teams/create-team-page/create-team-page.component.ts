@@ -13,11 +13,11 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 
 interface IFormControls {
     name: FormControl<string>;
     dateFounded: FormControl<string>;
-    number: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
@@ -36,15 +36,15 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
+        FormErrorsComponent,
     ],
     templateUrl: './create-team-page.component.html',
 })
 export class CreateTeamPageComponent implements OnInit {
-    form!: FormGroup;
+    form!: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
 
     constructor(
-        private fb: FormBuilder,
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
         private exceptionNoticeService: ExceptionNoticeService,
@@ -60,25 +60,15 @@ export class CreateTeamPageComponent implements OnInit {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
-            number: new FormControl('', {
-                nonNullable: true,
-                validators: [Validators.required],
-            })
-        });
-        
-        this.form = this.fb.group({
-            name: new FormControl('', [Validators.required]),
-            dateFounded: new FormControl('', [Validators.required]),
-            number: new FormControl('', [Validators.required]),
         });
     }
 
     onSubmit(): void {
-        const value = this.form.value;
+        const rawValue = this.form.getRawValue();
 
         const requestObserver = this.teamDataAccess.createTeam({
-            dateFounded: value.dateFounded,
-            name: value.name,
+            dateFounded: new Date(rawValue.dateFounded),
+            name: rawValue.name,
         });
 
         requestObserver
@@ -102,5 +92,12 @@ export class CreateTeamPageComponent implements OnInit {
                     this.router.navigate(['/teams']);
                 },
             });
+    }
+
+    onReset(): void {
+        this.form.reset({
+            dateFounded: '',
+            name: '',
+        });
     }
 }

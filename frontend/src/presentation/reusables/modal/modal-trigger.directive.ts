@@ -21,7 +21,7 @@ export class ModalTriggerDirective<T extends AbstractModalDirective> implements 
     private modalRef: ComponentRef<T> | null = null;
 
     constructor(private viewContainer: ViewContainerRef) {}
-
+    
     ngOnChanges(changes: SimpleChanges): void {
         // If modal is already open and modalData has changed, update the inputs
         if (this.modalRef && changes['modalData']) {

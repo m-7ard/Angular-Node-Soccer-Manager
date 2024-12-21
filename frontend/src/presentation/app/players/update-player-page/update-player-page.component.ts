@@ -16,6 +16,8 @@ import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import Player from '../../../models/Player';
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -38,6 +40,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
+        FormErrorsComponent,
     ],
     templateUrl: './update-player-page.component.html',
 })
@@ -45,11 +48,19 @@ export class UpdatePlayerPageComponent {
     form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
     id: string = null!;
+    player: Player = null!;
+
+    private get initialData() {
+        return {
+            name: this.player.name,
+            activeSince: parsers.parseJsDateToInputDate(this.player.activeSince),
+        };
+    }
 
     constructor(
         private router: Router,
         private playerDataAccess: PlayerDataAccessService,
-        private _activatedRoute: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
         private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
@@ -65,15 +76,12 @@ export class UpdatePlayerPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data: IUpdatePlayerResolverData = resolverData[RESOLVER_DATA_KEY];
             this.id = data.id;
-            const player = data.player;
+            this.player = data.player;
 
-            this.form.patchValue({
-                name: player.name,
-                activeSince: parsers.parseJsDateToInputDate(player.activeSince),
-            });
+            this.form.patchValue(this.initialData);
         });
     }
 
@@ -104,5 +112,10 @@ export class UpdatePlayerPageComponent {
                     this.router.navigate(['/players']);
                 },
             });
+    }
+
+    onReset(event: Event): void {
+        event.preventDefault();
+        this.form.reset(this.initialData);
     }
 }

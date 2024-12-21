@@ -1,10 +1,13 @@
-<form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()">
+<form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
     <header appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between flex-wrap">
         <div>
             <div class="token-card--header--primary-text">Update Team Membership</div>
             <div class="token-card--header--secondary-text">{{ teamPlayer.player.name }} from {{ team.name }}</div>
         </div>
     </header>
+    <section appMixinStyledCardSection *ngIf="errors['_'] != null">
+        <app-form-errors [errors]="errors['_']"></app-form-errors>
+    </section>
     <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
         <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom">
             <ng-template let-name="name">
@@ -43,6 +46,9 @@
         </app-form-field>
     </fieldset>
     <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+            Reset
+        </button>
         <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">
             Update Team Membership
         </button>

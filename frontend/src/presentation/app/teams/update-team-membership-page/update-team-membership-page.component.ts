@@ -16,6 +16,8 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import TeamPlayer from '../../../models/TeamPlayer';
 import Team from '../../../models/Team';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { CommonModule } from '@angular/common';
 
 interface IFormControls {
     activeFrom: FormControl<string>;
@@ -39,16 +41,31 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
+        FormErrorsComponent,
+        CommonModule,
     ],
     templateUrl: './update-team-membership-page.component.html',
 })
 export class UpdateTeamMembershipPageComponent {
     form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
+
     teamId: string = null!;
-    teamPlayer: TeamPlayer = null!;
     team: Team = null!;
+
+    teamPlayer: TeamPlayer = null!;
+
     playerId: string = null!;
+
+    private get initialData() {
+        const membership = this.teamPlayer.membership;
+
+        return {
+            activeFrom: parsers.parseJsDateToInputDate(membership.activeFrom),
+            activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDate(membership.activeTo),
+            number: membership.number.toString(),
+        };
+    }
 
     constructor(
         private router: Router,
@@ -79,16 +96,11 @@ export class UpdateTeamMembershipPageComponent {
             this.playerId = data.teamPlayer.player.id;
 
             const teamPlayer = data.teamPlayer;
-            const membership = teamPlayer.membership;
 
             this.teamPlayer = teamPlayer;
             this.team = data.team;
 
-            this.form.patchValue({
-                activeFrom: parsers.parseJsDateToInputDate(membership.activeFrom),
-                activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDate(membership.activeTo),
-                number: membership.number.toString(),
-            });
+            this.form.patchValue(this.initialData);
         });
     }
 
@@ -112,8 +124,13 @@ export class UpdateTeamMembershipPageComponent {
                     if (response === null) {
                         return;
                     }
-                    this.router.navigate(['/teams']);
+                    this.router.navigate([`/teams/${this.teamId}/players`]);
                 },
             });
+    }
+
+    onReset(event: Event): void {
+        event.preventDefault();
+        this.form.reset(this.initialData);
     }
 }

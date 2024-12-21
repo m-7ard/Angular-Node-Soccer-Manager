@@ -60,6 +60,13 @@ export class LoginUserPageComponent {
             }),
         });
     }
+    
+    onReset(): void {
+        this.form.reset({
+            email: "",
+            password: ""
+        })
+    }
 
     onSubmit(): void {
         const rawValue = this.form.getRawValue();

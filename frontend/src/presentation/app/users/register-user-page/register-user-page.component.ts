@@ -67,6 +67,14 @@ export class RegisterUserPageComponent {
         });
     }
 
+    onReset(): void {
+        this.form.reset({
+            email: "",
+            password: "",
+            name: ""
+        })
+    }
+
     onSubmit(): void {
         const rawValue = this.form.getRawValue();
 

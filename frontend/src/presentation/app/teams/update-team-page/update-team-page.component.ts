@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormResetEvent, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import IPresentationError from '../../../errors/IPresentationError';
@@ -15,6 +15,8 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IReadTeamResolverData } from '../read-team-page/read-team-page.resolver';
 import Team from '../../../models/Team';
+import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { CommonModule } from '@angular/common';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -36,19 +38,27 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         MixinStyledCardDirective,
         MixinStyledCardSectionDirective,
+        FormErrorsComponent,
+        CommonModule,
     ],
     templateUrl: './update-team-page.component.html',
 })
 export class UpdateTeamPageComponent {
     form: FormGroup<IFormControls> = null!;
     errors: IErrorSchema = {};
-    id: string = null!;
     team: Team = null!;
+
+    private get initialData() {
+        return {
+            name: this.team.name,
+            dateFounded: parsers.parseJsDateToInputDate(this.team.dateFounded),
+        };
+    }
 
     constructor(
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
-        private _activatedRoute: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -63,20 +73,17 @@ export class UpdateTeamPageComponent {
     }
 
     ngOnInit() {
-        const data: IReadTeamResolverData = this._activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
+        const data: IReadTeamResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
         this.team = data.team;
 
-        this.form.patchValue({
-            name: this.team.name,
-            dateFounded: parsers.parseJsDateToInputDate(this.team.dateFounded),
-        });
+        this.form.patchValue(this.initialData);
     }
 
     onSubmit(): void {
         const rawValue = this.form.getRawValue();
 
         this.teamDataAccess
-            .updateTeam(this.id, {
+            .updateTeam(this.team.id, {
                 dateFounded: new Date(rawValue.dateFounded),
                 name: rawValue.name,
             })
@@ -94,5 +101,10 @@ export class UpdateTeamPageComponent {
                     this.router.navigate(['/teams']);
                 },
             });
+    }
+
+    onReset(event: Event): void {
+        event.preventDefault();
+        this.form.reset(this.initialData);
     }
 }

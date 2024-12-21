@@ -1,5 +1,11 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base">
+    <form 
+        appMixinStyledCard 
+        [formGroup]="form" 
+        (ngSubmit)="onSubmit()" 
+        data-track="base" 
+        (reset)="onReset()"
+    >
         <header appMixinStyledCardSection>
             <div class="token-card--header--primary-text">Login User</div>
         </header>
@@ -32,6 +38,9 @@
             </app-form-field>
         </fieldset>
         <footer class="flex flex-row gap-3 justify-end" appMixinStyledCardSection>
+            <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+                Reset
+            </button>
             <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">
                 Login User
             </button>
