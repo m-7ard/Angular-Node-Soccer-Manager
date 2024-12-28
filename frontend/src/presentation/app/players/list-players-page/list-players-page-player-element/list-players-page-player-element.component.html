@@ -34,16 +34,36 @@
             class="justify-center"
             theme="theme-Sbutton-generic-blue"
             size="mixin-Sbutton-base"
-            popoverTrigger
-            [targetTemplate]="menuTemplate"
         >
             Details
         </button>
+        <button
+            appMixinStyledButton
+            class="justify-center"
+            theme="theme-Sbutton-generic-white"
+            size="mixin-Sbutton-base"
+            popoverTrigger
+            [targetTemplate]="menuTemplate"
+        >
+            Other Options
+        </button>
     </footer>
 </div>
-<ng-template #menuTemplate>
-    <div class="mixin-panel-like mixin-panel-base theme-panel-generic-white token-default-shadow">
-        <div data-role="panel-section" class="flex flex-col gap-1">
+<ng-template #menuTemplate let-close="close">
+    <div
+        appPanelDirective
+        panelSize="mixin-panel-base"
+        panelTheme="theme-panel-generic-white"
+        [panelHasBorder]="true"
+        [panelHasShadow]="true"
+        class="fixed mt-1"
+    >
+        <header appPanelSectionDirective class="flex flex-row justify-between items-center">
+            <div class="token-base-title">Other Options</div>
+            <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-white" (click)="close()">Close</button>
+        </header>
+        <app-divider />
+        <div appPanelSectionDirective class="flex flex-col gap-1">
             <button
                 [routerLink]="'/players/' + player.id + '/update'"
                 useRouterLink
@@ -59,7 +79,7 @@
                 class="justify-center"
                 theme="theme-Sbutton-generic-red"
                 size="mixin-Sbutton-base"
-                (click)="openDeletePlayerModal()"
+                (click)="openDeletePlayerModal(close)"
             >
                 Delete
             </button>

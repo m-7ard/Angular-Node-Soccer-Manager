@@ -14,16 +14,27 @@ import {
 import positionFixedContainer from '../../utils/fixedContainers/positionFixedContainer';
 import fitFixedContainer from '../../utils/fixedContainers/fitFixedContainer';
 
+// Interface for the template context
+export interface PopoverContext<T> {
+    $implicit: T;
+    close: () => void;
+}
+
+// Interface that components can implement to get close function
+export interface PopoverComponent {
+    close?: () => void;
+}
+
 @Directive({
     selector: '[popoverTrigger]',
     standalone: true,
 })
 export class PopoverTriggerDirective<T> implements OnChanges {
-    @Input() targetProps!: Partial<T>;
-    @Input('targetComponent') targetComponent?: Type<T>;
-    @Input('targetTemplate') targetTemplate?: TemplateRef<any>;
+    @Input() targetProps!: T;
+    @Input('targetComponent') targetComponent?: Type<T & PopoverComponent>;
+    @Input('targetTemplate') targetTemplate?: TemplateRef<PopoverContext<T>>;
 
-    private viewRef: ComponentRef<T> | EmbeddedViewRef<any> | null = null;
+    private viewRef: ComponentRef<T & PopoverComponent> | EmbeddedViewRef<PopoverContext<T>> | null = null;
 
     constructor(
         private el: ElementRef,
@@ -32,8 +43,8 @@ export class PopoverTriggerDirective<T> implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.viewRef && changes['targetProps'] && this.viewRef instanceof ComponentRef) {
-            Object.entries(changes['targetProps'].currentValue).forEach(([key, value]) => {
-                this.viewRef && (this.viewRef as ComponentRef<T>).setInput(key, value);
+            Object.entries(changes['targetProps']).forEach(([key, value]) => {
+                this.viewRef && (this.viewRef as ComponentRef<T & PopoverComponent>).setInput(key, value);
             });
         }
     }
@@ -68,17 +79,22 @@ export class PopoverTriggerDirective<T> implements OnChanges {
             return;
         }
 
-        this.viewRef?.destroy();
+        this.close();
+    };
+
+    close = () => {
+        if (!this.viewRef) return;
+        
+        this.viewRef.destroy();
         this.viewRef = null;
         window.removeEventListener('resize', this.placeTooltip);
         window.removeEventListener('mouseup', this.closeOnOutsideClick);
-    };
+    }
 
     @HostListener('click')
     onClick() {
         if (this.viewRef) {
-            this.viewRef.destroy();
-            this.viewRef = null;
+            this.close();
             return;
         }
 
@@ -88,12 +104,22 @@ export class PopoverTriggerDirective<T> implements OnChanges {
         }
 
         if (this.targetTemplate) {
-            this.viewRef = this.viewContainer.createEmbeddedView(this.targetTemplate, this.targetProps);
+            const context: PopoverContext<T> = {
+                $implicit: this.targetProps,
+                close: this.close
+            };
+            this.viewRef = this.viewContainer.createEmbeddedView(this.targetTemplate, context);
         } else if (this.targetComponent) {
             this.viewRef = this.viewContainer.createComponent(this.targetComponent);
+            
+            // Set component inputs
             Object.entries(this.targetProps || {}).forEach(([key, value]) => {
-                (this.viewRef as ComponentRef<T>).setInput(key, value);
+                (this.viewRef as ComponentRef<T & PopoverComponent>).setInput(key, value);
             });
+            
+            // Set close function
+            const componentInstance = (this.viewRef as ComponentRef<T & PopoverComponent>).instance;
+            componentInstance.close = this.close;
         }
 
         this.placeTooltip();

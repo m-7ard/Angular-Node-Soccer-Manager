@@ -8,6 +8,7 @@ export class MixinStyledButtonDirective implements OnChanges {
     @Input() size!: 'mixin-Sbutton-sm' | 'mixin-Sbutton-base';
     @Input() theme!: 'theme-Sbutton-generic-white' | 'theme-Sbutton-generic-yellow' | 'theme-Sbutton-generic-green' | 'theme-Sbutton-generic-red' | 'theme-Sbutton-generic-blue';
     @Input() hasShadow?: boolean = false;
+    @Input() isStatic?: boolean = false;
 
     private baseClass = 'mixin-Sbutton-like';
     private previousSize?: string;
@@ -34,6 +35,11 @@ export class MixinStyledButtonDirective implements OnChanges {
 
         if (this.hasShadow) {
             this.renderer.addClass(this.el.nativeElement, "token-default-shadow");
+        }
+        
+        if (this.isStatic) {
+            this.renderer.addClass(this.el.nativeElement, "mixin-Sbutton-like--static");
+            this.renderer.addClass(this.el.nativeElement, `${this.theme}--static`);
         }
     }
 

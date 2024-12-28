@@ -15,6 +15,7 @@ import { ContentGridTrackDirective } from '../../reusables/content-grid/content-
 import { ContentGridDirective } from '../../reusables/content-grid/page.directive';
 import { PageSectionDirective } from '../../reusables/page/page-section.directive';
 import { PageDirective } from '../../reusables/page/page.directive';
+import { DividerComponent } from '../../reusables/divider/divider.component';
 
 @Component({
     selector: 'app-frontpage',
@@ -31,6 +32,7 @@ import { PageDirective } from '../../reusables/page/page.directive';
         PageSectionDirective,
         ContentGridDirective,
         ContentGridTrackDirective,
+        DividerComponent
     ],
     templateUrl: './frontpage.component.html',
 })
