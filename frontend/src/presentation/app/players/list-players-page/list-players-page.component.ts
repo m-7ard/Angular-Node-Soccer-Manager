@@ -8,18 +8,26 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/page.directive';
+import { PageSectionDirective } from '../../../reusables/page/page-section.directive';
+import { PageDirective } from '../../../reusables/page/page.directive';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
 
 @Component({
     selector: 'app-list-players-page',
     standalone: true,
     imports: [
-        CommonModule,
-        RouterModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-        ListPlayersPagePlayerElementComponent,
-    ],
+    CommonModule,
+    RouterModule,
+    MixinStyledButtonDirective,
+    ListPlayersPagePlayerElementComponent,
+    PageDirective,
+    PageSectionDirective,
+    ContentGridDirective,
+    ContentGridTrackDirective,
+    DividerComponent
+],
     templateUrl: './list-players-page.component.html',
 })
 export class ListPlayersPageComponent {

@@ -7,6 +7,7 @@ import { Directive, ElementRef, Input, Renderer2, OnChanges, SimpleChanges } fro
 export class MixinStyledButtonDirective implements OnChanges {
     @Input() size!: 'mixin-Sbutton-sm' | 'mixin-Sbutton-base';
     @Input() theme!: 'theme-Sbutton-generic-white' | 'theme-Sbutton-generic-yellow' | 'theme-Sbutton-generic-green' | 'theme-Sbutton-generic-red' | 'theme-Sbutton-generic-blue';
+    @Input() hasShadow?: boolean = false;
 
     private baseClass = 'mixin-Sbutton-like';
     private previousSize?: string;
@@ -29,6 +30,10 @@ export class MixinStyledButtonDirective implements OnChanges {
         if (this.theme) {
             this.renderer.addClass(this.el.nativeElement, this.theme);
             this.previousTheme = this.theme;
+        }
+
+        if (this.hasShadow) {
+            this.renderer.addClass(this.el.nativeElement, "token-default-shadow");
         }
     }
 

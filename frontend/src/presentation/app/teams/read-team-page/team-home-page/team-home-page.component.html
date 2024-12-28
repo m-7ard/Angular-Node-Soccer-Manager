@@ -16,27 +16,27 @@
             </div>
         </header>
         <ul appMixinStyledCardSection>
-            <li class="token-card--list">
-                <span class="token-card--list-label--text shrink-0">Team Id</span>
-                <span class="truncate token-card--list-value--text">
+            <li class="token-default-list">
+                <span class="token-default-list__label shrink-0">Team Id</span>
+                <span class="truncate token-default-list__value">
                     {{ team.id }}
                 </span>
             </li>
-            <li class="token-card--list">
-                <span class="token-card--list-label--text shrink-0">Date Founded</span>
-                <span class="truncate token-card--list-value--text">
+            <li class="token-default-list">
+                <span class="token-default-list__label shrink-0">Date Founded</span>
+                <span class="truncate token-default-list__value">
                     {{ team.dateFounded | date }}
                 </span>
             </li>
-            <li class="token-card--list">
-                <span class="token-card--list-label--text shrink-0">Membership Count</span>
-                <span class="truncate token-card--list-value--text">
+            <li class="token-default-list">
+                <span class="token-default-list__label shrink-0">Membership Count</span>
+                <span class="truncate token-default-list__value">
                     {{ teamPlayers.length }}
                 </span>
             </li>
-            <li class="token-card--list">
-                <span class="token-card--list-label--text shrink-0">Active Members</span>
-                <span class="truncate token-card--list-value--text">
+            <li class="token-default-list">
+                <span class="token-default-list__label shrink-0">Active Members</span>
+                <span class="truncate token-default-list__value">
                     {{ activePlayers.length }}
                 </span>
             </li>

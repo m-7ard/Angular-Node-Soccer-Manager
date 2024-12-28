@@ -1,12 +1,30 @@
-<div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <div data-track="full" class="grid grid-cols-12 gap-3 items-start">
-        <div appMixinStyledCard class="col-span-3 max-[640px]:col-span-full max-[640px]:order-2">
-            <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
+<div appPageDirective pageSize="mixin-page-base" appContentGrid>
+    <div
+        appPageSectionDirective
+        appContentGridTrack
+        contentGridTrack="full"
+        class="grid grid-cols-12 gap-[inherit] items-start"
+    >
+        <div
+            appMixinStyledCard
+            class="col-span-3 max-[640px]:col-span-full max-[640px]:order-2"
+            [hasShadow]="true"
+            [hasDivide]="true"
+        >
+            <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between">
                 <div>
                     <div class="token-card--header--primary-text">Players</div>
                     <div class="token-card--header--secondary-text">Recently Added</div>
                 </div>
-                <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/players/">
+            </section>
+            <section appMixinStyledCardSection class="flex flex-row gap-3">
+                <button
+                    appMixinStyledButton
+                    size="mixin-Sbutton-sm"
+                    theme="theme-Sbutton-generic-blue"
+                    routerLink="/players/"
+                    class="w-full justify-center"
+                >
                     See All Players
                 </button>
             </section>
@@ -32,22 +50,63 @@
             </section>
         </div>
         <ul class="col-span-6 flex flex-col gap-3 max-[640px]:col-span-full">
-            <li appMixinStyledCard>
+            <li appMixinStyledCard [hasShadow]="true" [hasDivide]="true">
                 <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
                     <div>
                         <div class="token-card--header--primary-text">Matches</div>
                         <div class="token-card--header--secondary-text">Recently Finished</div>
                     </div>
-                    <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/matches/">
+                </section>
+                <footer appMixinStyledCardSection class="flex flex-row gap-3 overflow-auto">
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        routerLink="/matches/"
+                    >
+                        All
+                    </button>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        routerLink="/matches/"
+                    >
+                        Ongoing
+                    </button>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        routerLink="/matches/"
+                    >
+                        Finished
+                    </button>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        routerLink="/matches/"
+                        class="ml-auto shrink-0"
+                    >
                         See All Matches
                     </button>
-                </section>
+                </footer>
             </li>
-            <li appMixinStyledCard *ngFor="let i of matchesRange">
-                <section appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between bg-gray-100">
-                    <div class="token-card--header--tertiary-text">All-Stars League</div>
-                    <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-blue" routerLink="/matches/">
-                        See Match Details
+            <li appMixinStyledCard *ngFor="let i of matchesRange" [hasShadow]="true" [hasDivide]="true">
+                <section
+                    appMixinStyledCardSection
+                    class="flex flex-row gap-3 items-center justify-between"
+                    [ngClass]="{ 'bg-emerald-300': i % 3 === 0, 'bg-orange-300': i % 3 !== 0 }"
+                >
+                    <div class="token-card--label truncate">ABC Sample League</div>
+                    <button
+                        appMixinStyledButton
+                        size="mixin-Sbutton-sm"
+                        theme="theme-Sbutton-generic-white"
+                        routerLink="/matches/"
+                    >
+                        Details
                     </button>
                 </section>
                 <section
@@ -65,11 +124,11 @@
                     </div>
                     <div class="flex flex-row gap-3 token-card--label">
                         <div>
-                            {{ i * 77 % 3 }}
+                            {{ (i * 77) % 3 }}
                         </div>
                         <div>-</div>
                         <div>
-                            {{ i * 94 % 7 }}
+                            {{ (i * 94) % 7 }}
                         </div>
                     </div>
                     <div class="aspect-square h-full theme-avatar-any">
@@ -83,13 +142,21 @@
                 </section>
             </li>
         </ul>
-        <div appMixinStyledCard class="col-span-3 max-[640px]:col-span-full">
+        <div appMixinStyledCard class="col-span-3 max-[640px]:col-span-full" [hasShadow]="true" [hasDivide]="true">
             <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
                 <div>
                     <div class="token-card--header--primary-text">Teams</div>
                     <div class="token-card--header--secondary-text">Recently Added</div>
                 </div>
-                <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-blue" routerLink="/teams/">
+            </section>
+            <section appMixinStyledCardSection class="flex flex-row gap-3">
+                <button
+                    appMixinStyledButton
+                    size="mixin-Sbutton-sm"
+                    theme="theme-Sbutton-generic-blue"
+                    class="w-full justify-center"
+                    routerLink="/teams/"
+                >
                     See All Teams
                 </button>
             </section>

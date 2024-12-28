@@ -15,15 +15,15 @@
         </div>
     </section>
     <section appMixinStyledCardSection>
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Id</span>
-            <span class="token-card--list-value--text truncate">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Id</span>
+            <span class="token-default-list__value truncate">
                 {{ team.id }}
             </span>
         </div>
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Date Founded</span>
-            <span class="token-card--list-value--text truncate">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Date Founded</span>
+            <span class="token-default-list__value truncate">
                 {{ team.dateFounded | date }}
             </span>
         </div>
@@ -32,11 +32,20 @@
         <button
             appMixinStyledButton
             size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-white"
+            theme="theme-Sbutton-generic-yellow"
             class="justify-center"
             [routerLink]="'/teams/' + team.id + '/'"
         >
             Team Details
+        </button>
+        <button
+            appMixinStyledButton
+            size="mixin-Sbutton-base"
+            theme="theme-Sbutton-generic-green"
+            class="justify-center"
+            [routerLink]="'/teams/' + team.id + '/update'"
+        >
+            Update Team
         </button>
         <button
             appMixinStyledButton
@@ -50,20 +59,11 @@
         <button
             appMixinStyledButton
             size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-yellow"
+            theme="theme-Sbutton-generic-blue"
             class="justify-center"
             [routerLink]="'/teams/' + team.id + '/players/add'"
         >
             Add Player
-        </button>
-        <button
-            appMixinStyledButton
-            size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-green"
-            class="justify-center"
-            [routerLink]="'/teams/' + team.id + '/update'"
-        >
-            Update Team
         </button>
         <button
             appMixinStyledButton

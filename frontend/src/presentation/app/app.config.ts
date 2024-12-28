@@ -7,6 +7,7 @@ import { AuthInterceptor } from '../interceptors/auth-interceptor';
 import { Observable, first } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 import { GlobalErrorHandler } from '../error-handlers/global-error-handler';
+import { provideAnimations } from '@angular/platform-browser/animations'; // Add this import
 
 function initializeAuth(authService: AuthService) {
     // Used to avoid initial flicker
@@ -17,6 +18,7 @@ function initializeAuth(authService: AuthService) {
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideAnimations(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
         provideHttpClient(withInterceptorsFromDi()),

@@ -1,9 +1,9 @@
-<header class="mixin-content-grid p-3 shadow shadow-black/20 relative shrink-0 overflow-x-auto">
+<header class="mixin-content-grid p-3 relative shrink-0 overflow-x-auto token-default-shadow bg-white">
     <nav class="flex flex-row gap-3">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 appMixinStyledButton
-                size="mixin-Sbutton-base"
+                size="mixin-Sbutton-sm"
                 theme="theme-Sbutton-generic-red"
                 type="button"
                 (mouseup)="authService.logout()"
@@ -18,7 +18,7 @@
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
                 appMixinStyledButton
-                size="mixin-Sbutton-base"
+                size="mixin-Sbutton-sm"
                 theme="theme-Sbutton-generic-yellow"
                 [routerLinkActiveOptions]="{ exact: true }"
                 class="ml-auto"
@@ -30,7 +30,7 @@
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
                 appMixinStyledButton
-                size="mixin-Sbutton-base"
+                size="mixin-Sbutton-sm"
                 theme="theme-Sbutton-generic-green"
                 [routerLinkActiveOptions]="{ exact: true }"
             >
@@ -42,7 +42,7 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             appMixinStyledButton
-            size="mixin-Sbutton-base"
+            size="mixin-Sbutton-sm"
             theme="theme-Sbutton-generic-blue"
             [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -53,8 +53,8 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             appMixinStyledButton
-            size="mixin-Sbutton-base"
-            [theme]="isAuthenticated ? 'theme-Sbutton-generic-blue' : 'theme-Sbutton-generic-yellow'"
+            size="mixin-Sbutton-sm"
+            theme="theme-Sbutton-generic-blue"
             [routerLinkActiveOptions]="{ exact: true }"
         >
             Players
@@ -64,15 +64,15 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             appMixinStyledButton
-            size="mixin-Sbutton-base"
-            [theme]="isAuthenticated ? 'theme-Sbutton-generic-blue' : 'theme-Sbutton-generic-yellow'"
+            size="mixin-Sbutton-sm"
+            theme="theme-Sbutton-generic-blue"
             [routerLinkActiveOptions]="{ exact: true }"
         >
             Teams
         </a>
         <div
             appMixinStyledButton
-            size="mixin-Sbutton-base"
+            size="mixin-Sbutton-sm"
             theme="theme-Sbutton-generic-white"
             modalTrigger
             [modalPanel]="exampleModal"
@@ -83,7 +83,7 @@
         </div>
     </nav>
 </header>
-<main class="bg-[#f8f8f8] flex flex-col grow">
+<main class="flex flex-col grow">
     <router-outlet />
 </main>
 <ng-content *ngIf="error != null">

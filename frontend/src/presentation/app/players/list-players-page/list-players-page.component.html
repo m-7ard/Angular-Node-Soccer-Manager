@@ -1,21 +1,20 @@
-<div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header appMixinStyledCard data-track="base">
-        <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
-            <div>
-                <div class="token-card--header--primary-text">List Players</div>
-                <div class="token-card--header--secondary-text">All Players</div>
-            </div>
+<div appPageDirective pageSize="mixin-page-base" appContentGrid>
+    <header appPageSectionDirective appContentGridTrack contentGridTrack="base">
+        <section class="flex flex-row gap-3 items-center justify-between flex-wrap">
+            <div class="token-default-title">List Players</div>
             <button
                 appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-green"
+                size="mixin-Sbutton-sm"
+                theme="theme-Sbutton-generic-white"
                 [routerLink]="'/players/create'"
+                [hasShadow]="true"
             >
                 Create Player
             </button>
         </section>
     </header>
-    <div data-track="base" class="flex flex-col gap-[inherit]">
+    <app-divider appPageSectionDirective appContentGridTrack contentGridTrack="base" />
+    <div appPageSectionDirective appContentGridTrack contentGridTrack="base" class="flex flex-col gap-[inherit]">
         <div class="grid max-[450px]:grid-cols-1 grid-cols-2 gap-3">
             <ng-container *ngFor="let player of players">
                 <app-list-players-page-player-element

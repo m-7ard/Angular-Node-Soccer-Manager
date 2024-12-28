@@ -14,6 +14,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/page.directive';
+import { PageSectionDirective } from '../../../reusables/page/page-section.directive';
+import { PageDirective } from '../../../reusables/page/page.directive';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -36,9 +40,11 @@ type IErrorSchema = IPresentationError<{
         FormFieldComponent,
         CommonModule,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
         FormErrorsComponent,
+        PageDirective,
+        PageSectionDirective,
+        ContentGridDirective,
+        ContentGridTrackDirective,
     ],
     templateUrl: './register-user-page.component.html',
 })
@@ -69,10 +75,10 @@ export class RegisterUserPageComponent {
 
     onReset(): void {
         this.form.reset({
-            email: "",
-            password: "",
-            name: ""
-        })
+            email: '',
+            password: '',
+            name: '',
+        });
     }
 
     onSubmit(): void {

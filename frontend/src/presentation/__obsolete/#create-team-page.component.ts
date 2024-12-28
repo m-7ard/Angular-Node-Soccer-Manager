@@ -6,7 +6,7 @@ import {
 } from '../../../reusables/image-upload-field/image-upload-field.component';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinButtonComponent } from '../../../ui-mixins/mixin-button/mixin-button.component';
+import { MixinButtonComponent } from '../../../ui-mixins/mixin-Sbutton/mixin-Sbutton.component';
 import { Router } from '@angular/router';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import { CommonModule } from '@angular/common';

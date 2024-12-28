@@ -11,6 +11,10 @@ import { IFrontpageResolverData } from './frontpage.resolver';
 import Player from '../../models/Player';
 import Team from '../../models/Team';
 import { RESOLVER_DATA_KEY } from '../../utils/RESOLVER_DATA';
+import { ContentGridTrackDirective } from '../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../reusables/content-grid/page.directive';
+import { PageSectionDirective } from '../../reusables/page/page-section.directive';
+import { PageDirective } from '../../reusables/page/page.directive';
 
 @Component({
     selector: 'app-frontpage',
@@ -23,6 +27,10 @@ import { RESOLVER_DATA_KEY } from '../../utils/RESOLVER_DATA';
         MixinStyledCardSectionDirective,
         CoverImageComponent,
         ZeebraTextComponent,
+        PageDirective,
+        PageSectionDirective,
+        ContentGridDirective,
+        ContentGridTrackDirective,
     ],
     templateUrl: './frontpage.component.html',
 })

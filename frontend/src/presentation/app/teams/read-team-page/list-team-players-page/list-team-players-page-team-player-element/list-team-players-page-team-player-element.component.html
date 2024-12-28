@@ -15,27 +15,27 @@
         </div>
     </main>
     <section appMixinStyledCardSection className="overflow-hidden">
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Player Id</span>
-            <span class="truncate token-card--list-value--text">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Player Id</span>
+            <span class="truncate token-default-list__value">
                 {{ teamPlayer.player.id }}
             </span>
         </div>
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Membership Id</span>
-            <span class="truncate token-card--list-value--text">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Membership Id</span>
+            <span class="truncate token-default-list__value">
                 {{ teamPlayer.membership.id }}
             </span>
         </div>
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Active From</span>
-            <span class="truncate token-card--list-value--text">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Active From</span>
+            <span class="truncate token-default-list__value">
                 {{ teamPlayer.membership.activeFrom | date }}
             </span>
         </div>
-        <div class="token-card--list">
-            <span class="token-card--list-label--text shrink-0">Active To</span>
-            <span class="truncate token-card--list-value--text">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Active To</span>
+            <span class="truncate token-default-list__value">
                 {{ teamPlayer.membership.activeTo | date }}
             </span>
         </div>

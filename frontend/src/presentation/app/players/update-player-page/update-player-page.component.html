@@ -1,7 +1,8 @@
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
     <form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" (reset)="onReset($event)">
         <header appMixinStyledCardSection>
-            <div class="text-base text-gray-900">Update Player</div>
+            <div class="token-card--header--primary-text">Update Player</div>
+            <div class="token-card--header--secondary-text">{{ player.name }}</div>
         </header>
         <section appMixinStyledCardSection *ngIf="errors['_'] != null">
             <app-form-errors [errors]="errors['_']"></app-form-errors>

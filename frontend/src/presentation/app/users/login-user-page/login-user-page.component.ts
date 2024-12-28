@@ -14,6 +14,11 @@ import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { PageDirective } from '../../../reusables/page/page.directive';
+import { PageSectionDirective } from '../../../reusables/page/page-section.directive';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/page.directive';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -29,15 +34,18 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-login-user-page',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
-        CommonModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-        FormErrorsComponent,
-    ],
+    ReactiveFormsModule,
+    CharFieldComponent,
+    FormFieldComponent,
+    CommonModule,
+    MixinStyledButtonDirective,
+    FormErrorsComponent,
+    DividerComponent,
+    PageDirective,
+    PageSectionDirective,
+    ContentGridDirective,
+    ContentGridTrackDirective
+],
     templateUrl: './login-user-page.component.html',
 })
 export class LoginUserPageComponent {
