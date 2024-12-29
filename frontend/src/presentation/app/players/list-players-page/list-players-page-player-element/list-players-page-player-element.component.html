@@ -1,3 +1,4 @@
+<!-- List Players Page >>> Player Element -->
 <div appMixinStyledCard [hasShadow]="true" [hasDivide]="true">
     <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
         <div class="aspect-square theme-avatar-any">
@@ -30,59 +31,71 @@
     </section>
     <footer appMixinStyledCardSection class="flex flex-col gap-1">
         <button
-            appMixinStyledButton
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-blue',
+                size: 'mixin-Sbutton-base'
+            }"
             class="justify-center"
-            theme="theme-Sbutton-generic-blue"
-            size="mixin-Sbutton-base"
         >
             Details
         </button>
         <button
-            appMixinStyledButton
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-white',
+                size: 'mixin-Sbutton-base'
+            }"
             class="justify-center"
-            theme="theme-Sbutton-generic-white"
-            size="mixin-Sbutton-base"
-            popoverTrigger
-            [targetTemplate]="menuTemplate"
+            primeNgPopoverDirective
+            [popover]="op"
         >
             Other Options
         </button>
     </footer>
 </div>
-<ng-template #menuTemplate let-close="close">
+
+<p-popover #op class="fixed mt-1">
     <div
         appPanelDirective
         panelSize="mixin-panel-base"
         panelTheme="theme-panel-generic-white"
         [panelHasBorder]="true"
         [panelHasShadow]="true"
-        class="fixed mt-1"
     >
         <header appPanelSectionDirective class="flex flex-row justify-between items-center">
             <div class="token-base-title">Other Options</div>
-            <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-white" (click)="close()">Close</button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white'
+                }"
+                (click)="this.op.hide()"
+            >
+                Close
+            </button>
         </header>
         <app-divider />
         <div appPanelSectionDirective class="flex flex-col gap-1">
             <button
                 [routerLink]="'/players/' + player.id + '/update'"
                 useRouterLink
-                appMixinStyledButton
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-green'
+                }"
                 class="justify-center"
-                theme="theme-Sbutton-generic-green"
-                size="mixin-Sbutton-base"
             >
                 Update
             </button>
             <button
-                appMixinStyledButton
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-red'
+                }"
                 class="justify-center"
-                theme="theme-Sbutton-generic-red"
-                size="mixin-Sbutton-base"
-                (click)="openDeletePlayerModal(close)"
+                (click)="openDeletePlayerModal()"
             >
                 Delete
             </button>
         </div>
     </div>
-</ng-template>
+</p-popover>

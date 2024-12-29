@@ -1,10 +1,17 @@
+<!-- Delete Team Membership Modal -->
 <div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
     <header appMixinStyledCardSection class="flex flex-row gap-3 justify-between items-start">
         <div>
             <div class="token-card--header--primary-text">Delete Membership for Player</div>
             <div class="token-card--header--secondary-text">{{ teamPlayer.player.name }} from {{ team.name }}</div>
         </div>
-        <button appMixinStyledButton size="mixin-Sbutton-sm" theme="theme-Sbutton-generic-white" (click)="closeModal()">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            (click)="closeModal()"
+        >
             Close
         </button>
     </header>
@@ -16,14 +23,21 @@
     </section>
     <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
         <button
-            appMixinStyledButton
-            size="mixin-Sbutton-base"
-            theme="theme-Sbutton-generic-white"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
             (click)="closeModal()"
         >
             Cancel
         </button>
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-red" (click)="onSubmit()">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-red'
+            }"
+            (click)="onSubmit()"
+        >
             Delete Team Membership
         </button>
     </footer>

@@ -1,4 +1,5 @@
-<div class="mixin-page-like mixin-page-base mixin-content-grid">
+<!-- List Teams Page -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
     <header appMixinStyledCard data-track="base">
         <section appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
             <div>
@@ -6,9 +7,10 @@
                 <div class="token-card--header--secondary-text">All Teams</div>
             </div>
             <button
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-green"
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-green'
+                }"
                 [routerLink]="'/teams/create'"
             >
                 Create Team

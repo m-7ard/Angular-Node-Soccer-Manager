@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { CoverImageComponent } from '../../../../reusables/cover-image/cover-image.component';
 import Player from '../../../../models/Player';
 import { CommonModule } from '@angular/common';
@@ -12,35 +12,39 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
 import { DeletePlayerModalProps, DeletePlayerModal } from '../../delete-player-modal/delete-player-modal.component';
 import { PanelDirectivesModule } from '../../../../reusables/panel/panel.directive.module';
-import { DividerComponent } from "../../../../reusables/divider/divider.component";
+import { DividerComponent } from '../../../../reusables/divider/divider.component';
+import { Popover, PopoverModule } from 'primeng/popover';
+import positionFixedContainer from '../../../../utils/fixedContainers/positionFixedContainer';
+import { PrimeNgPopoverDirective } from '../../../../reusables/prime-ng-popover/prime-ng-popover.directive';
 
 @Component({
     selector: 'app-list-players-page-player-element',
     standalone: true,
     imports: [
-    CoverImageComponent,
-    CommonModule,
-    RouterModule,
-    ZeebraTextComponent,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirective,
-    MixinStyledCardSectionDirective,
-    PopoverTriggerDirective,
-    MatMenuModule,
-    PanelDirectivesModule,
-    DividerComponent
-],
+        CoverImageComponent,
+        CommonModule,
+        RouterModule,
+        ZeebraTextComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirective,
+        MixinStyledCardSectionDirective,
+        PrimeNgPopoverDirective,
+        MatMenuModule,
+        PanelDirectivesModule,
+        DividerComponent,
+        PopoverModule,
+    ],
     templateUrl: './list-players-page-player-element.component.html',
 })
 export class ListPlayersPagePlayerElementComponent {
     @Input() player!: Player;
     @Output() onDelete = new EventEmitter<Player>();
 
-    menuTemplate!: TemplateRef<PopoverContext<{}>>;
+    @ViewChild('op') op!: Popover;
 
     private dialog = inject(Dialog);
 
-    openDeletePlayerModal(closeMenu: PopoverContext<{}>["close"]): void {
+    openDeletePlayerModal(): void {
         const data: DeletePlayerModalProps = {
             player: this.player,
             onSuccess: () => this.onDelete.emit(this.player),
@@ -50,6 +54,6 @@ export class ListPlayersPagePlayerElementComponent {
             data: data,
         });
 
-        closeMenu();
+        this.op.hide();
     }
 }

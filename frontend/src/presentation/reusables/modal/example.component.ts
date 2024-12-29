@@ -16,9 +16,10 @@ import { MixinStyledButtonDirective } from '../styled-button/styled-button.direc
                         <div class="token-card--header--primary-text">Sample Modal</div>
                     </div>
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-sm"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-sm',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         (click)="close()"
                     >
                         Close
@@ -29,9 +30,10 @@ import { MixinStyledButtonDirective } from '../styled-button/styled-button.direc
                 </main>
                 <footer appMixinStyledCardSection>
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-base"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-base',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         (click)="close()"
                     >
                         Close

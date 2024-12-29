@@ -1,3 +1,4 @@
+<!-- Update Team Membership Page -->
 <form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
     <header appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between flex-wrap">
         <div>
@@ -46,10 +47,21 @@
         </app-form-field>
     </fieldset>
     <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
             Reset
         </button>
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
             Update Team Membership
         </button>
     </footer>

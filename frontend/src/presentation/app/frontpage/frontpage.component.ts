@@ -12,10 +12,9 @@ import Player from '../../models/Player';
 import Team from '../../models/Team';
 import { RESOLVER_DATA_KEY } from '../../utils/RESOLVER_DATA';
 import { ContentGridTrackDirective } from '../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../reusables/content-grid/page.directive';
-import { PageSectionDirective } from '../../reusables/page/page-section.directive';
-import { PageDirective } from '../../reusables/page/page.directive';
+import { ContentGridDirective } from '../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../reusables/divider/divider.component';
+import { PageDirectivesModule } from '../../reusables/page/page.directive.module';
 
 @Component({
     selector: 'app-frontpage',
@@ -28,8 +27,7 @@ import { DividerComponent } from '../../reusables/divider/divider.component';
         MixinStyledCardSectionDirective,
         CoverImageComponent,
         ZeebraTextComponent,
-        PageDirective,
-        PageSectionDirective,
+        PageDirectivesModule,
         ContentGridDirective,
         ContentGridTrackDirective,
         DividerComponent

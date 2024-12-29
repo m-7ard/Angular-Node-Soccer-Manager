@@ -1,3 +1,4 @@
+<!-- List Team Players Page >>> Team Player Element -->
 <div appMixinStyledCard>
     <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
         <div class="aspect-square theme-avatar-any">
@@ -42,27 +43,30 @@
     </section>
     <footer appMixinStyledCardSection class="grid max-[640px]:grid-cols-1 grid-cols-2 gap-1">
         <button
-            appMixinStyledButton
-            theme="theme-Sbutton-generic-green"
-            size="mixin-Sbutton-base"
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-green',
+                size: 'mixin-Sbutton-base'
+            }"
             class="justify-center"
             [routerLink]="'/teams/' + team.id + '/players/' + teamPlayer.player.id + '/update'"
         >
             Update
         </button>
         <button
-            appMixinStyledButton
-            theme="theme-Sbutton-generic-red"
-            size="mixin-Sbutton-base"
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-red',
+                size: 'mixin-Sbutton-base'
+            }"
             class="justify-center"
             (click)="openDeleteMembershipModal()"
         >
             Delete
         </button>
         <button
-            appMixinStyledButton
-            theme="theme-Sbutton-generic-white"
-            size="mixin-Sbutton-base"
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-white',
+                size: 'mixin-Sbutton-base'
+            }"
             class="justify-center"
         >
             See Player

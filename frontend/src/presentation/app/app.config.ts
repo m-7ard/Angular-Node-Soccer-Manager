@@ -8,6 +8,8 @@ import { Observable, first } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 import { GlobalErrorHandler } from '../error-handlers/global-error-handler';
 import { provideAnimations } from '@angular/platform-browser/animations'; // Add this import
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
 
 function initializeAuth(authService: AuthService) {
     // Used to avoid initial flicker
@@ -34,5 +36,7 @@ export const appConfig: ApplicationConfig = {
             deps: [AuthService],
             multi: true,
         },
+        provideAnimationsAsync(),
+        providePrimeNG({}),
     ],
 };

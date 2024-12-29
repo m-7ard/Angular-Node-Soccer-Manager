@@ -1,3 +1,4 @@
+<!-- List Team Players Page -->
 <header appMixinStyledCard data-track="base">
     <div appMixinStyledCardSection class="flex flex-row gap-3 items-start justify-between flex-wrap">
         <div>
@@ -5,9 +6,10 @@
             <div class="token-card--header--secondary-text">{{ team.name }}</div>
         </div>
         <button
-            appMixinStyledButton
-            theme="theme-Sbutton-generic-green"
-            size="mixin-Sbutton-base"
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-green',
+                size: 'mixin-Sbutton-base'
+            }"
             [routerLink]="'/teams/' + team.id + '/players/add'"
         >
             Add Player

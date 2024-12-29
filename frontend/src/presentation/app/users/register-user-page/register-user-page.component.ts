@@ -4,8 +4,6 @@ import IPresentationError from '../../../errors/IPresentationError';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth-service';
@@ -15,9 +13,8 @@ import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/page.directive';
-import { PageSectionDirective } from '../../../reusables/page/page-section.directive';
-import { PageDirective } from '../../../reusables/page/page.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -41,8 +38,7 @@ type IErrorSchema = IPresentationError<{
         CommonModule,
         MixinStyledButtonDirective,
         FormErrorsComponent,
-        PageDirective,
-        PageSectionDirective,
+        PageDirectivesModule,
         ContentGridDirective,
         ContentGridTrackDirective,
     ],

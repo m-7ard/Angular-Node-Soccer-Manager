@@ -1,8 +1,8 @@
-<div appPageDirective pageSize="mixin-page-base" appContentGrid>
+<!-- Frontpage -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base'  }" appContentGrid>
     <div
         appPageSectionDirective
-        appContentGridTrack
-        contentGridTrack="full"
+        [appContentGridTrack]="{ contentGridTrack: 'full' }"
         class="grid grid-cols-12 gap-[inherit] items-start"
     >
         <div
@@ -19,9 +19,10 @@
             </section>
             <section appMixinStyledCardSection class="flex flex-row gap-3">
                 <button
-                    appMixinStyledButton
-                    size="mixin-Sbutton-sm"
-                    theme="theme-Sbutton-generic-blue"
+                    [appMixinStyledButton]="{
+                        size: 'mixin-Sbutton-sm',
+                        theme: 'theme-Sbutton-generic-blue'
+                    }"
                     routerLink="/players/"
                     class="w-full justify-center"
                 >
@@ -59,33 +60,37 @@
                 </section>
                 <footer appMixinStyledCardSection class="flex flex-row gap-3 overflow-auto">
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-sm"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-sm',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         routerLink="/matches/"
                     >
                         All
                     </button>
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-sm"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-sm',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         routerLink="/matches/"
                     >
                         Ongoing
                     </button>
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-sm"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-sm',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         routerLink="/matches/"
                     >
                         Finished
                     </button>
                     <button
-                        appMixinStyledButton
-                        size="mixin-Sbutton-sm"
-                        theme="theme-Sbutton-generic-white"
+                        [appMixinStyledButton]="{
+                            size: 'mixin-Sbutton-sm',
+                            theme: 'theme-Sbutton-generic-white'
+                        }"
                         routerLink="/matches/"
                         class="ml-auto shrink-0"
                     >
@@ -97,20 +102,22 @@
                 <div appMixinStyledCard *ngFor="let i of matchesRange" [hasShadow]="true" [hasDivide]="true">
                     <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
                         <button
-                            appMixinStyledButton
-                            size="mixin-Sbutton-sm"
-                            theme="theme-Sbutton-generic-yellow"
+                            [appMixinStyledButton]="{
+                                size: 'mixin-Sbutton-sm',
+                                theme: 'theme-Sbutton-generic-yellow',
+                                isStatic: true
+                            }"
                             routerLink="/matches/"
-                            [isStatic]="true"
                         >
                             Pending
                         </button>
                         <button
-                            class="ml-auto"
-                            appMixinStyledButton
-                            size="mixin-Sbutton-sm"
-                            theme="theme-Sbutton-generic-white"
+                            [appMixinStyledButton]="{
+                                size: 'mixin-Sbutton-sm',
+                                theme: 'theme-Sbutton-generic-white'
+                            }"
                             routerLink="/matches/"
+                            class="ml-auto"
                         >
                             Details
                         </button>
@@ -151,9 +158,10 @@
             </section>
             <section appMixinStyledCardSection class="flex flex-row gap-3">
                 <button
-                    appMixinStyledButton
-                    size="mixin-Sbutton-sm"
-                    theme="theme-Sbutton-generic-blue"
+                    [appMixinStyledButton]="{
+                        size: 'mixin-Sbutton-sm',
+                        theme: 'theme-Sbutton-generic-blue'
+                    }"
                     class="w-full justify-center"
                     routerLink="/teams/"
                 >

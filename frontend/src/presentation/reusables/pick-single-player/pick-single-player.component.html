@@ -1,9 +1,11 @@
+<!-- Pick Single Player -->
 <div appMixinStyledCard>
     <div appMixinStyledCardSection>
         <button
-            appMixinStyledButton
-            theme="theme-Sbutton-generic-white"
-            size="mixin-Sbutton-base"
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-white',
+                size: 'mixin-Sbutton-base'
+            }"
             (click)="openPlayerPickerModal()"
             type="button"
         >

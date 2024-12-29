@@ -1,12 +1,13 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" appPageDirective pageSize="mixin-page-base" appContentGrid>
-    <header appPageSectionDirective appContentGridTrack contentGridTrack="base">
+<!-- Create Player Page -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
+    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <div class="token-default-title">Create Player</div>
     </header>
-    <app-divider appPageSectionDirective appContentGridTrack contentGridTrack="base" />
-    <section appPageSectionDirective appContentGridTrack contentGridTrack="base" *ngIf="errors['_'] != null">
+    <app-divider appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset appPageSectionDirective appContentGridTrack contentGridTrack="base" class="flex flex-col gap-3">
+    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">
                 <app-char-field
@@ -31,10 +32,12 @@
             </ng-template>
         </app-form-field>
     </fieldset>
-    <footer class="flex flex-row gap-3 justify-end" appPageSectionDirective appContentGridTrack contentGridTrack="base">
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+    <footer class="flex flex-row gap-3 justify-end" appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
+        <button [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-white' }" type="reset">
             Reset
         </button>
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Create</button>
+        <button [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-green' }">
+            Create
+        </button>
     </footer>
 </form>

@@ -34,9 +34,22 @@
         </app-form-field>
     </fieldset>
     <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
             Reset
         </button>
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Update</button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Update
+        </button>
     </footer>
 </form>

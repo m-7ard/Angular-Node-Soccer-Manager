@@ -1,3 +1,4 @@
+<!-- Read Team Page -->
 <div class="mixin-page-like mixin-page-base mixin-content-grid">
     <header appMixinStyledCard data-track="base">
         <section appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
@@ -17,9 +18,10 @@
         </section>
         <nav appMixinStyledCardSection class="flex flex-row max-[450px]:flex-col gap-3">
             <button
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-blue"
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
                 class="justify-center"
                 [routerLink]="'/teams/' + team.id + '/'"
                 routerLinkActive="active"
@@ -29,9 +31,10 @@
                 Team Details
             </button>
             <button
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-blue"
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
                 class="justify-center"
                 [routerLink]="'/teams/' + team.id + '/players'"
                 routerLinkActive="active"
@@ -41,9 +44,10 @@
                 Team Players
             </button>
             <button
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-blue"
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
                 class="justify-center"
                 [routerLink]="'/teams/' + team.id + '/update'"
                 routerLinkActive="active"
@@ -53,9 +57,10 @@
                 Update Team
             </button>
             <button
-                appMixinStyledButton
-                size="mixin-Sbutton-base"
-                theme="theme-Sbutton-generic-blue"
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
                 class="justify-center"
                 [routerLink]="'/teams/' + team.id + '/players/add'"
                 routerLinkActive="active"

@@ -5,10 +5,17 @@ import { Directive, ElementRef, Input, Renderer2, OnChanges, SimpleChanges } fro
     standalone: true,
 })
 export class MixinStyledButtonDirective implements OnChanges {
-    @Input() size!: 'mixin-Sbutton-sm' | 'mixin-Sbutton-base';
-    @Input() theme!: 'theme-Sbutton-generic-white' | 'theme-Sbutton-generic-yellow' | 'theme-Sbutton-generic-green' | 'theme-Sbutton-generic-red' | 'theme-Sbutton-generic-blue';
-    @Input() hasShadow?: boolean = false;
-    @Input() isStatic?: boolean = false;
+    @Input() appMixinStyledButton!: {
+        size: 'mixin-Sbutton-sm' | 'mixin-Sbutton-base';
+        theme:
+            | 'theme-Sbutton-generic-white'
+            | 'theme-Sbutton-generic-yellow'
+            | 'theme-Sbutton-generic-green'
+            | 'theme-Sbutton-generic-red'
+            | 'theme-Sbutton-generic-blue';
+        hasShadow?: boolean;
+        isStatic?: boolean;
+    };
 
     private baseClass = 'mixin-Sbutton-like';
     private previousSize?: string;
@@ -23,23 +30,25 @@ export class MixinStyledButtonDirective implements OnChanges {
         // Apply base class
         this.renderer.addClass(this.el.nativeElement, this.baseClass);
 
+        const { size, theme, hasShadow = false, isStatic = false } = this.appMixinStyledButton;
+
         // Apply initial size and theme classes
-        if (this.size) {
-            this.renderer.addClass(this.el.nativeElement, this.size);
-            this.previousSize = this.size;
+        if (size) {
+            this.renderer.addClass(this.el.nativeElement, size);
+            this.previousSize = size;
         }
-        if (this.theme) {
-            this.renderer.addClass(this.el.nativeElement, this.theme);
-            this.previousTheme = this.theme;
+        if (theme) {
+            this.renderer.addClass(this.el.nativeElement, theme);
+            this.previousTheme = theme;
         }
 
-        if (this.hasShadow) {
-            this.renderer.addClass(this.el.nativeElement, "token-default-shadow");
+        if (hasShadow) {
+            this.renderer.addClass(this.el.nativeElement, 'token-default-shadow');
         }
-        
-        if (this.isStatic) {
-            this.renderer.addClass(this.el.nativeElement, "mixin-Sbutton-like--static");
-            this.renderer.addClass(this.el.nativeElement, `${this.theme}--static`);
+
+        if (isStatic) {
+            this.renderer.addClass(this.el.nativeElement, 'mixin-Sbutton-like--static');
+            this.renderer.addClass(this.el.nativeElement, `${theme}--static`);
         }
     }
 

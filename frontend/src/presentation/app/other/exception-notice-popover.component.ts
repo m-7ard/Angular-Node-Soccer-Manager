@@ -20,9 +20,10 @@ import { MixinStyledCardDirective } from '../../reusables/styled-card/styled-car
             </main>
             <footer appMixinStyledCardSection class="flex flex-row justify-end">
                 <button
-                    appMixinStyledButton
-                    size="mixin-Sbutton-base"
-                    theme="theme-Sbutton-generic-white"
+                    [appMixinStyledButton]="{
+                        size: 'mixin-Sbutton-base',
+                        theme: 'theme-Sbutton-generic-white'
+                    }"
                     (mouseup)="dismiss.emit()"
                 >
                     Dismiss

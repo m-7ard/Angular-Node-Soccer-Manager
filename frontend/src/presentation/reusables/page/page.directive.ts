@@ -2,10 +2,11 @@ import { Directive, ElementRef, Input, Renderer2, OnInit, HostBinding } from '@a
 
 @Directive({
     selector: '[appPageDirective]',
-    standalone: true,
 })
 export class PageDirective implements OnInit {
-    @Input() pageSize!: 'mixin-page-base';
+    @Input() appPageDirective!: {
+        pageSize: 'mixin-page-base'
+    }
 
     constructor(
         private el: ElementRef,
@@ -13,7 +14,9 @@ export class PageDirective implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        const { pageSize } = this.appPageDirective;
+
         this.renderer.addClass(this.el.nativeElement, "mixin-page-like");
-        this.renderer.addClass(this.el.nativeElement, this.pageSize);
+        this.renderer.addClass(this.el.nativeElement, pageSize);
     }
 }

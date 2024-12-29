@@ -5,14 +5,11 @@ import Player from '../../../models/Player';
 import { IListPlayersResolverData } from './list-players-page.resolver';
 import { ListPlayersPagePlayerElementComponent } from './list-players-page-player-element/list-players-page-player-element.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/page.directive';
-import { PageSectionDirective } from '../../../reusables/page/page-section.directive';
-import { PageDirective } from '../../../reusables/page/page.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 
 @Component({
     selector: 'app-list-players-page',
@@ -22,8 +19,7 @@ import { DividerComponent } from "../../../reusables/divider/divider.component";
     RouterModule,
     MixinStyledButtonDirective,
     ListPlayersPagePlayerElementComponent,
-    PageDirective,
-    PageSectionDirective,
+    PageDirectivesModule,
     ContentGridDirective,
     ContentGridTrackDirective,
     DividerComponent

@@ -37,42 +37,4 @@
             <li class="token-default-list">
                 <span class="token-default-list__label shrink-0">Active Members</span>
                 <span class="truncate token-default-list__value">
-                    {{ activePlayers.length }}
-                </span>
-            </li>
-        </ul>
-    </main>
-    <main appMixinStyledCard>
-        <section appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between">
-            <div class="text-base">Team Players</div>
-            <button
-                appMixinStyledButton
-                theme="theme-Sbutton-generic-green"
-                size="mixin-Sbutton-sm"
-                [routerLink]="'/teams/' + team.id + '/players'"
-            >
-                See All
-            </button>
-        </section>
-        <section
-            appMixinStyledCardSection
-            *ngFor="let teamPlayer of teamPlayers.slice(0, 3)"
-            class="grid gap-3"
-            style="grid-template: auto / auto 1fr"
-        >
-            <div class="aspect-square theme-avatar-any">
-                <section class="relative h-full w-full flex">
-                    <app-cover-image src=""></app-cover-image>
-                </section>
-            </div>
-            <div class="overflow-hidden">
-                <div class="token-card--header--primary-text">
-                    {{ team.name }}
-                </div>
-                <div class="truncate token-card--header--secondary-text">
-                    <app-zeebra-text></app-zeebra-text>
-                </div>
-            </div>
-        </section>
-    </main>
-</section>
+         

@@ -1,19 +1,19 @@
+<!-- Login User Page -->
 <form
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
     (reset)="onReset()"
-    appPageDirective
-    pageSize="mixin-page-base"
+    [appPageDirective]="{ pageSize: 'mixin-page-base' }"
     appContentGrid
 >
-    <header appPageSectionDirective appContentGridTrack contentGridTrack="base">
+    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <div class="token-card--header--primary-text">Login User</div>
     </header>
-    <app-divider appPageSectionDirective appContentGridTrack contentGridTrack="base" />
-    <section *ngIf="errors['_'] != null" appPageSectionDirective appContentGridTrack contentGridTrack="base">
+    <app-divider appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section *ngIf="errors['_'] != null" appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset class="flex flex-col gap-3" appPageSectionDirective appContentGridTrack contentGridTrack="base">
+    <fieldset class="flex flex-col gap-3" appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <app-form-field [name]="'email'" [errors]="errors.email">
             <ng-template let-name="name">
                 <app-char-field
@@ -38,10 +38,27 @@
             </ng-template>
         </app-form-field>
     </fieldset>
-    <footer class="flex flex-row gap-3 justify-end" appPageSectionDirective appContentGridTrack contentGridTrack="base">
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-white" type="reset">
+    <footer
+        class="flex flex-row gap-3 justify-end"
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
             Reset
         </button>
-        <button appMixinStyledButton size="mixin-Sbutton-base" theme="theme-Sbutton-generic-green">Login User</button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Login User
+        </button>
     </footer>
 </form>
