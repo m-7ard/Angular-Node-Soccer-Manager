@@ -10,6 +10,7 @@ import {
     setUpIntegrationTest,
 } from "../../../__utils__/integrationTests/integrationTest.setup";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
+import ITeamSchema from "infrastructure/dbSchemas/ITeamSchema";
 
 beforeAll(async () => {
     await setUpIntegrationTest();
@@ -40,7 +41,7 @@ describe("Create Team Integration Test;", () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
-        const rows = await db.query({ statement: "SELECT * FROM team" });
+        const rows = await db.query<ITeamSchema>({ statement: "SELECT * FROM team" });
         expect(rows.length).toBe(1);
     });
 

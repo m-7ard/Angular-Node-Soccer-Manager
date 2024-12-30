@@ -1,5 +1,6 @@
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import IRequestDispatcher from "application/handlers/IRequestDispatcher";
+import IMatchRepository from "application/interfaces/IMatchRepository";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
@@ -26,6 +27,7 @@ export const DI_TOKENS = {
     TEAM_REPOSITORY: makeToken<ITeamRepository>("TEAM_REPOSITORY"),
     PLAYER_REPOSITORY: makeToken<IPlayerRepository>("PLAYER_REPOSITORY"),
     USER_REPOSITORY: makeToken<IUserRepository>("USER_REPOSITORY"),
+    MATCH_REPOSITORY: makeToken<IMatchRepository>("MATCH_REPOSITORY"),
 } as const;
 
 export class DIContainer {

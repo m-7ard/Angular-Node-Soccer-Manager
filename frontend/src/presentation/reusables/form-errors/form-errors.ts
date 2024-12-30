@@ -1,14 +1,19 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
+import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
 
 @Component({
     selector: 'app-form-errors',
     standalone: true,
-    imports: [CommonModule, MixinStyledCardDirective, MixinStyledCardSectionDirective],
+    imports: [CommonModule, MixinStyledCardDirectivesModule],
     template: `
-        <div *ngIf="errors != null" appMixinStyledCard>
+        <div
+            *ngIf="errors != null"
+            [appMixinStyledCard]="{
+                size: 'mixin-Scard-base',
+                theme: 'theme-Scard-generic-white'
+            }"
+        >
             <section appMixinStyledCardSection>
                 <div class="token-card--header--primary-text">Form Errors</div>
             </section>

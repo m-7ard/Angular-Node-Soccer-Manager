@@ -9,9 +9,10 @@ import { PlayerDataAccessService } from '../../services/data-access/player-data-
 import { CoverImageComponent } from '../cover-image/cover-image.component';
 import PlayerMapper from '../../mappers/PlayerMapper';
 import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
 import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
+import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
+import { PanelDirectivesModule } from '../panel/panel.directive.module';
+import { DividerComponent } from "../divider/divider.component";
 
 interface IFormControls {
     name: FormControl<string>;
@@ -31,16 +32,17 @@ const routes = {
     selector: 'app-search-players-modal-component',
     standalone: true,
     imports: [
-        CommonModule,
-        FormFieldComponent,
-        CharFieldComponent,
-        ReactiveFormsModule,
-        CoverImageComponent,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-        ZeebraTextComponent,
-    ],
+    CommonModule,
+    FormFieldComponent,
+    CharFieldComponent,
+    ReactiveFormsModule,
+    CoverImageComponent,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    ZeebraTextComponent,
+    PanelDirectivesModule,
+    DividerComponent
+],
     templateUrl: './search-players-modal-component.component.html',
 })
 export class SearchPlayersModalComponentComponent {

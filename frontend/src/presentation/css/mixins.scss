@@ -62,19 +62,13 @@
     }
 
     .mixin-page-like {
-        @apply flex flex-col grow overflow-auto;
+        @apply flex flex-col grow;
     }
 
     .mixin-page-base {
-        @apply px-4 py-4 gap-4;
-    }
-
-    .mixin-page-content-like {
-        @apply flex flex-col;
-    }
-
-    .mixin-page-content-base {
-        @apply gap-4;
+        > [data-role="page-section"] {
+            @apply p-4;
+        }
     }
 
     .mixin-panel-like {

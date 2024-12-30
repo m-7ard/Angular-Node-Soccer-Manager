@@ -1,12 +1,20 @@
 <!-- Create Team Membership Page -->
-<form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" (reset)="onReset()" data-track="base">
-    <header appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between">
-        <div>
-            <div class="token-card--header--primary-text">Create Team Membership</div>
-            <div class="token-card--header--secondary-text">{{ team.name }}</div>
-        </div>
+<form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    (reset)="onReset()"
+    [appPageDirective]="{ pageSize: 'mixin-page-base' }"
+    appContentGrid
+>
+    <header
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 items-center justify-between"
+    >
+        <div class="token-default-title">Create Team Membership</div>
     </header>
-    <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
         <app-form-field [name]="'player'" [errors]="errors.playerId">
             <ng-template let-name="name">
                 <app-pick-single-player [formControlName]="name"></app-pick-single-player>
@@ -49,8 +57,12 @@
             </ng-template>
         </app-form-field>
     </fieldset>
-
-    <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <footer
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 justify-end"
+    >
         <button
             [appMixinStyledButton]="{
                 theme: 'theme-Sbutton-generic-white',

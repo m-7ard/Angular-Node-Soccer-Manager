@@ -3,7 +3,7 @@
     <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <div class="token-default-title">Create Player</div>
     </header>
-    <app-divider appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>

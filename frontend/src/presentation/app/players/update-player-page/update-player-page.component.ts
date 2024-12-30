@@ -12,12 +12,15 @@ import { CharFieldComponent } from '../../../reusables/char-field/char-field.com
 import { IUpdatePlayerResolverData } from './update-player-page.resolver';
 import parsers from '../../../utils/parsers';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import Player from '../../../models/Player';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
+import { DividerComponent } from '../../../reusables/divider/divider.component';
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -38,9 +41,12 @@ type IErrorSchema = IPresentationError<{
         FormFieldComponent,
         CommonModule,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
         FormErrorsComponent,
+        PageDirectivesModule,
+        ContentGridDirective,
+        ContentGridTrackDirective,
+        DividerComponent
     ],
     templateUrl: './update-player-page.component.html',
 })

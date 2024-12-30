@@ -26,9 +26,9 @@ class MySQLDatabaseService implements IDatabaseService {
         await this._pool.query(`DROP DATABASE IF EXISTS football_manager`);
     }
 
-    async query<T = mysql.ResultSetHeader>(args: { statement: string }): Promise<T> {
+    async query<T = undefined>(args: { statement: string }): Promise<T extends undefined ? ResultSetHeader : T[]> {
         const { statement } = args;
-        const [query] = await this._pool.query<T & mysql.RowDataPacket[]>(statement);
+        const [query] = await this._pool.query<(T extends undefined ? ResultSetHeader : T[]) & mysql.RowDataPacket[]>(statement);
         return query;
     }
 

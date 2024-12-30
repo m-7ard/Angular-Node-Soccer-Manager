@@ -9,10 +9,11 @@ import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors'
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Team from '../../../models/Team';
 import TeamPlayer from '../../../models/TeamPlayer';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { DividerComponent } from '../../../reusables/divider/divider.component';
+import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 
 export interface DeleteTeamMembershipModalProps {
     teamPlayer: TeamPlayer;
@@ -27,8 +28,9 @@ export interface DeleteTeamMembershipModalProps {
         CommonModule,
         FormErrorsComponent,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
+        DividerComponent,
+        PanelDirectivesModule,
     ],
     templateUrl: './delete-team-membership-modal.component.html',
 })

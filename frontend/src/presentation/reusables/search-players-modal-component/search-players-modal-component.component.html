@@ -1,6 +1,14 @@
 <!-- Search Players Modal -->
-<div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
-    <header appMixinStyledCardSection class="flex flex-row gap-2 justify-between">
+<div
+    [appPanelDirective]="{
+        panelSize: 'mixin-panel-base',
+        panelTheme: 'theme-panel-generic-white',
+        panelHasBorder: true,
+        panelHasShadow: true
+    }"
+    class="w-[100vw]"
+>
+    <header appPanelSectionDirective class="flex flex-row gap-2 justify-between">
         <div class="font-bold">Filter Players</div>
         <button
             [appMixinStyledButton]="{
@@ -11,7 +19,8 @@
             Close
         </button>
     </header>
-    <nav appMixinStyledCardSection class="flex flex-row gap-3">
+    <app-divider />
+    <nav appPanelSectionDirective class="flex flex-row gap-3">
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-base',
@@ -35,8 +44,9 @@
             Result
         </button>
     </nav>
+    <app-divider />
     <ng-content *ngIf="currentRoute === 'form'">
-        <form appMixinStyledCardSection [formGroup]="form" class="flex flex-col gap-2" (submit)="onFormSubmit()">
+        <form appPanelSectionDirective class="flex flex-col gap-3" [formGroup]="form" (submit)="onFormSubmit()">
             <app-form-field [name]="'name'">
                 <ng-template let-name="name">
                     <app-char-field
@@ -48,23 +58,30 @@
                     ></app-char-field>
                 </ng-template>
             </app-form-field>
+            <footer appPanelSectionDirective class="flex flex-row gap-3 justify-end">
+                <button
+                    [appMixinStyledButton]="{
+                        size: 'mixin-Sbutton-base',
+                        theme: 'theme-Sbutton-generic-green'
+                    }"
+                    (mouseup)="onFormSubmit()"
+                >
+                    Filter
+                </button>
+            </footer>
         </form>
-        <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-green'
-                }"
-                (mouseup)="onFormSubmit()"
-            >
-                Filter
-            </button>
-        </footer>
     </ng-content>
     <ng-content *ngIf="currentRoute === 'results'">
-        <div appMixinStyledCardSection class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div appPanelSectionDirective class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <ng-content *ngFor="let player of results">
-                <div appMixinStyledCard>
+                <div
+                    [appMixinStyledCard]="{
+                        size: 'mixin-Scard-base',
+                        theme: 'theme-Scard-generic-white',
+                        hasBorder: true,
+                        hasDivide: true
+                    }"
+                >
                     <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
                         <div class="aspect-square theme-avatar-any">
                             <section class="relative h-full w-full flex">

@@ -1,5 +1,12 @@
 <!-- List Team Players Page >>> Team Player Element -->
-<div appMixinStyledCard>
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true
+    }"
+>
     <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
         <div class="aspect-square theme-avatar-any">
             <section class="relative h-full w-full flex">
@@ -15,7 +22,7 @@
             </div>
         </div>
     </main>
-    <section appMixinStyledCardSection className="overflow-hidden">
+    <section appMixinStyledCardSection class="overflow-hidden">
         <div class="token-default-list">
             <span class="token-default-list__label shrink-0">Player Id</span>
             <span class="truncate token-default-list__value">
@@ -41,35 +48,74 @@
             </span>
         </div>
     </section>
-    <footer appMixinStyledCardSection class="grid max-[640px]:grid-cols-1 grid-cols-2 gap-1">
+    <footer appMixinStyledCardSection class="flex flex-col gap-1">
         <button
             [appMixinStyledButton]="{
-                theme: 'theme-Sbutton-generic-green',
+                theme: 'theme-Sbutton-generic-blue',
                 size: 'mixin-Sbutton-base'
             }"
-            class="justify-center"
-            [routerLink]="'/teams/' + team.id + '/players/' + teamPlayer.player.id + '/update'"
+            class="justify-center w-full"
         >
-            Update
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                theme: 'theme-Sbutton-generic-red',
-                size: 'mixin-Sbutton-base'
-            }"
-            class="justify-center"
-            (click)="openDeleteMembershipModal()"
-        >
-            Delete
+            See Player
         </button>
         <button
             [appMixinStyledButton]="{
                 theme: 'theme-Sbutton-generic-white',
                 size: 'mixin-Sbutton-base'
             }"
-            class="justify-center"
+            primeNgPopoverDirective
+            [popover]="op"
+            class="justify-center w-full"
         >
-            See Player
+            Other Options
         </button>
     </footer>
 </div>
+
+<p-popover #op class="fixed mt-1">
+    <div
+        [appPanelDirective]="{
+            panelSize: 'mixin-panel-base',
+            panelTheme: 'theme-panel-generic-white',
+            panelHasBorder: true,
+            panelHasShadow: true
+        }"
+    >
+        <header appPanelSectionDirective class="flex flex-row justify-between items-center">
+            <div class="token-base-title">Other Options</div>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                (click)="this.op.hide()"
+            >
+                Close
+            </button>
+        </header>
+        <app-divider />
+        <div appPanelSectionDirective class="flex flex-col gap-1">
+            <button
+                [appMixinStyledButton]="{
+                    theme: 'theme-Sbutton-generic-green',
+                    size: 'mixin-Sbutton-base'
+                }"
+                class="justify-center"
+                [routerLink]="'/teams/' + team.id + '/players/' + teamPlayer.player.id + '/update'"
+            >
+                Update Team Player
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    theme: 'theme-Sbutton-generic-red',
+                    size: 'mixin-Sbutton-base'
+                }"
+                class="justify-center"
+                (click)="openDeleteMembershipModal()"
+            >
+                Delete Team Player
+            </button>
+        </div>
+    </div>
+</p-popover>

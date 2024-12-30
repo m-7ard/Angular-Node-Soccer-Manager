@@ -1,14 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MixinStyledButtonDirective } from '../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardSectionDirective } from '../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../reusables/styled-card/styled-card.directive';
+import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/styled-card.module';
+import { PanelDirectivesModule } from '../../reusables/panel/panel.directive.module';
 
 @Component({
     selector: 'app-exception-notice-popover',
     standalone: true,
-    imports: [MixinStyledCardDirective, MixinStyledCardSectionDirective, MixinStyledButtonDirective],
+    imports: [MixinStyledCardDirectivesModule, MixinStyledButtonDirective, PanelDirectivesModule],
     template: `
-        <div appMixinStyledCard class="mixin-panel-like mixin-panel-base h-fit my-16 pointer-events-auto">
+        <div
+            [appPanelDirective]="{ panelSize: 'mixin-panel-base', panelTheme: 'theme-panel-generic-white', panelHasShadow: true, panelHasBorder: true }"
+            class="h-fit my-16 pointer-events-auto"
+        >
             <main appMixinStyledCardSection>
                 <div class="token-card--header--primary-text">
                     {{ error.name }}

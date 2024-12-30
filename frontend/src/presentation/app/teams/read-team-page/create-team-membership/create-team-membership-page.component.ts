@@ -13,12 +13,15 @@ import Player from '../../../../models/Player';
 import { CharFieldComponent } from '../../../../reusables/char-field/char-field.component';
 import { PickSinglePlayerComponent } from '../../../../reusables/pick-single-player/pick-single-player.component';
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
 import Team from '../../../../models/Team';
 import { IReadTeamResolverData } from '../read-team-page.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
 import { ExceptionNoticeService } from '../../../../services/exception-notice-service';
+import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
+import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
+import { ContentGridDirective } from '../../../../reusables/content-grid/content-grid.directive';
+import { ContentGridTrackDirective } from '../../../../reusables/content-grid/content-grid-track.directive';
+import { DividerComponent } from "../../../../reusables/divider/divider.component";
 
 interface IFormControls {
     player: FormControl<Player | null>;
@@ -38,15 +41,18 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-create-team-membership-page',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        FormFieldComponent,
-        CharFieldComponent,
-        PickSinglePlayerComponent,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-    ],
+    ReactiveFormsModule,
+    CommonModule,
+    FormFieldComponent,
+    CharFieldComponent,
+    PickSinglePlayerComponent,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    PageDirectivesModule,
+    ContentGridDirective,
+    ContentGridTrackDirective,
+    DividerComponent
+],
     templateUrl: './create-team-membership-page.component.html',
 })
 export class CreateTeamMembershipPageComponent implements OnInit {

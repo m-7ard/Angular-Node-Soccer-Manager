@@ -9,14 +9,17 @@ import { TeamDataAccessService } from '../../../services/data-access/team-data-a
 import parsers from '../../../utils/parsers';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IReadTeamResolverData } from '../read-team-page/read-team-page.resolver';
 import Team from '../../../models/Team';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { CommonModule } from '@angular/common';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -32,15 +35,18 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-update-team-page',
     standalone: true,
     imports: [
-        FormFieldComponent,
-        CharFieldComponent,
-        ReactiveFormsModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-        FormErrorsComponent,
-        CommonModule,
-    ],
+    FormFieldComponent,
+    CharFieldComponent,
+    ReactiveFormsModule,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    FormErrorsComponent,
+    CommonModule,
+    DividerComponent,
+    PageDirectivesModule,
+    ContentGridDirective,
+    ContentGridTrackDirective
+],
     templateUrl: './update-team-page.component.html',
 })
 export class UpdateTeamPageComponent {

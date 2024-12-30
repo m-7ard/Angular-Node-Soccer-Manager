@@ -9,9 +9,8 @@ import {
     SearchPlayersModalComponentProps,
 } from '../search-players-modal-component/search-players-modal-component.component';
 import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
-import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
 import { ZeebraTextComponent } from "../zeebra-text/zeebra-text.component";
+import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
 
 @Component({
     selector: 'app-pick-single-player',
@@ -20,8 +19,7 @@ import { ZeebraTextComponent } from "../zeebra-text/zeebra-text.component";
     CommonModule,
     CoverImageComponent,
     MixinStyledButtonDirective,
-    MixinStyledCardDirective,
-    MixinStyledCardSectionDirective,
+    MixinStyledCardDirectivesModule,
     ZeebraTextComponent
 ],
     templateUrl: './pick-single-player.component.html',

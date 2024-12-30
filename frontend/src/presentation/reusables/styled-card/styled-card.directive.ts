@@ -2,14 +2,15 @@ import { Directive, ElementRef, Input, Renderer2, OnInit } from '@angular/core';
 
 @Directive({
     selector: '[appMixinStyledCard]',
-    standalone: true,
 })
 export class MixinStyledCardDirective implements OnInit {
-    @Input() size: 'mixin-Scard-base' = 'mixin-Scard-base';
-    @Input() theme: 'theme-Scard-generic-white' = 'theme-Scard-generic-white';
-    @Input() hasShadow?: boolean = false;
-    @Input() hasDivide?: boolean = false;
-    @Input() hasBorder?: boolean = false;
+    @Input() appMixinStyledCard!: {
+        size: 'mixin-Scard-base';
+        theme: 'theme-Scard-generic-white';
+        hasShadow?: boolean;
+        hasDivide?: boolean;
+        hasBorder?: boolean;
+    };
 
     constructor(
         private el: ElementRef,
@@ -17,22 +18,24 @@ export class MixinStyledCardDirective implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        const { size, theme, hasShadow = false, hasDivide = false, hasBorder = false } = this.appMixinStyledCard;
+
         // Apply base class
         this.renderer.addClass(this.el.nativeElement, 'mixin-Scard-like');
         // Apply size and theme classes
-        this.renderer.addClass(this.el.nativeElement, this.size);
-        this.renderer.addClass(this.el.nativeElement, this.theme);
+        this.renderer.addClass(this.el.nativeElement, size);
+        this.renderer.addClass(this.el.nativeElement, theme);
 
-        if (this.hasShadow) {
+        if (hasShadow) {
             this.renderer.addClass(this.el.nativeElement, 'token-default-shadow');
         }
 
-        if (this.hasDivide) {
+        if (hasDivide) {
             this.renderer.addClass(this.el.nativeElement, 'divide-y');
             this.renderer.addClass(this.el.nativeElement, 'token-default-divide-color');
         }
 
-        if (this.hasBorder) {
+        if (hasBorder) {
             this.renderer.addClass(this.el.nativeElement, 'border');
             this.renderer.addClass(this.el.nativeElement, 'token-default-border-color');
         }

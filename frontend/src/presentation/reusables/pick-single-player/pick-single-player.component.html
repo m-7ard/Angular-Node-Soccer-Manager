@@ -1,5 +1,12 @@
 <!-- Pick Single Player -->
-<div appMixinStyledCard>
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasBorder: true,
+        hasDivide: true
+    }"
+>
     <div appMixinStyledCardSection>
         <button
             [appMixinStyledButton]="{
@@ -14,7 +21,14 @@
     </div>
     <ng-content *ngIf="value != null">
         <section appMixinStyledCardSection>
-            <div appMixinStyledCard>
+            <div
+                [appMixinStyledCard]="{
+                    size: 'mixin-Scard-base',
+                    theme: 'theme-Scard-generic-white',
+                    hasDivide: true,
+                    hasBorder: true
+                }"
+            >
                 <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
                     <div class="aspect-square theme-avatar-any">
                         <section class="relative h-full w-full flex">

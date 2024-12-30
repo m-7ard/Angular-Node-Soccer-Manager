@@ -10,14 +10,13 @@ import parsers from '../../../utils/parsers';
 import { IUpdateTeamMembershipResolverData } from './update-team-membership-page.resolver';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import TeamPlayer from '../../../models/TeamPlayer';
 import Team from '../../../models/Team';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { CommonModule } from '@angular/common';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 
 interface IFormControls {
     activeFrom: FormControl<string>;
@@ -39,8 +38,7 @@ type IErrorSchema = IPresentationError<{
         CharFieldComponent,
         ReactiveFormsModule,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         CommonModule,
     ],

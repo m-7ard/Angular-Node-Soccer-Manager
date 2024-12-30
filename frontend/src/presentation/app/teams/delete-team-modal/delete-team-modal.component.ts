@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Team from '../../../models/Team';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
 
 export interface DeleteTeamModalProps {
     team: Team;
@@ -22,12 +23,13 @@ export interface DeleteTeamModalProps {
     selector: 'app-delete-team-modal',
     standalone: true,
     imports: [
-        CommonModule,
-        FormErrorsComponent,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-    ],
+    CommonModule,
+    FormErrorsComponent,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    PanelDirectivesModule,
+    DividerComponent
+],
     templateUrl: './delete-team-modal.component.html',
 })
 export class DeleteTeamModal {

@@ -1,7 +1,11 @@
 <!-- Read Team Page -->
-<div class="mixin-page-like mixin-page-base mixin-content-grid">
-    <header appMixinStyledCard data-track="base">
-        <section appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
+    <header
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 items-center"
+    >
+        <div class="grid gap-3" style="grid-template: auto / auto 1fr">
             <div class="aspect-square theme-avatar-any">
                 <section class="relative h-full w-full flex">
                     <app-cover-image src=""></app-cover-image>
@@ -11,67 +15,71 @@
                 <div class="token-card--header--primary-text">
                     {{ team.name }}
                 </div>
-                <div class="truncate token-card--header--secondary-text">
-                    <app-zeebra-text></app-zeebra-text>
-                </div>
+                <div class="token-card--header--secondary-text">Spain</div>
             </div>
-        </section>
-        <nav appMixinStyledCardSection class="flex flex-row max-[450px]:flex-col gap-3">
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-blue'
-                }"
-                class="justify-center"
-                [routerLink]="'/teams/' + team.id + '/'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Team Details
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-blue'
-                }"
-                class="justify-center"
-                [routerLink]="'/teams/' + team.id + '/players'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Team Players
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-blue'
-                }"
-                class="justify-center"
-                [routerLink]="'/teams/' + team.id + '/update'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Update Team
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-blue'
-                }"
-                class="justify-center"
-                [routerLink]="'/teams/' + team.id + '/players/add'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Add Player
-            </button>
-        </nav>
+        </div>
     </header>
-    <main data-track="base">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <nav appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row gap-3">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/teams/' + team.id + '/'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Team Details
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/teams/' + team.id + '/players'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Team Players
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/teams/' + team.id + '/update'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Update Team
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/teams/' + team.id + '/players/add'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Add Player
+        </button>
+    </nav>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <main [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <router-outlet></router-outlet>
     </main>
 </div>

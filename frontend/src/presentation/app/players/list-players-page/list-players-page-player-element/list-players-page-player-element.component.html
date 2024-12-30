@@ -1,5 +1,12 @@
 <!-- List Players Page >>> Player Element -->
-<div appMixinStyledCard [hasShadow]="true" [hasDivide]="true">
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true
+    }"
+>
     <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
         <div class="aspect-square theme-avatar-any">
             <section class="relative h-full w-full flex">
@@ -55,18 +62,20 @@
 
 <p-popover #op class="fixed mt-1">
     <div
-        appPanelDirective
-        panelSize="mixin-panel-base"
-        panelTheme="theme-panel-generic-white"
-        [panelHasBorder]="true"
-        [panelHasShadow]="true"
+        [appPanelDirective]="{
+            panelSize: 'mixin-panel-base',
+            panelTheme: 'theme-panel-generic-white',
+            panelHasBorder: true,
+            panelHasShadow: true
+        }"
     >
         <header appPanelSectionDirective class="flex flex-row justify-between items-center">
             <div class="token-base-title">Other Options</div>
             <button
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white'
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
                 }"
                 (click)="this.op.hide()"
             >

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { CoverImageComponent } from '../../../../../reusables/cover-image/cover-image.component';
 import { CommonModule } from '@angular/common';
 import { Dialog } from '@angular/cdk/dialog';
@@ -11,8 +11,11 @@ import {
 import TeamPlayer from '../../../../../models/TeamPlayer';
 import { ZeebraTextComponent } from '../../../../../reusables/zeebra-text/zeebra-text.component';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../../../reusables/styled-card/styled-card-section.directive';
+import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { DividerComponent } from '../../../../../reusables/divider/divider.component';
+import { PanelDirectivesModule } from '../../../../../reusables/panel/panel.directive.module';
+import { PrimeNgPopoverDirective } from '../../../../../reusables/prime-ng-popover/prime-ng-popover.directive';
 
 @Component({
     selector: 'app-list-team-players-page-team-player-element',
@@ -23,16 +26,21 @@ import { MixinStyledCardSectionDirective } from '../../../../../reusables/styled
         RouterModule,
         ZeebraTextComponent,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective
+        MixinStyledCardDirectivesModule,
+        PrimeNgPopoverDirective,
+        PanelDirectivesModule,
+        DividerComponent,
+        PopoverModule,
     ],
     templateUrl: './list-team-players-page-team-player-element.component.html',
 })
 export class ListTeamPlayerPageTeamPlayerElementComponent {
-    private dialog = inject(Dialog);
     @Input() teamPlayer!: TeamPlayer;
     @Input() team!: Team;
     @Output() onDelete = new EventEmitter<TeamPlayer>();
+
+    @ViewChild('op') op!: Popover;
+    private dialog = inject(Dialog);
 
     openDeleteMembershipModal(): void {
         const data: DeleteTeamMembershipModalProps = {
@@ -44,5 +52,7 @@ export class ListTeamPlayerPageTeamPlayerElementComponent {
         this.dialog.open(DeleteTeamMembershipModal, {
             data: data,
         });
+
+        this.op.hide();
     }
 }

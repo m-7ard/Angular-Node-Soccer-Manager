@@ -1,4 +1,11 @@
-<div appMixinStyledCard>
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true
+    }"
+>
     <section appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
         <div class="aspect-square theme-avatar-any">
             <section class="relative h-full w-full flex">
@@ -28,56 +35,95 @@
             </span>
         </div>
     </section>
-    <footer appMixinStyledCardSection class="grid max-[640px]:grid-cols-1 grid-cols-2 gap-1">
+    <footer appMixinStyledCardSection class="flex flex-col gap-1">
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-base',
-                theme: 'theme-Sbutton-generic-yellow'
+                theme: 'theme-Sbutton-generic-blue'
             }"
-            class="justify-center"
             [routerLink]="'/teams/' + team.id + '/'"
+            class="justify-center w-full"
         >
             Team Details
         </button>
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-base',
-                theme: 'theme-Sbutton-generic-green'
+                theme: 'theme-Sbutton-generic-white'
             }"
-            class="justify-center"
-            [routerLink]="'/teams/' + team.id + '/update'"
+            primeNgPopoverDirective
+            [popover]="op"
+            class="justify-center w-full"
         >
-            Update Team
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-base',
-                theme: 'theme-Sbutton-generic-blue'
-            }"
-            class="justify-center"
-            [routerLink]="seePlayersRoute"
-        >
-            See Players
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-base',
-                theme: 'theme-Sbutton-generic-blue'
-            }"
-            class="justify-center"
-            [routerLink]="'/teams/' + team.id + '/players/add'"
-        >
-            Add Player
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-base',
-                theme: 'theme-Sbutton-generic-red'
-            }"
-            class="justify-center"
-            (click)="openDeleteTeamModal()"
-        >
-            Delete Team
+            Other Options
         </button>
     </footer>
 </div>
+
+<p-popover #op class="fixed mt-1">
+    <div
+        [appPanelDirective]="{
+            panelSize: 'mixin-panel-base',
+            panelTheme: 'theme-panel-generic-white',
+            panelHasBorder: true,
+            panelHasShadow: true
+        }"
+    >
+        <header appPanelSectionDirective class="flex flex-row justify-between items-center">
+            <div class="token-base-title">Other Options</div>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                (click)="this.op.hide()"
+            >
+                Close
+            </button>
+        </header>
+        <app-divider />
+        <div appPanelSectionDirective class="flex flex-col gap-1">
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-green'
+                }"
+                class="justify-center"
+                [routerLink]="'/teams/' + team.id + '/update'"
+            >
+                Update Team
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
+                class="justify-center"
+                [routerLink]="seePlayersRoute"
+            >
+                See Players
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-yellow'
+                }"
+                class="justify-center"
+                [routerLink]="'/teams/' + team.id + '/players/add'"
+            >
+                Add Player
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-red'
+                }"
+                class="justify-center"
+                (click)="openDeleteTeamModal()"
+            >
+                Delete Team
+            </button>
+        </div>
+    </div>
+</p-popover>

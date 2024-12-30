@@ -14,6 +14,7 @@ import IApiError from "api/errors/IApiError";
 import TeamMembership from "domain/entities/TeamMembership";
 import IDeletePlayerRequestDTO from "api/DTOs/players/delete/IDeletePlayerRequestDTO";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
+import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 
 let team_001: Team;
 let player_001: Player;
@@ -58,7 +59,7 @@ describe("Delete TeamMembership Integration Test;", () => {
         });
 
         expect(response.status).toBe(200);
-        const rows = await db.query({
+        const rows = await db.query<ITeamMembershipSchema>({
             statement: "SELECT * FROM team_membership",
         });
         expect(rows.length).toBe(0);

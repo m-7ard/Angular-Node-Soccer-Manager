@@ -5,17 +5,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../../reusables/styled-card/styled-card-section.directive';
-import { PopoverContext, PopoverTriggerDirective } from '../../../../reusables/popover/popover-trigger.directive';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
 import { DeletePlayerModalProps, DeletePlayerModal } from '../../delete-player-modal/delete-player-modal.component';
 import { PanelDirectivesModule } from '../../../../reusables/panel/panel.directive.module';
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
 import { Popover, PopoverModule } from 'primeng/popover';
-import positionFixedContainer from '../../../../utils/fixedContainers/positionFixedContainer';
 import { PrimeNgPopoverDirective } from '../../../../reusables/prime-ng-popover/prime-ng-popover.directive';
+import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 
 @Component({
     selector: 'app-list-players-page-player-element',
@@ -26,10 +23,8 @@ import { PrimeNgPopoverDirective } from '../../../../reusables/prime-ng-popover/
         RouterModule,
         ZeebraTextComponent,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
         PrimeNgPopoverDirective,
-        MatMenuModule,
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,

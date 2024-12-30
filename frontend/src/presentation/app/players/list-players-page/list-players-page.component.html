@@ -15,8 +15,8 @@
             </button>
         </section>
     </header>
-    <app-divider appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <div appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-[inherit]">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <div appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
         <div class="grid max-[450px]:grid-cols-1 grid-cols-2 gap-3">
             <ng-container *ngFor="let player of players">
                 <app-list-players-page-player-element

@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ListPlayersPagePlayerElementComponent } from '../players/list-players-page/list-players-page-player-element/list-players-page-player-element.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { MixinStyledCardSectionDirective } from '../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../reusables/styled-card/styled-card.directive';
 import { MixinStyledButtonDirective } from '../../reusables/styled-button/styled-button.directive';
 import { CoverImageComponent } from '../../reusables/cover-image/cover-image.component';
 import { ZeebraTextComponent } from '../../reusables/zeebra-text/zeebra-text.component';
@@ -15,6 +12,7 @@ import { ContentGridTrackDirective } from '../../reusables/content-grid/content-
 import { ContentGridDirective } from '../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../reusables/page/page.directive.module';
+import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/styled-card.module';
 
 @Component({
     selector: 'app-frontpage',
@@ -23,8 +21,7 @@ import { PageDirectivesModule } from '../../reusables/page/page.directive.module
         CommonModule,
         RouterModule,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
         CoverImageComponent,
         ZeebraTextComponent,
         PageDirectivesModule,

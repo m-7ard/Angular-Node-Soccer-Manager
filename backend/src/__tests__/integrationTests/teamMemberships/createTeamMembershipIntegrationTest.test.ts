@@ -13,6 +13,7 @@ import Player from "domain/entities/Player";
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
+import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 
 let team_001: Team;
 let player_001: Player;
@@ -53,7 +54,7 @@ describe("Create TeamMembership Integration Test;", () => {
         });
 
         expect(response.status).toBe(201);
-        const rows = await db.query({
+        const rows = await db.query<ITeamMembershipSchema>({
             statement: "SELECT * FROM team_membership",
         });
         expect(rows.length).toBe(1);

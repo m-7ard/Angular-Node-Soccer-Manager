@@ -1,14 +1,20 @@
-<form appMixinStyledCard [formGroup]="form" (ngSubmit)="onSubmit()" data-track="base" (reset)="onReset($event)">
-    <header appMixinStyledCardSection>
+<form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    (reset)="onReset($event)"
+    [appPageDirective]="{ pageSize: 'mixin-page-base' }"
+    appContentGrid
+>
+    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <div>
-            <div class="token-card--header--primary-text">Update Team</div>
-            <div class="token-card--header--secondary-text">{{ team.name }}</div>
+            <div class="token-default-title">Update Team</div>
         </div>
     </header>
-    <section appMixinStyledCardSection *ngIf="errors['_'] != null">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset appMixinStyledCardSection class="flex flex-col gap-3">
+    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">
                 <app-char-field
@@ -33,7 +39,12 @@
             </ng-template>
         </app-form-field>
     </fieldset>
-    <footer appMixinStyledCardSection class="flex flex-row gap-3 justify-end">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <footer
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 justify-end"
+    >
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-base',

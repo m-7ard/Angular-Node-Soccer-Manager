@@ -8,10 +8,10 @@ import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
 
 export interface DeletePlayerModalProps {
     player: Player;
@@ -21,13 +21,7 @@ export interface DeletePlayerModalProps {
 @Component({
     selector: 'app-delete-player-modal',
     standalone: true,
-    imports: [
-        CommonModule,
-        FormErrorsComponent,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-    ],
+    imports: [CommonModule, FormErrorsComponent, PanelDirectivesModule, MixinStyledButtonDirective, DividerComponent],
     templateUrl: './delete-player-modal.component.html',
 })
 export class DeletePlayerModal {

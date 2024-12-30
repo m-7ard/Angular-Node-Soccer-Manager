@@ -5,7 +5,6 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import Team from '../../../models/Team';
 import { ListTeamsPageTeamElementComponent } from './list-teams-page-team-element/list-teams-page-team-element.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
 import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { MatMenuModule } from '@angular/material/menu';
@@ -16,6 +15,7 @@ import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 import { PrimeNgPopoverDirective } from '../../../reusables/prime-ng-popover/prime-ng-popover.directive';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 
 @Component({
     selector: 'app-list-teams-page',
@@ -25,8 +25,7 @@ import { PageDirectivesModule } from '../../../reusables/page/page.directive.mod
         ListTeamsPageTeamElementComponent,
         RouterModule,
         MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
+        MixinStyledCardDirectivesModule,
         PrimeNgPopoverDirective,
         PageDirectivesModule,
         MatMenuModule,

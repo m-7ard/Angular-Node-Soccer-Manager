@@ -1,8 +1,8 @@
-import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
-import ITeamMembershipSchema, { ITeamMembershipRelations } from "infrastructure/dbSchemas/ITeamMembershipSchema";
-import ITeamSchema from "infrastructure/dbSchemas/ITeamSchema";
+import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
+import TeamDbEntity from "./TeamDbEntity";
+import PlayerDbEntity from "./PlayerDbEntity";
 
-class TeamMembershipDbEntity implements ITeamMembershipSchema, ITeamMembershipRelations {
+class TeamMembershipDbEntity implements ITeamMembershipSchema {
     constructor(props: { id: string; team_id: string; player_id: string; active_from: Date; active_to: Date | null; number: number }) {
         this.id = props.id;
         this.team_id = props.team_id;
@@ -17,9 +17,10 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema, ITeamMembershipRe
     public player_id: string;
     public active_from: Date;
     public active_to: Date | null;
-    public team: ITeamSchema | null = null;
-    public player: IPlayerSchema | null = null;
     public number: number;
+    
+    public team: TeamDbEntity | null = null;
+    public player: PlayerDbEntity | null = null;
 }
 
 export default TeamMembershipDbEntity;

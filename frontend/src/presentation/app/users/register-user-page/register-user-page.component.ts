@@ -15,6 +15,7 @@ import { ExceptionNoticeService } from '../../../services/exception-notice-servi
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
 import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
 
 interface IFormControls {
     email: FormControl<string>;
@@ -32,16 +33,17 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-register-user-page',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
-        CommonModule,
-        MixinStyledButtonDirective,
-        FormErrorsComponent,
-        PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
-    ],
+    ReactiveFormsModule,
+    CharFieldComponent,
+    FormFieldComponent,
+    CommonModule,
+    MixinStyledButtonDirective,
+    FormErrorsComponent,
+    PageDirectivesModule,
+    ContentGridDirective,
+    ContentGridTrackDirective,
+    DividerComponent
+],
     templateUrl: './register-user-page.component.html',
 })
 export class RegisterUserPageComponent {

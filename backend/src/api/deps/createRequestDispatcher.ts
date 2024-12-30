@@ -17,12 +17,14 @@ import ReadTeamMembershipQueryHandler, { ReadTeamMembershipQuery } from "applica
 import RegisterUserCommandHandler, { RegisterUserCommand } from "application/handlers/users/RegisterUserCommandHandler";
 import LoginUserQueryHandler, { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler";
 import CurrentUserQueryHandler, { CurrentUserQuery } from "application/handlers/users/CurrentUserQueryHandler";
+import CreateMatchCommandHandler, { CreateMatchCommand } from "application/handlers/matches/CreateMatchCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
     const teamRepository = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
     const playerRepository = diContainer.resolve(DI_TOKENS.PLAYER_REPOSITORY);
     const userRepository = diContainer.resolve(DI_TOKENS.USER_REPOSITORY);
+    const matchRepository = diContainer.resolve(DI_TOKENS.MATCH_REPOSITORY);
     const passwordHasher = diContainer.resolve(DI_TOKENS.PASSWORD_HASHER);
     const jwtTokenService = diContainer.resolve(DI_TOKENS.JWT_TOKEN_SERVICE);
 
@@ -50,6 +52,9 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(RegisterUserCommand, new RegisterUserCommandHandler({ passwordHasher: passwordHasher, userRepository: userRepository }));
     requestDispatcher.registerHandler(LoginUserQuery, new LoginUserQueryHandler({ passwordHasher: passwordHasher, userRepository: userRepository, jwtTokenService: jwtTokenService }));
     requestDispatcher.registerHandler(CurrentUserQuery, new CurrentUserQueryHandler({ userRepository: userRepository, jwtTokenService: jwtTokenService }));
+
+    // Matches
+    requestDispatcher.registerHandler(CreateMatchCommand, new CreateMatchCommandHandler({ teamRepository: teamRepository, matchRepository: matchRepository }));
 
     return requestDispatcher;
 }

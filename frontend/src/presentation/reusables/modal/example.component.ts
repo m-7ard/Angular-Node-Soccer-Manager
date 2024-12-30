@@ -1,16 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { ModalComponent } from './modal.component';
 import { AbstractModalDirective } from './abstract-modal.directive';
-import { MixinStyledCardDirective } from '../styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../styled-card/styled-card-section.directive';
 import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
+import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
 
 @Component({
     selector: 'app-drawer-modal',
-    imports: [ModalComponent, MixinStyledCardDirective, MixinStyledCardSectionDirective, MixinStyledButtonDirective],
+    imports: [ModalComponent, MixinStyledCardDirectivesModule, MixinStyledButtonDirective],
     template: `
         <app-modal>
-            <div appMixinStyledCard class="mixin-panel-like mixin-panel-base theme-panel-generic-white">
+            <div
+                [appMixinStyledCard]="{
+                    size: 'mixin-Scard-base',
+                    theme: 'theme-Scard-generic-white'
+                }"
+                class="mixin-panel-like mixin-panel-base theme-panel-generic-white"
+            >
                 <header appMixinStyledCardSection class="flex flex-row gap-3 justify-between items-start">
                     <div>
                         <div class="token-card--header--primary-text">Sample Modal</div>

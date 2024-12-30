@@ -7,8 +7,9 @@
     appContentGrid
 >
     <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
-        <div class="token-card--header--primary-text">Register User</div>
+        <div class="token-default-title">Register User</div>
     </header>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>

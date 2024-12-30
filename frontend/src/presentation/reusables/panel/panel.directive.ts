@@ -4,11 +4,12 @@ import { Directive, ElementRef, Input, Renderer2, OnInit } from '@angular/core';
     selector: '[appPanelDirective]',
 })
 export class PanelDirective implements OnInit {
-    @Input() panelSize!: 'mixin-panel-base';
-    @Input() panelTheme!: 'theme-panel-generic-white'; 
-    @Input() panelHasBorder?: boolean = false;
-    @Input() panelHasShadow?: boolean = false;
-
+    @Input() appPanelDirective!: {
+        panelSize: 'mixin-panel-base';
+        panelTheme: 'theme-panel-generic-white';
+        panelHasBorder?: boolean;
+        panelHasShadow?: boolean;
+    };
 
     constructor(
         private el: ElementRef,
@@ -16,15 +17,17 @@ export class PanelDirective implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.renderer.addClass(this.el.nativeElement, "mixin-panel-like");
-        this.renderer.addClass(this.el.nativeElement, this.panelSize);
-        this.renderer.addClass(this.el.nativeElement, this.panelTheme);
+        const { panelSize, panelTheme, panelHasShadow, panelHasBorder } = this.appPanelDirective;
 
-        if (this.panelHasShadow) {
-            this.renderer.addClass(this.el.nativeElement, "token-default-shadow");
+        this.renderer.addClass(this.el.nativeElement, 'mixin-panel-like');
+        this.renderer.addClass(this.el.nativeElement, panelSize);
+        this.renderer.addClass(this.el.nativeElement, panelTheme);
+
+        if (panelHasShadow) {
+            this.renderer.addClass(this.el.nativeElement, 'token-default-shadow');
         }
 
-        if (this.panelHasBorder) {
+        if (panelHasBorder) {
             this.renderer.addClass(this.el.nativeElement, 'border');
             this.renderer.addClass(this.el.nativeElement, 'token-default-border-color');
         }

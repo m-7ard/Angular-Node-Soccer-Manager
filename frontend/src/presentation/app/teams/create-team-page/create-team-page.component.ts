@@ -10,10 +10,13 @@ import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirective } from '../../../reusables/styled-card/styled-card.directive';
-import { MixinStyledCardSectionDirective } from '../../../reusables/styled-card/styled-card-section.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
+import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
+import { DividerComponent } from "../../../reusables/divider/divider.component";
 
 interface IFormControls {
     name: FormControl<string>;
@@ -29,15 +32,18 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-create-team-page',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
-        CommonModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirective,
-        MixinStyledCardSectionDirective,
-        FormErrorsComponent,
-    ],
+    ReactiveFormsModule,
+    CharFieldComponent,
+    FormFieldComponent,
+    CommonModule,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    FormErrorsComponent,
+    PageDirectivesModule,
+    ContentGridDirective,
+    ContentGridTrackDirective,
+    DividerComponent
+],
     templateUrl: './create-team-page.component.html',
 })
 export class CreateTeamPageComponent implements OnInit {
