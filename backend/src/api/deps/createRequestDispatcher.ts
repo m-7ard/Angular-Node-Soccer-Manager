@@ -18,6 +18,8 @@ import RegisterUserCommandHandler, { RegisterUserCommand } from "application/han
 import LoginUserQueryHandler, { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler";
 import CurrentUserQueryHandler, { CurrentUserQuery } from "application/handlers/users/CurrentUserQueryHandler";
 import CreateMatchCommandHandler, { CreateMatchCommand } from "application/handlers/matches/CreateMatchCommandHandler";
+import ReadMatchQueryHandler, { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
+import ListMatchesQueryHandler, { ListMatchesQuery } from "application/handlers/matches/ListMatchesQueryHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -55,6 +57,8 @@ function createRequestDispatcher() {
 
     // Matches
     requestDispatcher.registerHandler(CreateMatchCommand, new CreateMatchCommandHandler({ teamRepository: teamRepository, matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(ReadMatchQuery, new ReadMatchQueryHandler({ matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(ListMatchesQuery, new ListMatchesQueryHandler({ matchRepository: matchRepository }));
 
     return requestDispatcher;
 }

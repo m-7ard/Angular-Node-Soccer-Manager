@@ -4,6 +4,7 @@ import MatchEvent from "./MatchEvent";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
 import { err, ok, Result } from "neverthrow";
 import dateDiff from "utils/dateDifference";
+import DomainErrorFactory from "domain/errors/DomainErrorFactory";
 
 type MatchProps = {
     id: string;
@@ -121,7 +122,7 @@ class Match {
     }
 
     public canHaveScore() {
-        return [MatchStatus.IN_PROGRESS, MatchStatus.COMPLETED].includes(this.status);
+        return [MatchStatus.IN_PROGRESS, MatchStatus.COMPLETED, MatchStatus.CANCELLED].includes(this.status);
     }
 }
 

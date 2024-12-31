@@ -1,5 +1,5 @@
 class FilterAllPlayersCriteria {
-    __type: "FILTER_PLAYERS_CRITERIA" = null!;
+    private readonly __type: "FILTER_PLAYERS_CRITERIA" = null!;
 
     constructor(props: { name: string | null; limitBy: number | null }) {
         this.name = props.name;

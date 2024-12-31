@@ -1,8 +1,12 @@
+import IMatchApiModel from "@apiModels/IMatchApiModel";
+import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
 import ITeamApiModel from "@apiModels/ITeamApiModel";
 import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import IUserApiModel from "@apiModels/IUserApiModel";
 import IPlayerApiModel from "api/models/IPlayerApiModel";
 import ITeamMembershipApiModel from "api/models/ITeamMembershipApiModel";
+import Match from "domain/entities/Match";
+import MatchEvent from "domain/entities/MatchEvent";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import TeamMembership from "domain/entities/TeamMembership";
@@ -50,6 +54,40 @@ class ApiModelMapper {
             name: user.name,
             dateCreated: user.dateCreated.toString(),
             isAdmin: user.isAdmin,
+        };
+    }
+
+    public static createMatchApiModel(match: Match): IMatchApiModel {
+        return {
+            id: match.id,
+            homeTeamId: match.homeTeamId,
+            awayTeamId: match.awayTeamId,
+            venue: match.venue,
+            scheduledDate: match.scheduledDate.toString(),
+            startTime: match.startTime.toString(),
+            endTime: match.endTime == null ? null : match.endTime.toString(),
+            status: match.status.value,
+            score:
+                match.score == null
+                    ? null
+                    : {
+                          awayTeamScore: match.score.awayTeamScore,
+                          homeTeamScore: match.score.homeTeamScore,
+                      },
+        };
+    }
+
+    public static createMatchEventApiModel(match: MatchEvent): IMatchEventApiModel {
+        return {
+            id: match.id,
+            matchId: match.matchId,
+            playerId: match.playerId,
+            teamId: match.teamId,
+            type: match.type.value,
+            timestamp: match.timestamp.toString(),
+            secondaryPlayerId: match.secondaryPlayerId,
+            description: match.description,
+            position: match.position,
         };
     }
 }

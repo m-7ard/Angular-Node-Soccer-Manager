@@ -4,6 +4,8 @@ import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
 import MatchMapper from "infrastructure/mappers/MatchMapper";
 import sql from "sql-template-tag";
 import IMatchRepository from "application/interfaces/IMatchRepository";
+import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
+import knexQueryBuilder from "api/deps/knexQueryBuilder";
 
 class MatchRepository implements IMatchRepository {
     private readonly _db: IDatabaseService;
@@ -13,7 +15,7 @@ class MatchRepository implements IMatchRepository {
     }
 
     async getByIdAsync(id: string): Promise<Match | null> {
-        const sqlEntry = sql`SELECT * FROM matches WHERE matches.id = ${id}`;
+        const sqlEntry = sql`SELECT * FROM matches WHERE id = ${id}`;
 
         const [row] = await this._db.execute<IMatchSchema | null>({
             statement: sqlEntry.sql,
@@ -52,6 +54,44 @@ class MatchRepository implements IMatchRepository {
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
+    }
+
+    async filterAllAsync(criteria: FilterAllMatchesCriteria): Promise<Match[]> {
+        let query = knexQueryBuilder<IMatchSchema>("matches");
+
+        if (criteria.scheduledDate != null) {
+            const startOfDay = new Date(criteria.scheduledDate);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(criteria.scheduledDate);
+            endOfDay.setHours(24, 0, 0, 0);
+
+            query = query.whereBetween("scheduled_date", [
+                startOfDay,
+                endOfDay,
+            ]);
+        }
+
+        if (criteria.status != null) {
+            query = query.where("status", criteria.status);
+        }
+
+        if (criteria.limitBy != null) {
+            query = query.limit(criteria.limitBy);
+        }
+
+        const queryString = query.toString();
+
+        const rows = await this._db.query<IMatchSchema>({
+            statement: queryString,
+        });
+        const matches = rows.map(MatchMapper.schemaToDbEntity);
+
+        for (const match of matches) {
+            await match.loadMatchEvents(this._db);
+        }
+
+        return matches.map(MatchMapper.dbEntityToDomain);
     }
 }
 

@@ -13,7 +13,8 @@ function dateDiff(a: Date, b: Date, unit: "seconds" | "minutes" | "hours" | "day
     const utcA = unit === "days" ? Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) : a.getTime();
     const utcB = unit === "days" ? Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) : b.getTime();
 
-    return Math.floor((utcB - utcA) / MS_PER_UNIT[unit]);
+    const difference = Math.floor(Math.abs(utcB - utcA) / MS_PER_UNIT[unit]);
+    return difference;
 }
 
 export default dateDiff;

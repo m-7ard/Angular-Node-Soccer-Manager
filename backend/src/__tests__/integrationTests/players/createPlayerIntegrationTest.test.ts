@@ -10,6 +10,7 @@ import {
 } from "../../../__utils__/integrationTests/integrationTest.setup";
 import ICreatePlayerRequestDTO from "api/DTOs/players/create/ICreatePlayerRequestDTO";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
+import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 
 beforeAll(async () => {
     await setUpIntegrationTest();
@@ -40,7 +41,7 @@ describe("Create Player Integration Test;", () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
-        const rows = await db.query({ statement: "SELECT * FROM player" });
+        const rows = await db.query<IPlayerSchema>({ statement: "SELECT * FROM player" });
         expect(rows.length).toBe(1);
     });
 

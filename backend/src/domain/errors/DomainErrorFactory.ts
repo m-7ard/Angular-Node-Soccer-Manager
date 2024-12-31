@@ -7,3 +7,5 @@ class DomainErrorFactory {
         }]
     }
 }
+
+export default DomainErrorFactory;

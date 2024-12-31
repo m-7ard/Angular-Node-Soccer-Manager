@@ -7,6 +7,7 @@ import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory"
 import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import ITeamRepository from "application/interfaces/ITeamRepository";
+import MatchDomainService from "domain/domainService/MatchDomainService";
 
 type CommandProps = {
     id: string;
@@ -61,73 +62,38 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
     }
 
     async handle(command: CreateMatchCommand): Promise<CreateMatchCommandResult> {
-        const match = MatchFactory.CreateNew({
-            id: command.id,
-            homeTeamId: command.homeTeamId,
-            awayTeamId: command.awayTeamId,
-            venue: command.venue,
-            scheduledDate: command.scheduledDate,
-            startTime: command.startTime,
-        });
-
-        const statusResult = match.trySetStatus(command.status);
-        if (statusResult.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(statusResult.error));
-        }
-
-        if (match.status === MatchStatus.COMPLETED) {
-            if (command.endTime == null) {
-                return err(
-                    ApplicationErrorFactory.createSingleListError({
-                        message: `A completed match cannot have a null endTime.`,
-                        code: VALIDATION_ERROR_CODES.StateMismatch,
-                        path: ["endTime"],
-                    }),
-                );
-            }
-
-            const endTimeResult = match.trySetEndTime(command.endTime);
-            if (endTimeResult.isErr()) {
-                return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(endTimeResult.error));
-            }
-        }
-
-        if (match.canHaveScore()) {
-            if (command.homeTeamScore == null) {
-                return err(
-                    ApplicationErrorFactory.createSingleListError({
-                        message: `Home Team Score cannot be null when status is ${match.status.value}.`,
-                        code: VALIDATION_ERROR_CODES.StateMismatch,
-                        path: ["homeTeamScore"],
-                    }),
-                );
-            }
-    
-            if (command.awayTeamScore == null) {
-                return err(
-                    ApplicationErrorFactory.createSingleListError({
-                        message: `Away Team Score cannot be null when status is ${match.status.value}.`,
-                        code: VALIDATION_ERROR_CODES.StateMismatch,
-                        path: ["awayTeamScore"],
-                    }),
-                );
-            }
-    
-            const scoreResult = match.trySetScore({ homeTeamScore: command.homeTeamScore, awayTeamScore: command.awayTeamScore });
-            if (scoreResult.isErr()) {
-                return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(scoreResult.error));
-            }
-        }
-
         const homeTeam = await this._teamRepository.getByIdAsync(command.homeTeamId);
         if (homeTeam == null) {
-            return err(ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.homeTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }));
+            return err(
+                ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.homeTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }),
+            );
         }
 
         const awayTeam = await this._teamRepository.getByIdAsync(command.awayTeamId);
         if (awayTeam == null) {
-            return err(ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.awayTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }));
+            return err(
+                ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.awayTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }),
+            );
         }
+
+        const matchCreationResult = MatchDomainService.tryCreateMatch({
+            id: command.id,
+            homeTeam: homeTeam,
+            awayTeam: awayTeam,
+            venue: command.venue,
+            scheduledDate: command.scheduledDate,
+            startTime: command.startTime,
+            endTime: command.endTime,
+            status: command.status,
+            homeTeamScore: command.homeTeamScore,
+            awayTeamScore: command.awayTeamScore,
+        });
+
+        if (matchCreationResult.isErr()) {
+            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(matchCreationResult.error));
+        }
+
+        const match = matchCreationResult.value;
 
         await this._matchRepository.createAsync(match);
         return ok(undefined);
