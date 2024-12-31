@@ -12,8 +12,8 @@ type MatchProps = {
     awayTeamId: Team["id"];
     venue: string;
     scheduledDate: Date;
-    startTime: Date;
-    endTime: Date | null;
+    startDate: Date;
+    endDate: Date | null;
     status: MatchStatus;
     score: MatchScore | null;
     events: MatchEvent[];
@@ -29,8 +29,8 @@ class Match {
     public awayTeamId: Team["id"];
     public venue: string;
     public scheduledDate: Date;
-    public startTime: Date;
-    public endTime: Date | null;
+    public startDate: Date;
+    public endDate: Date | null;
     public status: MatchStatus;
     public score: MatchScore | null;
     public events: MatchEvent[];
@@ -43,8 +43,8 @@ class Match {
         this.awayTeamId = props.awayTeamId;
         this.venue = props.venue;
         this.scheduledDate = props.scheduledDate;
-        this.startTime = props.startTime;
-        this.endTime = props.endTime;
+        this.startDate = props.startDate;
+        this.endDate = props.endDate;
         this.status = props.status;
         this.score = props.score;
         this.createdAt = props.createdAt;
@@ -108,16 +108,16 @@ class Match {
         return ok(true);
     }
 
-    public trySetEndTime(value: Date): Result<true, IDomainError[]> {
+    public trySetEndDate(value: Date): Result<true, IDomainError[]> {
         if (this.status !== MatchStatus.COMPLETED) {
-            return err(DomainErrorFactory.createSingleListError({ message: "endTime can only be set on a completed match.", code: "MATCH_NOT_COMPLETED", path: ["endTime"] }));
+            return err(DomainErrorFactory.createSingleListError({ message: "endDate can only be set on a completed match.", code: "MATCH_NOT_COMPLETED", path: ["endDate"] }));
         }
 
-        if (dateDiff(value, this.startTime, "minutes") < 90) {
-            return err(DomainErrorFactory.createSingleListError({ message: "endTime must be at least 90 minutes greater than startTime.", code: "ENDTIME_TOO_SMALL", path: ["endTime"] }));
+        if (dateDiff(value, this.startDate, "minutes") < 90) {
+            return err(DomainErrorFactory.createSingleListError({ message: "endDate must be at least 90 minutes greater than startDate.", code: "END_DATE_TOO_SMALL", path: ["endDate"] }));
         }
 
-        this.endTime = new Date();
+        this.endDate = value;
         return ok(true);
     }
 

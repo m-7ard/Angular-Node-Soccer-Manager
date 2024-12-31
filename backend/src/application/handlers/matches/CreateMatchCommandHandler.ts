@@ -15,8 +15,8 @@ type CommandProps = {
     awayTeamId: string;
     venue: string;
     scheduledDate: Date;
-    startTime: Date;
-    endTime: Date | null;
+    startDate: Date;
+    endDate: Date | null;
     status: string;
     homeTeamScore: number | null;
     awayTeamScore: number | null;
@@ -33,8 +33,8 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
         this.awayTeamId = props.awayTeamId;
         this.venue = props.venue;
         this.scheduledDate = props.scheduledDate;
-        this.startTime = props.startTime;
-        this.endTime = props.endTime;
+        this.startDate = props.startDate;
+        this.endDate = props.endDate;
         this.status = props.status;
         this.homeTeamScore = props.homeTeamScore;
         this.awayTeamScore = props.awayTeamScore;
@@ -45,8 +45,8 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
     awayTeamId: string;
     venue: string;
     scheduledDate: Date;
-    startTime: Date;
-    endTime: Date | null;
+    startDate: Date;
+    endDate: Date | null;
     status: string;
     homeTeamScore: number | null;
     awayTeamScore: number | null;
@@ -82,8 +82,8 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
             awayTeam: awayTeam,
             venue: command.venue,
             scheduledDate: command.scheduledDate,
-            startTime: command.startTime,
-            endTime: command.endTime,
+            startDate: command.startDate,
+            endDate: command.endDate,
             status: command.status,
             homeTeamScore: command.homeTeamScore,
             awayTeamScore: command.awayTeamScore,

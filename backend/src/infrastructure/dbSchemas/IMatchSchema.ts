@@ -6,8 +6,8 @@ export default interface IMatchSchema {
     away_team_id: ITeamSchema["id"];
     venue: string;
     scheduled_date: Date;
-    start_time: Date;
-    end_time: Date | null;
+    start_date: Date;
+    end_date: Date | null;
     status: string;
     home_team_score: number | null;
     away_team_score: number | null;

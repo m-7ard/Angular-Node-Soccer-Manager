@@ -4,8 +4,8 @@ export default interface IMatchApiModel {
     awayTeamId: string;
     venue: string;
     scheduledDate: string;
-    startTime: string;
-    endTime: string | null;
+    startDate: string;
+    endDate: string | null;
     status: string;
     score: {
         homeTeamScore: number,

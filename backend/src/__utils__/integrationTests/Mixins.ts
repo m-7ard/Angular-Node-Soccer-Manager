@@ -4,14 +4,12 @@ import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import IUserRepository from "application/interfaces/IUserRepository";
-import MatchFactory from "domain/domainFactories/MatchFactory";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
 import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
-import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 
 class Mixins {
@@ -93,8 +91,8 @@ class Mixins {
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
             scheduledDate: date,
-            startTime: date,
-            endTime: null,
+            startDate: date,
+            endDate: null,
             score: null,
             status: MatchStatus.SCHEDULED.value,
         });
@@ -102,16 +100,16 @@ class Mixins {
 
     async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; score: { homeTeamScore: number; awayTeamScore: number } }) {
         const date = new Date();
-        const endTime = new Date(date);
-        date.setMinutes(endTime.getMinutes() + 90);
+        const endDate = new Date(date);
+        date.setMinutes(endDate.getMinutes() + 90);
 
         return await this.createMatch({
             seed: props.seed,
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
             scheduledDate: date,
-            startTime: date,
-            endTime: endTime,
+            startDate: date,
+            endDate: endDate,
             score: props.score,
             status: MatchStatus.COMPLETED.value,
         });
@@ -124,8 +122,8 @@ class Mixins {
         status: string;
         awayTeam: Team;
         homeTeam: Team;
-        startTime: Date;
-        endTime: null | Date;
+        startDate: Date;
+        endDate: null | Date;
     }) {
         const matchResult = MatchDomainService.tryCreateMatch({
             id: `${props.seed}`,
@@ -133,8 +131,8 @@ class Mixins {
             awayTeam: props.awayTeam,
             venue: `match_${props.seed}_venue`,
             scheduledDate: props.scheduledDate,
-            startTime: props.startTime,
-            endTime: props.endTime,
+            startDate: props.startDate,
+            endDate: props.endDate,
             status: props.status,
             homeTeamScore: props.score == null ? null : props.score.homeTeamScore,
             awayTeamScore: props.score == null ? null : props.score.awayTeamScore,

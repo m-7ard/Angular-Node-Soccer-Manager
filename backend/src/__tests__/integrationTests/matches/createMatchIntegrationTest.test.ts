@@ -45,8 +45,8 @@ beforeEach(async () => {
         awayTeamScore: null,
         homeTeamScore: null,
         scheduledDate: new Date(),
-        startTime: new Date(),
-        endTime: null,
+        startDate: new Date(),
+        endDate: null,
         venue: "venue place",
         status: MatchStatus.SCHEDULED.value,
     };
@@ -77,14 +77,14 @@ describe("Create Match Integration Test;", () => {
     it("Create Completed Match; Valid Data; Create;", async () => {
         const request = { ...default_request };
 
-        const startTime = new Date();
-        startTime.setHours(10, 0, 0, 0);
+        const startDate = new Date();
+        startDate.setHours(10, 0, 0, 0);
 
-        const endTime = new Date(startTime);
-        endTime.setHours(11, 30, 0, 0);
+        const endDate = new Date(startDate);
+        endDate.setHours(11, 30, 0, 0);
 
-        request.startTime = startTime;
-        request.endTime = endTime;
+        request.startDate = startDate;
+        request.endDate = endDate;
 
         const response = await adminSuperTest({
             agent: supertest(server)
@@ -97,16 +97,16 @@ describe("Create Match Integration Test;", () => {
         expect(response.status).toBe(201);
     });
 
-    it("Create Completed Match; Missing endTime; Failure;", async () => {
+    it("Create Completed Match; Missing endDate; Failure;", async () => {
         const request = { ...default_request };
         request.status = MatchStatus.COMPLETED.value;
         request.awayTeamScore = 1;
         request.homeTeamScore = 1;
 
-        const startTime = new Date();
-        startTime.setHours(10, 0, 0, 0);
+        const startDate = new Date();
+        startDate.setHours(10, 0, 0, 0);
 
-        request.startTime = startTime;
+        request.startDate = startDate;
 
         const response = await adminSuperTest({
             agent: supertest(server)
@@ -127,14 +127,14 @@ describe("Create Match Integration Test;", () => {
         request.awayTeamScore = 1;
         request.homeTeamScore = 1;
 
-        const startTime = new Date();
-        startTime.setHours(10, 0, 0, 0);
+        const startDate = new Date();
+        startDate.setHours(10, 0, 0, 0);
 
-        const endTime = new Date(startTime);
-        endTime.setHours(11, 0, 0, 0);
+        const endDate = new Date(startDate);
+        endDate.setHours(11, 0, 0, 0);
 
-        request.startTime = startTime;
-        request.endTime = endTime;
+        request.startDate = startDate;
+        request.endDate = endDate;
 
         const response = await adminSuperTest({
             agent: supertest(server)

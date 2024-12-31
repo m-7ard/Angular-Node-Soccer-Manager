@@ -11,8 +11,8 @@ class MatchDbEntity implements IMatchSchema {
     away_team_id: string;
     venue: string;
     scheduled_date: Date;
-    start_time: Date;
-    end_time: Date | null;
+    start_date: Date;
+    end_date: Date | null;
     status: string;
     home_team_score: number | null;
     away_team_score: number | null;
@@ -34,8 +34,8 @@ class MatchDbEntity implements IMatchSchema {
         away_team_id: string;
         venue: string;
         scheduled_date: Date;
-        start_time: Date;
-        end_time: Date | null;
+        start_date: Date;
+        end_date: Date | null;
         status: string;
         home_team_score: number | null;
         away_team_score: number | null;
@@ -47,8 +47,8 @@ class MatchDbEntity implements IMatchSchema {
         this.away_team_id = props.away_team_id;
         this.venue = props.venue;
         this.scheduled_date = props.scheduled_date;
-        this.start_time = props.start_time;
-        this.end_time = props.end_time;
+        this.start_date = props.start_date;
+        this.end_date = props.end_date;
         this.status = props.status;
         this.home_team_score = props.home_team_score;
         this.away_team_score = props.away_team_score;

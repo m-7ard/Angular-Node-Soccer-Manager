@@ -64,8 +64,8 @@ class ApiModelMapper {
             awayTeamId: match.awayTeamId,
             venue: match.venue,
             scheduledDate: match.scheduledDate.toString(),
-            startTime: match.startTime.toString(),
-            endTime: match.endTime == null ? null : match.endTime.toString(),
+            startDate: match.startDate.toString(),
+            endDate: match.endDate == null ? null : match.endDate.toString(),
             status: match.status.value,
             score:
                 match.score == null

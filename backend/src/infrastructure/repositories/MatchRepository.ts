@@ -43,8 +43,8 @@ class MatchRepository implements IMatchRepository {
                     away_team_id = ${dbEntity.away_team_id},
                     venue = ${dbEntity.venue},
                     scheduled_date = ${dbEntity.scheduled_date},
-                    start_time = ${dbEntity.start_time},
-                    end_time = ${dbEntity.end_time},
+                    start_date = ${dbEntity.start_date},
+                    end_date = ${dbEntity.end_date},
                     status = ${dbEntity.status},
                     home_team_score = ${dbEntity.home_team_score},
                     away_team_score = ${dbEntity.away_team_score}

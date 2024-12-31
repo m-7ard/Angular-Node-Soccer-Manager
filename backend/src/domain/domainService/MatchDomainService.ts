@@ -13,8 +13,8 @@ class MatchDomainService {
         awayTeam: Team;
         venue: string;
         scheduledDate: Date;
-        startTime: Date;
-        endTime: Date | null;
+        startDate: Date;
+        endDate: Date | null;
         status: string;
         homeTeamScore: number | null;
         awayTeamScore: number | null;
@@ -25,7 +25,7 @@ class MatchDomainService {
             awayTeamId: props.awayTeam.id,
             venue: props.venue,
             scheduledDate: props.scheduledDate,
-            startTime: props.startTime,
+            startDate: props.startDate,
         });
 
         // Try to set the status of the match, return error if setting status fails
@@ -34,22 +34,22 @@ class MatchDomainService {
             return err(statusResult.error);
         }
 
-        // If the match is completed, validate that endTime is provided
+        // If the match is completed, validate that endDate is provided
         if (match.status === MatchStatus.COMPLETED) {
-            if (props.endTime == null) {
+            if (props.endDate == null) {
                 return err(
                     DomainErrorFactory.createSingleListError({
-                        message: `A completed match cannot have a null endTime.`,
-                        code: "INVALID_END_TIME",
-                        path: ["endTime"],
+                        message: `A completed match cannot have a null endDate.`,
+                        code: "INVALID_END_DATE",
+                        path: ["endDate"],
                     }),
                 );
             }
 
-            // Set the endTime and return error if setting endTime fails
-            const endTimeResult = match.trySetEndTime(props.endTime);
-            if (endTimeResult.isErr()) {
-                return err(endTimeResult.error);
+            // Set the endDate and return error if setting endDate fails
+            const endDateResult = match.trySetEndDate(props.endDate);
+            if (endDateResult.isErr()) {
+                return err(endDateResult.error);
             }
         }
 

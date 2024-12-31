@@ -8,7 +8,7 @@ class MatchFactory {
         awayTeamId: Match["awayTeamId"];
         venue: Match["venue"];
         scheduledDate: Match["scheduledDate"];
-        startTime: Match["startTime"];
+        startDate: Match["startDate"];
     }) {
         return new Match({
             id: props.id,
@@ -16,8 +16,8 @@ class MatchFactory {
             awayTeamId: props.awayTeamId,
             venue: props.venue,
             scheduledDate: props.scheduledDate,
-            startTime: props.startTime,
-            endTime: null,
+            startDate: props.startDate,
+            endDate: null,
             status: MatchStatus.SCHEDULED,
             score: null,
             events: [],
@@ -32,8 +32,8 @@ class MatchFactory {
         awayTeamId: Match["awayTeamId"];
         venue: Match["venue"];
         scheduledDate: Match["scheduledDate"];
-        startTime: Match["startTime"];
-        endTime: Match["endTime"];
+        startDate: Match["startDate"];
+        endDate: Match["endDate"];
         status: Match["status"];
         score: Match["score"];
         events: Match["events"];
@@ -46,8 +46,8 @@ class MatchFactory {
             awayTeamId: props.awayTeamId,
             venue: props.venue,
             scheduledDate: props.scheduledDate,
-            startTime: props.startTime,
-            endTime: props.endTime,
+            startDate: props.startDate,
+            endDate: props.endDate,
             status: props.status,
             score: props.score,
             events: props.events,
