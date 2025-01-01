@@ -21,6 +21,8 @@ import CreateMatchCommandHandler, { CreateMatchCommand } from "application/handl
 import ReadMatchQueryHandler, { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
 import ListMatchesQueryHandler, { ListMatchesQuery } from "application/handlers/matches/ListMatchesQueryHandler";
 import MarkMatchInProgressCommandHandler, { MarkMatchInProgressCommand } from "application/handlers/matches/MarkMatchInProgressCommandHandler";
+import MarkMatchCompletedCommandHandler, { MarkMatchCompletedCommand } from "application/handlers/matches/MarkMatchCompletedCommandHandler";
+import MarkMatchCancelledCommandHandler, { MarkMatchCancelledCommand } from "application/handlers/matches/MarkMatchCancelledCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -61,6 +63,8 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(ReadMatchQuery, new ReadMatchQueryHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(ListMatchesQuery, new ListMatchesQueryHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(MarkMatchInProgressCommand, new MarkMatchInProgressCommandHandler({ matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(MarkMatchCompletedCommand, new MarkMatchCompletedCommandHandler({ matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(MarkMatchCancelledCommand, new MarkMatchCancelledCommandHandler({ matchRepository: matchRepository }));
 
     return requestDispatcher;
 }

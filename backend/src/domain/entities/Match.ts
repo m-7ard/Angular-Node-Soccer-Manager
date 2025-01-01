@@ -56,10 +56,10 @@ class Match {
     private isValidStatusTransitions = (newStatus: MatchStatus) => {
         if (this.status === MatchStatus.SCHEDULED) {
             return [MatchStatus.IN_PROGRESS, MatchStatus.CANCELLED].includes(newStatus);
-        } else if (this.status === MatchStatus.SCHEDULED) {
-            return [MatchStatus.IN_PROGRESS, MatchStatus.CANCELLED].includes(newStatus);
         } else if (this.status === MatchStatus.IN_PROGRESS) {
             return [MatchStatus.COMPLETED, MatchStatus.CANCELLED].includes(newStatus);
+        } else if (this.status === MatchStatus.COMPLETED) {
+            return [MatchStatus.CANCELLED].includes(newStatus);
         }
 
         return false;
@@ -118,6 +118,8 @@ class Match {
             const errors: IDomainError[] = scoreResult.error.map((error) => ({ code: "INVALID_SCORE", message: error, path: ["score"] }));
             return err(errors);
         }
+
+        this.score = scoreResult.value;
 
         return ok(true);
     }

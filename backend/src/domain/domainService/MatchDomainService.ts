@@ -234,12 +234,7 @@ class MatchDomainService {
         return ok(match);
     }
 
-    public static tryMarkInProgress(
-        match: Match,
-        props: {
-            startDate: Date;
-        },
-    ): Result<true, IDomainError[]> {
+    public static tryMarkInProgress(match: Match, props: { startDate: Date }): Result<true, IDomainError[]> {
         const statusResult = match.tryTransitionStatus(MatchStatus.IN_PROGRESS.value);
         if (statusResult.isErr()) {
             return err(statusResult.error);
@@ -253,6 +248,44 @@ class MatchDomainService {
         const startScoreResult = match.trySetScore({ homeTeamScore: 0, awayTeamScore: 0 });
         if (startScoreResult.isErr()) {
             return err(startScoreResult.error);
+        }
+
+        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
+        if (matchIntegrityResult.isErr()) {
+            return err(matchIntegrityResult.error);
+        }
+
+        return ok(true);
+    }
+
+    public static tryMarkCompleted(match: Match, props: { endDate: Date }): Result<true, IDomainError[]> {
+        const statusResult = match.tryTransitionStatus(MatchStatus.COMPLETED.value);
+        if (statusResult.isErr()) {
+            return err(statusResult.error);
+        }
+
+        const endDateResult = match.trySetEndDate(props.endDate);
+        if (endDateResult.isErr()) {
+            return err(endDateResult.error);
+        }
+
+        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
+        if (matchIntegrityResult.isErr()) {
+            return err(matchIntegrityResult.error);
+        }
+
+        return ok(true);
+    }
+
+    public static tryMarkCancelled(match: Match): Result<true, IDomainError[]> {
+        const statusResult = match.tryTransitionStatus(MatchStatus.CANCELLED.value);
+        if (statusResult.isErr()) {
+            return err(statusResult.error);
+        }
+
+        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
+        if (matchIntegrityResult.isErr()) {
+            return err(matchIntegrityResult.error);
         }
 
         return ok(true);

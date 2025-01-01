@@ -10,7 +10,7 @@ import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import Match from "domain/entities/Match";
-import IMarkMatchInProgressRequestDTO from "api/DTOs/matches/markMatchInProgress/IMarkMatchInProgressRequestDTO";
+import IMarkMatchCompletedRequestDTO from "api/DTOs/matches/markMatchCompleted/IMarkMatchCompletedRequestDTO";
 
 let team_001: Team;
 let team_002: Team;
@@ -18,7 +18,7 @@ let scheduled_match: Match;
 let in_progress_match: Match;
 let completed_match: Match;
 let cancelled_match: Match;
-let default_request: IMarkMatchInProgressRequestDTO;
+let default_request: IMarkMatchCompletedRequestDTO;
 
 beforeAll(async () => {
     await setUpIntegrationTest();
@@ -33,27 +33,27 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     team_002 = await mixins.createTeam(2);
-    scheduled_match = await mixins.createScheduledMatch({
+    completed_match = await mixins.createCompletedMatch({
         seed: 1,
-        awayTeam: team_001,
-        homeTeam: team_002,
-    });
-
-    const startDate = scheduled_match.scheduledDate;
-    startDate.setDate(startDate.getMinutes() + 1);
-
-    default_request = {
-        startDate: startDate,
-    };
-
-    in_progress_match = await mixins.createInProgressMatch({
-        seed: 2,
         awayTeam: team_001,
         homeTeam: team_002,
         score: { homeTeamScore: 0, awayTeamScore: 0 },
     });
 
-    completed_match = await mixins.createCompletedMatch({
+    const endDate = completed_match.startDate!;
+    endDate.setMinutes(endDate.getMinutes() + 90);
+
+    default_request = {
+        endDate: endDate,
+    };
+
+    scheduled_match = await mixins.createScheduledMatch({
+        seed: 2,
+        awayTeam: team_001,
+        homeTeam: team_002,
+    });
+
+    in_progress_match = await mixins.createInProgressMatch({
         seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
@@ -67,13 +67,13 @@ beforeEach(async () => {
     });
 });
 
-describe("Mark Match In Progress Integration Test;", () => {
-    it("Mark Match In Progress; Valid Match; Success;", async () => {
+describe("Mark Match Completed Integration Test;", () => {
+    it("Mark Match Completed; Valid Match; Success;", async () => {
         const request = { ...default_request };
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/matches/${scheduled_match.id}/mark_in_progress`)
+                .post(`/api/matches/${in_progress_match.id}/mark_completed`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -82,12 +82,12 @@ describe("Mark Match In Progress Integration Test;", () => {
         expect(response.status).toBe(200);
     });
 
-    it("Mark Match In Progress; Match does not exist; Failure;", async () => {
+    it("Mark Match Completed; Match does not exist; Failure;", async () => {
         const request = { ...default_request };
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/matches/${"does_not_exist"}/mark_in_progress`)
+                .post(`/api/matches/${"does_not_exist"}/mark_completed`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -96,16 +96,15 @@ describe("Mark Match In Progress Integration Test;", () => {
         expect(response.status).toBe(404);
     });
 
-    it("Mark Match In Progress; Invalid startDate; Failure;", async () => {
+    it("Mark Match Completed; Invalid endDate; Failure;", async () => {
         const request = { ...default_request };
-        const startDate = new Date(scheduled_match.scheduledDate);
-        startDate.setDate(startDate.getMinutes() - 1);
+        const endDate = new Date(in_progress_match.startDate!);
 
-        request.startDate = startDate;
+        request.endDate = endDate;
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/matches/${scheduled_match.id}/mark_in_progress`)
+                .post(`/api/matches/${in_progress_match.id}/mark_completed`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -115,18 +114,18 @@ describe("Mark Match In Progress Integration Test;", () => {
     });
 
     it.each([
-        [() => in_progress_match],
+        [() => scheduled_match],
         [() => completed_match],
         [() => cancelled_match],
     ])(
-        "Mark Match In Progress; Match cannot transition status; Failure;",
+        "Mark Match Completed; Match cannot transition status; Failure;",
         async (getMatch) => {
             const match = getMatch();
             const request = { ...default_request };
 
             const response = await adminSuperTest({
                 agent: supertest(server)
-                    .post(`/api/matches/${match.id}/mark_in_progress`)
+                    .post(`/api/matches/${match.id}/mark_completed`)
                     .send(request)
                     .set("Content-Type", "application/json"),
                 seed: 1,
