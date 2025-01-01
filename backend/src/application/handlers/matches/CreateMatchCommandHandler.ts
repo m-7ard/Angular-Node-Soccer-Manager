@@ -2,10 +2,8 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
-import MatchFactory from "domain/domainFactories/MatchFactory";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 
@@ -15,11 +13,13 @@ type CommandProps = {
     awayTeamId: string;
     venue: string;
     scheduledDate: Date;
-    startDate: Date;
+    startDate: Date | null;
     endDate: Date | null;
     status: string;
-    homeTeamScore: number | null;
-    awayTeamScore: number | null;
+    score: {
+        homeTeamScore: number;
+        awayTeamScore: number;
+    } | null;
 };
 
 export type CreateMatchCommandResult = ICommandResult<IApplicationError[]>;
@@ -36,8 +36,7 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
         this.startDate = props.startDate;
         this.endDate = props.endDate;
         this.status = props.status;
-        this.homeTeamScore = props.homeTeamScore;
-        this.awayTeamScore = props.awayTeamScore;
+        this.score = props.score;
     }
 
     id: string;
@@ -45,11 +44,13 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
     awayTeamId: string;
     venue: string;
     scheduledDate: Date;
-    startDate: Date;
+    startDate: Date | null;
     endDate: Date | null;
     status: string;
-    homeTeamScore: number | null;
-    awayTeamScore: number | null;
+    score: {
+        homeTeamScore: number;
+        awayTeamScore: number;
+    } | null;
 }
 
 export default class CreateMatchCommandHandler implements IRequestHandler<CreateMatchCommand, CreateMatchCommandResult> {
@@ -85,8 +86,7 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
             startDate: command.startDate,
             endDate: command.endDate,
             status: command.status,
-            homeTeamScore: command.homeTeamScore,
-            awayTeamScore: command.awayTeamScore,
+            score: command.score,
         });
 
         if (matchCreationResult.isErr()) {

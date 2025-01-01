@@ -12,7 +12,7 @@ type MatchProps = {
     awayTeamId: Team["id"];
     venue: string;
     scheduledDate: Date;
-    startDate: Date;
+    startDate: Date | null;
     endDate: Date | null;
     status: MatchStatus;
     score: MatchScore | null;
@@ -29,7 +29,7 @@ class Match {
     public awayTeamId: Team["id"];
     public venue: string;
     public scheduledDate: Date;
-    public startDate: Date;
+    public startDate: Date | null;
     public endDate: Date | null;
     public status: MatchStatus;
     public score: MatchScore | null;
@@ -55,7 +55,7 @@ class Match {
 
     private isValidStatusTransitions = (newStatus: MatchStatus) => {
         if (this.status === MatchStatus.SCHEDULED) {
-            return true;
+            return [MatchStatus.IN_PROGRESS, MatchStatus.CANCELLED].includes(newStatus);
         } else if (this.status === MatchStatus.SCHEDULED) {
             return [MatchStatus.IN_PROGRESS, MatchStatus.CANCELLED].includes(newStatus);
         } else if (this.status === MatchStatus.IN_PROGRESS) {
@@ -65,7 +65,7 @@ class Match {
         return false;
     };
 
-    public trySetStatus(value: string): Result<true, IDomainError[]> {
+    public tryTransitionStatus(value: string): Result<true, IDomainError[]> {
         const statusResult = MatchStatus.tryCreate(value);
 
         if (statusResult.isErr()) {
@@ -84,6 +84,20 @@ class Match {
             );
         }
 
+        this.status = newStatus;
+        return ok(true);
+    }
+
+
+    public trySetStatus(value: string): Result<true, IDomainError[]> {
+        const statusResult = MatchStatus.tryCreate(value);
+
+        if (statusResult.isErr()) {
+            return err(DomainErrorFactory.createSingleListError({ message: statusResult.error, path: ["status"], code: "INVALID_STATUS" }));
+        }
+
+        const newStatus = statusResult.value;
+        
         this.status = newStatus;
         return ok(true);
     }
@@ -113,11 +127,28 @@ class Match {
             return err(DomainErrorFactory.createSingleListError({ message: "endDate can only be set on a completed match.", code: "MATCH_NOT_COMPLETED", path: ["endDate"] }));
         }
 
+        if (this.startDate == null) {
+            return err(DomainErrorFactory.createSingleListError({ message: "endDate cannot be set when startDate is null.", code: "NULL_START_DATE", path: ["startDate"] }));
+        }
+
         if (dateDiff(value, this.startDate, "minutes") < 90) {
             return err(DomainErrorFactory.createSingleListError({ message: "endDate must be at least 90 minutes greater than startDate.", code: "END_DATE_TOO_SMALL", path: ["endDate"] }));
         }
 
         this.endDate = value;
+        return ok(true);
+    }
+
+    public trySetStartDate(value: Date): Result<true, IDomainError[]> {
+        if (this.status !== MatchStatus.IN_PROGRESS) {
+            return err(DomainErrorFactory.createSingleListError({ message: "startDate can only be set on a in progress match.", code: "MATCH_NOT_COMPLETED", path: ["startDate"] }));
+        }
+
+        if (value < this.scheduledDate) {
+            return err(DomainErrorFactory.createSingleListError({ message: "startDate cannot be smaller than the scheduled date.", code: "START_DATE_TOO_SMALL", path: ["startDate"] }));
+        }
+
+        this.startDate = value;
         return ok(true);
     }
 

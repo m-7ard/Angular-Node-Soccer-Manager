@@ -57,7 +57,7 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
                 playerId: request.body.playerId,
                 activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
                 activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),
-                number: parseInt(request.body.number)
+                number: request.body.number
             },
         };
     }

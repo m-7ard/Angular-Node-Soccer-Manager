@@ -4,6 +4,7 @@ import MatchDbEntity from "infrastructure/dbEntities/MatchDbEntity";
 import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
 import MatchEventMapper from "./MatchEventMapper";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import MatchDomainService from "domain/domainService/MatchDomainService";
 
 class MatchMapper {
     static schemaToDbEntity(source: IMatchSchema): MatchDbEntity {
@@ -47,7 +48,7 @@ class MatchMapper {
             throw new Error(statusResult.error)
         }
 
-        return new Match({
+        const match = new Match({
             id: source.id,
             homeTeamId: source.home_team_id,
             awayTeamId: source.away_team_id,
@@ -64,6 +65,13 @@ class MatchMapper {
             updatedAt: source.updated_at,
             events: source.events.map(MatchEventMapper.dbEntityToDomain)
         });
+
+        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
+        if (matchIntegrityResult.isErr()) {
+            throw new Error(`Integrity error occured while trying to map Match Db entity to a domain entity: ${JSON.stringify(matchIntegrityResult.error)}`);
+        }
+
+        return match;
     }
 }
 

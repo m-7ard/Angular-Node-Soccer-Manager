@@ -1,5 +1,5 @@
 import { IRequestHandler } from "../IRequestHandler";
-import { err, ok } from "neverthrow";
+import { ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import IQuery, { IQueryResult } from "../IQuery";
 import Match from "domain/entities/Match";

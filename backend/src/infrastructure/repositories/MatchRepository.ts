@@ -93,6 +93,33 @@ class MatchRepository implements IMatchRepository {
 
         return matches.map(MatchMapper.dbEntityToDomain);
     }
+    
+    async updateAsync(match: Match): Promise<void> {
+        const dbEntity = MatchMapper.domainToDbEntity(match);
+
+        const sqlEntry = sql`
+            UPDATE matches
+                SET 
+                    id = ${dbEntity.id},
+                    home_team_id = ${dbEntity.home_team_id},
+                    away_team_id = ${dbEntity.away_team_id},
+                    venue = ${dbEntity.venue},
+                    scheduled_date = ${dbEntity.scheduled_date},
+                    start_date = ${dbEntity.start_date},
+                    end_date = ${dbEntity.end_date},
+                    status = ${dbEntity.status},
+                    home_team_score = ${dbEntity.home_team_score},
+                    away_team_score = ${dbEntity.away_team_score}
+                WHERE 
+                    id = ${dbEntity.id}
+
+        `;
+
+        await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+    }
 }
 
 export default MatchRepository;

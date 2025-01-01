@@ -20,6 +20,7 @@ import CurrentUserQueryHandler, { CurrentUserQuery } from "application/handlers/
 import CreateMatchCommandHandler, { CreateMatchCommand } from "application/handlers/matches/CreateMatchCommandHandler";
 import ReadMatchQueryHandler, { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
 import ListMatchesQueryHandler, { ListMatchesQuery } from "application/handlers/matches/ListMatchesQueryHandler";
+import MarkMatchInProgressCommandHandler, { MarkMatchInProgressCommand } from "application/handlers/matches/MarkMatchInProgressCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -59,6 +60,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(CreateMatchCommand, new CreateMatchCommandHandler({ teamRepository: teamRepository, matchRepository: matchRepository }));
     requestDispatcher.registerHandler(ReadMatchQuery, new ReadMatchQueryHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(ListMatchesQuery, new ListMatchesQueryHandler({ matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(MarkMatchInProgressCommand, new MarkMatchInProgressCommandHandler({ matchRepository: matchRepository }));
 
     return requestDispatcher;
 }

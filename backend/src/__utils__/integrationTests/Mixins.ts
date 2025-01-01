@@ -91,10 +91,24 @@ class Mixins {
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
             scheduledDate: date,
-            startDate: date,
+            startDate: null,
             endDate: null,
             score: null,
             status: MatchStatus.SCHEDULED.value,
+        });
+    }
+
+    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; score: { homeTeamScore: number; awayTeamScore: number } }) {
+        const date = new Date();
+        return await this.createMatch({
+            seed: props.seed,
+            awayTeam: props.awayTeam,
+            homeTeam: props.homeTeam,
+            scheduledDate: date,
+            startDate: date,
+            endDate: null,
+            score: props.score,
+            status: MatchStatus.IN_PROGRESS.value,
         });
     }
 
@@ -115,6 +129,21 @@ class Mixins {
         });
     }
 
+    async createCancelledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; }) {
+        const date = new Date();
+
+        return await this.createMatch({
+            seed: props.seed,
+            awayTeam: props.awayTeam,
+            homeTeam: props.homeTeam,
+            scheduledDate: date,
+            startDate: null,
+            endDate: null,
+            score: null,
+            status: MatchStatus.CANCELLED.value,
+        });
+    }
+
     private async createMatch(props: {
         seed: number;
         scheduledDate: Date;
@@ -122,7 +151,7 @@ class Mixins {
         status: string;
         awayTeam: Team;
         homeTeam: Team;
-        startDate: Date;
+        startDate: Date | null;
         endDate: null | Date;
     }) {
         const matchResult = MatchDomainService.tryCreateMatch({
@@ -134,8 +163,13 @@ class Mixins {
             startDate: props.startDate,
             endDate: props.endDate,
             status: props.status,
-            homeTeamScore: props.score == null ? null : props.score.homeTeamScore,
-            awayTeamScore: props.score == null ? null : props.score.awayTeamScore,
+            score:
+                props.score == null
+                    ? null
+                    : {
+                          homeTeamScore: props.score.homeTeamScore,
+                          awayTeamScore: props.score.awayTeamScore,
+                      },
         });
 
         if (matchResult.isErr()) {

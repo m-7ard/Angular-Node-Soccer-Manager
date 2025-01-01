@@ -5,6 +5,7 @@ import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
 import CreateMatchAction from "api/actions/matches/CreateMatchAction";
 import ReadMatchAction from "api/actions/matches/ReadMatchAction";
 import ListMatchesAction from "api/actions/matches/ListMatchAction";
+import MarkMatchInProgressAction from "api/actions/matches/MarkMatchInProgressAction";
 
 const matchesRouter = Router();
 
@@ -38,6 +39,17 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new ListMatchesAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: matchesRouter,
+    path: "/:matchId/mark_in_progress",
+    method: "POST",
+    guards: [userIsAuthenticatedGuard],
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new MarkMatchInProgressAction(requestDispatcher);
     },
 });
 

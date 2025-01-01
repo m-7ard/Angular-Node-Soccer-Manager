@@ -11,7 +11,7 @@ class MatchDbEntity implements IMatchSchema {
     away_team_id: string;
     venue: string;
     scheduled_date: Date;
-    start_date: Date;
+    start_date: Date | null;
     end_date: Date | null;
     status: string;
     home_team_score: number | null;
@@ -28,20 +28,7 @@ class MatchDbEntity implements IMatchSchema {
         this.events = matchEvents.map((row) => MatchEventMapper.schemaToDbEntity(row));
     }
 
-    constructor(props: {
-        id: string;
-        home_team_id: string;
-        away_team_id: string;
-        venue: string;
-        scheduled_date: Date;
-        start_date: Date;
-        end_date: Date | null;
-        status: string;
-        home_team_score: number | null;
-        away_team_score: number | null;
-        created_at: Date;
-        updated_at: Date;
-    }) {
+    constructor(props: IMatchSchema) {
         this.id = props.id;
         this.home_team_id = props.home_team_id;
         this.away_team_id = props.away_team_id;

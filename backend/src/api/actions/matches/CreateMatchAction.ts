@@ -39,8 +39,7 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
             startDate: dto.startDate,
             endDate: dto.endDate,
             status: dto.status,
-            homeTeamScore: dto.homeTeamScore,
-            awayTeamScore: dto.awayTeamScore,
+            score: dto.score
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -66,11 +65,10 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
                 awayTeamId: request.body.awayTeamId,
                 venue: request.body.venue,
                 scheduledDate: new Date(request.body.scheduledDate),
-                startDate: parsers.parseDateOrElse(request.body.startDate, "Invalid Date"),
+                startDate: request.body.startDate == null ? null : parsers.parseDateOrElse(request.body.startDate, "Invalid Date"),
                 endDate: request.body.endDate == null ? null : parsers.parseDateOrElse(request.body.endDate, "Invalid Date"),
                 status: request.body.status,
-                homeTeamScore: request.body.homeTeamScore == null ? null : parseInt(request.body.homeTeamScore),
-                awayTeamScore: request.body.awayTeamScore == null ? null : parseInt(request.body.awayTeamScore),
+                score: request.body.score
             },
         };
     }

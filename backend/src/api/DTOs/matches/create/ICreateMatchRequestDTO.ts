@@ -3,11 +3,13 @@ interface ICreateMatchRequestDTO {
     awayTeamId: string;
     venue: string;
     scheduledDate: Date;
-    startDate: Date;
+    startDate: Date | null;
     endDate: Date | null;
     status: string;
-    homeTeamScore: number | null;
-    awayTeamScore: number | null;
+    score: {
+        homeTeamScore: number;
+        awayTeamScore: number;
+    } | null;
 }
 
 export default ICreateMatchRequestDTO;

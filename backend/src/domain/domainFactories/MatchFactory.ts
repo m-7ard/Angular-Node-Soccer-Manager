@@ -1,5 +1,4 @@
 import Match from "domain/entities/Match";
-import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 
 class MatchFactory {
     static CreateNew(props: {
@@ -9,6 +8,9 @@ class MatchFactory {
         venue: Match["venue"];
         scheduledDate: Match["scheduledDate"];
         startDate: Match["startDate"];
+        endDate: Match["endDate"];
+        status: Match["status"];
+        score: Match["score"];
     }) {
         return new Match({
             id: props.id,
@@ -17,9 +19,9 @@ class MatchFactory {
             venue: props.venue,
             scheduledDate: props.scheduledDate,
             startDate: props.startDate,
-            endDate: null,
-            status: MatchStatus.SCHEDULED,
-            score: null,
+            endDate: props.endDate,
+            status: props.status,
+            score: props.score,
             events: [],
             createdAt: new Date(),
             updatedAt: new Date(),

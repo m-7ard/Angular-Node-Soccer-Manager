@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import {
-    db,
     disposeIntegrationTest,
     resetIntegrationTest,
     server,
@@ -23,8 +22,6 @@ let team_003: Team;
 let match_001: Match;
 let match_002: Match;
 let match_003: Match;
-
-jest.setTimeout(1000000000);
 
 let default_request: IListMatchesRequestDTO = {
     limitBy: null,
