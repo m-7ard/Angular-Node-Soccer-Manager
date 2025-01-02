@@ -59,7 +59,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(CurrentUserQuery, new CurrentUserQueryHandler({ userRepository: userRepository, jwtTokenService: jwtTokenService }));
 
     // Matches
-    requestDispatcher.registerHandler(CreateMatchCommand, new CreateMatchCommandHandler({ teamRepository: teamRepository, matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(CreateMatchCommand, new CreateMatchCommandHandler({ teamRepository: teamRepository, matchRepository: matchRepository, playerRepository: playerRepository }));
     requestDispatcher.registerHandler(ReadMatchQuery, new ReadMatchQueryHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(ListMatchesQuery, new ListMatchesQueryHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(MarkMatchInProgressCommand, new MarkMatchInProgressCommandHandler({ matchRepository: matchRepository }));

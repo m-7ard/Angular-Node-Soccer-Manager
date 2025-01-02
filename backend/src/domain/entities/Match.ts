@@ -5,6 +5,11 @@ import MatchScore from "domain/valueObjects/Match/MatchScore";
 import { err, ok, Result } from "neverthrow";
 import dateDiff from "utils/dateDifference";
 import DomainErrorFactory from "domain/errors/DomainErrorFactory";
+import Player from "./Player";
+import MatchEventFactory from "domain/domainFactories/MatchEventFactory";
+import MatchEventType from "domain/valueObjects/MatchEvent/MatchEventType";
+import DomainEvent from "domain/domainEvents/DomainEvent";
+import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
 
 type MatchProps = {
     id: string;
@@ -36,6 +41,8 @@ class Match {
     public events: MatchEvent[];
     public createdAt: Date;
     public updatedAt: Date;
+
+    public domainEvents: DomainEvent[] = [];
 
     constructor(props: MatchProps) {
         this.id = props.id;
@@ -88,7 +95,6 @@ class Match {
         return ok(true);
     }
 
-
     public trySetStatus(value: string): Result<true, IDomainError[]> {
         const statusResult = MatchStatus.tryCreate(value);
 
@@ -97,7 +103,7 @@ class Match {
         }
 
         const newStatus = statusResult.value;
-        
+
         this.status = newStatus;
         return ok(true);
     }
@@ -156,6 +162,86 @@ class Match {
 
     public canHaveScore() {
         return [MatchStatus.IN_PROGRESS, MatchStatus.COMPLETED, MatchStatus.CANCELLED].includes(this.status);
+    }
+
+    public tryAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): Result<true, IDomainError[]> {
+        if (this.score == null) {
+            return err(
+                DomainErrorFactory.createSingleListError({
+                    message: `Score cannot be null when adding a goal`,
+                    path: ["_"],
+                    code: "INVALID_SCORE",
+                }),
+            );
+        }
+
+        if (this.startDate == null) {
+            return err(
+                DomainErrorFactory.createSingleListError({
+                    message: `Cannot add goals when startDate is null`,
+                    path: ["_"],
+                    code: "INVALID_START_DATE",
+                }),
+            );
+        }
+
+        if (props.dateOccured < this.startDate) {
+            return err(
+                DomainErrorFactory.createSingleListError({
+                    message: `Date occured cannot be less than start date`,
+                    path: ["_"],
+                    code: "DATE_OCCURED_TOO_SMALL",
+                }),
+            );
+        }
+
+        if (props.teamId !== this.homeTeamId || props.teamId !== this.awayTeamId) {
+            return err(
+                DomainErrorFactory.createSingleListError({
+                    message: `Goal team does not match teams from match`,
+                    path: ["_"],
+                    code: "TEAM_DOES_NOT_EXIST",
+                }),
+            );
+        }
+
+        const matchEvent = MatchEventFactory.CreateNew({
+            id: crypto.randomUUID(),
+            matchId: this.id,
+            playerId: props.playerId,
+            teamId: props.teamId,
+            type: MatchEventType.GOAL,
+            dateOccured: props.dateOccured,
+            secondaryPlayerId: null,
+            description: "",
+        });
+
+        this.events.push(matchEvent);
+        this.domainEvents.push(new MatchEventPendingCreationEvent(matchEvent));
+
+        const isHomeTeamGoal = props.teamId === this.homeTeamId;
+        const matchScoreResult = MatchScore.tryCreate({
+            homeTeamScore: isHomeTeamGoal ? this.score.homeTeamScore + 1 : this.score.homeTeamScore,
+            awayTeamScore: isHomeTeamGoal ? this.score.awayTeamScore : this.score.awayTeamScore + 1,
+        });
+
+        if (matchScoreResult.isErr()) {
+            const errors: IDomainError[] = matchScoreResult.error.map((message) => ({
+                message: message,
+                path: ["_"],
+                code: "INVALID_SCORE",
+            }));
+
+            return err(errors);
+        }
+
+        this.score = matchScoreResult.value;
+
+        return ok(true);
+    }
+
+    public getGoals() {
+        return this.events.filter((event) => event.type === MatchEventType.GOAL);
     }
 }
 

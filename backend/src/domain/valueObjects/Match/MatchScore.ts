@@ -12,18 +12,11 @@ class MatchScore {
 
     public readonly homeTeamScore: number;
     public readonly awayTeamScore: number;
+    public static readonly ZeroScore = new MatchScore({ homeTeamScore: 0, awayTeamScore: 0 });
 
     private constructor(value: { homeTeamScore: number; awayTeamScore: number }) {
         this.homeTeamScore = value.homeTeamScore;
         this.awayTeamScore = value.awayTeamScore;
-    }
-
-    public static createOrNull(value: { homeTeamScore: unknown; awayTeamScore: unknown }) {
-        if (is(value, validator)) {
-            return new MatchScore(value);
-        }
-
-        return null;
     }
 
     public static tryCreate(value: { homeTeamScore: number; awayTeamScore: number }) {

@@ -53,14 +53,14 @@ beforeEach(async () => {
         seed: 2,
         awayTeam: team_001,
         homeTeam: team_002,
-        score: { homeTeamScore: 1, awayTeamScore: 2 },
+        goals: {},
     });
 
     match_003 = await mixins.createCompletedMatch({
         seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
-        score: { homeTeamScore: 0, awayTeamScore: 0 },
+        goals: {},
     });
 });
 
@@ -78,36 +78,18 @@ describe("List Matches Integration Test;", () => {
         expect(body.matches.length).toBe(3);
     });
 
-    test.each([[0, 3]])("List Matches; scheduledDate; Success;", async (addDays, expectAmount) => {
-        const request = { ...default_request };
-        request.scheduledDate = match_001.scheduledDate;
-        request.scheduledDate.setDate(request.scheduledDate.getDate() + addDays);
-
-        const response = await supertest(server)
-            .get(BASE_URL)
-            .query(request)
-            .set("Content-Type", "application/json");
-
-        expect(response.status).toBe(200);
-        const body: IListMatchesResponseDTO = response.body;
-        expect(body.matches.length).toBe(expectAmount);
-    });
-
-    test.each([
-        [MatchStatus.COMPLETED, 2],
-        [MatchStatus.SCHEDULED, 1],
-        [MatchStatus.CANCELLED, 0],
-        [MatchStatus.IN_PROGRESS, 0],
-    ])(
-        "List Matches; status; Success;",
-        async (status, expectAmount) => {
+    test.each([[0, 3]])(
+        "List Matches; scheduledDate; Success;",
+        async (addDays, expectAmount) => {
             const request = { ...default_request };
-            request.status = status.value;
-
-            const url = urlWithQuery(BASE_URL, request);
+            request.scheduledDate = match_001.scheduledDate;
+            request.scheduledDate.setDate(
+                request.scheduledDate.getDate() + addDays,
+            );
 
             const response = await supertest(server)
-                .get(`${url}`)
+                .get(BASE_URL)
+                .query(request)
                 .set("Content-Type", "application/json");
 
             expect(response.status).toBe(200);
@@ -115,4 +97,24 @@ describe("List Matches Integration Test;", () => {
             expect(body.matches.length).toBe(expectAmount);
         },
     );
+
+    test.each([
+        [MatchStatus.COMPLETED, 2],
+        [MatchStatus.SCHEDULED, 1],
+        [MatchStatus.CANCELLED, 0],
+        [MatchStatus.IN_PROGRESS, 0],
+    ])("List Matches; status; Success;", async (status, expectAmount) => {
+        const request = { ...default_request };
+        request.status = status.value;
+
+        const url = urlWithQuery(BASE_URL, request);
+
+        const response = await supertest(server)
+            .get(`${url}`)
+            .set("Content-Type", "application/json");
+
+        expect(response.status).toBe(200);
+        const body: IListMatchesResponseDTO = response.body;
+        expect(body.matches.length).toBe(expectAmount);
+    });
 });

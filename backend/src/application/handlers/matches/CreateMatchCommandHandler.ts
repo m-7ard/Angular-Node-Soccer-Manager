@@ -1,11 +1,15 @@
 import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
-import { err, ok } from "neverthrow";
+import { err, ok, Result } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
+import IUidRecord from "api/interfaces/IUidRecord";
+import Player from "domain/entities/Player";
+import IPlayerRepository from "application/interfaces/IPlayerRepository";
+import Team from "domain/entities/Team";
 
 type CommandProps = {
     id: string;
@@ -16,10 +20,7 @@ type CommandProps = {
     startDate: Date | null;
     endDate: Date | null;
     status: string;
-    score: {
-        homeTeamScore: number;
-        awayTeamScore: number;
-    } | null;
+    goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> | null;
 };
 
 export type CreateMatchCommandResult = ICommandResult<IApplicationError[]>;
@@ -36,7 +37,7 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
         this.startDate = props.startDate;
         this.endDate = props.endDate;
         this.status = props.status;
-        this.score = props.score;
+        this.goals = props.goals;
     }
 
     id: string;
@@ -47,19 +48,18 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
     startDate: Date | null;
     endDate: Date | null;
     status: string;
-    score: {
-        homeTeamScore: number;
-        awayTeamScore: number;
-    } | null;
+    goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> | null;
 }
 
 export default class CreateMatchCommandHandler implements IRequestHandler<CreateMatchCommand, CreateMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
     private readonly _teamRepository: ITeamRepository;
+    private readonly _playerRepository: IPlayerRepository;
 
-    constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
+    constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository; playerRepository: IPlayerRepository }) {
         this._matchRepository = props.matchRepository;
         this._teamRepository = props.teamRepository;
+        this._playerRepository = props.playerRepository;
     }
 
     async handle(command: CreateMatchCommand): Promise<CreateMatchCommandResult> {
@@ -77,6 +77,13 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
             );
         }
 
+        if (command.goals != null) {
+            const goalsResult = await this.tryProcessGoals({ goals: command.goals, homeTeam: homeTeam, awayTeam: awayTeam });
+            if (goalsResult.isErr()) {
+                return err(goalsResult.error);
+            }
+        }
+
         const matchCreationResult = MatchDomainService.tryCreateMatch({
             id: command.id,
             homeTeam: homeTeam,
@@ -86,7 +93,7 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
             startDate: command.startDate,
             endDate: command.endDate,
             status: command.status,
-            score: command.score,
+            goals: command.goals,
         });
 
         if (matchCreationResult.isErr()) {
@@ -97,5 +104,32 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
 
         await this._matchRepository.createAsync(match);
         return ok(undefined);
+    }
+
+    private async tryProcessGoals(props: { goals: NonNullable<CommandProps["goals"]>; homeTeam: Team; awayTeam: Team }): Promise<Result<true, IApplicationError[]>> {
+        const { goals, homeTeam, awayTeam } = props;
+
+        const playerErrors: IApplicationError[] = [];
+        const players: { [key: Player["id"]]: Player | null } = {};
+        for (const [UID, goal] of Object.entries(goals)) {
+            const player = players.hasOwnProperty(goal.playerId) ? players[goal.playerId] : await this._playerRepository.getByIdAsync(goal.playerId);
+
+            players[goal.playerId] = player;
+
+            if (player == null) {
+                playerErrors.push({ message: `Player of id "${goal.playerId}" does not exist`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["goals", UID, "playerId"] });
+            } else {
+                const memebership = awayTeam.findMemberByPlayerId(player.id) ?? homeTeam.findMemberByPlayerId(player.id);
+                if (memebership == null) {
+                    playerErrors.push({ message: `Player of id "${player.id}" does not exist on match teams`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["goals", UID, "playerId"] });
+                }
+            }
+        }
+
+        if (playerErrors.length) {
+            return err(playerErrors);
+        }
+
+        return ok(true);
     }
 }

@@ -10,7 +10,6 @@ class MatchFactory {
         startDate: Match["startDate"];
         endDate: Match["endDate"];
         status: Match["status"];
-        score: Match["score"];
     }) {
         return new Match({
             id: props.id,
@@ -21,7 +20,7 @@ class MatchFactory {
             startDate: props.startDate,
             endDate: props.endDate,
             status: props.status,
-            score: props.score,
+            score: null,
             events: [],
             createdAt: new Date(),
             updatedAt: new Date(),

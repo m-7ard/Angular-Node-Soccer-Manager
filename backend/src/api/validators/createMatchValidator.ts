@@ -1,6 +1,6 @@
 import ICreateMatchRequestDTO from "api/DTOs/matches/create/ICreateMatchRequestDTO";
 import validateSuperstruct from "api/utils/validateSuperstruct";
-import { string, nullable, number, date, object, min, max } from "superstruct";
+import { string, nullable, date, object, record } from "superstruct";
 
 const validatorSchema = object({
     homeTeamId: string(),
@@ -10,11 +10,15 @@ const validatorSchema = object({
     startDate: nullable(date()),
     endDate: nullable(date()),
     status: string(),
-    score: nullable(
-        object({
-            homeTeamScore: max(min(number(), 0), 100),
-            awayTeamScore: max(min(number(), 0), 100),
-        }),
+    goals: nullable(
+        record(
+            string(),
+            object({
+                dateOccured: date(),
+                teamId: string(),
+                playerId: string(),
+            }),
+        ),
     ),
 });
 

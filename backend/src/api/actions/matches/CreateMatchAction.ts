@@ -39,7 +39,7 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
             startDate: dto.startDate,
             endDate: dto.endDate,
             status: dto.status,
-            score: dto.score
+            goals: dto.goals
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -68,7 +68,7 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
                 startDate: request.body.startDate == null ? null : parsers.parseDateOrElse(request.body.startDate, "Invalid Date"),
                 endDate: request.body.endDate == null ? null : parsers.parseDateOrElse(request.body.endDate, "Invalid Date"),
                 status: request.body.status,
-                score: request.body.score
+                goals: request.body.goals
             },
         };
     }

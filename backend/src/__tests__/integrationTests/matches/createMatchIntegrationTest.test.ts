@@ -35,12 +35,12 @@ beforeEach(async () => {
     default_request = {
         awayTeamId: team_001.id,
         homeTeamId: team_002.id,
-        score: null,
         scheduledDate: new Date(),
         startDate: null,
         endDate: null,
         venue: "venue place",
         status: MatchStatus.SCHEDULED.value,
+        goals: {}
     };
 });
 
@@ -61,10 +61,6 @@ describe("Create Match Integration Test - Happy Paths", () => {
         const request = { ...default_request };
         request.status = MatchStatus.IN_PROGRESS.value;
         request.startDate = new Date();
-        request.score = {
-            awayTeamScore: 0,
-            homeTeamScore: 0,
-        };
 
         const response = await adminSuperTest({
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
@@ -87,10 +83,6 @@ describe("Create Match Integration Test - Happy Paths", () => {
 
         request.startDate = startDate;
         request.endDate = endDate;
-        request.score = {
-            awayTeamScore: 2,
-            homeTeamScore: 1,
-        };
 
         const response = await adminSuperTest({
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
@@ -104,6 +96,7 @@ describe("Create Match Integration Test - Happy Paths", () => {
     it("Create Cancelled Match", async () => {
         const request = { ...default_request };
         request.status = MatchStatus.CANCELLED.value;
+        request.goals = null;
 
         const response = await adminSuperTest({
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),

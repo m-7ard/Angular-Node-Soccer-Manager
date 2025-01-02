@@ -4,11 +4,7 @@ export default interface IMatchEventApiModel {
     playerId: string;
     teamId: string;
     type: string;
-    timestamp: string;
+    dateOccured: string;
     secondaryPlayerId: string | null;
     description: string;
-    position: {
-        x: number;
-        y: number
-    } | null;
 }

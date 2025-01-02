@@ -8,11 +8,9 @@ export default interface IMatchEventSchema {
     player_id: IPlayerSchema["id"];
     team_id: ITeamSchema["id"];
     type: string;
-    timestamp: Date;
+    dateOccured: Date;
     secondary_player_id: IPlayerSchema["id"] | null;
     description: string;
-    x_position: number | null;
-    y_position: number | null;
     created_at: Date;
     updated_at: Date;
 }

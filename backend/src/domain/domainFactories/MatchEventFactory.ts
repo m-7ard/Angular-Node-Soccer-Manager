@@ -7,10 +7,9 @@ class MatchEventFactory {
         playerId: MatchEvent["playerId"];
         teamId: MatchEvent["teamId"];
         type: MatchEvent["type"];
-        timestamp: MatchEvent["timestamp"];
+        dateOccured: MatchEvent["dateOccured"];
         secondaryPlayerId: MatchEvent["secondaryPlayerId"];
         description: MatchEvent["description"];
-        position: MatchEvent["position"];
     }) {
         return new MatchEvent({
             id: props.id,
@@ -18,10 +17,9 @@ class MatchEventFactory {
             playerId: props.playerId,
             teamId: props.teamId,
             type: props.type,
-            timestamp: props.timestamp,
+            dateOccured: props.dateOccured,
             secondaryPlayerId: props.secondaryPlayerId,
             description: props.description,
-            position: props.position,
             createdAt: new Date(),
             updatedAt: new Date(),
         });
@@ -33,10 +31,9 @@ class MatchEventFactory {
         playerId: MatchEvent["playerId"];
         teamId: MatchEvent["teamId"];
         type: MatchEvent["type"];
-        timestamp: MatchEvent["timestamp"];
+        dateOccured: MatchEvent["dateOccured"];
         secondaryPlayerId: MatchEvent["secondaryPlayerId"];
         description: MatchEvent["description"];
-        position: MatchEvent["position"];
         createdAt: MatchEvent["createdAt"];
         updatedAt: MatchEvent["updatedAt"];
     }) {
@@ -46,10 +43,9 @@ class MatchEventFactory {
             playerId: props.playerId,
             teamId: props.teamId,
             type: props.type,
-            timestamp: props.timestamp,
+            dateOccured: props.dateOccured,
             secondaryPlayerId: props.secondaryPlayerId,
             description: props.description,
-            position: props.position,
             createdAt: props.createdAt,
             updatedAt: props.updatedAt,
         });

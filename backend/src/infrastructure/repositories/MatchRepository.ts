@@ -14,6 +14,42 @@ class MatchRepository implements IMatchRepository {
         this._db = db;
     }
 
+    async deleteAsync(match: Match): Promise<void> {
+        for (let i = 0; i < match.events.length; i++) {
+            const event = match.events[i];
+
+            const sqlEntry = sql`
+                DELETE FROM match_events WHERE
+                    id = ${event.id}
+            `;
+
+            const headers = await this._db.execute({
+                statement: sqlEntry.sql,
+                parameters: sqlEntry.values,
+            });
+
+            if (headers.affectedRows === 0) {
+                throw Error(
+                    `No \`match_events\` of id "${event.id}" was deleted."`,
+                );
+            }
+        }
+
+        const sqlEntry = sql`
+            DELETE FROM matches WHERE
+                id = ${match.id}
+        `;
+
+        const headers = await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        if (headers.affectedRows === 0) {
+            throw Error(`No \`matches\` of id "${match.id} was deleted."`);
+        }
+    }
+
     async getByIdAsync(id: string): Promise<Match | null> {
         const sqlEntry = sql`SELECT * FROM matches WHERE id = ${id}`;
 
@@ -93,7 +129,7 @@ class MatchRepository implements IMatchRepository {
 
         return matches.map(MatchMapper.dbEntityToDomain);
     }
-    
+
     async updateAsync(match: Match): Promise<void> {
         const dbEntity = MatchMapper.domainToDbEntity(match);
 

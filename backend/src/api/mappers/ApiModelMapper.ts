@@ -84,10 +84,9 @@ class ApiModelMapper {
             playerId: match.playerId,
             teamId: match.teamId,
             type: match.type.value,
-            timestamp: match.timestamp.toString(),
+            dateOccured: match.dateOccured.toString(),
             secondaryPlayerId: match.secondaryPlayerId,
             description: match.description,
-            position: match.position,
         };
     }
 }

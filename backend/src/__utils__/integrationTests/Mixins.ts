@@ -1,4 +1,5 @@
 import diContainer, { DI_TOKENS } from "api/deps/diContainer";
+import IUidRecord from "api/interfaces/IUidRecord";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
@@ -93,12 +94,12 @@ class Mixins {
             scheduledDate: date,
             startDate: null,
             endDate: null,
-            score: null,
+            goals: null,
             status: MatchStatus.SCHEDULED.value,
         });
     }
 
-    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; score: { homeTeamScore: number; awayTeamScore: number } }) {
+    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> }) {
         const date = new Date();
         return await this.createMatch({
             seed: props.seed,
@@ -107,12 +108,12 @@ class Mixins {
             scheduledDate: date,
             startDate: date,
             endDate: null,
-            score: props.score,
+            goals: props.goals,
             status: MatchStatus.IN_PROGRESS.value,
         });
     }
 
-    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; score: { homeTeamScore: number; awayTeamScore: number } }) {
+    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> }) {
         const date = new Date();
         const endDate = new Date(date);
         date.setMinutes(endDate.getMinutes() + 90);
@@ -124,7 +125,7 @@ class Mixins {
             scheduledDate: date,
             startDate: date,
             endDate: endDate,
-            score: props.score,
+            goals: props.goals,
             status: MatchStatus.COMPLETED.value,
         });
     }
@@ -139,7 +140,7 @@ class Mixins {
             scheduledDate: date,
             startDate: null,
             endDate: null,
-            score: null,
+            goals: null,
             status: MatchStatus.CANCELLED.value,
         });
     }
@@ -147,12 +148,12 @@ class Mixins {
     private async createMatch(props: {
         seed: number;
         scheduledDate: Date;
-        score: null | { homeTeamScore: number; awayTeamScore: number };
         status: string;
         awayTeam: Team;
         homeTeam: Team;
         startDate: Date | null;
         endDate: null | Date;
+        goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> | null;
     }) {
         const matchResult = MatchDomainService.tryCreateMatch({
             id: `${props.seed}`,
@@ -163,13 +164,7 @@ class Mixins {
             startDate: props.startDate,
             endDate: props.endDate,
             status: props.status,
-            score:
-                props.score == null
-                    ? null
-                    : {
-                          homeTeamScore: props.score.homeTeamScore,
-                          awayTeamScore: props.score.awayTeamScore,
-                      },
+            goals: props.goals
         });
 
         if (matchResult.isErr()) {

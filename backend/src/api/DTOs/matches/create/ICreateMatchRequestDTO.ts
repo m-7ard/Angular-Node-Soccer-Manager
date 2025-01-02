@@ -1,3 +1,5 @@
+import IUidRecord from "api/interfaces/IUidRecord";
+
 interface ICreateMatchRequestDTO {
     homeTeamId: string;
     awayTeamId: string;
@@ -6,10 +8,7 @@ interface ICreateMatchRequestDTO {
     startDate: Date | null;
     endDate: Date | null;
     status: string;
-    score: {
-        homeTeamScore: number;
-        awayTeamScore: number;
-    } | null;
+    goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string; }> | null;
 }
 
 export default ICreateMatchRequestDTO;

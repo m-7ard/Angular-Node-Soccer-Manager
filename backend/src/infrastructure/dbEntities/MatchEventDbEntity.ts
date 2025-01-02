@@ -8,11 +8,9 @@ class MatchEventDbEntity implements IMatchEventSchema {
     player_id: string;
     team_id: string;
     type: string;
-    timestamp: Date;
+    dateOccured: Date;
     secondary_player_id: string | null;
     description: string;
-    x_position: number | null;
-    y_position: number | null;
     created_at: Date;
     updated_at: Date;
 
@@ -27,11 +25,9 @@ class MatchEventDbEntity implements IMatchEventSchema {
         player_id: string;
         team_id: string;
         type: string;
-        timestamp: Date;
+        dateOccured: Date;
         secondary_player_id: string | null;
         description: string;
-        x_position: number | null;
-        y_position: number | null;
         created_at: Date;
         updated_at: Date;
     }) {
@@ -40,11 +36,9 @@ class MatchEventDbEntity implements IMatchEventSchema {
         this.player_id = props.player_id;
         this.team_id = props.team_id;
         this.type = props.type;
-        this.timestamp = props.timestamp;
+        this.dateOccured = props.dateOccured;
         this.secondary_player_id = props.secondary_player_id;
         this.description = props.description;
-        this.x_position = props.x_position;
-        this.y_position = props.y_position;
         this.created_at = props.created_at;
         this.updated_at = props.updated_at;
     }

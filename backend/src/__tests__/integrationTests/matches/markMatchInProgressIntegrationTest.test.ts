@@ -11,6 +11,8 @@ import Team from "domain/entities/Team";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import Match from "domain/entities/Match";
 import IMarkMatchInProgressRequestDTO from "api/DTOs/matches/markMatchInProgress/IMarkMatchInProgressRequestDTO";
+import { DateTime } from "luxon";
+import { start } from "repl";
 
 let team_001: Team;
 let team_002: Team;
@@ -39,25 +41,25 @@ beforeEach(async () => {
         homeTeam: team_002,
     });
 
-    const startDate = scheduled_match.scheduledDate;
-    startDate.setDate(startDate.getMinutes() + 1);
+
+    const startDate = DateTime.fromJSDate(scheduled_match.scheduledDate).plus({ minutes: 1 });
 
     default_request = {
-        startDate: startDate,
+        startDate: startDate.toJSDate(),
     };
 
     in_progress_match = await mixins.createInProgressMatch({
         seed: 2,
         awayTeam: team_001,
         homeTeam: team_002,
-        score: { homeTeamScore: 0, awayTeamScore: 0 },
+        goals: {}
     });
 
     completed_match = await mixins.createCompletedMatch({
         seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
-        score: { homeTeamScore: 0, awayTeamScore: 0 },
+        goals: {},
     });
 
     cancelled_match = await mixins.createCancelledMatch({
@@ -78,6 +80,8 @@ describe("Mark Match In Progress Integration Test;", () => {
                 .set("Content-Type", "application/json"),
             seed: 1,
         });
+
+        console.log(response.body)
 
         expect(response.status).toBe(200);
     });
