@@ -7,7 +7,7 @@ import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IUpdatePlayerRequestDTO from "api/DTOs/players/update/IUpdatePlayerRequestDTO";
 import IUpdatePlayerResponseDTO from "api/DTOs/players/update/IUpdatePlayerResponseDTO";
-import updatePlayerValidator from "api/validators/updatePlayerValidator";
+import updatePlayerValidator from "api/validators/players/updatePlayerValidator";
 import { UpdatePlayerCommand } from "application/handlers/players/UpdatePlayerCommandHandler";
 
 type ActionRequest = { dto: IUpdatePlayerRequestDTO; playerId: string };

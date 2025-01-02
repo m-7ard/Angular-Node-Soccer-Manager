@@ -9,7 +9,7 @@ import { UpdateTeamMembershipCommand } from "application/handlers/team_membershi
 import parsers from "api/utils/parsers";
 import IUpdateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/update/IUpdateTeamMembershipRequestDTO";
 import IUpdateTeamMembershipResponseDTO from "api/DTOs/teamMemberships/update/IUpdateTeamMembershipResponseDTO";
-import updateTeamMembershipValidator from "api/validators/updateTeamMembershipValidator";
+import updateTeamMembershipValidator from "api/validators/teamMembership/updateTeamMembershipValidator";
 
 type ActionRequest = { teamId: string; playerId: string; dto: IUpdateTeamMembershipRequestDTO };
 type ActionResponse = JsonResponse<IUpdateTeamMembershipResponseDTO | IApiError[]>;

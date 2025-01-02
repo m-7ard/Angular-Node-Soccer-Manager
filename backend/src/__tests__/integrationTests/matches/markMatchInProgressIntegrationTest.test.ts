@@ -81,8 +81,6 @@ describe("Mark Match In Progress Integration Test;", () => {
             seed: 1,
         });
 
-        console.log(response.body)
-
         expect(response.status).toBe(200);
     });
 

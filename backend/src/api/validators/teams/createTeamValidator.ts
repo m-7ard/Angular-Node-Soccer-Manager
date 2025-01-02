@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
-import ICreateTeamRequestDTO from "../DTOs/teams/create/ICreateTeamRequestDTO";
-import validateTypeboxSchema from "../utils/validateTypeboxSchema";
+import ICreateTeamRequestDTO from "../../DTOs/teams/create/ICreateTeamRequestDTO";
+import validateTypeboxSchema from "../../utils/validateTypeboxSchema";
 
 const validatorSchema = Type.Object({
     name: Type.String({

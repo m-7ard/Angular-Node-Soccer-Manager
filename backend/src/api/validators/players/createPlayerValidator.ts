@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import validateTypeboxSchema from "../utils/validateTypeboxSchema";
+import validateTypeboxSchema from "../../utils/validateTypeboxSchema";
 import ICreatePlayerRequestDTO from "api/DTOs/players/create/ICreatePlayerRequestDTO";
 
 const validatorSchema = Type.Object({

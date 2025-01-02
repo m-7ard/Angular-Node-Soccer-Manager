@@ -23,6 +23,7 @@ import ListMatchesQueryHandler, { ListMatchesQuery } from "application/handlers/
 import MarkMatchInProgressCommandHandler, { MarkMatchInProgressCommand } from "application/handlers/matches/MarkMatchInProgressCommandHandler";
 import MarkMatchCompletedCommandHandler, { MarkMatchCompletedCommand } from "application/handlers/matches/MarkMatchCompletedCommandHandler";
 import MarkMatchCancelledCommandHandler, { MarkMatchCancelledCommand } from "application/handlers/matches/MarkMatchCancelledCommandHandler";
+import ScheduleMatchCommandHandler, { ScheduleMatchCommand } from "application/handlers/matches/ScheduleMatchCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -65,6 +66,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(MarkMatchInProgressCommand, new MarkMatchInProgressCommandHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(MarkMatchCompletedCommand, new MarkMatchCompletedCommandHandler({ matchRepository: matchRepository }));
     requestDispatcher.registerHandler(MarkMatchCancelledCommand, new MarkMatchCancelledCommandHandler({ matchRepository: matchRepository }));
+    requestDispatcher.registerHandler(ScheduleMatchCommand, new ScheduleMatchCommandHandler({ matchRepository: matchRepository, teamRepository: teamRepository }));
 
     return requestDispatcher;
 }

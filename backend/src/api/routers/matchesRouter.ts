@@ -8,6 +8,7 @@ import ListMatchesAction from "api/actions/matches/ListMatchAction";
 import MarkMatchInProgressAction from "api/actions/matches/MarkMatchInProgressAction";
 import MarkMatchCompletedAction from "api/actions/matches/MarkMatchCompletedAction";
 import MarkMatchCancelledAction from "api/actions/matches/MarkMatchCancelledAction";
+import ScheduleMatchAction from "api/actions/matches/ScheduleMatchAction";
 
 const matchesRouter = Router();
 
@@ -74,6 +75,17 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new MarkMatchCancelledAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: matchesRouter,
+    path: "/schedule",
+    method: "POST",
+    guards: [userIsAuthenticatedGuard],
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new ScheduleMatchAction(requestDispatcher);
     },
 });
 

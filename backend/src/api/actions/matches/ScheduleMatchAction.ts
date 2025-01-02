@@ -1,27 +1,25 @@
-import ICreateMatchRequestDTO from "api/DTOs/matches/create/ICreateMatchRequestDTO";
-import ICreateMatchResponseDTO from "api/DTOs/matches/create/ICreateMatchResponseDTO";
+import IScheduleMatchRequestDTO from "api/DTOs/matches/schedule/IScheduleMatchRequestDTO";
+import IScheduleMatchResponseDTO from "api/DTOs/matches/schedule/IScheduleMatchResponseDTO";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IApiError from "api/errors/IApiError";
 import JsonResponse from "api/responses/JsonResponse";
-import createMatchValidator from "api/validators/matches/createMatchValidator";
 import IRequestDispatcher from "application/handlers/IRequestDispatcher";
+import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import IAction from "../IAction";
-import { Request } from "express";
-import parsers from "api/utils/parsers";
-import { CreateMatchCommand } from "application/handlers/matches/CreateMatchCommandHandler";
-import { Map } from "immutable";
+import scheduleMatchValidator from "api/validators/matches/scheduleMatchValidator";
+import { ScheduleMatchCommand } from "application/handlers/matches/ScheduleMatchCommandHandler";
 
-type ActionRequest = { dto: ICreateMatchRequestDTO };
-type ActionResponse = JsonResponse<ICreateMatchResponseDTO | IApiError[]>;
+type ActionRequest = { dto: IScheduleMatchRequestDTO };
+type ActionResponse = JsonResponse<IScheduleMatchResponseDTO | IApiError[]>;
 
-class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
+class ScheduleMatchAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
 
-        const validation = createMatchValidator(dto);
+        const validation = scheduleMatchValidator(dto);
         if (validation.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
@@ -31,16 +29,12 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
 
         const guid = crypto.randomUUID();
 
-        const command = new CreateMatchCommand({
+        const command = new ScheduleMatchCommand({
             id: guid,
             homeTeamId: dto.homeTeamId,
             awayTeamId: dto.awayTeamId,
             venue: dto.venue,
             scheduledDate: dto.scheduledDate,
-            startDate: dto.startDate,
-            endDate: dto.endDate,
-            status: dto.status,
-            goals: dto.goals,
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -66,22 +60,9 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
                 awayTeamId: request.body.awayTeamId,
                 venue: request.body.venue,
                 scheduledDate: new Date(request.body.scheduledDate),
-                startDate: request.body.startDate == null ? null : parsers.parseDateOrElse(request.body.startDate, "Invalid Date"),
-                endDate: request.body.endDate == null ? null : parsers.parseDateOrElse(request.body.endDate, "Invalid Date"),
-                status: request.body.status,
-                goals:
-                    request.body.goals == null
-                        ? null
-                        : Map(request.body.goals)
-                              .map((value) => ({
-                                  dateOccured: parsers.parseDateOrElse(value.dateOccured, "Invalid Date"),
-                                  teamId: value.teamId,
-                                  playerId: value.playerId,
-                              }))
-                              .toObject(),
             },
         };
     }
 }
 
-export default CreateMatchAction;
+export default ScheduleMatchAction;

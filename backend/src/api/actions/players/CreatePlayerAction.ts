@@ -7,7 +7,7 @@ import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import ICreatePlayerRequestDTO from "api/DTOs/players/create/ICreatePlayerRequestDTO";
 import ICreatePlayerResponseDTO from "api/DTOs/players/create/ICreatePlayerResponseDTO";
-import createPlayerValidator from "api/validators/createPlayerValidator";
+import createPlayerValidator from "api/validators/players/createPlayerValidator";
 import { CreatePlayerCommand } from "application/handlers/players/CreatePlayerCommandHandler";
 
 type ActionRequest = { dto: ICreatePlayerRequestDTO };

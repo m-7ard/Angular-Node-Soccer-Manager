@@ -128,8 +128,6 @@ describe("Create Match Integration Test - Happy Paths", () => {
             seed: 1,
         });
 
-        console.log(response.body)
-
         expect(response.status).toBe(201);
         await wasCreated();
 

@@ -4,7 +4,7 @@ import ICreateTeamResponseDTO from "../../DTOs/teams/create/ICreateTeamResponseD
 import IAction from "../IAction";
 import IRequestDispatcher from "../../../application/handlers/IRequestDispatcher";
 import JsonResponse from "../../responses/JsonResponse";
-import createTeamValidator from "../../validators/createTeamValidator";
+import createTeamValidator from "../../validators/teams/createTeamValidator";
 import { StatusCodes } from "http-status-codes";
 import { CreateTeamCommand } from "../../../application/handlers/teams/CreateTeamCommandHandler";
 import IApiError from "api/errors/IApiError";

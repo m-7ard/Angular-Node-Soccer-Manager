@@ -9,7 +9,7 @@ import IListTeamsRequestDTO from "api/DTOs/teams/list/IListTeamsRequestDTO";
 import IListTeamsResponseDTO from "api/DTOs/teams/list/IListTeamsResponseDTO";
 import { ListTeamsQuery } from "application/handlers/teams/ListTeamsQueryHandler";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
-import listTeamsValidator from "api/validators/listTeamsValidator";
+import listTeamsValidator from "api/validators/teams/listTeamsValidator";
 
 type ActionRequest = { dto: IListTeamsRequestDTO };
 type ActionResponse = JsonResponse<IListTeamsResponseDTO | IApiError[]>;

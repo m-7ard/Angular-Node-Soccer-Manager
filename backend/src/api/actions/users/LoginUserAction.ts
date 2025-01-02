@@ -5,7 +5,7 @@ import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
 import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
-import loginUserValidator from "api/validators/loginUserValidator";
+import loginUserValidator from "api/validators/users/loginUserValidator";
 import { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler";
 import ILoginUserRequestDTO from "api/DTOs/users/login/ILoginUserRequestDTO";
 import ILoginUserResponseDTO from "api/DTOs/users/login/ILoginUserResponseDTO";

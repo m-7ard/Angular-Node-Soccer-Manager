@@ -7,7 +7,7 @@ import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IRegisterUserRequestDTO from "api/DTOs/users/register/IRegisterUserRequestDTO";
 import IRegisterUserResponseDTO from "api/DTOs/users/register/IRegisterUserResponseDTO";
-import registerUserValidator from "api/validators/registerUserValidator";
+import registerUserValidator from "api/validators/users/registerUserValidator";
 import { RegisterUserCommand } from "application/handlers/users/RegisterUserCommandHandler";
 
 type ActionRequest = { dto: IRegisterUserRequestDTO };

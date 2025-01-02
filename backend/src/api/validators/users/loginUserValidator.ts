@@ -1,5 +1,5 @@
 import { object, size, string } from "superstruct";
-import email from "./custom-value-validators/email";
+import email from "../custom-value-validators/email";
 import validateSuperstruct from "api/utils/validateSuperstruct";
 import ILoginUserRequestDTO from "api/DTOs/users/login/ILoginUserRequestDTO";
 

@@ -7,7 +7,7 @@ import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import ICreateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipRequestDTO";
 import ICreateTeamMembershipResponseDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipResponseDTO";
-import createTeamMembershipValidator from "api/validators/createTeamMembershipValidator";
+import createTeamMembershipValidator from "api/validators/teamMembership/createTeamMembershipValidator";
 import { CreateTeamMembershipCommand } from "application/handlers/team_memberships/CreateTeamMembershipCommandHandler";
 import parsers from "api/utils/parsers";
 

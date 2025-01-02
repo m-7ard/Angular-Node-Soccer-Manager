@@ -5,7 +5,7 @@ import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
 import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
-import updateTeamValidator from "api/validators/updateTeamValidator";
+import updateTeamValidator from "api/validators/teams/updateTeamValidator";
 import { UpdateTeamCommand } from "application/handlers/teams/UpdateTeamCommandHandler";
 import IUpdateTeamRequestDTO from "api/DTOs/teams/update/IUpdateTeamRequestDTO";
 import IUpdateTeamResponseDTO from "api/DTOs/teams/update/IUpdateTeamResponseDTO";

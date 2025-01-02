@@ -10,7 +10,7 @@ import IListMatchesRequestDTO from "api/DTOs/matches/list/IListMatchesRequestDTO
 import IListMatchesResponseDTO from "api/DTOs/matches/list/IListMatchesResponseDTO";
 import { ListMatchesQuery } from "application/handlers/matches/ListMatchesQueryHandler";
 import parsers from "api/utils/parsers";
-import listMatchesValidator from "api/validators/listMatchesValidator";
+import listMatchesValidator from "api/validators/matches/listMatchesValidator";
 
 type ActionRequest = { dto: IListMatchesRequestDTO };
 type ActionResponse = JsonResponse<IListMatchesResponseDTO | IApiError[]>;
