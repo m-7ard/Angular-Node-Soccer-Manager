@@ -212,6 +212,7 @@ class MatchDomainService {
         });
 
         if (props.goals != null) {
+            // ignores goals if it can't have a score
             const addGoalErrors: IDomainError[] = [];
             if (match.canHaveScore()) {
                 match.score = MatchScore.ZeroScore;

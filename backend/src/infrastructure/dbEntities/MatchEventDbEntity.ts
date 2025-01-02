@@ -8,7 +8,7 @@ class MatchEventDbEntity implements IMatchEventSchema {
     player_id: string;
     team_id: string;
     type: string;
-    dateOccured: Date;
+    date_occured: Date;
     secondary_player_id: string | null;
     description: string;
     created_at: Date;
@@ -36,7 +36,7 @@ class MatchEventDbEntity implements IMatchEventSchema {
         this.player_id = props.player_id;
         this.team_id = props.team_id;
         this.type = props.type;
-        this.dateOccured = props.dateOccured;
+        this.date_occured = props.dateOccured;
         this.secondary_player_id = props.secondary_player_id;
         this.description = props.description;
         this.created_at = props.created_at;

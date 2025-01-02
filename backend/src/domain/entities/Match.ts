@@ -43,7 +43,10 @@ class Match {
     public updatedAt: Date;
 
     public domainEvents: DomainEvent[] = [];
-
+    clearEvents = () => {
+        this.domainEvents = [];
+    };
+    
     constructor(props: MatchProps) {
         this.id = props.id;
         this.homeTeamId = props.homeTeamId;
@@ -195,7 +198,7 @@ class Match {
             );
         }
 
-        if (props.teamId !== this.homeTeamId || props.teamId !== this.awayTeamId) {
+        if (props.teamId !== this.homeTeamId && props.teamId !== this.awayTeamId) {
             return err(
                 DomainErrorFactory.createSingleListError({
                     message: `Goal team does not match teams from match`,

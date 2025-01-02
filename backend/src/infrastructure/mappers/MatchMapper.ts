@@ -68,7 +68,8 @@ class MatchMapper {
 
         const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
         if (matchIntegrityResult.isErr()) {
-            throw new Error(`Integrity error occured while trying to map Match Db entity to a domain entity: ${JSON.stringify(matchIntegrityResult.error)}`);
+            const errors = JSON.stringify(matchIntegrityResult.error);
+            throw new Error(`Integrity error occured while trying to map Match Db entity to a domain entity: ${errors}`);
         }
 
         return match;

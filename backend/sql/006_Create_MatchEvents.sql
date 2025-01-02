@@ -4,7 +4,7 @@ CREATE TABLE match_events (
     player_id VARCHAR(255) NOT NULL,
     team_id VARCHAR(255) NOT NULL,
     type VARCHAR(50) NOT NULL,
-    dateOccured DATETIME NOT NULL,
+    date_occured DATETIME NOT NULL,
     secondary_player_id VARCHAR(255),
     description TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

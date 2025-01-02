@@ -6,6 +6,8 @@ import sql from "sql-template-tag";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
+import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
+import MatchEventMapper from "infrastructure/mappers/MatchEventMapper";
 
 class MatchRepository implements IMatchRepository {
     private readonly _db: IDatabaseService;
@@ -90,6 +92,36 @@ class MatchRepository implements IMatchRepository {
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
+
+        for (let i = 0; i < match.domainEvents.length; i++) {
+            const event = match.domainEvents[i];
+
+            if (event instanceof MatchEventPendingCreationEvent) {
+                const matchEvent = event.payload;
+                const matchEventDbEntity =
+                    MatchEventMapper.domainToDbEntity(matchEvent);
+
+                const sqlEntry = sql`
+                    INSERT INTO match_events
+                        SET
+                            id = ${matchEventDbEntity.id},
+                            match_id = ${matchEventDbEntity.match_id},
+                            player_id = ${matchEventDbEntity.player_id},
+                            team_id = ${matchEventDbEntity.team_id},
+                            type = ${matchEventDbEntity.type},
+                            date_occured = ${matchEventDbEntity.date_occured},
+                            secondary_player_id = ${matchEventDbEntity.secondary_player_id},
+                            description = ${matchEventDbEntity.description}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            }
+        }
+
+        match.clearEvents();
     }
 
     async filterAllAsync(criteria: FilterAllMatchesCriteria): Promise<Match[]> {

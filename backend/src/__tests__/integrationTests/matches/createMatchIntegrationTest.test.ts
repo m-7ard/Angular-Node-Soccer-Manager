@@ -2,13 +2,16 @@ import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import { db, setUpIntegrationTest, disposeIntegrationTest, resetIntegrationTest, server } from "__utils__/integrationTests/integrationTest.setup";
 import Mixins from "__utils__/integrationTests/Mixins";
 import ICreateMatchRequestDTO from "api/DTOs/matches/create/ICreateMatchRequestDTO";
+import ICreateMatchResponseDTO from "api/DTOs/matches/create/ICreateMatchResponseDTO";
 import Team from "domain/entities/Team";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
+import MatchRepository from "infrastructure/repositories/MatchRepository";
+import { DateTime } from "luxon";
 import supertest from "supertest";
 
-let team_001: Team;
-let team_002: Team;
+let away_team: Team;
+let home_team: Team;
 let default_request: ICreateMatchRequestDTO;
 
 const wasCreated = async () => {
@@ -29,12 +32,12 @@ afterAll(async () => {
 beforeEach(async () => {
     await resetIntegrationTest();
     const mixins = new Mixins();
-    team_001 = await mixins.createTeam(1);
-    team_002 = await mixins.createTeam(2);
+    away_team = await mixins.createTeam(1);
+    home_team = await mixins.createTeam(2);
 
     default_request = {
-        awayTeamId: team_001.id,
-        homeTeamId: team_002.id,
+        awayTeamId: away_team.id,
+        homeTeamId: home_team.id,
         scheduledDate: new Date(),
         startDate: null,
         endDate: null,
@@ -105,5 +108,37 @@ describe("Create Match Integration Test - Happy Paths", () => {
 
         expect(response.status).toBe(201);
         await wasCreated();
+    });
+
+    it("Create In Progress Match With Valid Score", async () => {
+        const mixins = new Mixins();
+        const player = await mixins.createPlayer(1);
+        const teamMembership = await mixins.createTeamMembership(player, away_team, null, 1);
+
+        const request = { ...default_request };
+        request.status = MatchStatus.IN_PROGRESS.value;
+        request.startDate = DateTime.fromJSDate(request.scheduledDate).plus({ minutes: 1 }).toJSDate();
+        request.goals = {
+            "1": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id, playerId: player.id },
+            "2": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id, playerId: player.id },
+        }
+
+        const response = await adminSuperTest({
+            agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
+            seed: 1,
+        });
+
+        console.log(response.body)
+
+        expect(response.status).toBe(201);
+        await wasCreated();
+
+        const body: ICreateMatchResponseDTO = response.body;
+
+        const repo = new MatchRepository(db);
+        const match = await repo.getByIdAsync(body.id)!;
+        expect(match?.score).not.toBeNull();
+        expect(match?.score?.awayTeamScore).toBe(2);
+        expect(match?.score?.homeTeamScore).toBe(0);
     });
 });
