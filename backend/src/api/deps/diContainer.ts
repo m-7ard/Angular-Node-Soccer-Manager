@@ -1,3 +1,4 @@
+import IApiModelService from "api/interfaces/IApiModelService";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import IRequestDispatcher from "application/handlers/IRequestDispatcher";
 import IMatchRepository from "application/interfaces/IMatchRepository";
@@ -28,6 +29,7 @@ export const DI_TOKENS = {
     PLAYER_REPOSITORY: makeToken<IPlayerRepository>("PLAYER_REPOSITORY"),
     USER_REPOSITORY: makeToken<IUserRepository>("USER_REPOSITORY"),
     MATCH_REPOSITORY: makeToken<IMatchRepository>("MATCH_REPOSITORY"),
+    API_MODEL_SERVICE: makeToken<IApiModelService>("API_MODEL_SERVICE"),
 } as const;
 
 export class DIContainer {

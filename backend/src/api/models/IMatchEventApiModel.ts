@@ -1,10 +1,12 @@
+import IPlayerApiModel from "./IPlayerApiModel";
+
 export default interface IMatchEventApiModel {
     id: string;
     matchId: string;
-    playerId: string;
+    player: IPlayerApiModel;
     teamId: string;
     type: string;
     dateOccured: string;
-    secondaryPlayerId: string | null;
+    secondaryPlayer: IPlayerApiModel | null;
     description: string;
 }

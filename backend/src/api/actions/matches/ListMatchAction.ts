@@ -5,18 +5,21 @@ import IRequestDispatcher from "application/handlers/IRequestDispatcher";
 import { StatusCodes } from "http-status-codes";
 import IAction from "../IAction";
 import { Request } from "express";
-import ApiModelMapper from "api/mappers/ApiModelMapper";
 import IListMatchesRequestDTO from "api/DTOs/matches/list/IListMatchesRequestDTO";
 import IListMatchesResponseDTO from "api/DTOs/matches/list/IListMatchesResponseDTO";
 import { ListMatchesQuery } from "application/handlers/matches/ListMatchesQueryHandler";
 import parsers from "api/utils/parsers";
 import listMatchesValidator from "api/validators/matches/listMatchesValidator";
+import IApiModelService from "api/interfaces/IApiModelService";
 
 type ActionRequest = { dto: IListMatchesRequestDTO };
 type ActionResponse = JsonResponse<IListMatchesResponseDTO | IApiError[]>;
 
 class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+    constructor(
+        private readonly _requestDispatcher: IRequestDispatcher,
+        private readonly _apiModelService: IApiModelService,
+    ) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { dto } = request;
@@ -45,7 +48,7 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
-                matches: result.value.map(ApiModelMapper.createMatchApiModel),
+                matches: await this._apiModelService.createManyMatchApiModels(result.value),
             },
         });
     }

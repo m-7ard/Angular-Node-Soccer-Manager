@@ -10,12 +10,17 @@ import IReadMatchResponseDTO from "api/DTOs/matches/read/IReadMatchResponseDTO";
 import { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
 import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import IApiModelService from "api/interfaces/IApiModelService";
+import { match } from "assert";
 
 type ActionRequest = { dto: IReadMatchRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IReadMatchResponseDTO | IApiError[]>;
 
 class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+    constructor(
+        private readonly _requestDispatcher: IRequestDispatcher,
+        private readonly _apiModelService: IApiModelService,
+    ) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { matchId } = request;
@@ -39,11 +44,13 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
+        const match = result.value;
+
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
-                match: ApiModelMapper.createMatchApiModel(result.value),
-                matchEvents: result.value.events.map(ApiModelMapper.createMatchEventApiModel),
+                match: await this._apiModelService.createMatchApiModel(match),
+                matchEvents: await this._apiModelService.createManyMatchEventApiModel(match.events),
             },
         });
     }

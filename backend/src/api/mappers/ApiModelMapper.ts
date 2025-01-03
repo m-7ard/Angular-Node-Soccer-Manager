@@ -57,11 +57,13 @@ class ApiModelMapper {
         };
     }
 
-    public static createMatchApiModel(match: Match): IMatchApiModel {
+    public static createMatchApiModel(props: { match: Match; homeTeam: Team; awayTeam: Team }): IMatchApiModel {
+        const { match, homeTeam, awayTeam } = props;
+
         return {
             id: match.id,
-            homeTeamId: match.homeTeamId,
-            awayTeamId: match.awayTeamId,
+            homeTeam: this.createTeamApiModel(homeTeam),
+            awayTeam: this.createTeamApiModel(awayTeam),
             venue: match.venue,
             scheduledDate: match.scheduledDate.toString(),
             startDate: match.startDate == null ? null : match.startDate.toString(),
@@ -77,16 +79,18 @@ class ApiModelMapper {
         };
     }
 
-    public static createMatchEventApiModel(match: MatchEvent): IMatchEventApiModel {
+    public static createMatchEventApiModel(props: { matchEvent: MatchEvent; player: Player; secondaryPlayer: Player | null }): IMatchEventApiModel {
+        const { matchEvent, player, secondaryPlayer } = props;
+
         return {
-            id: match.id,
-            matchId: match.matchId,
-            playerId: match.playerId,
-            teamId: match.teamId,
-            type: match.type.value,
-            dateOccured: match.dateOccured.toString(),
-            secondaryPlayerId: match.secondaryPlayerId,
-            description: match.description,
+            id: matchEvent.id,
+            matchId: matchEvent.matchId,
+            player: this.createPlayerApiModel(player),
+            teamId: matchEvent.teamId,
+            type: matchEvent.type.value,
+            dateOccured: matchEvent.dateOccured.toString(),
+            secondaryPlayer: secondaryPlayer == null ? null : this.createPlayerApiModel(secondaryPlayer),
+            description: matchEvent.description,
         };
     }
 }

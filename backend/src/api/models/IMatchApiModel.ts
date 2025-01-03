@@ -1,7 +1,9 @@
+import ITeamApiModel from "./ITeamApiModel";
+
 export default interface IMatchApiModel {
     id: string;
-    homeTeamId: string;
-    awayTeamId: string;
+    homeTeam: ITeamApiModel;
+    awayTeam: ITeamApiModel;
     venue: string;
     scheduledDate: string;
     startDate: string | null;

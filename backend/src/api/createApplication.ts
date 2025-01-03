@@ -14,6 +14,7 @@ import { JsonWebTokenService } from "infrastructure/services/JsonWebTokenService
 import { BcryptPasswordHasher } from "infrastructure/services/BcryptPasswordHasher";
 import MatchRepository from "infrastructure/repositories/MatchRepository";
 import matchesRouter from "./routers/matchesRouter";
+import ApiModelService from "./services/ApiModelService";
 
 export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService }) {
     const { database } = config;
@@ -25,13 +26,19 @@ export default function createApplication(config: { port: number; middleware: Ar
     // Database
     diContainer.register(DI_TOKENS.DATABASE, database);
 
+    // Services
+    diContainer.register(DI_TOKENS.JWT_TOKEN_SERVICE, new JsonWebTokenService("super_secret_key"));
+    diContainer.register(DI_TOKENS.PASSWORD_HASHER, new BcryptPasswordHasher());
+    diContainer.registerFactory(DI_TOKENS.API_MODEL_SERVICE, (diContainer) => {
+        const db = diContainer.resolve(DI_TOKENS.DATABASE);
+        return new ApiModelService(db);
+    });
+
     // Repositories
     diContainer.register(DI_TOKENS.TEAM_REPOSITORY, new TeamRepository(database));
     diContainer.register(DI_TOKENS.PLAYER_REPOSITORY, new PlayerRepository(database));
     diContainer.register(DI_TOKENS.USER_REPOSITORY, new UserRepository(database));
     diContainer.register(DI_TOKENS.MATCH_REPOSITORY, new MatchRepository(database));
-    diContainer.register(DI_TOKENS.JWT_TOKEN_SERVICE, new JsonWebTokenService("super_secret_key"));
-    diContainer.register(DI_TOKENS.PASSWORD_HASHER, new BcryptPasswordHasher());
 
     // Request Dispatcher
     const dispatcher = createRequestDispatcher();
@@ -53,7 +60,7 @@ export default function createApplication(config: { port: number; middleware: Ar
     app.use("/api/players/", playersRouter);
     app.use("/api/users/", usersRouter);
     app.use("/api/matches/", matchesRouter);
-    
+
     app.use("/media", express.static("media"));
     app.use("/static", express.static("static"));
     app.use(errorLogger);

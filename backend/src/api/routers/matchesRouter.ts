@@ -31,7 +31,8 @@ registerAction({
     guards: [],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
-        return new ReadMatchAction(requestDispatcher);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ReadMatchAction(requestDispatcher, apiModelService);
     },
 });
 
@@ -42,7 +43,8 @@ registerAction({
     guards: [],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
-        return new ListMatchesAction(requestDispatcher);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ListMatchesAction(requestDispatcher, apiModelService);
     },
 });
 
