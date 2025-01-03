@@ -1,4 +1,4 @@
-<!-- Search Players Modal -->
+<!-- Search Teams Modal -->
 <div
     [appPanelDirective]="{
         panelSize: 'mixin-panel-base',
@@ -9,7 +9,7 @@
     class="w-[100vw]"
 >
     <header appPanelSectionDirective class="flex flex-row gap-2 justify-between">
-        <div class="font-bold">Filter Players</div>
+        <div class="font-bold">Filter Teams</div>
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
@@ -73,8 +73,12 @@
     </ng-content>
     <ng-content *ngIf="currentRoute === 'results'">
         <div appPanelSectionDirective class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ng-container *ngFor="let player of results">
-                <ng-container *ngComponentOutlet="ResultComponent; inputs: propsFactory(player)"> </ng-container>
+            <ng-container *ngFor="let team of results">
+                <ng-container *ngComponentOutlet="
+                    ResultComponent;
+                    inputs: propsFactory(team)
+                ">
+                </ng-container>
             </ng-container>
         </div>
     </ng-content>

@@ -1,4 +1,4 @@
-import { Dialog } from '@angular/cdk/dialog';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import {
     AfterViewInit,
@@ -24,7 +24,9 @@ import {
 import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
 import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
 import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
-import { PlayerSelectResultComponent } from '../search-players-modal-component/player-selector-result-component';
+import { PlayerSelectResultComponent } from '../search-players-modal-component/results/player-selector-result-component';
+
+type DataType = SearchPlayersModalComponentData<typeof PlayerSelectResultComponent.prototype>;
 
 @Component({
     selector: 'app-pick-single-player',
@@ -35,7 +37,6 @@ import { PlayerSelectResultComponent } from '../search-players-modal-component/p
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
         ZeebraTextComponent,
-        PlayerSelectResultComponent,
     ],
     templateUrl: './pick-single-player.component.html',
     providers: [
@@ -46,28 +47,35 @@ import { PlayerSelectResultComponent } from '../search-players-modal-component/p
         },
     ],
 })
-export class PickSinglePlayerComponent implements ControlValueAccessor, OnInit {
+export class PickSinglePlayerComponent implements ControlValueAccessor {
+    private dialogRef!: DialogRef<unknown, SearchPlayersModalComponentComponent<Record<string, unknown>>>;
     private dialog = inject(Dialog);
-    private resultsChangedEmitter = new EventEmitter<Player[]>();
+    private resultsChangedEmitter = new EventEmitter<DataType['propsFactory']>();
     private results: Player[] = [];
 
     @Input() value: Player | null = null;
-    @ViewChild('resultElementsTemplateRef') resultElementsTemplateRef!: TemplateRef<any>;
 
-    ngOnInit(): void {
-        this.resultsChangedEmitter.subscribe((players) => {
-            this.results = players;
-            console.log(this.results);
-        });
+    propsFactoryFactory() {
+        return (player: Player) => {
+            return {
+                isSelected: this.value?.id === player.id,
+                player: player,
+                selectPlayer: () => {
+                    this.whenPlayerIsPicked(player);
+                    this.dialogRef.componentInstance!.propsFactory = this.propsFactoryFactory();
+                },
+            };
+        };
     }
 
     openPlayerPickerModal(): void {
-        const data: SearchPlayersModalComponentData = {
-            resultsTemplateRef: this.resultElementsTemplateRef,
+        const data: DataType = {
+            ResultComponent: PlayerSelectResultComponent,
+            propsFactory: this.propsFactoryFactory(),
             resultsChangedEmitter: this.resultsChangedEmitter,
         };
 
-        const dialogRef = this.dialog.open(SearchPlayersModalComponentComponent, {
+        this.dialogRef = this.dialog.open(SearchPlayersModalComponentComponent, {
             data: data,
         });
     }

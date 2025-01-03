@@ -32,6 +32,6 @@ export class MatchDataAccessService {
     }
 
     scheduleMatch(request: IScheduleMatchRequestDTO) {
-        return this.http.post<IScheduleMatchResponseDTO>(`${this._baseUrl}/schedule_match`, request);
+        return this.http.post<IScheduleMatchResponseDTO>(`${this._baseUrl}/schedule`, request);
     }
 }

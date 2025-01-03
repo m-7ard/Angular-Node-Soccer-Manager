@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CharFieldComponent } from '../char-field/char-field.component';
-import { CoverImageComponent } from '../cover-image/cover-image.component';
-import { DividerComponent } from '../divider/divider.component';
-import { FormFieldComponent } from '../form-field/form-field.component';
-import { PanelDirectivesModule } from '../panel/panel.directive.module';
-import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
-import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
-import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
-import Player from '../../models/Player';
+import { CharFieldComponent } from '../../char-field/char-field.component';
+import { CoverImageComponent } from '../../cover-image/cover-image.component';
+import { DividerComponent } from '../../divider/divider.component';
+import { FormFieldComponent } from '../../form-field/form-field.component';
+import { PanelDirectivesModule } from '../../panel/panel.directive.module';
+import { MixinStyledButtonDirective } from '../../styled-button/styled-button.directive';
+import { MixinStyledCardDirectivesModule } from '../../styled-card/styled-card.module';
+import { ZeebraTextComponent } from '../../zeebra-text/zeebra-text.component';
+import Player from '../../../models/Player';
 
 @Component({
     selector: 'app-player-selector-result-component',

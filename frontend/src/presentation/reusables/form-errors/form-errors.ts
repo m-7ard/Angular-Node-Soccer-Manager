@@ -11,7 +11,10 @@ import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.modu
             *ngIf="errors != null"
             [appMixinStyledCard]="{
                 size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white'
+                theme: 'theme-Scard-generic-white',
+                hasBorder: true,
+                hasDivide: true,
+                hasShadow: true
             }"
         >
             <section appMixinStyledCardSection>

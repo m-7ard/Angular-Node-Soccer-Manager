@@ -1,27 +1,19 @@
-import { Component, EventEmitter, Inject, OnDestroy, TemplateRef, Type } from '@angular/core';
-import Player from '../../models/Player';
-import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Inject, Type } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormFieldComponent } from '../form-field/form-field.component';
 import { CharFieldComponent } from '../char-field/char-field.component';
-import { PlayerDataAccessService } from '../../services/data-access/player-data-access.service';
-import { CoverImageComponent } from '../cover-image/cover-image.component';
-import PlayerMapper from '../../mappers/PlayerMapper';
-import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
-import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
-import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
-import { PanelDirectivesModule } from '../panel/panel.directive.module';
 import { DividerComponent } from '../divider/divider.component';
+import { FormFieldComponent } from '../form-field/form-field.component';
+import { PanelDirectivesModule } from '../panel/panel.directive.module';
+import { MixinStyledButtonDirective } from '../styled-button/styled-button.directive';
+import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
+import { TeamDataAccessService } from '../../services/data-access/team-data-access.service';
+import TeamMapper from '../../mappers/TeamMapper';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import Team from '../../models/Team';
 
 interface IFormControls {
     name: FormControl<string>;
-}
-
-export interface SearchPlayersModalComponentData<P extends any> {
-    ResultComponent: Type<P>;
-    propsFactory: (player: Player) => P;
-    resultsChangedEmitter: EventEmitter<(player: Player) => P>;
 }
 
 const routes = {
@@ -29,8 +21,14 @@ const routes = {
     results: 'results',
 };
 
+export interface SearchTeamsModalComponentData<P extends any> {
+    ResultComponent: Type<P>;
+    propsFactory: (team: Team) => P;
+    resultsChangedEmitter: EventEmitter<(team: Team) => P>;
+}
+
 @Component({
-    selector: 'app-search-players-modal-component',
+    selector: 'app-search-teams-modal',
     standalone: true,
     imports: [
         CommonModule,
@@ -42,12 +40,12 @@ const routes = {
         PanelDirectivesModule,
         DividerComponent,
     ],
-    templateUrl: './search-players-modal-component.component.html',
+    templateUrl: './search-teams-modal.component.html',
 })
-export class SearchPlayersModalComponentComponent<P extends Record<string, unknown>> implements SearchPlayersModalComponentData<P>  {
+export class SearchTeamsModalComponent<P extends Record<string, unknown>> implements SearchTeamsModalComponentData<P> {
     readonly ResultComponent: Type<P>;
-    readonly resultsChangedEmitter: EventEmitter<(player: Player) => P>;
-    propsFactory: (player: Player) => P;
+    readonly resultsChangedEmitter: EventEmitter<(team: Team) => P>;
+    propsFactory: (team: Team) => P;
 
     currentRoute: keyof typeof routes = 'form';
     changeRoute(newRoute: keyof typeof routes) {
@@ -55,13 +53,12 @@ export class SearchPlayersModalComponentComponent<P extends Record<string, unkno
     }
 
     form: FormGroup<IFormControls>;
-    results: Player[] = [];
-
+    results: Team[] = [];
 
     constructor(
-        public dialogRef: DialogRef<Player>,
-        @Inject(DIALOG_DATA) data: SearchPlayersModalComponentData<P>,
-        private playerDataAccess: PlayerDataAccessService,
+        public dialogRef: DialogRef<Team>,
+        @Inject(DIALOG_DATA) data: SearchTeamsModalComponentData<P>,
+        private teamDataAccess: TeamDataAccessService,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -77,13 +74,14 @@ export class SearchPlayersModalComponentComponent<P extends Record<string, unkno
 
     async onFormSubmit() {
         const rawValue = this.form.getRawValue();
-        const responseObservable = this.playerDataAccess.listPlayers({
+        const responseObservable = this.teamDataAccess.listTeams({
             name: rawValue.name,
             limitBy: null,
+            teamMembershipPlayerId: null
         });
 
         responseObservable.subscribe((dto) => {
-            this.results = dto.players.map(PlayerMapper.apiModelToDomain);
+            this.results = dto.teams.map(TeamMapper.apiModelToDomain);
             this.changeRoute('results');
         });
     }

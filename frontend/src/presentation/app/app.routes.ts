@@ -28,6 +28,7 @@ import { AuthGuard } from '../guards/auth-guard';
 import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
 import { ListMatchesPageComponent } from './matches/list-matches-page/list-matches-page.component';
 import { ListMatchesPageResolver } from './matches/list-matches-page/list-matches-page.resolver';
+import { ScheduleMatchPageComponent } from './matches/schedule-match-page/schedule-match-page.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -114,6 +115,11 @@ export const routes: Routes = [
                 path: '',
                 component: ListMatchesPageComponent,
                 resolve: { [RESOLVER_DATA_KEY]: ListMatchesPageResolver },
+                canActivate: [AuthGuard],
+            },
+            {
+                path: 'schedule',
+                component: ScheduleMatchPageComponent,
                 canActivate: [AuthGuard],
             },
         ],

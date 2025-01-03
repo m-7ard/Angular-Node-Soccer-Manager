@@ -21,6 +21,8 @@ import structErrorToPresentationError from '../../../utils/structErrorToPresenta
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
+import { SearchTeamsModalComponent } from '../../../reusables/search-teams-modal/search-teams-modal.component';
+import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
 
 interface IFormControls {
     homeTeam: FormControl<Team | null>;
@@ -58,6 +60,7 @@ const validator = object({
         ContentGridDirective,
         ContentGridTrackDirective,
         DividerComponent,
+        PickSingleTeamComponent,
     ],
     templateUrl: './schedule-match-page.component.html',
 })
@@ -101,7 +104,7 @@ export class ScheduleMatchPageComponent {
                 homeTeamId: rawValue.homeTeam?.id,
                 awayTeamId: rawValue.awayTeam?.id,
                 venue: rawValue.venue,
-                scheduledDate: rawValue.scheduledDate,
+                scheduledDate: new Date(rawValue.scheduledDate),
             },
             validator,
         );
