@@ -26,96 +26,121 @@ import { LoginUserPageComponent } from './users/login-user-page/login-user-page.
 import { FrontpageResolver } from './frontpage/frontpage.resolver';
 import { AuthGuard } from '../guards/auth-guard';
 import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
+import { ListMatchesPageComponent } from './matches/list-matches-page/list-matches-page.component';
+import { ListMatchesPageResolver } from './matches/list-matches-page/list-matches-page.resolver';
 
 export const routes: Routes = [
+    // Frontpage
     {
         path: '',
         component: FrontpageComponent,
-        resolve: {
-            [RESOLVER_DATA_KEY]: FrontpageResolver,
-        },
+        resolve: { [RESOLVER_DATA_KEY]: FrontpageResolver },
     },
+
+    // Players Module
     {
         path: 'players',
-        component: ListPlayersPageComponent,
-        resolve: {
-            [RESOLVER_DATA_KEY]: ListPlayersPageResolver,
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'players/create',
-        component: CreatePlayerPageComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'teams',
-        component: ListTeamsPageComponent,
-        resolve: {
-            [RESOLVER_DATA_KEY]: ListTeamsPageResolver,
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'teams/create',
-        component: CreateTeamPageComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'teams/:teamId',
-        component: ReadTeamPageComponent,
-        resolve: {
-            [RESOLVER_DATA_KEY]: ReadTeamPageResolver,
-        },
-        runGuardsAndResolvers: 'always',
-        canActivate: [AuthGuard],
         children: [
             {
                 path: '',
-                component: TeamHomePageComponent,
+                component: ListPlayersPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: ListPlayersPageResolver },
+                canActivate: [AuthGuard],
             },
             {
-                path: 'update',
-                component: UpdateTeamPageComponent,
+                path: 'create',
+                component: CreatePlayerPageComponent,
+                canActivate: [AuthGuard],
             },
             {
-                path: 'players/add',
-                component: CreateTeamMembershipPageComponent,
-            },
-            {
-                path: 'players',
-                component: ListTeamPlayersPageComponent,
-            },
-            {
-                path: 'players/:playerId/update',
-                component: UpdateTeamMembershipPageComponent,
-                resolve: {
-                    [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver,
-                },
+                path: ':id/update',
+                component: UpdatePlayerPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: UpdatePlayerPageResolver },
+                canActivate: [AuthGuard],
             },
         ],
     },
+
+    // Teams Module
     {
-        path: 'players/:id/update',
-        component: UpdatePlayerPageComponent,
-        resolve: {
-            [RESOLVER_DATA_KEY]: UpdatePlayerPageResolver,
-        },
-        canActivate: [AuthGuard],
-    },
-    {
-        path: 'users/register',
-        component: RegisterUserPageComponent,
-    },
-    {
-        path: 'users/login',
-        component: LoginUserPageComponent,
+        path: 'teams',
+        children: [
+            {
+                path: '',
+                component: ListTeamsPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: ListTeamsPageResolver },
+                canActivate: [AuthGuard],
+            },
+            {
+                path: 'create',
+                component: CreateTeamPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: ':teamId',
+                component: ReadTeamPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: ReadTeamPageResolver },
+                runGuardsAndResolvers: 'always',
+                canActivate: [AuthGuard],
+                children: [
+                    { path: '', component: TeamHomePageComponent },
+                    { path: 'update', component: UpdateTeamPageComponent },
+                    { path: 'players/add', component: CreateTeamMembershipPageComponent },
+                    { path: 'players', component: ListTeamPlayersPageComponent },
+                    {
+                        path: 'players/:playerId/update',
+                        component: UpdateTeamMembershipPageComponent,
+                        resolve: { [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver },
+                    },
+                ],
+            },
+        ],
     },
 
-    { path: 'not-found', component: NotFoundPageComponent },
-    { path: 'page-does-not-exist', component: PageDoesNotExistPageComponent },
-    { path: 'internal-server-error', component: InternalServerErrorPageComponent },
-    { path: 'unkown-error', component: UnknownErrorPageComponent },
-    { path: 'client-side-error', component: ClientSideErrorPageComponent },
+    // Users Module
+    {
+        path: 'users',
+        children: [
+            { path: 'register', component: RegisterUserPageComponent },
+            { path: 'login', component: LoginUserPageComponent },
+        ],
+    },
+
+    // Matches Module
+    {
+        path: 'matches',
+        children: [
+            {
+                path: '',
+                component: ListMatchesPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: ListMatchesPageResolver },
+                canActivate: [AuthGuard],
+            },
+        ],
+    },
+
+    // Error Pages
+    {
+        path: 'not-found',
+        component: NotFoundPageComponent,
+    },
+    {
+        path: 'page-does-not-exist',
+        component: PageDoesNotExistPageComponent,
+    },
+    {
+        path: 'internal-server-error',
+        component: InternalServerErrorPageComponent,
+    },
+    {
+        path: 'unknown-error',
+        component: UnknownErrorPageComponent,
+    },
+    {
+        path: 'client-side-error',
+        component: ClientSideErrorPageComponent,
+    },
+
+    // Catch-All
     { path: '**', redirectTo: 'page-does-not-exist' },
 ];

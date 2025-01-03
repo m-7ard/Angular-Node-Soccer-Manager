@@ -77,6 +77,18 @@
         >
             Teams
         </a>
+        <a
+            routerLink="/matches"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-blue'
+            }"
+            [routerLinkActiveOptions]="{ exact: true }"
+        >
+            Matches
+        </a>
         <div
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',

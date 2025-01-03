@@ -16,7 +16,7 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { DividerComponent } from '../../../reusables/divider/divider.component';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -32,18 +32,18 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-create-team-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    CommonModule,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirectivesModule,
-    FormErrorsComponent,
-    PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective,
-    DividerComponent
-],
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirectivesModule,
+        FormErrorsComponent,
+        PageDirectivesModule,
+        ContentGridDirective,
+        ContentGridTrackDirective,
+        DividerComponent,
+    ],
     templateUrl: './create-team-page.component.html',
 })
 export class CreateTeamPageComponent implements OnInit {

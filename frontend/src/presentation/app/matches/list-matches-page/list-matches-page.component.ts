@@ -1,27 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IListTeamsResolverData } from './list-teams-page.resolver';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import Team from '../../../models/Team';
-import { ListTeamsPageTeamElementComponent } from './list-teams-page-team-element/list-teams-page-team-element.component';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { MatMenuModule } from '@angular/material/menu';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PopoverModule } from 'primeng/popover';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
 import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
+import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 import { PrimeNgPopoverDirective } from '../../../reusables/prime-ng-popover/prime-ng-popover.directive';
-import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
+import { IListMatchesResolverData } from './list-matches-page.resolver';
+import Match from '../../../models/Match';
+import { ListMatchsPageMatchElementComponent } from './list-matches-page-team-element/list-matches-page-match-element.component';
 
 @Component({
-    selector: 'app-list-teams-page',
+    selector: 'app-list-matches-page',
     standalone: true,
     imports: [
         CommonModule,
-        ListTeamsPageTeamElementComponent,
         RouterModule,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
@@ -33,22 +32,19 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
         PopoverModule,
         ContentGridDirective,
         ContentGridTrackDirective,
+        ListMatchsPageMatchElementComponent,
     ],
-    templateUrl: './list-teams-page.component.html',
+    templateUrl: './list-matches-page.component.html',
 })
-export class ListTeamsPageComponent {
+export class ListMatchesPageComponent {
     constructor(private _activatedRoute: ActivatedRoute) {}
 
-    teams: Team[] = null!;
-
-    onDeleteTeam(team: Team) {
-        this.teams = this.teams.filter((value) => value.id !== team.id);
-    }
+    matches: Match[] = null!;
 
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
-            const data = resolverData[RESOLVER_DATA_KEY] as IListTeamsResolverData;
-            this.teams = data.teams;
+            const data = resolverData[RESOLVER_DATA_KEY] as IListMatchesResolverData;
+            this.matches = data.matches;
         });
     }
 }

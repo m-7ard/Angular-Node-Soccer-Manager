@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, TemplateRef } from '@angular/core';
 import Player from '../../models/Player';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
@@ -12,15 +12,15 @@ import { MixinStyledButtonDirective } from '../styled-button/styled-button.direc
 import { ZeebraTextComponent } from '../zeebra-text/zeebra-text.component';
 import { MixinStyledCardDirectivesModule } from '../styled-card/styled-card.module';
 import { PanelDirectivesModule } from '../panel/panel.directive.module';
-import { DividerComponent } from "../divider/divider.component";
+import { DividerComponent } from '../divider/divider.component';
 
 interface IFormControls {
     name: FormControl<string>;
 }
 
-export interface SearchPlayersModalComponentProps {
-    selectPlayer: Player | null;
-    onSelect: (player: Player) => void;
+export interface SearchPlayersModalComponentData {
+    resultsTemplateRef: TemplateRef<any>;
+    resultsChangedEmitter: EventEmitter<Player[]>;
 }
 
 const routes = {
@@ -32,17 +32,17 @@ const routes = {
     selector: 'app-search-players-modal-component',
     standalone: true,
     imports: [
-    CommonModule,
-    FormFieldComponent,
-    CharFieldComponent,
-    ReactiveFormsModule,
-    CoverImageComponent,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirectivesModule,
-    ZeebraTextComponent,
-    PanelDirectivesModule,
-    DividerComponent
-],
+        CommonModule,
+        FormFieldComponent,
+        CharFieldComponent,
+        ReactiveFormsModule,
+        CoverImageComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirectivesModule,
+        ZeebraTextComponent,
+        PanelDirectivesModule,
+        DividerComponent,
+    ],
     templateUrl: './search-players-modal-component.component.html',
 })
 export class SearchPlayersModalComponentComponent {
@@ -54,9 +54,12 @@ export class SearchPlayersModalComponentComponent {
     form: FormGroup<IFormControls>;
     results: Player[] = [];
 
+    resultsTemplateRef: TemplateRef<any>;
+    resultsChangedEmitter: EventEmitter<Player[]>;
+
     constructor(
         public dialogRef: DialogRef<Player>,
-        @Inject(DIALOG_DATA) public data: SearchPlayersModalComponentProps,
+        @Inject(DIALOG_DATA) public data: SearchPlayersModalComponentData,
         private playerDataAccess: PlayerDataAccessService,
     ) {
         this.form = new FormGroup<IFormControls>({
@@ -65,15 +68,9 @@ export class SearchPlayersModalComponentComponent {
                 validators: [],
             }),
         });
-    }
 
-    isPlayerAlreadySelected(player: Player): boolean {
-        return this.data.selectPlayer?.id === player.id;
-    }
-
-    selectPlayer(player: Player): void {
-        this.data.onSelect(player);
-        this.dialogRef.close();
+        this.resultsTemplateRef = data.resultsTemplateRef;
+        this.resultsChangedEmitter = data.resultsChangedEmitter;
     }
 
     async onFormSubmit() {
@@ -85,6 +82,7 @@ export class SearchPlayersModalComponentComponent {
 
         responseObservable.subscribe((dto) => {
             this.results = dto.players.map(PlayerMapper.apiModelToDomain);
+            this.resultsChangedEmitter.emit(this.results);
             this.changeRoute('results');
         });
     }

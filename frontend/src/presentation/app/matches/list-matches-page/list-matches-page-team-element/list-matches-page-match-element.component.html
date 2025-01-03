@@ -1,0 +1,60 @@
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true
+    }"
+>
+    <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-yellow',
+                isStatic: true
+            }"
+            routerLink="/matches/"
+        >
+            {{ match.status }}
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            routerLink="/matches/"
+            class="ml-auto"
+        >
+            Details
+        </button>
+    </section>
+    <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
+        <div class="token-card--header--secondary-text">
+            {{ match.scheduledDate | date }}
+        </div>
+    </section>
+    <section appMixinStyledCardSection class="flex flex-col gap-3">
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+            <div class="aspect-square h-full theme-avatar-any">
+                <app-cover-image src=""></app-cover-image>
+            </div>
+            <div class="text-sm truncate">{{ match.homeTeam.name }}</div>
+            <div class="flex flex-row gap-3 text-sm">
+                <div>
+                    {{ match.score?.homeTeamScore ?? "" }}
+                </div>
+            </div>
+        </div>
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+            <div class="aspect-square h-full theme-avatar-any">
+                <app-cover-image src=""></app-cover-image>
+            </div>
+            <div class="text-sm truncate">{{ match.awayTeam }}</div>
+            <div class="flex flex-row gap-3 text-sm">
+                <div>
+                    {{ match.score?.awayTeamScore ?? "" }}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

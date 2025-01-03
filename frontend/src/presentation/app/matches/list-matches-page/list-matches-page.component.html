@@ -1,0 +1,32 @@
+<!-- List Matches Page -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
+    <header [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
+        <section class="flex flex-row gap-3 items-start justify-between flex-wrap">
+            <div>
+                <div class="token-default-title">List Matches</div>
+            </div>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-yellow',
+                    hasShadow: true
+                }"
+                [routerLink]="'/matchs/create'"
+            >
+                Schedule
+            </button>
+        </section>
+    </header>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <div
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+        class="flex flex-col gap-[inherit]"
+    >
+        <div class="grid max-[450px]:grid-cols-1 grid-cols-2 gap-3">
+            <ng-container *ngFor="let match of matches">
+                <app-list-matches-page-match-element [match]="match"></app-list-matches-page-match-element>
+            </ng-container>
+        </div>
+    </div>
+</div>

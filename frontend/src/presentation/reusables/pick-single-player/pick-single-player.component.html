@@ -62,3 +62,9 @@
         </section>
     </ng-content>
 </div>
+<ng-template #resultElementsTemplateRef>
+    <ng-container *ngFor="let props of this.resultProps();">
+        <app-player-selector-result-component [player]="props.player" [isSelected]="props.isSelected" [selectPlayer]="props.selectPlayer" />
+    </ng-container>    
+
+</ng-template>
