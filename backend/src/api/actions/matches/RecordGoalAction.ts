@@ -1,4 +1,3 @@
-import IScheduleMatchResponseDTO from "api/DTOs/matches/schedule/IScheduleMatchResponseDTO";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IApiError from "api/errors/IApiError";
 import JsonResponse from "api/responses/JsonResponse";
@@ -6,20 +5,22 @@ import IRequestDispatcher from "application/handlers/IRequestDispatcher";
 import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import IAction from "../IAction";
-import scheduleMatchValidator from "api/validators/matches/scheduleMatchValidator";
-import { ScheduleMatchCommand } from "application/handlers/matches/ScheduleMatchCommandHandler";
-import IScheduleMatchRequestDTO from "api/DTOs/matches/schedule/IScheduleMatchRequestDTO";
+import IRecordGoalRequestDTO from "api/DTOs/matchEvents/recordGoal/IRecordGoalRequestDTO";
+import IRecordGoalResponseDTO from "api/DTOs/matchEvents/recordGoal/IRecordGoalResponseDTO";
+import recordGoalValidator from "api/validators/matchEvents/recordGoalValidator";
+import { RecordGoalCommand } from "application/handlers/matchEvents/RecordGoalCommandHandler";
+import parsers from "api/utils/parsers";
 
-type ActionRequest = { dto: IScheduleMatchRequestDTO };
-type ActionResponse = JsonResponse<IScheduleMatchResponseDTO | IApiError[]>;
+type ActionRequest = { dto: IRecordGoalRequestDTO; matchId: string };
+type ActionResponse = JsonResponse<IRecordGoalResponseDTO | IApiError[]>;
 
-class ScheduleMatchAction implements IAction<ActionRequest, ActionResponse> {
+class RecordGoalAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { dto } = request;
+        const { dto, matchId } = request;
 
-        const validation = scheduleMatchValidator(dto);
+        const validation = recordGoalValidator(dto);
         if (validation.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
@@ -27,14 +28,11 @@ class ScheduleMatchAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
-        const guid = crypto.randomUUID();
-
-        const command = new ScheduleMatchCommand({
-            id: guid,
-            homeTeamId: dto.homeTeamId,
-            awayTeamId: dto.awayTeamId,
-            venue: dto.venue,
-            scheduledDate: dto.scheduledDate,
+        const command = new RecordGoalCommand({
+            id: matchId,
+            playerId: dto.playerId,
+            teamId: dto.teamId,
+            dateOccured: dto.dateOccured,
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -48,21 +46,21 @@ class ScheduleMatchAction implements IAction<ActionRequest, ActionResponse> {
         return new JsonResponse({
             status: StatusCodes.CREATED,
             body: {
-                id: guid,
+                matchId: matchId,
             },
         });
     }
 
     bind(request: Request): ActionRequest {
         return {
+            matchId: request.params.matchId,
             dto: {
-                homeTeamId: request.body.homeTeamId,
-                awayTeamId: request.body.awayTeamId,
-                venue: request.body.venue,
-                scheduledDate: new Date(request.body.scheduledDate),
+                playerId: request.body.playerId,
+                teamId: request.body.teamId,
+                dateOccured: parsers.parseDateOrElse(request.body.dateOccured, "Invalid Date"),
             },
         };
     }
 }
 
-export default ScheduleMatchAction;
+export default RecordGoalAction;

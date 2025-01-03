@@ -17,55 +17,7 @@ class TeamRepository implements ITeamRepository {
         this._db = db;
     }
 
-    async getByIdAsync(id: string): Promise<Team | null> {
-        const sqlEntry = sql`SELECT * FROM team WHERE team.id = ${id}`;
-
-        const [row] = await this._db.execute<ITeamSchema | null>({
-            statement: sqlEntry.sql,
-            parameters: sqlEntry.values,
-        });
-
-        if (row == null) {
-            return null;
-        }
-
-        const team = TeamMapper.schemaToDbEntity(row);
-        await team.loadTeamMemberships(this._db);
-
-        return team == null ? null : TeamMapper.dbEntityToDomain(team);
-    }
-
-    async createAsync(team: Team): Promise<void> {
-        const sqlEntry = sql`
-            INSERT INTO team
-                SET 
-                    id = ${team.id},
-                    name = ${team.name},
-                    date_founded = ${team.dateFounded}
-        `;
-
-        await this._db.execute({
-            statement: sqlEntry.sql,
-            parameters: sqlEntry.values,
-        });
-    }
-
-    async updateAsync(team: Team): Promise<void> {
-        const sqlEntry = sql`
-            UPDATE team
-                SET 
-                    id = ${team.id},
-                    name = ${team.name},
-                    date_founded = ${team.dateFounded}
-                WHERE
-                    id = ${team.id}
-        `;
-
-        await this._db.execute({
-            statement: sqlEntry.sql,
-            parameters: sqlEntry.values,
-        });
-
+    private async persistDomainEvents(team: Team) {
         for (let i = 0; i < team.domainEvents.length; i++) {
             const event = team.domainEvents[i];
 
@@ -119,9 +71,63 @@ class TeamRepository implements ITeamRepository {
                     parameters: sqlEntry.values,
                 });
             }
-
-            team.clearEvents();
         }
+
+        team.clearEvents();
+    }
+
+    async getByIdAsync(id: string): Promise<Team | null> {
+        const sqlEntry = sql`SELECT * FROM team WHERE team.id = ${id}`;
+
+        const [row] = await this._db.execute<ITeamSchema | null>({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        if (row == null) {
+            return null;
+        }
+
+        const team = TeamMapper.schemaToDbEntity(row);
+        await team.loadTeamMemberships(this._db);
+
+        return team == null ? null : TeamMapper.dbEntityToDomain(team);
+    }
+
+    async createAsync(team: Team): Promise<void> {
+        const sqlEntry = sql`
+            INSERT INTO team
+                SET 
+                    id = ${team.id},
+                    name = ${team.name},
+                    date_founded = ${team.dateFounded}
+        `;
+
+        await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        await this.persistDomainEvents(team);
+    }
+
+    async updateAsync(team: Team): Promise<void> {
+        const sqlEntry = sql`
+            UPDATE team
+                SET 
+                    id = ${team.id},
+                    name = ${team.name},
+                    date_founded = ${team.dateFounded}
+                WHERE
+                    id = ${team.id}
+        `;
+
+        await this._db.execute({
+            statement: sqlEntry.sql,
+            parameters: sqlEntry.values,
+        });
+
+        await this.persistDomainEvents(team);
     }
 
     async filterAllAsync(criteria: FilterAllTeamsCriteria): Promise<Team[]> {

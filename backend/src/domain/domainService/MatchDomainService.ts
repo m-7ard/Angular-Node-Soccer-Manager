@@ -81,13 +81,21 @@ class MatchDomainService {
         return ok(true);
     }
 
-    private static validateDateScoreConsistency(match: Match): Result<true, IDomainError[]> {
+    private static validateScoreConsistency(match: Match): Result<true, IDomainError[]> {
         if (match.startDate != null && match.score == null) {
             return err(this.createIntegrityError("A match with a startDate must also have a score", ["score"]));
         }
 
         if (match.score != null && match.startDate == null) {
             return err(this.createIntegrityError("A match with a score must also have a startDate", ["startDate"]));
+        }
+
+        return ok(true);
+    }
+
+    private static validateDates(match: Match): Result<true, IDomainError[]> {
+        if (match.endDate != null && match.startDate == null) {
+            return err(this.createIntegrityError("startDate cannot be null when endDate is set", ["endDate"]));
         }
 
         if (match.startDate != null && match.endDate != null) {
@@ -149,6 +157,7 @@ class MatchDomainService {
                     * Home team cannot be the same as away team
                     * If [startDate] exists, [score] must also exist
                     * If [score] exists, [startDate] must also exist
+                    * If [endDate] exists, [startDate] must also exist
                     * If both [startDate] and [endDate] exist, duration must be at least 90 minutes
                     * If [score] is null, there cannot be any goal events
                     * If [score] exists, the number of home team goals must match homeTeamScore
@@ -158,8 +167,11 @@ class MatchDomainService {
         const teamValidation = this.validateTeams(match);
         if (teamValidation.isErr()) return teamValidation;
 
-        const dateScoreValidation = this.validateDateScoreConsistency(match);
-        if (dateScoreValidation.isErr()) return dateScoreValidation;
+        const scoreValidation = this.validateScoreConsistency(match);
+        if (scoreValidation.isErr()) return scoreValidation;
+
+        const datesValidation = this.validateDates(match);
+        if (datesValidation.isErr()) return datesValidation;
 
         const goalsValidation = this.validateGoalsConsistency(match);
         if (goalsValidation.isErr()) return goalsValidation;
@@ -223,10 +235,10 @@ class MatchDomainService {
                     }
                 });
             }
-                
+
             if (addGoalErrors.length) {
                 return err(addGoalErrors);
-            }   
+            }
         }
 
         const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
@@ -248,10 +260,7 @@ class MatchDomainService {
             return err(startDateResult.error);
         }
 
-        const startScoreResult = match.trySetScore({ homeTeamScore: 0, awayTeamScore: 0 });
-        if (startScoreResult.isErr()) {
-            return err(startScoreResult.error);
-        }
+        match.score = MatchScore.ZeroScore;
 
         const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
         if (matchIntegrityResult.isErr()) {

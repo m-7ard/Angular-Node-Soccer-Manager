@@ -16,6 +16,38 @@ class MatchRepository implements IMatchRepository {
         this._db = db;
     }
 
+    private async persistDomainEvents(match: Match) {
+        for (let i = 0; i < match.domainEvents.length; i++) {
+            const event = match.domainEvents[i];
+
+            if (event instanceof MatchEventPendingCreationEvent) {
+                const matchEvent = event.payload;
+                const matchEventDbEntity =
+                    MatchEventMapper.domainToDbEntity(matchEvent);
+
+                const sqlEntry = sql`
+                    INSERT INTO match_events
+                        SET
+                            id = ${matchEventDbEntity.id},
+                            match_id = ${matchEventDbEntity.match_id},
+                            player_id = ${matchEventDbEntity.player_id},
+                            team_id = ${matchEventDbEntity.team_id},
+                            type = ${matchEventDbEntity.type},
+                            date_occured = ${matchEventDbEntity.date_occured},
+                            secondary_player_id = ${matchEventDbEntity.secondary_player_id},
+                            description = ${matchEventDbEntity.description}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            }
+        }
+
+        match.clearEvents();
+    }
+
     async deleteAsync(match: Match): Promise<void> {
         for (let i = 0; i < match.events.length; i++) {
             const event = match.events[i];
@@ -93,35 +125,7 @@ class MatchRepository implements IMatchRepository {
             parameters: sqlEntry.values,
         });
 
-        for (let i = 0; i < match.domainEvents.length; i++) {
-            const event = match.domainEvents[i];
-
-            if (event instanceof MatchEventPendingCreationEvent) {
-                const matchEvent = event.payload;
-                const matchEventDbEntity =
-                    MatchEventMapper.domainToDbEntity(matchEvent);
-
-                const sqlEntry = sql`
-                    INSERT INTO match_events
-                        SET
-                            id = ${matchEventDbEntity.id},
-                            match_id = ${matchEventDbEntity.match_id},
-                            player_id = ${matchEventDbEntity.player_id},
-                            team_id = ${matchEventDbEntity.team_id},
-                            type = ${matchEventDbEntity.type},
-                            date_occured = ${matchEventDbEntity.date_occured},
-                            secondary_player_id = ${matchEventDbEntity.secondary_player_id},
-                            description = ${matchEventDbEntity.description}
-                `;
-
-                await this._db.execute({
-                    statement: sqlEntry.sql,
-                    parameters: sqlEntry.values,
-                });
-            }
-        }
-
-        match.clearEvents();
+        await this.persistDomainEvents(match);
     }
 
     async filterAllAsync(criteria: FilterAllMatchesCriteria): Promise<Match[]> {
@@ -187,6 +191,8 @@ class MatchRepository implements IMatchRepository {
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
+
+        await this.persistDomainEvents(match);
     }
 }
 

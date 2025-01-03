@@ -9,6 +9,7 @@ import MarkMatchInProgressAction from "api/actions/matches/MarkMatchInProgressAc
 import MarkMatchCompletedAction from "api/actions/matches/MarkMatchCompletedAction";
 import MarkMatchCancelledAction from "api/actions/matches/MarkMatchCancelledAction";
 import ScheduleMatchAction from "api/actions/matches/ScheduleMatchAction";
+import RecordGoalAction from "api/actions/matches/RecordGoalAction";
 
 const matchesRouter = Router();
 
@@ -86,6 +87,17 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new ScheduleMatchAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: matchesRouter,
+    path: "/:matchId/record_goal",
+    method: "POST",
+    guards: [userIsAuthenticatedGuard],
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new RecordGoalAction(requestDispatcher);
     },
 });
 
