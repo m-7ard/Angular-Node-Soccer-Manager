@@ -46,7 +46,7 @@ class Match {
     clearEvents = () => {
         this.domainEvents = [];
     };
-    
+
     constructor(props: MatchProps) {
         this.id = props.id;
         this.homeTeamId = props.homeTeamId;
@@ -111,28 +111,6 @@ class Match {
         return ok(true);
     }
 
-    public trySetScore(value: { homeTeamScore: number; awayTeamScore: number }): Result<true, IDomainError[]> {
-        if (!this.canHaveScore()) {
-            return err(
-                DomainErrorFactory.createSingleListError({
-                    message: `Cannot set score when match status is ${this.status}`,
-                    path: ["score"],
-                    code: "INVALID_SCORE",
-                }),
-            );
-        }
-
-        const scoreResult = MatchScore.tryCreate({ awayTeamScore: value.awayTeamScore, homeTeamScore: value.homeTeamScore });
-        if (scoreResult.isErr()) {
-            const errors: IDomainError[] = scoreResult.error.map((error) => ({ code: "INVALID_SCORE", message: error, path: ["score"] }));
-            return err(errors);
-        }
-
-        this.score = scoreResult.value;
-
-        return ok(true);
-    }
-
     public trySetEndDate(value: Date): Result<true, IDomainError[]> {
         if (this.status !== MatchStatus.COMPLETED) {
             return err(DomainErrorFactory.createSingleListError({ message: "endDate can only be set on a completed match.", code: "MATCH_NOT_COMPLETED", path: ["endDate"] }));
@@ -167,46 +145,41 @@ class Match {
         return [MatchStatus.IN_PROGRESS, MatchStatus.COMPLETED, MatchStatus.CANCELLED].includes(this.status);
     }
 
-    public tryAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): Result<true, IDomainError[]> {
+    public canAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): Result<{ score: MatchScore }, string> {
+        if (!this.canHaveScore()) {
+            return err(`Cannot add a goal to a match that cannot have a score.`);
+        }
+
         if (this.score == null) {
-            return err(
-                DomainErrorFactory.createSingleListError({
-                    message: `Score cannot be null when adding a goal`,
-                    path: ["_"],
-                    code: "INVALID_SCORE",
-                }),
-            );
+            return err(`Score cannot be null when adding a goal.`);
         }
 
         if (this.startDate == null) {
-            return err(
-                DomainErrorFactory.createSingleListError({
-                    message: `Cannot add goals when startDate is null`,
-                    path: ["_"],
-                    code: "INVALID_START_DATE",
-                }),
-            );
+            return err(`Cannot add goals when startDate is null.`);
         }
 
         if (props.dateOccured < this.startDate) {
-            return err(
-                DomainErrorFactory.createSingleListError({
-                    message: `Date occured cannot be less than start date`,
-                    path: ["_"],
-                    code: "DATE_OCCURED_TOO_SMALL",
-                }),
-            );
+            return err(`Date occured cannot be less than start date.`);
+        }
+
+        if (this.endDate != null && props.dateOccured > this.endDate) {
+            return err(`Date occured cannot be more than end date.`);
         }
 
         if (props.teamId !== this.homeTeamId && props.teamId !== this.awayTeamId) {
-            return err(
-                DomainErrorFactory.createSingleListError({
-                    message: `Goal team does not match teams from match`,
-                    path: ["_"],
-                    code: "TEAM_DOES_NOT_EXIST",
-                }),
-            );
+            return err(`Goal team does not match teams from match.`);
         }
+
+        return ok({ score: this.score });
+    }
+
+    public executeAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): void {
+        const canAddGoalResult = this.canAddGoal(props);
+        if (canAddGoalResult.isErr()) {
+            throw new Error(canAddGoalResult.error);
+        }
+
+        const { score } = canAddGoalResult.value;
 
         const matchEvent = MatchEventFactory.CreateNew({
             id: crypto.randomUUID(),
@@ -223,24 +196,10 @@ class Match {
         this.domainEvents.push(new MatchEventPendingCreationEvent(matchEvent));
 
         const isHomeTeamGoal = props.teamId === this.homeTeamId;
-        const matchScoreResult = MatchScore.tryCreate({
-            homeTeamScore: isHomeTeamGoal ? this.score.homeTeamScore + 1 : this.score.homeTeamScore,
-            awayTeamScore: isHomeTeamGoal ? this.score.awayTeamScore : this.score.awayTeamScore + 1,
+        this.score = MatchScore.executeCreate({
+            homeTeamScore: isHomeTeamGoal ? score.homeTeamScore + 1 : score.homeTeamScore,
+            awayTeamScore: isHomeTeamGoal ? score.awayTeamScore : score.awayTeamScore + 1,
         });
-
-        if (matchScoreResult.isErr()) {
-            const errors: IDomainError[] = matchScoreResult.error.map((message) => ({
-                message: message,
-                path: ["_"],
-                code: "INVALID_SCORE",
-            }));
-
-            return err(errors);
-        }
-
-        this.score = matchScoreResult.value;
-
-        return ok(true);
     }
 
     public getGoals() {

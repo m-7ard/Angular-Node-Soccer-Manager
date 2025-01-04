@@ -53,14 +53,14 @@ beforeEach(async () => {
         seed: 2,
         awayTeam: team_001,
         homeTeam: team_002,
-        goals: {},
+        goals: [],
     });
 
     match_003 = await mixins.createCompletedMatch({
         seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
-        goals: {},
+        goals: [],
     });
 });
 

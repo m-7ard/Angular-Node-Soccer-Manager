@@ -1,5 +1,5 @@
 import validateSuperstruct from "api/utils/validateSuperstruct";
-import { err, ok } from "neverthrow";
+import { err, ok, Result } from "neverthrow";
 import { is, min, number, object } from "superstruct";
 
 const validator = object({
@@ -19,14 +19,24 @@ class MatchScore {
         this.awayTeamScore = value.awayTeamScore;
     }
 
-    public static tryCreate(value: { homeTeamScore: number; awayTeamScore: number }) {
+    public static canCreate(value: { homeTeamScore: number; awayTeamScore: number }): Result<true, string> {
         const result = validateSuperstruct(validator, value);
 
         if (result.isErr()) {
-            return err(result.error.map((failure) => failure.message));
+            return err(JSON.stringify(result.error.map((failure) => failure.message)));
         }
 
-        return ok(new MatchScore({ homeTeamScore: value.homeTeamScore, awayTeamScore: value.awayTeamScore }));
+        return ok(true);
+    }
+
+    public static executeCreate(value: { homeTeamScore: number; awayTeamScore: number }) {
+        const canCreateResult = this.canCreate(value);
+        if (canCreateResult.isErr()) {
+            throw new Error(canCreateResult.error)
+        }
+
+        const score = new MatchScore({ homeTeamScore: value.homeTeamScore, awayTeamScore: value.awayTeamScore });
+        return score;
     }
 }
 

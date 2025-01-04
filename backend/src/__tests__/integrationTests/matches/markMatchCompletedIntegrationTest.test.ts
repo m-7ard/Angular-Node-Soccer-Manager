@@ -37,7 +37,7 @@ beforeEach(async () => {
         seed: 1,
         awayTeam: team_001,
         homeTeam: team_002,
-        goals: {}
+        goals: []
     });
 
     const endDate = completed_match.startDate!;
@@ -57,7 +57,7 @@ beforeEach(async () => {
         seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
-        goals: {},
+        goals: [],
     });
 
     cancelled_match = await mixins.createCancelledMatch({

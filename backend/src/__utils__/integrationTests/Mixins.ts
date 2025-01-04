@@ -99,7 +99,7 @@ class Mixins {
         });
     }
 
-    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> }) {
+    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> }) {
         const date = new Date();
         return await this.createMatch({
             seed: props.seed,
@@ -113,7 +113,7 @@ class Mixins {
         });
     }
 
-    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> }) {
+    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> }) {
         const date = new Date();
         const endDate = new Date(date);
         date.setMinutes(endDate.getMinutes() + 90);
@@ -153,9 +153,9 @@ class Mixins {
         homeTeam: Team;
         startDate: Date | null;
         endDate: null | Date;
-        goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> | null;
+        goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> | null;
     }) {
-        const matchResult = MatchDomainService.tryCreateMatch({
+        const matchResult = MatchDomainService.canCreateMatch({
             id: `${props.seed}`,
             homeTeam: props.homeTeam,
             awayTeam: props.awayTeam,

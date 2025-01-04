@@ -60,7 +60,7 @@ export default class ScheduleMatchCommandHandler implements IRequestHandler<Sche
             );
         }
 
-        const matchCreationResult = MatchDomainService.tryCreateMatch({
+        const matchCreationResult = MatchDomainService.canCreateMatch({
             id: command.id,
             homeTeam: homeTeam,
             awayTeam: awayTeam,

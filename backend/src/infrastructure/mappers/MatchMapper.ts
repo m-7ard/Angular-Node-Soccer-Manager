@@ -66,11 +66,7 @@ class MatchMapper {
             events: source.events.map(MatchEventMapper.dbEntityToDomain)
         });
 
-        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (matchIntegrityResult.isErr()) {
-            const errors = JSON.stringify(matchIntegrityResult.error);
-            throw new Error(`Integrity error occured while trying to map Match Db entity to a domain entity: ${errors}`);
-        }
+        MatchDomainService.verifyIntegrity(match);
 
         return match;
     }
@@ -88,16 +84,12 @@ class MatchValueObjectsMapper {
             throw new Error("Partial score values found in the database.");
         }
 
-        const scoreResult = MatchScore.tryCreate({
+        const scoreResult = MatchScore.executeCreate({
             homeTeamScore: value.homeTeamScore,
             awayTeamScore: value.awayTeamScore,
         });
     
-        if (scoreResult.isErr()) {
-            throw new Error(`Invalid score data: ${JSON.stringify(scoreResult.error)}`);
-        }
-    
-        return scoreResult.value;
+        return scoreResult;
     }
 }
 

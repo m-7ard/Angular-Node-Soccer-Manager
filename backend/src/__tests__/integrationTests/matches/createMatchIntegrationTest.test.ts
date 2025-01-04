@@ -43,7 +43,7 @@ beforeEach(async () => {
         endDate: null,
         venue: "venue place",
         status: MatchStatus.SCHEDULED.value,
-        goals: {}
+        goals: null
     };
 });
 
@@ -64,6 +64,7 @@ describe("Create Match Integration Test - Happy Paths", () => {
         const request = { ...default_request };
         request.status = MatchStatus.IN_PROGRESS.value;
         request.startDate = new Date();
+        request.goals = {};
 
         const response = await adminSuperTest({
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
@@ -77,6 +78,7 @@ describe("Create Match Integration Test - Happy Paths", () => {
     it("Create Completed Match", async () => {
         const request = { ...default_request };
         request.status = MatchStatus.COMPLETED.value;
+        request.goals = {};
 
         const startDate = new Date();
         startDate.setHours(10, 0, 0, 0);

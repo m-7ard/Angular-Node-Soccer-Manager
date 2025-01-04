@@ -7,16 +7,12 @@ import {
     server,
 } from "__utils__/integrationTests/integrationTest.setup";
 import Mixins from "__utils__/integrationTests/Mixins";
-import ICreateMatchRequestDTO from "api/DTOs/matches/create/ICreateMatchRequestDTO";
-import ICreateMatchResponseDTO from "api/DTOs/matches/create/ICreateMatchResponseDTO";
 import IRecordGoalRequestDTO from "api/DTOs/matchEvents/recordGoal/IRecordGoalRequestDTO";
 import Match from "domain/entities/Match";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import TeamMembership from "domain/entities/TeamMembership";
-import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
-import MatchRepository from "infrastructure/repositories/MatchRepository";
 import { DateTime } from "luxon";
 import supertest from "supertest";
 
@@ -58,7 +54,7 @@ beforeEach(async () => {
         seed: 1,
         awayTeam: away_team,
         homeTeam: home_team,
-        goals: {},
+        goals: [],
     });
 
     const dateOccured = DateTime.fromJSDate(in_progress_match.startDate!)
@@ -83,6 +79,8 @@ describe("Record Goal Integration Test;", () => {
                 .set("Content-Type", "application/json"),
             seed: 1,
         });
+
+        console.log(response.body)
 
         expect(response.status).toBe(201);
         await wasCreated();

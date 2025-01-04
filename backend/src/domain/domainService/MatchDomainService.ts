@@ -9,128 +9,106 @@ import { err, ok, Result } from "neverthrow";
 import dateDiff from "utils/dateDifference";
 
 class MatchDomainService {
-    private static createIntegrityError(message: string, path: string[]): IDomainError[] {
-        return DomainErrorFactory.createSingleListError({
-            message,
-            code: "INTEGRITY_ERROR",
-            path,
-        });
-    }
-
-    private static validateScheduledMatch(match: Match): Result<true, IDomainError[]> {
+    private static validateScheduledMatch(match: Match): void {
         if (match.startDate != null) {
-            return err(this.createIntegrityError("A scheduled match cannot have a startDate", ["startDate"]));
+            throw new Error("A scheduled match cannot have a startDate");
         }
 
         if (match.endDate != null) {
-            return err(this.createIntegrityError("A scheduled match cannot have an endDate", ["endDate"]));
+            throw new Error("A scheduled match cannot have an endDate");
         }
 
         if (match.score != null) {
-            return err(this.createIntegrityError("A scheduled match cannot have a score", ["score"]));
+            throw new Error("A scheduled match cannot have a score");
         }
-
-        return ok(true);
     }
 
-    private static validateInProgressMatch(match: Match): Result<true, IDomainError[]> {
+    private static validateInProgressMatch(match: Match): void {
         if (match.startDate == null) {
-            return err(this.createIntegrityError("An in-progress match cannot have a null startDate", ["startDate"]));
+            throw new Error("An in-progress match cannot have a null startDate");
         }
 
         if (match.endDate != null) {
-            return err(this.createIntegrityError("An in-progress match cannot have an endDate", ["endDate"]));
+            throw new Error("An in-progress match cannot have an endDate");
         }
 
         if (match.score == null) {
-            return err(this.createIntegrityError("An in-progress match cannot have a null score", ["score"]));
+            throw new Error("An in-progress match cannot have a null score");
         }
 
         if (match.startDate < match.scheduledDate) {
-            return err(this.createIntegrityError("An in-progress match cannot start before its scheduledDate", ["startDate"]));
+            throw new Error("An in-progress match cannot start before its scheduledDate");
         }
-
-        return ok(true);
     }
 
-    private static validateCompletedMatch(match: Match): Result<true, IDomainError[]> {
+    private static validateCompletedMatch(match: Match): void {
         if (match.startDate == null) {
-            return err(this.createIntegrityError("A completed match cannot have a null startDate", ["startDate"]));
+            throw new Error("A completed match cannot have a null startDate");
         }
 
         if (match.endDate == null) {
-            return err(this.createIntegrityError("A completed match cannot have a null endDate", ["endDate"]));
+            throw new Error("A completed match cannot have a null endDate");
         }
 
         if (match.score == null) {
-            return err(this.createIntegrityError("A completed match cannot have a null score", ["score"]));
+            throw new Error("A completed match cannot have a null score");
         }
 
         if (dateDiff(match.startDate, match.endDate, "minutes") < 90) {
-            return err(this.createIntegrityError("A completed match must have a duration of at least 90 minutes", ["endDate"]));
+            throw new Error("A completed match must have a duration of at least 90 minutes");
         }
-
-        return ok(true);
     }
 
-    private static validateTeams(match: Match): Result<true, IDomainError[]> {
+    private static validateTeams(match: Match): void {
         if (match.homeTeamId === match.awayTeamId) {
-            return err(this.createIntegrityError("Home team cannot be the same as the away team", ["_"]));
+            throw new Error("Home team cannot be the same as the away team");
         }
-
-        return ok(true);
     }
 
-    private static validateScoreConsistency(match: Match): Result<true, IDomainError[]> {
+    private static validateScoreConsistency(match: Match): void {
         if (match.startDate != null && match.score == null) {
-            return err(this.createIntegrityError("A match with a startDate must also have a score", ["score"]));
+            throw new Error("A match with a startDate must also have a score");
         }
 
         if (match.score != null && match.startDate == null) {
-            return err(this.createIntegrityError("A match with a score must also have a startDate", ["startDate"]));
+            throw new Error("A match with a score must also have a startDate");
         }
-
-        return ok(true);
     }
 
-    private static validateDates(match: Match): Result<true, IDomainError[]> {
+    private static validateDates(match: Match): void {
         if (match.endDate != null && match.startDate == null) {
-            return err(this.createIntegrityError("startDate cannot be null when endDate is set", ["endDate"]));
+            throw new Error("startDate cannot be null when endDate is set");
         }
 
         if (match.startDate != null && match.endDate != null) {
             const duration = dateDiff(match.startDate, match.endDate, "minutes");
             if (duration < 90) {
-                return err(this.createIntegrityError("A match with a startDate and endDate must have a duration of at least 90 minutes", ["endDate"]));
+                throw new Error("A match with a startDate and endDate must have a duration of at least 90 minutes");
             }
         }
-
-        return ok(true);
     }
 
-    private static validateGoalsConsistency(match: Match): Result<true, IDomainError[]> {
+    private static validateGoalsConsistency(match: Match): void {
         const goals = match.getGoals();
 
         if (match.score == null && goals.length > 0) {
-            return err(this.createIntegrityError("Score cannot be null when goal events exist", ["score"]));
+            throw new Error("Score cannot be null when goal events exist");
         }
 
         if (match.score != null) {
             const homeTeamGoals = goals.filter((goal) => goal.teamId === match.homeTeamId);
             if (homeTeamGoals.length !== match.score.homeTeamScore) {
-                return err(this.createIntegrityError(`Home team score does not match goals. Score: ${match.score.homeTeamScore}; Goals: ${homeTeamGoals.length}`, ["score"]));
+                throw new Error(`Home team score does not match goals. Score: ${match.score.homeTeamScore}; Goals: ${homeTeamGoals.length}`);
             }
 
             const awayTeamGoals = goals.filter((goal) => goal.teamId === match.awayTeamId);
             if (awayTeamGoals.length !== match.score.awayTeamScore) {
-                return err(this.createIntegrityError(`Away team score does not match goals. Score: ${match.score.awayTeamScore}; Goals: ${awayTeamGoals.length}`, ["score"]));
+                throw new Error(`Away team score does not match goals. Score: ${match.score.awayTeamScore}; Goals: ${awayTeamGoals.length}`);
             }
         }
-
-        return ok(true);
     }
 
-    public static tryVerifyIntegrity(match: Match): Result<true, IDomainError[]> {
+    public static verifyIntegrity(match: Match): void {
         /*
             RULES: 
                 - Scheduled Match:
@@ -164,33 +142,21 @@ class MatchDomainService {
                     * If [score] exists, the number of away team goals must match awayTeamScore
         */
 
-        const teamValidation = this.validateTeams(match);
-        if (teamValidation.isErr()) return teamValidation;
+        this.validateTeams(match);
+        this.validateScoreConsistency(match);
+        this.validateDates(match);
+        this.validateGoalsConsistency(match);
 
-        const scoreValidation = this.validateScoreConsistency(match);
-        if (scoreValidation.isErr()) return scoreValidation;
-
-        const datesValidation = this.validateDates(match);
-        if (datesValidation.isErr()) return datesValidation;
-
-        const goalsValidation = this.validateGoalsConsistency(match);
-        if (goalsValidation.isErr()) return goalsValidation;
-
-        switch (match.status) {
-            case MatchStatus.SCHEDULED:
-                return this.validateScheduledMatch(match);
-            case MatchStatus.IN_PROGRESS:
-                return this.validateInProgressMatch(match);
-            case MatchStatus.COMPLETED:
-                return this.validateCompletedMatch(match);
-            case MatchStatus.CANCELLED:
-                return ok(true);
-            default:
-                return err(this.createIntegrityError(`Unhandled match status: ${match.status}`, ["status"]));
+        if (match.status === MatchStatus.SCHEDULED) {
+            this.validateScheduledMatch(match);
+        } else if (match.status === MatchStatus.IN_PROGRESS) {
+            this.validateInProgressMatch(match);
+        } else if (match.status === MatchStatus.IN_PROGRESS) {
+            this.validateCompletedMatch(match);
         }
     }
 
-    public static tryCreateMatch(props: {
+    public static canCreateMatch(props: {
         id: string;
         homeTeam: Team;
         awayTeam: Team;
@@ -199,7 +165,7 @@ class MatchDomainService {
         startDate: Date | null;
         endDate: Date | null;
         status: string;
-        goals: IUidRecord<{ dateOccured: Date; teamId: string; playerId: string }> | null;
+        goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> | null;
     }): Result<Match, IDomainError[]> {
         const statusResult = MatchStatus.tryCreate(props.status);
         if (statusResult.isErr()) {
@@ -224,28 +190,17 @@ class MatchDomainService {
         });
 
         if (props.goals != null) {
-            // ignores goals if it can't have a score
             const addGoalErrors: IDomainError[] = [];
-            if (match.canHaveScore()) {
-                match.score = MatchScore.ZeroScore;
-                Object.entries(props.goals).forEach(([UID, goal]) => {
-                    const addGoalResult = match.tryAddGoal(goal);
-                    if (addGoalResult.isErr()) {
-                        addGoalErrors.push(...addGoalResult.error.map((error) => ({ ...error, path: [UID, ...error.path] })));
-                    }
-                });
-            }
-
+            match.score = MatchScore.ZeroScore;
+            props.goals.map((goal) => {
+                match.executeAddGoal(goal)
+            });
             if (addGoalErrors.length) {
                 return err(addGoalErrors);
             }
         }
 
-        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (matchIntegrityResult.isErr()) {
-            return err(matchIntegrityResult.error);
-        }
-
+        MatchDomainService.verifyIntegrity(match);
         return ok(match);
     }
 
@@ -262,11 +217,7 @@ class MatchDomainService {
 
         match.score = MatchScore.ZeroScore;
 
-        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (matchIntegrityResult.isErr()) {
-            return err(matchIntegrityResult.error);
-        }
-
+        MatchDomainService.verifyIntegrity(match);
         return ok(true);
     }
 
@@ -281,11 +232,7 @@ class MatchDomainService {
             return err(endDateResult.error);
         }
 
-        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (matchIntegrityResult.isErr()) {
-            return err(matchIntegrityResult.error);
-        }
-
+        MatchDomainService.verifyIntegrity(match);
         return ok(true);
     }
 
@@ -295,11 +242,7 @@ class MatchDomainService {
             return err(statusResult.error);
         }
 
-        const matchIntegrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (matchIntegrityResult.isErr()) {
-            return err(matchIntegrityResult.error);
-        }
-
+        MatchDomainService.verifyIntegrity(match);
         return ok(true);
     }
 }

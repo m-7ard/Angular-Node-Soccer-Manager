@@ -6,7 +6,14 @@ import MatchDomainService from "domain/domainService/MatchDomainService";
 import { err, ok } from "neverthrow";
 import ICommand, { ICommandResult } from "../ICommand";
 import { IRequestHandler } from "../IRequestHandler";
-import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import MatchExistsValidator from "application/validators/MatchExistsValidator";
+import IsMatchTeamValidator from "application/validators/IsMatchTeamValidator";
+import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
+import path from "path";
+import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import CanAddGoalValidator from "application/validators/CanAddGoalValidator";
+import IsValidGoalValidator from "application/validators/IsValidGoalValidator";
 
 type CommandProps = {
     id: string;
@@ -34,80 +41,62 @@ export class RecordGoalCommand implements ICommand<RecordGoalCommandResult>, Com
 }
 
 export default class RecordGoalCommandHandler implements IRequestHandler<RecordGoalCommand, RecordGoalCommandResult> {
-    private readonly _matchRepository: IMatchRepository;
-    private readonly _teamRepository: ITeamRepository;
+    private readonly matchRepository: IMatchRepository;
+    private readonly matchExistsValidator: MatchExistsValidator;
+    private readonly teamExistsValidator: TeamExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
-        this._matchRepository = props.matchRepository;
-        this._teamRepository = props.teamRepository;
+        this.matchRepository = props.matchRepository;
+        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
+        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
     }
 
     async handle(command: RecordGoalCommand): Promise<RecordGoalCommandResult> {
-        const match = await this._matchRepository.getByIdAsync(command.teamId);
-        if (match == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                    message: `Match of id "${command.id}" does not exist.`,
-                    path: ["_"],
-                }),
-            );
+        const matchExistsResult = await this.matchExistsValidator.validate({ id: command.id });
+        if (matchExistsResult.isErr()) {
+            return err(matchExistsResult.error);
         }
 
-        if (!match.canHaveScore()) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.StateMismatch,
-                    message: `Cannot record a goal on a match that cannot have a score.`,
-                    path: ["_"],
-                }),
-            );
+        const match = matchExistsResult.value;
+        const isMatchTeamValidator = new IsMatchTeamValidator(match);
+        const isMatchTeamResult = isMatchTeamValidator.validate({ teamId: command.teamId });
+        if (isMatchTeamResult.isErr()) {
+            return err(isMatchTeamResult.error);
         }
 
-        const isMatchTeam = command.teamId === match.awayTeamId || command.teamId === match.homeTeamId;
-        if (!isMatchTeam) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.StateMismatch,
-                    message: `Team of id "${command.teamId}" is not part of the match.`,
-                    path: ["teamId"],
-                }),
-            );
+        const goalTeamExistsResult = await this.teamExistsValidator.validate({ id: command.teamId });
+        if (goalTeamExistsResult.isErr()) {
+            return err(goalTeamExistsResult.error);
         }
 
-        const team = await this._teamRepository.getByIdAsync(command.teamId);
-        if (team == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.StateMismatch,
-                    message: `Team of id "${command.teamId}" does not exist.`,
-                    path: ["teamId"],
-                }),
-            );
+        const homeTeamExistsResult = await this.teamExistsValidator.validate({ id: match.homeTeamId });
+        if (homeTeamExistsResult.isErr()) {
+            return err(homeTeamExistsResult.error);
         }
 
-        const membership = team.findMemberByPlayerId(command.playerId);
-        if (membership == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.IntegrityError,
-                    message: `Player of id "${command.playerId}" does not exist on team of id "${command.teamId}".`,
-                    path: ["playerId"],
-                }),
-            );
+        const awayTeamExistsResult = await this.teamExistsValidator.validate({ id: match.awayTeamId });
+        if (awayTeamExistsResult.isErr()) {
+            return err(awayTeamExistsResult.error);
         }
 
-        const addGoalResult = match.tryAddGoal({ dateOccured: command.dateOccured, teamId: command.teamId, playerId: command.playerId });
-        if (addGoalResult.isErr()) {
-            return err(addGoalResult.error);
+        const homeTeam = homeTeamExistsResult.value;
+        const awayTeam = awayTeamExistsResult.value;
+
+        const isValidGoalValidator = new IsValidGoalValidator(homeTeam, awayTeam);
+        const isValidGoalResult = isValidGoalValidator.validate({ dateOccured: command.dateOccured, playerId: command.playerId, teamId: command.teamId });
+        if (isValidGoalResult.isErr()) {
+            return err(isValidGoalResult.error);
         }
 
-        const integrityResult = MatchDomainService.tryVerifyIntegrity(match);
-        if (integrityResult.isErr()) {
-            return err(integrityResult.error);
+        const canAddGoalValidator = new CanAddGoalValidator(match);
+        const canAddGoalResult = canAddGoalValidator.validate({ dateOccured: command.dateOccured, playerId: command.playerId, teamId: command.teamId });
+        if (canAddGoalResult.isErr()) {
+            return err(canAddGoalResult.error);
         }
 
-        await this._matchRepository.updateAsync(match);
+        match.executeAddGoal({ dateOccured: command.dateOccured, teamId: command.teamId, playerId: command.playerId });
+        MatchDomainService.verifyIntegrity(match);
+        await this.matchRepository.updateAsync(match);
         return ok(undefined);
     }
 }

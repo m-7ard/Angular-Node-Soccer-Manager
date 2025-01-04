@@ -25,5 +25,4 @@ export default class MatchStatus {
     }
 
     public value: string;
-    public label: string;
 }
