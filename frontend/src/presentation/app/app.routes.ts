@@ -29,6 +29,9 @@ import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
 import { ListMatchesPageComponent } from './matches/list-matches-page/list-matches-page.component';
 import { ListMatchesPageResolver } from './matches/list-matches-page/list-matches-page.resolver';
 import { ScheduleMatchPageComponent } from './matches/schedule-match-page/schedule-match-page.component';
+import { MarkInProgressPageComponent } from './matches/mark-in-progress-page/mark-in-progress-page.component';
+import { MarkCompletedPageComponent } from './matches/mark-completed-page/mark-completed-page.component';
+import { MarkCancelledPageComponent } from './matches/mark-cancelled-page/mark-cancelled-page.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -120,6 +123,21 @@ export const routes: Routes = [
             {
                 path: 'schedule',
                 component: ScheduleMatchPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: ':matchId/mark-in-progress',
+                component: MarkInProgressPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: ':matchId/mark-completed',
+                component: MarkCompletedPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: ':matchId/mark-cancelled',
+                component: MarkCancelledPageComponent,
                 canActivate: [AuthGuard],
             },
         ],

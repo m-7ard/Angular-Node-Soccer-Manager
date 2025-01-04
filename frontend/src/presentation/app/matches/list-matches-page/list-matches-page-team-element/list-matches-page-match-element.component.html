@@ -15,21 +15,9 @@
             }"
             routerLink="/matches/"
         >
-            {{ match.status }}
+            {{ match.statusLabel }}
         </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white'
-            }"
-            routerLink="/matches/"
-            class="ml-auto"
-        >
-            Details
-        </button>
-    </section>
-    <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
-        <div class="token-card--header--secondary-text">
+        <div routerLink="/matches/" class="ml-auto token-card--header--secondary-text">
             {{ match.scheduledDate | date }}
         </div>
     </section>
@@ -49,7 +37,7 @@
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="text-sm truncate">{{ match.awayTeam }}</div>
+            <div class="text-sm truncate">{{ match.awayTeam.name }}</div>
             <div class="flex flex-row gap-3 text-sm">
                 <div>
                     {{ match.score?.awayTeamScore ?? "" }}
@@ -57,4 +45,108 @@
             </div>
         </div>
     </section>
+    <footer appMixinStyledCardSection class="flex flex-col gap-1">
+        <button
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-blue',
+                size: 'mixin-Sbutton-base'
+            }"
+            class="justify-center"
+        >
+            Details
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-white',
+                size: 'mixin-Sbutton-base'
+            }"
+            class="justify-center"
+            primeNgPopoverDirective
+            [popover]="op"
+        >
+            Other Options
+        </button>
+    </footer>
 </div>
+
+<p-popover #op class="fixed mt-1">
+    <div
+        [appPanelDirective]="{
+            panelSize: 'mixin-panel-base',
+            panelTheme: 'theme-panel-generic-white',
+            panelHasBorder: true,
+            panelHasShadow: true
+        }"
+    >
+        <header appPanelSectionDirective class="flex flex-row justify-between items-center">
+            <div class="token-base-title">Other Options</div>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                (click)="this.op.hide()"
+            >
+                Close
+            </button>
+        </header>
+        <app-divider />
+        <div appPanelSectionDirective class="flex flex-col gap-1">
+            <button
+                [routerLink]="'/matches/' + match.id + '/record-goal/'"
+                useRouterLink
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-green'
+                }"
+                class="justify-center"
+            >
+                Record Goal
+            </button>
+            <button
+                [routerLink]="'/matches/' + match.id + '/mark-in-progress/'"
+                useRouterLink
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
+                class="justify-center"
+            >
+                Mark In Progress
+            </button>
+            <button
+                [routerLink]="'/matches/' + match.id + '/mark-completed/'"
+                useRouterLink
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
+                class="justify-center"
+            >
+                Mark Completed
+            </button>
+            <button
+                [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
+                useRouterLink
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-blue'
+                }"
+                class="justify-center"
+            >
+                Mark Cancelled
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-red'
+                }"
+                class="justify-center"
+                (click)="openDeleteMatchModal()"
+            >
+                Delete
+            </button>
+        </div>
+    </div>
+</p-popover>

@@ -13,6 +13,7 @@ import { ContentGridDirective } from '../../reusables/content-grid/content-grid.
 import { DividerComponent } from '../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/styled-card.module';
+import Match from '../../models/Match';
 
 @Component({
     selector: 'app-frontpage',
@@ -34,7 +35,7 @@ import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/sty
 export class FrontpageComponent implements OnInit {
     public players: Player[] = null!;
     public teams: Team[] = null!;
-    public matchesRange = Array.from({ length: 10 }, (_, i) => i + 1);
+    public matches: Match[] = null!;
 
     constructor(private _activatedRoute: ActivatedRoute) {}
 
@@ -43,6 +44,7 @@ export class FrontpageComponent implements OnInit {
             const data = resolverData[RESOLVER_DATA_KEY] as IFrontpageResolverData;
             this.players = data.players;
             this.teams = data.teams;
+            this.matches = data.matches;
         });
     }
 }

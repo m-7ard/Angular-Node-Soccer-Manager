@@ -6,7 +6,6 @@ import TeamMapper from '../../../mappers/TeamMapper';
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import TeamPlayer from '../../../models/TeamPlayer';
 import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
-import NotFoundException from '../../../exceptions/NotFoundException';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 

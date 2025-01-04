@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
 import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
@@ -9,44 +8,35 @@ import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
-import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { object, string, date } from 'superstruct';
 import IPresentationError from '../../../errors/IPresentationError';
-import Team from '../../../models/Team';
-import { object, string, number, date, validate } from 'superstruct';
-import validateSuperstruct from '../../../utils/validateSuperstuct';
-import structErrorToPresentationError from '../../../utils/structErrorToPresentationError';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
+import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
+import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import structErrorToPresentationError from '../../../utils/structErrorToPresentationError';
+import validateSuperstruct from '../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
 interface IFormControls {
-    homeTeam: FormControl<Team | null>;
-    awayTeam: FormControl<Team | null>;
-    venue: FormControl<string>;
-    scheduledDate: FormControl<string>;
+    startDate: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
-    awayTeamId: string[];
-    homeTeamId: string[];
-    venue: string[];
-    scheduledDate: string[];
+    startDate: string[];
 }>;
 
 const validator = object({
-    homeTeamId: string(),
-    awayTeamId: string(),
-    venue: string(),
-    scheduledDate: date(),
+    startDate: date(),
 });
 
 @Component({
-    selector: 'app-schedule-match-page',
+    selector: 'app-mark-in-progress-page',
     standalone: true,
     imports: [
         ReactiveFormsModule,
@@ -62,13 +52,15 @@ const validator = object({
         DividerComponent,
         PickSingleTeamComponent,
     ],
-    templateUrl: './schedule-match-page.component.html',
+    templateUrl: './mark-in-progress-page.component.html',
 })
-export class ScheduleMatchPageComponent {
+export class MarkInProgressPageComponent implements OnInit {
     form!: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
+    matchId!: string;
 
     constructor(
+        private activtedRoute: ActivatedRoute,
         private router: Router,
         private matchDataAccess: MatchDataAccessService,
         private exceptionNoticeService: ExceptionNoticeService,
@@ -76,20 +68,20 @@ export class ScheduleMatchPageComponent {
 
     ngOnInit(): void {
         this.form = new FormGroup<IFormControls>({
-            awayTeam: new FormControl(null, {
-                validators: [Validators.required],
-            }),
-            homeTeam: new FormControl(null, {
-                validators: [Validators.required],
-            }),
-            venue: new FormControl('', {
+            startDate: new FormControl('', {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
-            scheduledDate: new FormControl('', {
-                nonNullable: true,
-                validators: [Validators.required],
-            }),
+        });
+
+        this.activtedRoute.paramMap.subscribe((parms) => {
+            const matchId = parms.get('matchId');
+
+            if (matchId == null) {
+                throw new ClientSideErrorException('Schedule Match Page: matchId parameter is null.');
+            }
+
+            this.matchId = matchId;
         });
     }
 
@@ -101,10 +93,7 @@ export class ScheduleMatchPageComponent {
         const rawValue = this.form.getRawValue();
         const validation = validateSuperstruct(
             {
-                homeTeamId: rawValue.homeTeam?.id,
-                awayTeamId: rawValue.awayTeam?.id,
-                venue: rawValue.venue,
-                scheduledDate: new Date(rawValue.scheduledDate),
+                startDate: new Date(rawValue.startDate),
             },
             validator,
         );
@@ -116,12 +105,7 @@ export class ScheduleMatchPageComponent {
         const data = validation.value;
 
         this.matchDataAccess
-            .scheduleMatch({
-                awayTeamId: data.awayTeamId,
-                homeTeamId: data.homeTeamId,
-                venue: data.venue,
-                scheduledDate: new Date(data.scheduledDate),
-            })
+            .markInProgress(this.matchId, { startDate: data.startDate })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
                     if (err.status === 400) {

@@ -48,7 +48,7 @@ class ApiModelService implements IApiModelService {
         const homeTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
         if (homeTeam == null) throw new Error("Home Team does not exist.");
 
-        const awayTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
+        const awayTeam = await this.getTeamFromCacheOrDb(match.awayTeamId);
         if (awayTeam == null) throw new Error("Away Team does not exist.");
 
         return ApiModelMapper.createMatchApiModel({

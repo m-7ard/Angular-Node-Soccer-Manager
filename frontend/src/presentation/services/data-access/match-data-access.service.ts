@@ -6,6 +6,14 @@ import IScheduleMatchRequestDTO from '../../contracts/matches/schedule/ISchedule
 import IScheduleMatchResponseDTO from '../../contracts/matches/schedule/IScheduleMatchResponseDTO';
 import IReadMatchRequestDTO from '../../contracts/matches/read/IReadMatchRequestDTO';
 import IReadMatchResponseDTO from '../../contracts/matches/read/IReadMatchResponseDTO';
+import IDeleteMatchRequestDTO from '../../contracts/matches/delete/IDeleteMatchRequestDTO';
+import IDeleteMatchResponseDTO from '../../contracts/matches/delete/IDeleteMatchResponseDTO';
+import IMarkMatchInProgressRequestDTO from '../../contracts/matches/markMatchInProgress/IMarkMatchInProgressRequestDTO';
+import IMarkMatchInProgressResponseDTO from '../../contracts/matches/markMatchInProgress/IMarkMatchInProgressResponseDTO';
+import IMarkMatchCompletedRequestDTO from '../../contracts/matches/markMatchCompleted/IMarkMatchCompletedRequestDTO';
+import IMarkMatchCompletedResponseDTO from '../../contracts/matches/markMatchCompleted/IMarkMatchCompletedResponseDTO';
+import IMarkMatchCancelledRequestDTO from '../../contracts/matches/markMatchCancelled/IMarkMatchCancelledRequestDTO';
+import IMarkMatchCancelledResponseDTO from '../../contracts/matches/markMatchCancelled/IMarkMatchCancelledResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -33,5 +41,21 @@ export class MatchDataAccessService {
 
     scheduleMatch(request: IScheduleMatchRequestDTO) {
         return this.http.post<IScheduleMatchResponseDTO>(`${this._baseUrl}/schedule`, request);
+    }
+
+    markInProgress(matchId: string, request: IMarkMatchInProgressRequestDTO) {
+        return this.http.post<IMarkMatchInProgressResponseDTO>(`${this._baseUrl}/${matchId}/mark_in_progress`, request);
+    }
+
+    markCompleted(matchId: string, request: IMarkMatchCompletedRequestDTO) {
+        return this.http.post<IMarkMatchCompletedResponseDTO>(`${this._baseUrl}/${matchId}/mark_completed`, request);
+    }
+
+    markCancelled(matchId: string, request: IMarkMatchCancelledRequestDTO) {
+        return this.http.post<IMarkMatchCancelledResponseDTO>(`${this._baseUrl}/${matchId}/mark_cancelled`, request);
+    }
+
+    delete(matchId: string, request: IDeleteMatchRequestDTO) {
+        return this.http.post<IDeleteMatchResponseDTO>(`${this._baseUrl}/${matchId}/delete`, request);
     }
 }

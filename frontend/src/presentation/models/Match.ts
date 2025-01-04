@@ -1,3 +1,4 @@
+import matchStatuses from '../app/values/matchStatuses';
 import Team from './Team';
 
 type MatchProps = {
@@ -36,6 +37,15 @@ class Match implements MatchProps {
         this.endDate = props.endDate;
         this.status = props.status;
         this.score = props.score;
+    }
+
+    get statusLabel() {
+        const label = matchStatuses[this.status];
+        if (label == null) {
+            throw new Error(`Status of Match lacks a label. Status: ${this.status}`);
+        }
+
+        return label;
     }
 }
 

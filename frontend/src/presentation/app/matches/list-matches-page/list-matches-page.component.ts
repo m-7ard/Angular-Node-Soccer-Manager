@@ -41,6 +41,10 @@ export class ListMatchesPageComponent {
 
     matches: Match[] = null!;
 
+    onDeleteMatch(match: Match) {
+        this.matches = this.matches.filter((value) => value.id !== match.id);
+    }
+
     ngOnInit() {
         this._activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IListMatchesResolverData;

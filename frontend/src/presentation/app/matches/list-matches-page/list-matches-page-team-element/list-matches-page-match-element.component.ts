@@ -4,7 +4,6 @@ import { CoverImageComponent } from '../../../../reusables/cover-image/cover-ima
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
-import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
@@ -12,6 +11,7 @@ import { PanelDirectivesModule } from '../../../../reusables/panel/panel.directi
 import { PrimeNgPopoverDirective } from '../../../../reusables/prime-ng-popover/prime-ng-popover.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import Match from '../../../../models/Match';
+import { DeleteMatchModalProps, DeleteMatchModal } from '../../delete-match-component/delete-match-component.component';
 
 @Component({
     selector: 'app-list-matches-page-match-element',
@@ -22,7 +22,6 @@ import Match from '../../../../models/Match';
         CommonModule,
         MixinStyledCardDirectivesModule,
         MixinStyledButtonDirective,
-        ZeebraTextComponent,
         PrimeNgPopoverDirective,
         MatMenuModule,
         PanelDirectivesModule,
@@ -36,22 +35,21 @@ import Match from '../../../../models/Match';
 })
 export class ListMatchsPageMatchElementComponent {
     @Input() match!: Match;
+    @Output() onDelete = new EventEmitter<Match>();
 
     @ViewChild('op') op!: Popover;
     private dialog = inject(Dialog);
 
-    /*
-    openDeleteTeamModal(): void {
-        const data: DeleteTeamModalProps = {
+    openDeleteMatchModal(): void {
+        const data: DeleteMatchModalProps = {
             match: this.match,
             onSuccess: () => this.onDelete.emit(this.match),
         };
 
-        this.dialog.open(DeleteTeamModal, {
+        this.dialog.open(DeleteMatchModal, {
             data: data,
         });
 
         this.op.hide();
     }
-        */
 }
