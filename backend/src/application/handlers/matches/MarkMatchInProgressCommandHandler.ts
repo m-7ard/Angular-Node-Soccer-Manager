@@ -3,8 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import MatchDomainService from "domain/domainService/MatchDomainService";
+import MatchExistsValidator from "application/validators/MatchExistsValidator";
 
 type CommandProps = {
     id: string;
@@ -26,25 +27,32 @@ export class MarkMatchInProgressCommand implements ICommand<MarkMatchInProgressC
 }
 
 export default class MarkMatchInProgressCommandHandler implements IRequestHandler<MarkMatchInProgressCommand, MarkMatchInProgressCommandResult> {
-    private readonly _matchRepository: IMatchRepository;
+    private readonly _matchRepository: IMatchRepository;    
+    private readonly matchExistsValidator: MatchExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; }) {
-        this._matchRepository = props.matchRepository;
+        this._matchRepository = props.matchRepository;        
+        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
     }
 
     async handle(command: MarkMatchInProgressCommand): Promise<MarkMatchInProgressCommandResult> {
-        const match = await this._matchRepository.getByIdAsync(command.id);
-        if (match == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({ message: `Match of id "${command.id}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["_"] }),
-            )
+        const matchExistsResult = await this.matchExistsValidator.validate({ id: command.id });
+        if (matchExistsResult.isErr()) {
+            return err(matchExistsResult.error);
         }
 
-        const markingResult = MatchDomainService.tryMarkInProgress(match, { startDate: command.startDate });
+        const match = matchExistsResult.value;
+
+        const markingResult = MatchDomainService.canMarkInProgress(match, { startDate: command.startDate });
         if (markingResult.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(markingResult.error));
+            return err(ApplicationErrorFactory.createSingleListError({
+                message: markingResult.error,
+                path: [],
+                code: APPLICATION_ERROR_CODES.NotAllowed
+            }));
         }
 
+        MatchDomainService.executeMarkInProgress(match, { startDate: command.startDate });
         await this._matchRepository.updateAsync(match);
         return ok(undefined);
     }

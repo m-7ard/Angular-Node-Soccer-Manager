@@ -4,9 +4,10 @@ import IJwtTokenService from "application/interfaces/JwtTokenService";
 import IQuery, { IQueryResult } from "../IQuery";
 import { IRequestHandler } from "../IRequestHandler";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import { err, ok } from "neverthrow";
 import { JWT_ROLES } from "application/other/jwt-payload";
+import UserExistsValidator from "application/validators/UserExistsValidator";
 
 export type LoginUserQueryResult = IQueryResult<{ jwtToken: string }, IApplicationError[]>;
 
@@ -26,32 +27,30 @@ export default class LoginUserQueryHandler implements IRequestHandler<LoginUserQ
     private readonly _userRepository: IUserRepository;
     private readonly _jwtTokenService: IJwtTokenService;
     private readonly _passwordHasher: IPasswordHasher;
+    private readonly userExistsValidator: UserExistsValidator;
 
     constructor(props: { userRepository: IUserRepository; jwtTokenService: IJwtTokenService; passwordHasher: IPasswordHasher }) {
         this._userRepository = props.userRepository;
         this._jwtTokenService = props.jwtTokenService;
         this._passwordHasher = props.passwordHasher;
+        this.userExistsValidator = new UserExistsValidator(props.userRepository);
     }
 
     async handle(query: LoginUserQuery): Promise<LoginUserQueryResult> {
-        const user = await this._userRepository.getByEmailAsync(query.email);
-        if (user == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    message: `Email or password is incorrect.`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                }),
-            );
+        const userExistResult = await this.userExistsValidator.validate({ email: query.email });
+        if (userExistResult.isErr()) {
+            return err(userExistResult.error);
         }
+
+        const user = userExistResult.value;
 
         const isValid = await this._passwordHasher.verifyPassword(query.password, user.hashedPassword);
         if (!isValid) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Email or password is incorrect.`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
+                    path: [],
+                    code: APPLICATION_ERROR_CODES.StateMismatch,
                 }),
             );
         }
@@ -65,8 +64,8 @@ export default class LoginUserQueryHandler implements IRequestHandler<LoginUserQ
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: jwtTokenResult.error,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.OperationFailed,
+                    path: [],
+                    code: APPLICATION_ERROR_CODES.OperationFailed,
                 }),
             );
         }

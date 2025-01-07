@@ -8,7 +8,8 @@ import { Request } from "express";
 import IDeleteMatchRequestDTO from "api/DTOs/matches/delete/IDeleteMatchRequestDTO";
 import IDeleteMatchResponseDTO from "api/DTOs/matches/delete/IDeleteMatchResponseDTO";
 import { DeleteMatchCommand } from "application/handlers/matches/DeleteMatchCommandHandler";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
 
 type ActionRequest = { dto: IDeleteMatchRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IDeleteMatchResponseDTO | IApiError[]>;
@@ -25,7 +26,9 @@ class DeleteMatchAction implements IAction<ActionRequest, ActionResponse> {
         const result = await this._requestDispatcher.dispatch(command);
 
         if (result.isErr()) {
-            if (result.error[0].code === VALIDATION_ERROR_CODES.ModelDoesNotExist) {
+            const [expectedError] = result.error;
+
+            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.applicationErrorToApiErrors(result.error),

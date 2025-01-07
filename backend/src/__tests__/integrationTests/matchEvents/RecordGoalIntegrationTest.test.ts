@@ -57,7 +57,7 @@ beforeEach(async () => {
         goals: [],
     });
 
-    const dateOccured = DateTime.fromJSDate(in_progress_match.startDate!)
+    const dateOccured = DateTime.fromJSDate(in_progress_match.matchDates.startDate!)
         .plus({ minutes: 1 })
         .toJSDate();
 
@@ -120,7 +120,7 @@ describe("Record Goal Integration Test;", () => {
 
     it("Record Goal; Invalid dateOcurred; Failure;", async () => {
         const request = { ...default_request };
-        request.dateOccured = DateTime.fromJSDate(in_progress_match.startDate!)
+        request.dateOccured = DateTime.fromJSDate(in_progress_match.matchDates.startDate!)
             .minus({ minutes: 1 })
             .toJSDate();
 

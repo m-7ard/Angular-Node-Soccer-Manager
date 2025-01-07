@@ -3,8 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
+import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
 
 export type UpdatePlayerCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -24,30 +25,24 @@ export class UpdatePlayerCommand implements ICommand<UpdatePlayerCommandResult> 
 
 export default class CreateTeamCommandHandler implements IRequestHandler<UpdatePlayerCommand, UpdatePlayerCommandResult> {
     private readonly _playerRepository: IPlayerRepository;
+    private readonly playerExistsValidator: PlayerExistsValidator;
 
     constructor(props: { playerRepository: IPlayerRepository }) {
         this._playerRepository = props.playerRepository;
+        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
     }
 
     async handle(command: UpdatePlayerCommand): Promise<UpdatePlayerCommandResult> {
-        const player = await this._playerRepository.getByIdAsync(command.id);
-        if (player == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    message: `Player of id "${command.id}" does not exist.`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
-                }),
-            );
+        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.id });
+        if (playerExistsResult.isErr()) {
+            return err(playerExistsResult.error);
         }
 
-        const updatedPlayer = PlayerFactory.CreateExisting({
-            id: player.id,
-            name: command.name,
-            activeSince: command.activeSince,
-        });
+        const player = playerExistsResult.value;
+        player.name = command.name;
+        player.activeSince = command.activeSince;
 
-        await this._playerRepository.updateAsync(updatedPlayer);
+        await this._playerRepository.updateAsync(player);
         return ok(undefined);
     }
 }

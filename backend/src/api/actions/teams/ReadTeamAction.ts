@@ -8,9 +8,10 @@ import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IReadTeamRequestDTO from "api/DTOs/teams/read/IReadTeamRequestDTO";
 import IReadTeamResponseDTO from "api/DTOs/teams/read/IReadTeamResponseDTO";
 import { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
 import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
+import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
 
 type ActionRequest = { dto: IReadTeamRequestDTO; teamId: string };
 type ActionResponse = JsonResponse<IReadTeamResponseDTO | IApiError[]>;
@@ -27,8 +28,9 @@ class ReadTeamAction implements IAction<ActionRequest, ActionResponse> {
         const readTeamResult = await this._requestDispatcher.dispatch(command);
 
         if (readTeamResult.isErr()) {
-            const firstError = readTeamResult.error[0];
-            if (firstError.code === VALIDATION_ERROR_CODES.ModelDoesNotExist) {
+            const [expectedError] = readTeamResult.error;
+
+            if (expectedError.code === APPLICATION_VALIDATOR_CODES.TEAM_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.applicationErrorToApiErrors(readTeamResult.error),

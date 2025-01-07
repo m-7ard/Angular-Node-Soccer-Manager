@@ -3,8 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ITeamRepository from "application/interfaces/ITeamRepository";
+import MatchExistsValidator from "application/validators/MatchExistsValidator";
 
 type CommandProps = {
     id: string;
@@ -24,16 +25,20 @@ export class DeleteMatchCommand implements ICommand<DeleteMatchCommandResult>, C
 
 export default class DeleteMatchCommandHandler implements IRequestHandler<DeleteMatchCommand, DeleteMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
+    private readonly matchExistsValidator: MatchExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
         this._matchRepository = props.matchRepository;
+        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
     }
 
     async handle(command: DeleteMatchCommand): Promise<DeleteMatchCommandResult> {
-        const match = await this._matchRepository.getByIdAsync(command.id);
-        if (match == null) {
-            return err(ApplicationErrorFactory.createSingleListError({ message: `Match of id "${command.id}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["_"] }));
+        const matchExistsResult = await this.matchExistsValidator.validate({ id: command.id });
+        if (matchExistsResult.isErr()) {
+            return err(matchExistsResult.error);
         }
+
+        const match = matchExistsResult.value;
 
         await this._matchRepository.deleteAsync(match);
         return ok(undefined);

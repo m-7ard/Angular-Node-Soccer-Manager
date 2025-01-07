@@ -3,8 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
-import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
+import CanAddTeamMembershipValidator from "application/validators/CanAddTeamMembershipValidator";
 
 export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -29,42 +30,44 @@ export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershi
 export default class CreateTeamMembershipCommandHandler implements IRequestHandler<CreateTeamMembershipCommand, CreateTeamMembershipCommandResult> {
     private readonly _playerRepository: IPlayerRepository;
     private readonly _teamRepository: ITeamRepository;
+    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly playerExistsValidator: PlayerExistsValidator;
 
     constructor(props: { playerRepository: IPlayerRepository; teamRepository: ITeamRepository }) {
         this._playerRepository = props.playerRepository;
         this._teamRepository = props.teamRepository;
+        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
     }
 
     async handle(command: CreateTeamMembershipCommand): Promise<CreateTeamMembershipCommandResult> {
-        const team = await this._teamRepository.getByIdAsync(command.teamId);
-        if (team == null) {
-            return err([
-                {
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                    path: ["_"],
-                    message: `Team with id ${command.teamId} does not exist.`,
-                },
-            ]);
+        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.teamId });
+        if (teamExistsResult.isErr()) {
+            return err(teamExistsResult.error);
         }
 
-        const player = await this._playerRepository.getByIdAsync(command.playerId);
-        if (player == null) {
-            return err([
-                {
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                    path: ["_"],
-                    message: `Player with id ${command.playerId} does not exist.`,
-                },
-            ]);
+        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.playerId });
+        if (playerExistsResult.isErr()) {
+            return err(playerExistsResult.error);
         }
 
-        const memberAdded = team.tryAddMember({ playerId: player.id, activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
-        if (memberAdded.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors([memberAdded.error]));
+        const team = teamExistsResult.value;
+        const player = playerExistsResult.value;
+
+        const canAddTeamMembershipValidator = new CanAddTeamMembershipValidator();
+        const canAddTeamMembershipResult = canAddTeamMembershipValidator.validate({
+            team: team,
+            playerId: player.id,
+            activeFrom: command.activeFrom,
+            activeTo: command.activeTo,
+            number: command.number,
+        });
+        if (canAddTeamMembershipResult.isErr()) {
+            return err(canAddTeamMembershipResult.error);
         }
 
+        team.executeAddMember({ playerId: command.playerId, activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
         this._teamRepository.updateAsync(team);
-
         return ok(undefined);
     }
 }

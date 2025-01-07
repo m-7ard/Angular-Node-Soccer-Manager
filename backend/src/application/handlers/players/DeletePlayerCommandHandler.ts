@@ -3,9 +3,10 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
+import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
 
 export type DeletePlayerCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -22,36 +23,35 @@ export class DeletePlayerCommand implements ICommand<DeletePlayerCommandResult> 
 export default class CreateTeamCommandHandler implements IRequestHandler<DeletePlayerCommand, DeletePlayerCommandResult> {
     private readonly _playerRepository: IPlayerRepository;
     private readonly _teamRepository: ITeamRepository;
+    private readonly playerExistsValidator: PlayerExistsValidator;
 
     constructor(props: { playerRepository: IPlayerRepository; teamRepository: ITeamRepository; }) {
         this._playerRepository = props.playerRepository;
         this._teamRepository = props.teamRepository;
+        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
     }
 
     async handle(command: DeletePlayerCommand): Promise<DeletePlayerCommandResult> {
-        const player = await this._playerRepository.getByIdAsync(command.id);
-        if (player == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    message: `Player of id "${command.id}" does not exist.`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
-                }),
-            );
+        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.id });
+        if (playerExistsResult.isErr()) {
+            return err(playerExistsResult.error);
         }
+
+        const player = playerExistsResult.value;
 
         const criteria = new FilterAllTeamsCriteria({
             name: null,
             teamMembershipPlayerId: player.id,
             limitBy: null
         });
+
         const teamMemberships = await this._teamRepository.filterAllAsync(criteria);
         if (teamMemberships.length > 0) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Team memberships linked to player of id "${command.id}" still exist. Delete the team memberships before you delete the player.`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.IntegrityError,
+                    path: [],
+                    code: APPLICATION_ERROR_CODES.IntegrityError,
                 }),
             ); 
         }

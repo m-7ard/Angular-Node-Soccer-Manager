@@ -80,11 +80,12 @@ describe("Create Match Integration Test - Happy Paths", () => {
         request.status = MatchStatus.COMPLETED.value;
         request.goals = {};
 
-        const startDate = new Date();
-        startDate.setHours(10, 0, 0, 0);
+        const startDate = DateTime.fromJSDate(request.scheduledDate)
+            .toJSDate();
 
-        const endDate = new Date(startDate);
-        endDate.setHours(11, 30, 0, 0); // 90 minutes later
+        const endDate = DateTime.fromJSDate(request.scheduledDate)
+            .plus({ minutes: 90 })
+            .toJSDate();
 
         request.startDate = startDate;
         request.endDate = endDate;
@@ -93,6 +94,8 @@ describe("Create Match Integration Test - Happy Paths", () => {
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
             seed: 1,
         });
+
+        const errors = response.body;
 
         expect(response.status).toBe(201);
         await wasCreated();
@@ -129,6 +132,8 @@ describe("Create Match Integration Test - Happy Paths", () => {
             agent: supertest(server).post(`/api/matches/create`).send(request).set("Content-Type", "application/json"),
             seed: 1,
         });
+
+        const errors = response.body;
 
         expect(response.status).toBe(201);
         await wasCreated();

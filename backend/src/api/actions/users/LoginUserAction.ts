@@ -10,7 +10,7 @@ import { LoginUserQuery } from "application/handlers/users/LoginUserQueryHandler
 import ILoginUserRequestDTO from "api/DTOs/users/login/ILoginUserRequestDTO";
 import ILoginUserResponseDTO from "api/DTOs/users/login/ILoginUserResponseDTO";
 import IHttpService from "api/interfaces/IHttpRequestService";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 type ActionRequest = { dto: ILoginUserRequestDTO };
 type ActionResponse = JsonResponse<ILoginUserResponseDTO | IApiError[]>;
@@ -37,7 +37,8 @@ class LoginUserAction implements IAction<ActionRequest, ActionResponse> {
 
         if (result.isErr()) {
             const [firstError] = result.error;
-            if (firstError.code === VALIDATION_ERROR_CODES.OperationFailed) {
+
+            if (firstError.code === APPLICATION_ERROR_CODES.OperationFailed) {
                 return new JsonResponse({
                     status: StatusCodes.INTERNAL_SERVER_ERROR,
                     body: ApiErrorFactory.applicationErrorToApiErrors(result.error),

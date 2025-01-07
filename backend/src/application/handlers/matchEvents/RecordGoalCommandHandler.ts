@@ -1,5 +1,5 @@
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";

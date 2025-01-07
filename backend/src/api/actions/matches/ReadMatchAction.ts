@@ -8,10 +8,9 @@ import { Request } from "express";
 import IReadMatchRequestDTO from "api/DTOs/matches/read/IReadMatchRequestDTO";
 import IReadMatchResponseDTO from "api/DTOs/matches/read/IReadMatchResponseDTO";
 import { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
-import ApiModelMapper from "api/mappers/ApiModelMapper";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IApiModelService from "api/interfaces/IApiModelService";
-import { match } from "assert";
+import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
 
 type ActionRequest = { dto: IReadMatchRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IReadMatchResponseDTO | IApiError[]>;
@@ -31,7 +30,9 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
         const result = await this._requestDispatcher.dispatch(command);
 
         if (result.isErr()) {
-            if (result.error[0].code === VALIDATION_ERROR_CODES.ModelDoesNotExist) {
+            const [expectedError] = result.error;
+
+            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.applicationErrorToApiErrors(result.error),

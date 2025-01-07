@@ -37,7 +37,7 @@ export default class ListMatchesQueryHandler implements IRequestHandler<ListMatc
 
     async handle(query: ListMatchesQuery): Promise<ListMatchesQueryResult> {
         if (query.status != null) {
-            const statusResult = MatchStatus.tryCreate(query.status);
+            const statusResult = MatchStatus.canCreate(query.status);
             if (statusResult.isErr()) {
                 query.status = null;
             }

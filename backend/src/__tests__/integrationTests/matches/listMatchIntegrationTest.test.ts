@@ -82,7 +82,7 @@ describe("List Matches Integration Test;", () => {
         "List Matches; scheduledDate; Success;",
         async (addDays, expectAmount) => {
             const request = { ...default_request };
-            request.scheduledDate = match_001.scheduledDate;
+            request.scheduledDate = match_001.matchDates.scheduledDate;
             request.scheduledDate.setDate(
                 request.scheduledDate.getDate() + addDays,
             );

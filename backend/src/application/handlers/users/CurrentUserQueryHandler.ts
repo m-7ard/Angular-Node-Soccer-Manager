@@ -2,7 +2,7 @@ import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import { err, ok } from "neverthrow";
 import IUserRepository from "../../interfaces/IUserRepository";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import User from "domain/entities/User";
 import IJwtTokenService from "application/interfaces/JwtTokenService";
@@ -35,8 +35,8 @@ export default class CurrentUserQueryHandler implements IRequestHandler<CurrentU
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Invalid Jwt Token was provided.".`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.OperationFailed,
+                    path: [],
+                    code: APPLICATION_ERROR_CODES.OperationFailed,
                 }),
             );
         }

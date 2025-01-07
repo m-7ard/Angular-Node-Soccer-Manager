@@ -6,9 +6,7 @@ class MatchFactory {
         homeTeamId: Match["homeTeamId"];
         awayTeamId: Match["awayTeamId"];
         venue: Match["venue"];
-        scheduledDate: Match["scheduledDate"];
-        startDate: Match["startDate"];
-        endDate: Match["endDate"];
+        matchDates: Match["matchDates"]
         status: Match["status"];
     }) {
         return new Match({
@@ -16,9 +14,7 @@ class MatchFactory {
             homeTeamId: props.homeTeamId,
             awayTeamId: props.awayTeamId,
             venue: props.venue,
-            scheduledDate: props.scheduledDate,
-            startDate: props.startDate,
-            endDate: props.endDate,
+            matchDates: props.matchDates,
             status: props.status,
             score: null,
             events: [],
@@ -32,9 +28,7 @@ class MatchFactory {
         homeTeamId: Match["homeTeamId"];
         awayTeamId: Match["awayTeamId"];
         venue: Match["venue"];
-        scheduledDate: Match["scheduledDate"];
-        startDate: Match["startDate"];
-        endDate: Match["endDate"];
+        matchDates: Match["matchDates"];
         status: Match["status"];
         score: Match["score"];
         events: Match["events"];
@@ -46,9 +40,7 @@ class MatchFactory {
             homeTeamId: props.homeTeamId,
             awayTeamId: props.awayTeamId,
             venue: props.venue,
-            scheduledDate: props.scheduledDate,
-            startDate: props.startDate,
-            endDate: props.endDate,
+            matchDates: props.matchDates,
             status: props.status,
             score: props.score,
             events: props.events,

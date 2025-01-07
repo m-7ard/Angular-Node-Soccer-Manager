@@ -14,7 +14,7 @@ export default class MatchStatus {
         this.value = value;
     }
 
-    public static tryCreate(value: string): Result<MatchStatus, string> {
+    public static canCreate(value: string): Result<MatchStatus, string> {
         const status = MatchStatus.validStatuses.find((status) => status.value === value);
 
         if (status == null) {
@@ -22,6 +22,15 @@ export default class MatchStatus {
         }
 
         return ok(status);
+    }
+
+    public static executeCreate(value: string): MatchStatus {
+        const canCreateResult = this.canCreate(value);
+        if (canCreateResult.isErr()) {
+            throw new Error(canCreateResult.error);
+        }
+
+        return canCreateResult.value;
     }
 
     public value: string;

@@ -1,17 +1,20 @@
 import diContainer, { DI_TOKENS } from "api/deps/diContainer";
-import IUidRecord from "api/interfaces/IUidRecord";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import IUserRepository from "application/interfaces/IUserRepository";
+import MatchFactory from "domain/domainFactories/MatchFactory";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
 import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
+import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import { DateTime } from "luxon";
 
 class Mixins {
     private readonly _teamRepository: ITeamRepository;
@@ -54,20 +57,15 @@ class Mixins {
     }
 
     async createTeamMembership(player: Player, team: Team, activeTo: Date | null, number: number) {
-        const result = team.tryAddMember({
+        const teamMembership = team.executeAddMember({
             activeFrom: new Date(0),
             activeTo: activeTo,
             playerId: player.id,
             number: number,
         });
 
-        if (result.isErr()) {
-            throw Error(result.error.message);
-        }
-
         await this._teamRepository.updateAsync(team);
-
-        return result.value;
+        return teamMembership;
     }
 
     async createUser(seed: number, isAdmin: boolean) {
@@ -115,8 +113,10 @@ class Mixins {
 
     async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> }) {
         const date = new Date();
-        const endDate = new Date(date);
-        date.setMinutes(endDate.getMinutes() + 90);
+        const endDate = DateTime.fromJSDate(date)
+            .plus({ minutes: 90 })
+            .toJSDate();
+        
 
         return await this.createMatch({
             seed: props.seed,
@@ -130,7 +130,7 @@ class Mixins {
         });
     }
 
-    async createCancelledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; }) {
+    async createCancelledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team }) {
         const date = new Date();
 
         return await this.createMatch({
@@ -155,24 +155,26 @@ class Mixins {
         endDate: null | Date;
         goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> | null;
     }) {
-        const matchResult = MatchDomainService.canCreateMatch({
+        const match = MatchFactory.CreateNew({
             id: `${props.seed}`,
-            homeTeam: props.homeTeam,
-            awayTeam: props.awayTeam,
+            homeTeamId: props.homeTeam.id,
+            awayTeamId: props.awayTeam.id,
             venue: `match_${props.seed}_venue`,
-            scheduledDate: props.scheduledDate,
-            startDate: props.startDate,
-            endDate: props.endDate,
-            status: props.status,
-            goals: props.goals
+            matchDates: MatchDates.executeCreate({
+                scheduledDate: props.scheduledDate,
+                startDate: props.startDate,
+                endDate: props.endDate,
+            }),
+            status: MatchStatus.executeCreate(props.status),
         });
 
-        if (matchResult.isErr()) {
-            throw new Error(`Errors occured while trying to create match in Mixins: ${JSON.stringify(matchResult.error)}`);
+        if (props.goals != null) {
+            match.score = MatchScore.ZeroScore;
+            props.goals.forEach(match.executeAddGoal);
         }
 
-        await this._matchRepository.createAsync(matchResult.value);
-        const insertedMatch = await this._matchRepository.getByIdAsync(matchResult.value.id);
+        await this._matchRepository.createAsync(match);
+        const insertedMatch = await this._matchRepository.getByIdAsync(match.id);
 
         if (insertedMatch == null) {
             throw new Error(`Errors occured while trying to create match in Mixins: Match was not inserted.`);

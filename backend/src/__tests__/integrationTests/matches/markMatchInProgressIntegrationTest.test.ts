@@ -42,7 +42,7 @@ beforeEach(async () => {
     });
 
 
-    const startDate = DateTime.fromJSDate(scheduled_match.scheduledDate).plus({ minutes: 1 });
+    const startDate = DateTime.fromJSDate(scheduled_match.matchDates.scheduledDate).plus({ minutes: 1 });
 
     default_request = {
         startDate: startDate.toJSDate(),
@@ -100,7 +100,7 @@ describe("Mark Match In Progress Integration Test;", () => {
 
     it("Mark Match In Progress; Invalid startDate; Failure;", async () => {
         const request = { ...default_request };
-        const startDate = new Date(scheduled_match.scheduledDate);
+        const startDate = new Date(scheduled_match.matchDates.scheduledDate);
         startDate.setDate(startDate.getMinutes() - 1);
 
         request.startDate = startDate;

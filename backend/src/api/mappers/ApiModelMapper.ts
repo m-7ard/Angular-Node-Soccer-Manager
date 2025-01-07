@@ -65,9 +65,9 @@ class ApiModelMapper {
             homeTeam: this.createTeamApiModel(homeTeam),
             awayTeam: this.createTeamApiModel(awayTeam),
             venue: match.venue,
-            scheduledDate: match.scheduledDate.toString(),
-            startDate: match.startDate == null ? null : match.startDate.toString(),
-            endDate: match.endDate == null ? null : match.endDate.toString(),
+            scheduledDate: match.matchDates.scheduledDate.toString(),
+            startDate: match.matchDates.startDate == null ? null : match.matchDates.startDate.toString(),
+            endDate: match.matchDates.endDate == null ? null : match.matchDates.endDate.toString(),
             status: match.status.value,
             score:
                 match.score == null

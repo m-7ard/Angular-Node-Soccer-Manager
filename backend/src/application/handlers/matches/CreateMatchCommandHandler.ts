@@ -2,14 +2,20 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
-import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 import IUidRecord from "api/interfaces/IUidRecord";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
 import IsValidGoalValidator from "application/validators/IsValidGoalValidator";
+import IsValidMatchDatesValidator from "application/validators/IsValidMatchDateValidator";
+import MatchFactory from "domain/domainFactories/MatchFactory";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
+import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import MatchScore from "domain/valueObjects/Match/MatchScore";
+import CanAddGoalValidator from "application/validators/CanAddGoalValidator";
+import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 type CommandProps = {
     id: string;
@@ -53,16 +59,10 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
 
 export default class CreateMatchCommandHandler implements IRequestHandler<CreateMatchCommand, CreateMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
-    private readonly _teamRepository: ITeamRepository;
-    private readonly _playerRepository: IPlayerRepository;
-    private readonly playerExistsValidator: PlayerExistsValidator;
     private readonly teamExistsValidator: TeamExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository; playerRepository: IPlayerRepository }) {
         this._matchRepository = props.matchRepository;
-        this._teamRepository = props.teamRepository;
-        this._playerRepository = props.playerRepository;
-        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
         this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
     }
 
@@ -79,39 +79,75 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
 
         const homeTeam = homeTeamExistsResult.value;
         const awayTeam = awayTeamExistsResult.value;
-        const isValidGoalValidator = new IsValidGoalValidator(homeTeam, awayTeam);
 
-        if (command.goals != null) {
-            const errors: IApplicationError[] = [];
-            Object.entries(command.goals).forEach(([UID, goal]) => {
-                const isValidGoalResult = isValidGoalValidator.validate(goal);
-                if (isValidGoalResult.isErr()) {
-                    errors.push(...isValidGoalResult.error.map((error) => ({ ...error, path: [UID] })));
-                }
-            });
-
-            if (errors.length) {
-                return err(errors);
-            }
-        }
-
-        const matchCreationResult = MatchDomainService.canCreateMatch({
-            id: command.id,
-            homeTeam: homeTeamExistsResult.value,
-            awayTeam: awayTeamExistsResult.value,
-            venue: command.venue,
+        const isValidMatchDatesValidator = new IsValidMatchDatesValidator();
+        const isValidMatchDatesResult = isValidMatchDatesValidator.validate({
             scheduledDate: command.scheduledDate,
             startDate: command.startDate,
             endDate: command.endDate,
-            status: command.status,
-            goals: command.goals == null ? null : Object.values(command.goals),
         });
 
-        if (matchCreationResult.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(matchCreationResult.error));
+        if (isValidMatchDatesResult.isErr()) {
+            return err(isValidMatchDatesResult.error);
         }
 
-        const match = matchCreationResult.value;
+        const match = MatchFactory.CreateNew({
+            id: command.id,
+            homeTeamId: command.homeTeamId,
+            awayTeamId: command.awayTeamId,
+            venue: command.venue,
+            matchDates: MatchDates.executeCreate({
+                scheduledDate: command.scheduledDate,
+                startDate: command.startDate,
+                endDate: command.endDate,
+            }),
+            status: MatchStatus.executeCreate(command.status),
+        });
+
+        if (command.goals != null) {
+            match.score = MatchScore.ZeroScore;
+            const allGoalsErrors: IApplicationError[] = [];
+
+            Object.entries(command.goals).forEach(([UID, goal]) => {
+                const goalErrors: IApplicationError[] = [];
+
+                const isValidGoalValidator = new IsValidGoalValidator(homeTeam, awayTeam);
+                const isValidGoalResult = isValidGoalValidator.validate(goal);
+                if (isValidGoalResult.isErr()) {
+                    goalErrors.push(...isValidGoalResult.error);
+                }
+
+                const canAddGoalValidator = new CanAddGoalValidator(match);
+                const canAddGoalResult = canAddGoalValidator.validate(goal);
+                if (canAddGoalResult.isErr()) {
+                    goalErrors.push(...canAddGoalResult.error);
+                }
+
+                goalErrors.forEach((error) => {
+                    error.path = [UID, ...error.path];
+                });
+            });
+
+            if (allGoalsErrors.length) {
+                return err(allGoalsErrors);
+            }
+
+            Object.values(command.goals).forEach((goal) => match.executeAddGoal(goal));
+        }
+
+        try {
+            MatchDomainService.verifyIntegrity(match);
+        } catch (error) {
+            if (typeof error === "string") {
+                return err(
+                    ApplicationErrorFactory.createSingleListError({
+                        message: error,
+                        path: [],
+                        code: APPLICATION_ERROR_CODES.IntegrityError,
+                    }),
+                );
+            }
+        }
 
         await this._matchRepository.createAsync(match);
         return ok(undefined);

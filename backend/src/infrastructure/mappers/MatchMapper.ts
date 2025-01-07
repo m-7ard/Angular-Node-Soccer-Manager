@@ -5,6 +5,7 @@ import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
 import MatchEventMapper from "./MatchEventMapper";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import MatchDomainService from "domain/domainService/MatchDomainService";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
 
 class MatchMapper {
     static schemaToDbEntity(source: IMatchSchema): MatchDbEntity {
@@ -30,9 +31,9 @@ class MatchMapper {
             home_team_id: source.homeTeamId,
             away_team_id: source.awayTeamId,
             venue: source.venue,
-            scheduled_date: source.scheduledDate,
-            start_date: source.startDate,
-            end_date: source.endDate ?? null,
+            scheduled_date: source.matchDates.scheduledDate,
+            start_date: source.matchDates.startDate,
+            end_date: source.matchDates.endDate,
             status: source.status.value,
             away_team_score: source.score?.awayTeamScore ?? null,
             home_team_score: source.score?.homeTeamScore ?? null,
@@ -42,21 +43,21 @@ class MatchMapper {
     }
 
     static dbEntityToDomain(source: MatchDbEntity): Match {
-        const statusResult = MatchStatus.tryCreate(source.status);
-        
-        if (statusResult.isErr()) {
-            throw new Error(statusResult.error)
-        }
+        const matchStatus = MatchStatus.executeCreate(source.status);
+        const matchDates = MatchDates.executeCreate({
+            scheduledDate: source.scheduled_date,
+            startDate: source.start_date,
+            endDate: source.end_date,
+        });
+
 
         const match = new Match({
             id: source.id,
             homeTeamId: source.home_team_id,
             awayTeamId: source.away_team_id,
             venue: source.venue,
-            scheduledDate: source.scheduled_date,
-            startDate: source.start_date,
-            endDate: source.end_date,
-            status: statusResult.value,
+            matchDates: matchDates,
+            status: matchStatus,
             score: MatchValueObjectsMapper.dbToValueObject({
                 awayTeamScore: source.away_team_score,
                 homeTeamScore: source.home_team_score

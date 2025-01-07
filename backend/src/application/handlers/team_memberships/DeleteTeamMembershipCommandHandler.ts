@@ -3,7 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
 
 export type DeleteTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -21,28 +23,28 @@ export class DeleteTeamMembershipCommand implements ICommand<DeleteTeamMembershi
 
 export default class DeleteTeamMembershipCommandHandler implements IRequestHandler<DeleteTeamMembershipCommand, DeleteTeamMembershipCommandResult> {
     private readonly _teamRepository: ITeamRepository;
+    private readonly teamExistsValidator: TeamExistsValidator;
 
     constructor(props: { teamRepository: ITeamRepository }) {
         this._teamRepository = props.teamRepository;
+        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
     }
 
     async handle(command: DeleteTeamMembershipCommand): Promise<DeleteTeamMembershipCommandResult> {
-        const team = await this._teamRepository.getByIdAsync(command.teamId);
-        if (team == null) {
-            return err([
-                {
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                    path: ["_"],
-                    message: `Team with id ${command.teamId} does not exist.`,
-                },
-            ]);
+        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.teamId });
+        if (teamExistsResult.isErr()) {
+            return err(teamExistsResult.error);
         }
 
-        const result = team.tryRemoveMemberByPlayerId(command.playerId);
-        if (result.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors([result.error]));
+        const team = teamExistsResult.value;
+
+        const isTeamMemberValidator = new IsTeamMemberValidator();
+        const isTeamMemberResult = isTeamMemberValidator.validate({ team: teamExistsResult.value, playerId: command.playerId });
+        if (isTeamMemberResult.isErr()) {
+            return err(isTeamMemberResult.error);
         }
 
+        team.executeDeleteTeamMembershipByPlayerId(command.playerId);
         this._teamRepository.updateAsync(team);
         return ok(undefined);
     }

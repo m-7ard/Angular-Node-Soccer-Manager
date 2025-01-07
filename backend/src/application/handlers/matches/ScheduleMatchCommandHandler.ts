@@ -1,5 +1,5 @@
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
@@ -7,6 +7,10 @@ import { err, ok } from "neverthrow";
 import ICommand, { ICommandResult } from "../ICommand";
 import { IRequestHandler } from "../IRequestHandler";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import MatchFactory from "domain/domainFactories/MatchFactory";
+import IsValidMatchDatesValidator from "application/validators/IsValidMatchDateValidator";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
 
 type CommandProps = {
     id: string;
@@ -38,45 +42,50 @@ export class ScheduleMatchCommand implements ICommand<ScheduleMatchCommandResult
 
 export default class ScheduleMatchCommandHandler implements IRequestHandler<ScheduleMatchCommand, ScheduleMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
-    private readonly _teamRepository: ITeamRepository;
+    private readonly teamExistsValidator: TeamExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
         this._matchRepository = props.matchRepository;
-        this._teamRepository = props.teamRepository;
+        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
     }
 
     async handle(command: ScheduleMatchCommand): Promise<ScheduleMatchCommandResult> {
-        const homeTeam = await this._teamRepository.getByIdAsync(command.homeTeamId);
-        if (homeTeam == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.homeTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }),
-            );
+        const homeTeamExistsResult = await this.teamExistsValidator.validate({ id: command.homeTeamId });
+        if (homeTeamExistsResult.isErr()) {
+            return err(homeTeamExistsResult.error);
         }
 
-        const awayTeam = await this._teamRepository.getByIdAsync(command.awayTeamId);
-        if (awayTeam == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({ message: `Team of id "${command.awayTeamId}" does not exist.`, code: VALIDATION_ERROR_CODES.ModelDoesNotExist, path: ["homeTeamId"] }),
-            );
+        const awayTeamExistsResult = await this.teamExistsValidator.validate({ id: command.awayTeamId });
+        if (awayTeamExistsResult.isErr()) {
+            return err(awayTeamExistsResult.error);
         }
 
-        const matchCreationResult = MatchDomainService.canCreateMatch({
-            id: command.id,
-            homeTeam: homeTeam,
-            awayTeam: awayTeam,
-            venue: command.venue,
+        const homeTeam = homeTeamExistsResult.value;
+        const awayTeam = awayTeamExistsResult.value;
+
+        const isValidMatchDatesValidator = new IsValidMatchDatesValidator();
+        const isValidMatchDatesResult = isValidMatchDatesValidator.validate({
             scheduledDate: command.scheduledDate,
             startDate: null,
             endDate: null,
-            status: MatchStatus.SCHEDULED.value,
-            goals: null,
         });
 
-        if (matchCreationResult.isErr()) {
-            return err(ApplicationErrorFactory.domainErrorsToApplicationErrors(matchCreationResult.error));
+        if (isValidMatchDatesResult.isErr()) {
+            return err(isValidMatchDatesResult.error);
         }
 
-        const match = matchCreationResult.value;
+        const match = MatchFactory.CreateNew({
+            id: command.id,
+            homeTeamId: homeTeam.id,
+            awayTeamId: awayTeam.id,
+            venue: command.venue,
+            matchDates: MatchDates.executeCreate({
+                scheduledDate: command.scheduledDate,
+                startDate: null,
+                endDate: null,
+            }),
+            status: MatchStatus.SCHEDULED,
+        });
 
         await this._matchRepository.createAsync(match);
         return ok(undefined);

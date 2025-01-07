@@ -2,9 +2,10 @@ import { IRequestHandler } from "../IRequestHandler";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IQuery, { IQueryResult } from "../IQuery";
 import Match from "domain/entities/Match";
+import MatchExistsValidator from "application/validators/MatchExistsValidator";
 
 type QueryProps = {
     id: string;
@@ -24,23 +25,20 @@ export class ReadMatchQuery implements IQuery<ReadMatchQueryResult>, QueryProps 
 
 export default class ReadMatchQueryHandler implements IRequestHandler<ReadMatchQuery, ReadMatchQueryResult> {
     private readonly _matchRepository: IMatchRepository;
+    private readonly matchExistsValidator: MatchExistsValidator;
 
     constructor(props: { matchRepository: IMatchRepository; }) {
         this._matchRepository = props.matchRepository;
+        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
     }
 
     async handle(query: ReadMatchQuery): Promise<ReadMatchQueryResult> {
-        const match = await this._matchRepository.getByIdAsync(query.id);
-
-        if (match == null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    code: VALIDATION_ERROR_CODES.ModelDoesNotExist,
-                    message: `Match of id "${query.id}" does not exist.`,
-                    path: ["_"],
-                }),
-            );
+        const matchExistsResult = await this.matchExistsValidator.validate({ id: query.id });
+        if (matchExistsResult.isErr()) {
+            return err(matchExistsResult.error);
         }
+
+        const match = matchExistsResult.value;
 
         return ok(match);
     }

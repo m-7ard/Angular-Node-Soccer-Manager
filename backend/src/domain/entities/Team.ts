@@ -1,4 +1,4 @@
-import { err, ok, Result } from "neverthrow";
+import { Err, err, ok, Result } from "neverthrow";
 import TeamMembership from "./TeamMembership";
 import TeamMembershipFactory from "domain/domainFactories/TeamMembershipFactory";
 import DomainEvent from "domain/domainEvents/DomainEvent";
@@ -30,16 +30,21 @@ class Team {
         return this.teamMemberships.find((membership) => membership.playerId === playerId);
     }
 
-    public tryAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, IDomainError> {
+    public canAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): Result<boolean, string> {
         const membership = this.findMemberByPlayerId(props.playerId);
         if (membership != null) {
-            return err({
-                code: "PLAYER_ALREADY_IS_MEMBER",
-                message: "Player is already a member of the team",
-                path: ["playerId"],
-            });
+            return err("Player is already a member of the team");
         }
 
+        return ok(true);
+    }
+
+    public executeAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): TeamMembership {
+        const canAddMemberResult = this.canAddMember(props);
+        if (canAddMemberResult.isErr()) {
+            throw new Error(canAddMemberResult.error);
+        }
+        
         const teamMembership = TeamMembershipFactory.CreateNew({
             id: crypto.randomUUID(),
             teamId: this.id,
@@ -50,41 +55,50 @@ class Team {
         });
         this.teamMemberships.push(teamMembership);
         this.domainEvents.push(new TeamMembershipPendingCreationEvent(teamMembership));
+        return teamMembership;
+    }
+
+    public canUpdateMember(playerId: string, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, string> {
+        const teamMembership = this.findMemberByPlayerId(playerId);
+        if (teamMembership == null) {
+            return err(`Player of id "${playerId}" is not a member of the team.`);
+        }
 
         return ok(teamMembership);
     }
 
-    public tryUpdateMember(playerId: string, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, IDomainError> {
-        const teamMembership = this.findMemberByPlayerId(playerId);
-        if (teamMembership == null) {
-            return err({
-                code: "PLAYER_IS_NOT_MEMBER",
-                message: `Player of id "${playerId}" is not a member of the team.`,
-                path: ["_"],
-            });
+    public executeUpdateMember(playerId: string, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<true, string> {
+        const canUpdateTeamMembershipResult = this.canUpdateMember(playerId, props);
+        if (canUpdateTeamMembershipResult.isErr()) {
+            throw new Error(canUpdateTeamMembershipResult.error);
         }
 
-        teamMembership.update({
-            activeFrom: props.activeFrom,
-            activeTo: props.activeTo,
-            number: props.number,
-        });
+        const teamMembership = canUpdateTeamMembershipResult.value;
+        teamMembership.activeFrom = props.activeFrom;
+        teamMembership.activeTo = props.activeTo;
+        teamMembership.number = props.number;
         this.domainEvents.push(new TeamMembershipPendingUpdatingEvent(teamMembership));
+        return ok(true);
+    }
+
+    public canRemoveTeamMembershipByPlayerId(playerId: Player["id"]): Result<TeamMembership, string> {
+        const teamMembership = this.findMemberByPlayerId(playerId);
+        if (teamMembership == null) {
+            return err(`Player of id "${playerId}" is not a member of the team.`);
+        }
+
         return ok(teamMembership);
     }
 
-    public tryRemoveMemberByPlayerId(playerId: Player["id"]): Result<true, IDomainError> {
-        const teamMembership = this.findMemberByPlayerId(playerId);
-        if (teamMembership == null) {
-            return err({
-                code: "PLAYER_IS_NOT_MEMBER",
-                message: `Player of id "${playerId}" is not a member of the team.`,
-                path: ["_"],
-            });
+    public executeDeleteTeamMembershipByPlayerId(playerId: Player["id"]): void {
+        const canRemoveTeamMembershipByPlayerIdResult = this.canRemoveTeamMembershipByPlayerId(playerId);
+        if (canRemoveTeamMembershipByPlayerIdResult.isErr()) {
+            throw new Error(canRemoveTeamMembershipByPlayerIdResult.error)
         }
 
-        this.domainEvents.push(new TeamMembershipPendingDeletionEvent(teamMembership));
-        return ok(true);
+        const removedMembership = canRemoveTeamMembershipByPlayerIdResult.value;
+        this.teamMemberships = this.teamMemberships.filter((teamMembership) => teamMembership !== removedMembership);
+        this.domainEvents.push(new TeamMembershipPendingDeletionEvent(removedMembership));
     }
 }
 

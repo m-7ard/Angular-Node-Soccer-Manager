@@ -11,6 +11,7 @@ import Team from "domain/entities/Team";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import Match from "domain/entities/Match";
 import IMarkMatchCompletedRequestDTO from "api/DTOs/matches/markMatchCompleted/IMarkMatchCompletedRequestDTO";
+import { DateTime } from "luxon";
 
 let team_001: Team;
 let team_002: Team;
@@ -40,9 +41,10 @@ beforeEach(async () => {
         goals: []
     });
 
-    const endDate = completed_match.startDate!;
-    endDate.setMinutes(endDate.getMinutes() + 90);
-
+    const endDate = DateTime.fromJSDate(completed_match.matchDates.startDate!)
+        .plus({ minutes: 90 })
+        .toJSDate();
+      
     default_request = {
         endDate: endDate,
     };
@@ -98,7 +100,7 @@ describe("Mark Match Completed Integration Test;", () => {
 
     it("Mark Match Completed; Invalid endDate; Failure;", async () => {
         const request = { ...default_request };
-        const endDate = new Date(in_progress_match.startDate!);
+        const endDate = new Date(in_progress_match.matchDates.startDate!);
 
         request.endDate = endDate;
 

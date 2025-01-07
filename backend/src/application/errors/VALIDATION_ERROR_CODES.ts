@@ -1,15 +1,10 @@
-const VALIDATION_ERROR_CODES = {
-    IsNull: "IsNull",
+const APPLICATION_ERROR_CODES = {
     StateMismatch: "StateMismatch",
     ModelDoesNotExist: "ModelDoesNotExist",
     IntegrityError: "IntegrityError",
     ModelAlreadyExists: "ModelAlreadyExists",
-    Custom: "Custom",
-    InvalidValue: "InvalidValue",
-    FileSizeExceeded: "FileSizeExceeded",
-    FileInvalidExtension: "FileInvalidExtension",
-    FileCountExceeded: "FileCountExceeded",
     OperationFailed: "OperationFailed",
+    NotAllowed: "NotAllowed",
 } as const;
 
-export default VALIDATION_ERROR_CODES;
+export default APPLICATION_ERROR_CODES;

@@ -4,8 +4,9 @@ import { err, ok } from "neverthrow";
 import IUserRepository from "../../interfaces/IUserRepository";
 import UserFactory from "domain/domainFactories/UserFactory";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
-import VALIDATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import UserExistsValidator from "application/validators/UserExistsValidator";
 
 export type RegisterUserCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -28,22 +29,22 @@ export class RegisterUserCommand implements ICommand<RegisterUserCommandResult> 
 export default class RegisterUserCommandHandler implements IRequestHandler<RegisterUserCommand, RegisterUserCommandResult> {
     private readonly _userRepository: IUserRepository;
     private readonly _passwordHasher: IPasswordHasher;
+    private readonly userExistsValidator: UserExistsValidator;
 
     constructor(props: { userRepository: IUserRepository; passwordHasher: IPasswordHasher }) {
         this._userRepository = props.userRepository;
         this._passwordHasher = props.passwordHasher;
+        this.userExistsValidator = new UserExistsValidator(props.userRepository);
     }
 
     async handle(command: RegisterUserCommand): Promise<RegisterUserCommandResult> {
-        const existingUser = await this._userRepository.getByEmailAsync(command.email);
-        if (existingUser != null) {
-            return err(
-                ApplicationErrorFactory.createSingleListError({
-                    message: `User of email "${command.email} already exists.".`,
-                    path: ["_"],
-                    code: VALIDATION_ERROR_CODES.ModelAlreadyExists,
-                }),
-            );
+        const userExistResult = await this.userExistsValidator.validate({ email: command.email });
+        if (userExistResult.isOk()) {
+            return err(ApplicationErrorFactory.createSingleListError({
+                message: `User of email "${command.email} already exists."`,
+                code: APPLICATION_ERROR_CODES.ModelAlreadyExists,
+                path: []
+            }));
         }
 
         const hashed_password = await this._passwordHasher.hashPassword(command.password);

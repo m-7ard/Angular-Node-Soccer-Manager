@@ -16,12 +16,6 @@ class TeamMembership {
     public activeFrom: Date;
     public activeTo: Date | null;
     public number: number;
-
-    update(props: { activeFrom: TeamMembership["activeFrom"]; activeTo: TeamMembership["activeTo"]; number: TeamMembership["number"] }) {
-        this.activeFrom = props.activeFrom;
-        this.activeTo = props.activeTo;
-        this.number = props.number;
-    }
 }
 
 export default TeamMembership;
