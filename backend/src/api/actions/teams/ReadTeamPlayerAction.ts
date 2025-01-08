@@ -34,13 +34,13 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
             if (expectedError.code === APPLICATION_VALIDATOR_CODES.TEAM_EXISTS_ERROR || expectedError.code === APPLICATION_VALIDATOR_CODES.IS_TEAM_MEMBER_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
-                    body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                    body: ApiErrorFactory.mapApplicationErrors(result.error),
                 });
             }
 
             return new JsonResponse({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 
@@ -49,7 +49,7 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
         if (playerQueryResult.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.applicationErrorToApiErrors(playerQueryResult.error),
+                body: ApiErrorFactory.mapApplicationErrors(playerQueryResult.error),
             });
         }
 

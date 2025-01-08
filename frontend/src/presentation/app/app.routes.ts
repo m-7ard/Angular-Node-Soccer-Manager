@@ -32,6 +32,7 @@ import { ScheduleMatchPageComponent } from './matches/schedule-match-page/schedu
 import { MarkInProgressPageComponent } from './matches/mark-in-progress-page/mark-in-progress-page.component';
 import { MarkCompletedPageComponent } from './matches/mark-completed-page/mark-completed-page.component';
 import { MarkCancelledPageComponent } from './matches/mark-cancelled-page/mark-cancelled-page.component';
+import { RecordGoalPageComponent } from './matches/record-goal-page/record-goal-page.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -138,6 +139,11 @@ export const routes: Routes = [
             {
                 path: ':matchId/mark-cancelled',
                 component: MarkCancelledPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: ':matchId/record-goal',
+                component: RecordGoalPageComponent,
                 canActivate: [AuthGuard],
             },
         ],

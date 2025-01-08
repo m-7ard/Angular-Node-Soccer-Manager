@@ -1,4 +1,5 @@
-import matchStatuses from '../app/values/matchStatuses';
+import matchStatusColors from '../app/values/matchStatusColors';
+import matchStatusLabels from '../app/values/matchStatusLabels';
 import Team from './Team';
 
 type MatchProps = {
@@ -40,12 +41,21 @@ class Match implements MatchProps {
     }
 
     get statusLabel() {
-        const label = matchStatuses[this.status];
+        const label = matchStatusLabels[this.status];
         if (label == null) {
             throw new Error(`Status of Match lacks a label. Status: ${this.status}`);
         }
 
         return label;
+    }
+
+    get statusColor() {
+        const color = matchStatusColors[this.status];
+        if (color == null) {
+            throw new Error(`Status of Match lacks a color. Status: ${this.status}`);
+        }
+
+        return color;
     }
 }
 

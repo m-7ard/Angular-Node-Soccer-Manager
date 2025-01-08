@@ -26,7 +26,7 @@ class ListTeamPlayersAction implements IAction<ActionRequest, ActionResponse> {
         if (readTeamResult.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.applicationErrorToApiErrors(readTeamResult.error),
+                body: ApiErrorFactory.mapApplicationErrors(readTeamResult.error),
             });
         }
 
@@ -47,7 +47,7 @@ class ListTeamPlayersAction implements IAction<ActionRequest, ActionResponse> {
             if (readPlayerResult.isErr()) {
                 return new JsonResponse({
                     status: StatusCodes.INTERNAL_SERVER_ERROR,
-                    body: ApiErrorFactory.applicationErrorToApiErrors(readPlayerResult.error),
+                    body: ApiErrorFactory.mapApplicationErrors(readPlayerResult.error),
                 });
             }
 

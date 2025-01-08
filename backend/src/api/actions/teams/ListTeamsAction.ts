@@ -36,7 +36,7 @@ class ListTeamsAction implements IAction<ActionRequest, ActionResponse> {
         if (teamResult.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.applicationErrorToApiErrors(teamResult.error),
+                body: ApiErrorFactory.mapApplicationErrors(teamResult.error),
             });
         }
 

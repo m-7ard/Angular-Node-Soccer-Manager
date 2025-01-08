@@ -14,6 +14,8 @@ import IMarkMatchCompletedRequestDTO from '../../contracts/matches/markMatchComp
 import IMarkMatchCompletedResponseDTO from '../../contracts/matches/markMatchCompleted/IMarkMatchCompletedResponseDTO';
 import IMarkMatchCancelledRequestDTO from '../../contracts/matches/markMatchCancelled/IMarkMatchCancelledRequestDTO';
 import IMarkMatchCancelledResponseDTO from '../../contracts/matches/markMatchCancelled/IMarkMatchCancelledResponseDTO';
+import IRecordGoalRequestDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalRequestDTO';
+import IRecordGoalResponseDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -41,6 +43,10 @@ export class MatchDataAccessService {
 
     scheduleMatch(request: IScheduleMatchRequestDTO) {
         return this.http.post<IScheduleMatchResponseDTO>(`${this._baseUrl}/schedule`, request);
+    }
+
+    recordGoal(matchId: string, request: IRecordGoalRequestDTO) {
+        return this.http.post<IRecordGoalResponseDTO>(`${this._baseUrl}/${matchId}/record_goal`, request);
     }
 
     markInProgress(matchId: string, request: IMarkMatchInProgressRequestDTO) {

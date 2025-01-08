@@ -7,19 +7,9 @@
     }"
 >
     <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-yellow',
-                isStatic: true
-            }"
-            routerLink="/matches/"
-        >
+        <button class="mixin-Sbutton-like mixin-Sbutton-like--static mixin-Sbutton-sm {{ match.statusColor }}">
             {{ match.statusLabel }}
         </button>
-        <div routerLink="/matches/" class="ml-auto token-card--header--secondary-text">
-            {{ match.scheduledDate | date }}
-        </div>
     </section>
     <section appMixinStyledCardSection class="flex flex-col gap-3">
         <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
@@ -27,10 +17,8 @@
                 <app-cover-image src=""></app-cover-image>
             </div>
             <div class="text-sm truncate">{{ match.homeTeam.name }}</div>
-            <div class="flex flex-row gap-3 text-sm">
-                <div>
-                    {{ match.score?.homeTeamScore ?? "" }}
-                </div>
+            <div class="token-card--header--primary-text">
+                {{ match.score?.homeTeamScore ?? "" }}
             </div>
         </div>
         <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
@@ -38,11 +26,29 @@
                 <app-cover-image src=""></app-cover-image>
             </div>
             <div class="text-sm truncate">{{ match.awayTeam.name }}</div>
-            <div class="flex flex-row gap-3 text-sm">
-                <div>
-                    {{ match.score?.awayTeamScore ?? "" }}
-                </div>
+            <div class="token-card--header--primary-text">
+                {{ match.score?.awayTeamScore ?? "" }}
             </div>
+        </div>
+    </section>
+    <section appMixinStyledCardSection class="overflow-hidden">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Scheduled Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.scheduledDate | date }}
+            </span>
+        </div>
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Start Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.startDate == null ? "N/A" : (match.startDate | date) }}
+            </span>
+        </div>
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">End Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.endDate == null ? "N/A" : (match.endDate | date) }}
+            </span>
         </div>
     </section>
     <footer appMixinStyledCardSection class="flex flex-col gap-1">

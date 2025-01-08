@@ -41,13 +41,13 @@ class LoginUserAction implements IAction<ActionRequest, ActionResponse> {
             if (firstError.code === APPLICATION_ERROR_CODES.OperationFailed) {
                 return new JsonResponse({
                     status: StatusCodes.INTERNAL_SERVER_ERROR,
-                    body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                    body: ApiErrorFactory.mapApplicationErrors(result.error),
                 });
             }
 
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

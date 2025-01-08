@@ -27,7 +27,7 @@ class DeleteTeamMembershipAction implements IAction<ActionRequest, ActionRespons
         if (result.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

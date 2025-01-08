@@ -1,4 +1,4 @@
-<!-- Mark Match In Progress Page -->
+<!-- Record Goal Page -->
 <form
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
@@ -11,14 +11,24 @@
         appPageSectionDirective
         class="flex flex-row gap-3 items-center justify-between"
     >
-        <div class="token-default-title">Mark Match In Progress</div>
+        <div class="token-default-title">Record Goal</div>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section *ngIf="errors['_'] != null" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
     <fieldset class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
-        <app-form-field name="startDate" [errors]="errors.startDate">
+        <app-form-field name="team" [errors]="errors.teamId">
+            <ng-template let-name="name">
+                <app-pick-single-team [formControlName]="name" />
+            </ng-template>
+        </app-form-field>
+        <app-form-field name="player" [errors]="errors.playerId">
+            <ng-template let-name="name">
+                <app-pick-single-player [formControlName]="name" />
+            </ng-template>
+        </app-form-field>
+        <app-form-field name="dateOccured" [errors]="errors.dateOccured">
             <ng-template let-name="name">
                 <app-char-field
                     [formControlName]="name"
@@ -26,7 +36,7 @@
                         size: 'mixin-char-input-base',
                         theme: 'theme-input-generic-white'
                     }"
-                    [type]="'datetime-local'"
+                    type="datetime-local"
                 />
             </ng-template>
         </app-form-field>
@@ -51,7 +61,7 @@
                 theme: 'theme-Sbutton-generic-green'
             }"
         >
-            Mark In Progress
+            Record
         </button>
     </footer>
 </form>

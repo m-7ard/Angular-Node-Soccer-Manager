@@ -32,13 +32,13 @@ class ReadPlayerAction implements IAction<ActionRequest, ActionResponse> {
             if (expectedError.code === APPLICATION_VALIDATOR_CODES.PLAYER_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
-                    body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                    body: ApiErrorFactory.mapApplicationErrors(result.error),
                 });
             }
 
             return new JsonResponse({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

@@ -37,7 +37,7 @@ class UpdateTeamAction implements IAction<ActionRequest, ActionResponse> {
         if (result.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

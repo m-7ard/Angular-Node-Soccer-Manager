@@ -79,7 +79,7 @@ class Match {
         const newStatus = statusResult.value;
 
         if (!this.isValidStatusTransitions(newStatus)) {
-            return err(`Invalid status transition from ${this.status} to ${newStatus}`);
+            return err(`Invalid status transition from ${this.status.value} to ${newStatus.value}`);
         }
 
         return ok(newStatus);

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
 import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
@@ -15,14 +15,13 @@ import { MatchDataAccessService } from '../../../services/data-access/match-data
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import IPresentationError from '../../../errors/IPresentationError';
 import Team from '../../../models/Team';
-import { object, string, number, date, validate } from 'superstruct';
+import { object, string, date } from 'superstruct';
 import validateSuperstruct from '../../../utils/validateSuperstuct';
 import structErrorToPresentationError from '../../../utils/structErrorToPresentationError';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
-import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
 interface IFormControls {
     homeTeam: FormControl<Team | null>;

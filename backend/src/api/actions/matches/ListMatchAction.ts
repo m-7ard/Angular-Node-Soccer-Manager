@@ -41,7 +41,7 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
         if (result.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

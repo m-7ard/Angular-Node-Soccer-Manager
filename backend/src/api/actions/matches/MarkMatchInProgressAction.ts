@@ -32,13 +32,13 @@ class MarkMatchInProgressAction implements IAction<ActionRequest, ActionResponse
             if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
-                    body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                    body: ApiErrorFactory.mapApplicationErrors(result.error),
                 });
             }
 
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
-                body: ApiErrorFactory.applicationErrorToApiErrors(result.error),
+                body: ApiErrorFactory.mapApplicationErrors(result.error),
             });
         }
 

@@ -50,6 +50,14 @@ export default class ScheduleMatchCommandHandler implements IRequestHandler<Sche
     }
 
     async handle(command: ScheduleMatchCommand): Promise<ScheduleMatchCommandResult> {
+        if (command.awayTeamId === command.homeTeamId) {
+            return err(ApplicationErrorFactory.createSingleListError({
+                message: "Away team cannot be the same team as home team.",
+                path: [],
+                code: APPLICATION_ERROR_CODES.IntegrityError
+            }))
+        }
+
         const homeTeamExistsResult = await this.teamExistsValidator.validate({ id: command.homeTeamId });
         if (homeTeamExistsResult.isErr()) {
             return err(homeTeamExistsResult.error);
@@ -69,7 +77,6 @@ export default class ScheduleMatchCommandHandler implements IRequestHandler<Sche
             startDate: null,
             endDate: null,
         });
-
         if (isValidMatchDatesResult.isErr()) {
             return err(isValidMatchDatesResult.error);
         }
