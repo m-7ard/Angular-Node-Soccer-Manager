@@ -1,5 +1,8 @@
 import matchStatusColors from '../app/values/matchStatusColors';
+import matchStatuses from '../app/values/matchStatuses';
+import matchStatusIsScorable from '../app/values/matchStatusIsScorable';
 import matchStatusLabels from '../app/values/matchStatusLabels';
+import matchStatusTransitions from '../app/values/matchStatusTransitions';
 import Team from './Team';
 
 type MatchProps = {
@@ -57,6 +60,31 @@ class Match implements MatchProps {
 
         return color;
     }
+
+    canTransition(status: typeof matchStatuses[keyof typeof matchStatuses]) {
+        const transitions = matchStatusTransitions[this.status];
+        console.log(transitions)
+
+        if (transitions == null) {
+            throw new Error(`Status of Match lacks a transition. Status: ${this.status}`);
+        }
+
+        return transitions.includes(status);
+    }
+
+    canScore() {
+        const canScore = matchStatusIsScorable[this.status];
+
+        console.log(this.status, canScore)
+
+        if (canScore == null) {
+            throw new Error(`Status of Match lacks a value in matchStatusIsScorable. Status: ${this.status}`);
+        }
+
+        return canScore;
+    }
+
+    public VALID_MATCH_STATUSES = matchStatuses;
 }
 
 export default Match;

@@ -10,6 +10,7 @@ import MarkMatchCompletedAction from "api/actions/matches/MarkMatchCompletedActi
 import MarkMatchCancelledAction from "api/actions/matches/MarkMatchCancelledAction";
 import ScheduleMatchAction from "api/actions/matches/ScheduleMatchAction";
 import RecordGoalAction from "api/actions/matches/RecordGoalAction";
+import DeleteMatchAction from "api/actions/matches/DeleteMatchAction";
 
 const matchesRouter = Router();
 
@@ -100,6 +101,17 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new RecordGoalAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: matchesRouter,
+    path: "/:matchId/delete",
+    method: "POST",
+    guards: [userIsAuthenticatedGuard],
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new DeleteMatchAction(requestDispatcher);
     },
 });
 

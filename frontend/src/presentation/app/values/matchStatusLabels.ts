@@ -1,8 +1,10 @@
+import matchStatuses from "./matchStatuses";
+
 const matchStatusLabels: Record<string, string> = {
-    IN_PROGRESS: 'In Progress',
-    SCHEDULED: 'Scheduled',
-    COMPLETED: 'Completed',
-    CANCELLED: 'Cancelled',
+    [matchStatuses.IN_PROGRESS]: 'In Progress',
+    [matchStatuses.SCHEDULED]: 'Scheduled',
+    [matchStatuses.COMPLETED]: 'Completed',
+    [matchStatuses.CANCELLED]: 'Cancelled',
 };
 
 export default matchStatusLabels;

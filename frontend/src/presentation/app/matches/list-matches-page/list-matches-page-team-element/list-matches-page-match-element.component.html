@@ -12,21 +12,27 @@
         </button>
     </section>
     <section appMixinStyledCardSection class="flex flex-col gap-3">
-        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto auto 1fr">
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
             <div class="text-sm truncate">{{ match.homeTeam.name }}</div>
-            <div class="token-card--header--primary-text">
+            <div class="text-sm">
+                -
+            </div>
+            <div class="text-sm">
                 {{ match.score?.homeTeamScore ?? "" }}
             </div>
         </div>
-        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto auto 1fr">
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
             <div class="text-sm truncate">{{ match.awayTeam.name }}</div>
-            <div class="token-card--header--primary-text">
+            <div class="text-sm">
+                -
+            </div>
+            <div class="text-sm">
                 {{ match.score?.awayTeamScore ?? "" }}
             </div>
         </div>
@@ -106,6 +112,7 @@
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-green'
                 }"
+                [ngClass]="{ 'contrast-50': !match.canScore()}"
                 class="justify-center"
             >
                 Record Goal
@@ -117,6 +124,7 @@
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
+                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.IN_PROGRESS)}"
                 class="justify-center"
             >
                 Mark In Progress
@@ -128,6 +136,7 @@
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
+                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.COMPLETED)}"
                 class="justify-center"
             >
                 Mark Completed
@@ -139,6 +148,7 @@
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
+                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.CANCELLED)}"
                 class="justify-center"
             >
                 Mark Cancelled
