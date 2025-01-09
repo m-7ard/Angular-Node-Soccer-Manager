@@ -61,9 +61,9 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
     private readonly _matchRepository: IMatchRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
 
-    constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository; playerRepository: IPlayerRepository }) {
+    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: TeamExistsValidator; }) {
         this._matchRepository = props.matchRepository;
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+        this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: CreateMatchCommand): Promise<CreateMatchCommandResult> {

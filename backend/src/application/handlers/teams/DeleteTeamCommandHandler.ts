@@ -20,9 +20,9 @@ export default class DeleteTeamCommandHandler implements IRequestHandler<DeleteT
     private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
 
-    constructor(props: { teamRepository: ITeamRepository }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: TeamExistsValidator }) {
         this._teamRepository = props.teamRepository;
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+        this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: DeleteTeamCommand): Promise<DeleteTeamCommandResult> {

@@ -80,8 +80,6 @@ describe("Record Goal Integration Test;", () => {
             seed: 1,
         });
 
-        console.log(response.body)
-
         expect(response.status).toBe(201);
         await wasCreated();
     });

@@ -1,5 +1,3 @@
-import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
@@ -9,9 +7,6 @@ import { IRequestHandler } from "../IRequestHandler";
 import MatchExistsValidator from "application/validators/MatchExistsValidator";
 import IsMatchTeamValidator from "application/validators/IsMatchTeamValidator";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
-import path from "path";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
 import CanAddGoalValidator from "application/validators/CanAddGoalValidator";
 import IsValidGoalValidator from "application/validators/IsValidGoalValidator";
 
@@ -45,10 +40,10 @@ export default class RecordGoalCommandHandler implements IRequestHandler<RecordG
     private readonly matchExistsValidator: MatchExistsValidator;
     private readonly teamExistsValidator: TeamExistsValidator;
 
-    constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
+    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: TeamExistsValidator, matchExistsValidator: MatchExistsValidator }) {
         this.matchRepository = props.matchRepository;
-        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+        this.matchExistsValidator = props.matchExistsValidator;
+        this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: RecordGoalCommand): Promise<RecordGoalCommandResult> {

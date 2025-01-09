@@ -27,9 +27,9 @@ export default class DeleteMatchCommandHandler implements IRequestHandler<Delete
     private readonly _matchRepository: IMatchRepository;
     private readonly matchExistsValidator: MatchExistsValidator;
 
-    constructor(props: { matchRepository: IMatchRepository; teamRepository: ITeamRepository }) {
+    constructor(props: { matchRepository: IMatchRepository; matchExistsValidator: MatchExistsValidator; }) {
         this._matchRepository = props.matchRepository;
-        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
+        this.matchExistsValidator = props.matchExistsValidator;
     }
 
     async handle(command: DeleteMatchCommand): Promise<DeleteMatchCommandResult> {

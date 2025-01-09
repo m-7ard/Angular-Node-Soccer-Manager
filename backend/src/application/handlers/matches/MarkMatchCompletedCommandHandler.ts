@@ -30,9 +30,9 @@ export default class MarkMatchCompletedCommandHandler implements IRequestHandler
     private readonly _matchRepository: IMatchRepository;
     private readonly matchExistsValidator: MatchExistsValidator;
 
-    constructor(props: { matchRepository: IMatchRepository }) {
+    constructor(props: { matchRepository: IMatchRepository; matchExistsValidator: MatchExistsValidator; }) {
         this._matchRepository = props.matchRepository;
-        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
+        this.matchExistsValidator = props.matchExistsValidator;
     }
 
     async handle(command: MarkMatchCompletedCommand): Promise<MarkMatchCompletedCommandResult> {

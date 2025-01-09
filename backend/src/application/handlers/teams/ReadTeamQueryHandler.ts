@@ -1,7 +1,6 @@
 import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import Team from "../../../domain/entities/Team";
-import ITeamRepository from "../../interfaces/ITeamRepository";
 import { err, ok } from "neverthrow";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
 
@@ -18,14 +17,12 @@ export class ReadTeamQuery implements IQuery<ReadTeamQueryResult> {
 }
 
 export default class ReadTeamQueryHandler implements IRequestHandler<ReadTeamQuery, ReadTeamQueryResult> {
-    private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
     
     constructor(props: {
-        teamRepository: ITeamRepository;
+        teamExistsValidator: TeamExistsValidator;
     }) {
-        this._teamRepository = props.teamRepository;
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+        this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: ReadTeamQuery): Promise<ReadTeamQueryResult> {

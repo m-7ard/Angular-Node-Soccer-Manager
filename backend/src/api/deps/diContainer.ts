@@ -7,6 +7,10 @@ import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import IUserRepository from "application/interfaces/IUserRepository";
 import IJwtTokenService from "application/interfaces/JwtTokenService";
+import MatchExistsValidator from "application/validators/MatchExistsValidator";
+import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
+import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import UserExistsValidator from "application/validators/UserExistsValidator";
 
 type TokenType<T> = T extends { __service: infer S } ? S : never;
 
@@ -30,6 +34,10 @@ export const DI_TOKENS = {
     USER_REPOSITORY: makeToken<IUserRepository>("USER_REPOSITORY"),
     MATCH_REPOSITORY: makeToken<IMatchRepository>("MATCH_REPOSITORY"),
     API_MODEL_SERVICE: makeToken<IApiModelService>("API_MODEL_SERVICE"),
+    PLAYER_EXISTS_VALIDATOR: makeToken<PlayerExistsValidator>("PLAYER_EXISTS_VALIDATOR"),
+    TEAM_EXISTS_VALIDATOR: makeToken<TeamExistsValidator>("TEAM_EXISTS_VALIDATOR"),
+    USER_EXISTS_VALIDATOR: makeToken<UserExistsValidator>("USER_EXISTS_VALIDATOR"),
+    MATCH_EXISTS_VALIDATOR: makeToken<MatchExistsValidator>("MATCH_EXISTS_VALIDATOR"),
 } as const;
 
 export class DIContainer {

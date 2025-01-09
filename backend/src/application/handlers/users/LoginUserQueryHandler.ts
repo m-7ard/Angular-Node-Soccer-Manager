@@ -24,16 +24,14 @@ export class LoginUserQuery implements IQuery<LoginUserQueryResult> {
 }
 
 export default class LoginUserQueryHandler implements IRequestHandler<LoginUserQuery, LoginUserQueryResult> {
-    private readonly _userRepository: IUserRepository;
     private readonly _jwtTokenService: IJwtTokenService;
     private readonly _passwordHasher: IPasswordHasher;
     private readonly userExistsValidator: UserExistsValidator;
 
-    constructor(props: { userRepository: IUserRepository; jwtTokenService: IJwtTokenService; passwordHasher: IPasswordHasher }) {
-        this._userRepository = props.userRepository;
+    constructor(props: { jwtTokenService: IJwtTokenService; passwordHasher: IPasswordHasher; userExistsValidator: UserExistsValidator; }) {
         this._jwtTokenService = props.jwtTokenService;
         this._passwordHasher = props.passwordHasher;
-        this.userExistsValidator = new UserExistsValidator(props.userRepository);
+        this.userExistsValidator = props.userExistsValidator;
     }
 
     async handle(query: LoginUserQuery): Promise<LoginUserQueryResult> {

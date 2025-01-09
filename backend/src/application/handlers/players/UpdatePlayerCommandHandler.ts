@@ -27,9 +27,9 @@ export default class CreateTeamCommandHandler implements IRequestHandler<UpdateP
     private readonly _playerRepository: IPlayerRepository;
     private readonly playerExistsValidator: PlayerExistsValidator;
 
-    constructor(props: { playerRepository: IPlayerRepository }) {
+    constructor(props: { playerRepository: IPlayerRepository; playerExistsValidator: PlayerExistsValidator }) {
         this._playerRepository = props.playerRepository;
-        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
+        this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: UpdatePlayerCommand): Promise<UpdatePlayerCommandResult> {

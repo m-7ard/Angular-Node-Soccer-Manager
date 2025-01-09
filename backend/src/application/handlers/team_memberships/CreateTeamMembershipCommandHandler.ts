@@ -28,16 +28,14 @@ export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershi
 }
 
 export default class CreateTeamMembershipCommandHandler implements IRequestHandler<CreateTeamMembershipCommand, CreateTeamMembershipCommandResult> {
-    private readonly _playerRepository: IPlayerRepository;
     private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
     private readonly playerExistsValidator: PlayerExistsValidator;
 
-    constructor(props: { playerRepository: IPlayerRepository; teamRepository: ITeamRepository }) {
-        this._playerRepository = props.playerRepository;
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: TeamExistsValidator; playerExistsValidator: PlayerExistsValidator }) {
         this._teamRepository = props.teamRepository;
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
-        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
+        this.teamExistsValidator = props.teamExistsValidator;
+        this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: CreateTeamMembershipCommand): Promise<CreateTeamMembershipCommandResult> {

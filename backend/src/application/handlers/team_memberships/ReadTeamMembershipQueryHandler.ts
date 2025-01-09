@@ -22,12 +22,10 @@ export class ReadTeamMembershipQuery implements IQuery<ReadTeamMembershipQueryRe
 }
 
 export default class ReadTeamMembershipQueryHandler implements IRequestHandler<ReadTeamMembershipQuery, ReadTeamMembershipQueryResult> {
-    private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
 
-    constructor(props: { teamRepository: ITeamRepository }) {
-        this._teamRepository = props.teamRepository;
-        this.teamExistsValidator = new TeamExistsValidator(props.teamRepository);
+    constructor(props: { teamExistsValidator: TeamExistsValidator }) {
+        this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: ReadTeamMembershipQuery): Promise<ReadTeamMembershipQueryResult> {

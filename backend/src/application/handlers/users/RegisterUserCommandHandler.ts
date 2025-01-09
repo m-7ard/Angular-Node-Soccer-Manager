@@ -31,10 +31,10 @@ export default class RegisterUserCommandHandler implements IRequestHandler<Regis
     private readonly _passwordHasher: IPasswordHasher;
     private readonly userExistsValidator: UserExistsValidator;
 
-    constructor(props: { userRepository: IUserRepository; passwordHasher: IPasswordHasher }) {
+    constructor(props: { userRepository: IUserRepository; passwordHasher: IPasswordHasher; userExistsValidator: UserExistsValidator; }) {
         this._userRepository = props.userRepository;
         this._passwordHasher = props.passwordHasher;
-        this.userExistsValidator = new UserExistsValidator(props.userRepository);
+        this.userExistsValidator = props.userExistsValidator;
     }
 
     async handle(command: RegisterUserCommand): Promise<RegisterUserCommandResult> {

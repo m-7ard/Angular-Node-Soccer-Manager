@@ -18,12 +18,10 @@ export class ReadPlayerQuery implements IQuery<ReadPlayerQueryResult> {
 }
 
 export default class ReadPlayerQueryHandler implements IRequestHandler<ReadPlayerQuery, ReadPlayerQueryResult> {
-    private readonly _playerRepository: IPlayerRepository;
     private readonly playerExistsValidator: PlayerExistsValidator;
 
-    constructor(props: { playerRepository: IPlayerRepository }) {
-        this._playerRepository = props.playerRepository;
-        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
+    constructor(props: { playerExistsValidator: PlayerExistsValidator }) {
+        this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(query: ReadPlayerQuery): Promise<ReadPlayerQueryResult> {

@@ -24,12 +24,10 @@ export class ReadMatchQuery implements IQuery<ReadMatchQueryResult>, QueryProps 
 }
 
 export default class ReadMatchQueryHandler implements IRequestHandler<ReadMatchQuery, ReadMatchQueryResult> {
-    private readonly _matchRepository: IMatchRepository;
     private readonly matchExistsValidator: MatchExistsValidator;
 
-    constructor(props: { matchRepository: IMatchRepository; }) {
-        this._matchRepository = props.matchRepository;
-        this.matchExistsValidator = new MatchExistsValidator(props.matchRepository);
+    constructor(props: { matchExistsValidator: MatchExistsValidator; }) {
+        this.matchExistsValidator = props.matchExistsValidator;
     }
 
     async handle(query: ReadMatchQuery): Promise<ReadMatchQueryResult> {

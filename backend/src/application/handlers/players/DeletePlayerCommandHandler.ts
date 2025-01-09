@@ -25,10 +25,10 @@ export default class CreateTeamCommandHandler implements IRequestHandler<DeleteP
     private readonly _teamRepository: ITeamRepository;
     private readonly playerExistsValidator: PlayerExistsValidator;
 
-    constructor(props: { playerRepository: IPlayerRepository; teamRepository: ITeamRepository; }) {
+    constructor(props: { playerRepository: IPlayerRepository; teamRepository: ITeamRepository; playerExistsValidator: PlayerExistsValidator }) {
         this._playerRepository = props.playerRepository;
         this._teamRepository = props.teamRepository;
-        this.playerExistsValidator = new PlayerExistsValidator(props.playerRepository);
+        this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: DeletePlayerCommand): Promise<DeletePlayerCommandResult> {
