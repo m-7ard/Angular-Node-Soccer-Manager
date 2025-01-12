@@ -33,7 +33,7 @@ import { MarkInProgressPageComponent } from './matches/match-page-layout/pages/m
 import { MarkCompletedPageComponent } from './matches/match-page-layout/pages/mark-completed-page/mark-completed-page.component';
 import { MarkCancelledPageComponent } from './matches/match-page-layout/pages/mark-cancelled-page/mark-cancelled-page.component';
 import { RecordGoalPageComponent } from './matches/match-page-layout/pages/record-goal-page/record-goal-page.component';
-import { MatchPageLayoutResolver } from './matches/match-page-layout/match-page-layout';
+import { MatchPageLayoutResolver } from './matches/match-page-layout/match-page-layout.resolver';
 import { MatchPageLayoutComponent } from './matches/match-page-layout/match-page-layout.component';
 import { MatchDetailsPageComponent } from './matches/match-page-layout/pages/match-details-page/match-details-page.component';
 

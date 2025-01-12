@@ -50,7 +50,6 @@ type DataType = SearchPlayersModalComponentData<typeof PlayerSelectResultCompone
 export class PickSinglePlayerComponent implements ControlValueAccessor {
     private dialogRef!: DialogRef<unknown, SearchPlayersModalComponentComponent<Record<string, unknown>>>;
     private dialog = inject(Dialog);
-    private resultsChangedEmitter = new EventEmitter<DataType['propsFactory']>();
     private results: Player[] = [];
 
     @Input() value: Player | null = null;
@@ -71,8 +70,7 @@ export class PickSinglePlayerComponent implements ControlValueAccessor {
     openPlayerPickerModal(): void {
         const data: DataType = {
             ResultComponent: PlayerSelectResultComponent,
-            propsFactory: this.propsFactoryFactory(),
-            resultsChangedEmitter: this.resultsChangedEmitter,
+            propsFactory: this.propsFactoryFactory()
         };
 
         this.dialogRef = this.dialog.open(SearchPlayersModalComponentComponent, {

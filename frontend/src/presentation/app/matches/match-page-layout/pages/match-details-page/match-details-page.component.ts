@@ -11,7 +11,7 @@ import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled
 import { ZeebraTextComponent } from '../../../../../reusables/zeebra-text/zeebra-text.component';
 import Match from '../../../../../models/Match';
 import MatchEvent from '../../../../../models/MatchEvent';
-import { IMatchPageLayoutResolverData } from '../../match-page-layout';
+import { IMatchPageLayoutResolverData } from '../../match-page-layout.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
 
 @Component({

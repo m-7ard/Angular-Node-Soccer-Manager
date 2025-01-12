@@ -37,7 +37,6 @@ type DataType = SearchTeamsModalComponentData<typeof TeamSelectResultComponent.p
 export class PickSingleTeamComponent implements ControlValueAccessor {
     private dialogRef!: DialogRef<unknown, SearchTeamsModalComponent<Record<string, unknown>>>;
     private dialog = inject(Dialog);
-    private resultsChangedEmitter = new EventEmitter<DataType['propsFactory']>();
     private results: Team[] = [];
 
     @Input() value: Team | null = null;
@@ -60,8 +59,7 @@ export class PickSingleTeamComponent implements ControlValueAccessor {
     openTeamPickerModal(): void {
         const data: DataType = {
             ResultComponent: TeamSelectResultComponent,
-            propsFactory: this.propsFactoryFactory(),
-            resultsChangedEmitter: this.resultsChangedEmitter,
+            propsFactory: this.propsFactoryFactory()
         };
 
         this.dialogRef = this.dialog.open(SearchTeamsModalComponent, {

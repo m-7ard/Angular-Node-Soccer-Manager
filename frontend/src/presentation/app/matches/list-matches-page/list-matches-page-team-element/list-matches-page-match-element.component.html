@@ -11,12 +11,12 @@
             {{ match.statusLabel }}
         </button>
     </section>
-    <section appMixinStyledCardSection class="flex flex-col gap-3">
+    <section appMixinStyledCardSection class="flex flex-col gap-1">
         <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="token-card--header--primary-text truncate">{{ match.homeTeam.name }}</div>
+            <div class="token-card--header--secondary-text truncate">{{ match.homeTeam.name }}</div>
             <div class="token-card--header--secondary-text">
                 {{ match.score?.homeTeamScore ?? "" }}
             </div>
@@ -25,7 +25,7 @@
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="token-card--header--primary-text truncate">{{ match.awayTeam.name }}</div>
+            <div class="token-card--header--secondary-text truncate">{{ match.awayTeam.name }}</div>
             <div class="token-card--header--secondary-text">
                 {{ match.score?.awayTeamScore ?? "" }}
             </div>

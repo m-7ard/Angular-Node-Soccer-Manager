@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, Type } from '@angular/core';
+import { Component, Inject, Type } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CharFieldComponent } from '../char-field/char-field.component';
 import { DividerComponent } from '../divider/divider.component';
@@ -24,7 +24,6 @@ const routes = {
 export interface SearchTeamsModalComponentData<P extends any> {
     ResultComponent: Type<P>;
     propsFactory: (team: Team) => P;
-    resultsChangedEmitter: EventEmitter<(team: Team) => P>;
 }
 
 @Component({
@@ -44,7 +43,6 @@ export interface SearchTeamsModalComponentData<P extends any> {
 })
 export class SearchTeamsModalComponent<P extends Record<string, unknown>> implements SearchTeamsModalComponentData<P> {
     readonly ResultComponent: Type<P>;
-    readonly resultsChangedEmitter: EventEmitter<(team: Team) => P>;
     propsFactory: (team: Team) => P;
 
     currentRoute: keyof typeof routes = 'form';
@@ -69,7 +67,6 @@ export class SearchTeamsModalComponent<P extends Record<string, unknown>> implem
 
         this.ResultComponent = data.ResultComponent;
         this.propsFactory = data.propsFactory;
-        this.resultsChangedEmitter = data.resultsChangedEmitter;
     }
 
     async onFormSubmit() {

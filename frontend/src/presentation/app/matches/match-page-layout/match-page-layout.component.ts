@@ -10,7 +10,7 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
 import Match from '../../../models/Match';
 import MatchEvent from '../../../models/MatchEvent';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { IMatchPageLayoutResolverData } from './match-page-layout';
+import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import Team from '../../../models/Team';
 import { CommonModule } from '@angular/common';
 
@@ -33,14 +33,14 @@ import { CommonModule } from '@angular/common';
 export class MatchPageLayoutComponent implements OnInit {
     match!: Match;
     matchEvents!: MatchEvent[];
-    homeTeam!: Team;
-    awayTeam!: Team;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        const data: IMatchPageLayoutResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
-        this.match = data.match;
-        this.matchEvents = data.matchEvents;
+        this.activatedRoute.data.subscribe(data => {
+            const resolverData: IMatchPageLayoutResolverData = data[RESOLVER_DATA_KEY];
+            this.match = resolverData.match;
+            this.matchEvents = resolverData.matchEvents;
+        });
     }
 }
