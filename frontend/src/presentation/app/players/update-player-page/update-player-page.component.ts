@@ -17,10 +17,9 @@ import { ExceptionNoticeService } from '../../../services/exception-notice-servi
 import Player from '../../../models/Player';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -44,8 +43,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent
     ],
     templateUrl: './update-player-page.component.html',

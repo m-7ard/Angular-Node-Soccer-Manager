@@ -13,9 +13,8 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import { DividerComponent } from "../../../reusables/divider/divider.component";
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -39,8 +38,7 @@ type IErrorSchema = IPresentationError<{
     FormErrorsComponent,
     DividerComponent,
     PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective
+    ContentDirectivesModule,
 ],
     templateUrl: './login-user-page.component.html',
 })

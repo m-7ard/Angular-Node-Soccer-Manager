@@ -12,10 +12,9 @@ import { CharFieldComponent } from '../../../reusables/char-field/char-field.com
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -38,8 +37,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './create-player-page.component.html',

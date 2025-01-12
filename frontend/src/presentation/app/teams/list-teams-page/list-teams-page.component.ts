@@ -8,13 +8,11 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { MatMenuModule } from '@angular/material/menu';
 import { PopoverModule } from 'primeng/popover';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
-import { PrimeNgPopoverDirective } from '../../../reusables/prime-ng-popover/prime-ng-popover.directive';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-teams-page',
@@ -25,14 +23,12 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
         RouterModule,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
-        PrimeNgPopoverDirective,
         PageDirectivesModule,
         MatMenuModule,
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
     ],
     templateUrl: './list-teams-page.component.html',
 })

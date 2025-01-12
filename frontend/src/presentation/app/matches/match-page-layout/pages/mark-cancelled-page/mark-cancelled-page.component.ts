@@ -11,8 +11,6 @@ import IPresentationError from '../../../../../errors/IPresentationError';
 import { object } from 'superstruct';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
-import { ContentGridTrackDirective } from '../../../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
 import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
@@ -20,6 +18,7 @@ import { PageDirectivesModule } from '../../../../../reusables/page/page.directi
 import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-team/pick-single-team.component';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
+import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {}
 
@@ -32,17 +31,13 @@ const validator = object({});
     standalone: true,
     imports: [
         ReactiveFormsModule,
-        CharFieldComponent,
-        FormFieldComponent,
         CommonModule,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent,
-        PickSingleTeamComponent,
     ],
     templateUrl: './mark-cancelled-page.component.html',
 })

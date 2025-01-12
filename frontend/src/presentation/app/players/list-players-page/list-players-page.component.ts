@@ -6,24 +6,22 @@ import { IListPlayersResolverData } from './list-players-page.resolver';
 import { ListPlayersPagePlayerElementComponent } from './list-players-page-player-element/list-players-page-player-element.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
-import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-players-page',
     standalone: true,
     imports: [
-    CommonModule,
-    RouterModule,
-    MixinStyledButtonDirective,
-    ListPlayersPagePlayerElementComponent,
-    PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective,
-    DividerComponent
-],
+        CommonModule,
+        RouterModule,
+        MixinStyledButtonDirective,
+        ListPlayersPagePlayerElementComponent,
+        PageDirectivesModule,
+        ContentDirectivesModule,
+        DividerComponent,
+    ],
     templateUrl: './list-players-page.component.html',
 })
 export class ListPlayersPageComponent {

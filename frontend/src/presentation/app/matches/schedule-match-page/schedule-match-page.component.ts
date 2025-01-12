@@ -3,8 +3,6 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
@@ -22,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     homeTeam: FormControl<Team | null>;
@@ -56,8 +55,7 @@ const validator = object({
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent,
         PickSingleTeamComponent,
     ],

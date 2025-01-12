@@ -15,8 +15,6 @@ import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
-import { ContentGridTrackDirective } from '../../../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
 import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
@@ -25,6 +23,7 @@ import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-te
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
 import { PickSinglePlayerComponent } from "../../../../../reusables/pick-single-player/pick-single-player.component";
+import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     team: FormControl<Team | null>;
@@ -56,8 +55,7 @@ const validator = object({
     MixinStyledCardDirectivesModule,
     FormErrorsComponent,
     PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective,
+    ContentDirectivesModule,
     DividerComponent,
     PickSingleTeamComponent,
     PickSinglePlayerComponent

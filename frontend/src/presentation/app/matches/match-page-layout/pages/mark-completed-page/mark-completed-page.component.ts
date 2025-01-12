@@ -7,13 +7,10 @@ import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
-import { ContentGridTrackDirective } from '../../../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
 import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
 import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
-import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-team/pick-single-team.component';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
@@ -22,6 +19,7 @@ import structErrorToPresentationError from '../../../../../utils/structErrorToPr
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import IPresentationError from '../../../../../errors/IPresentationError';
 import { object, date } from 'superstruct';
+import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     endDate: FormControl<string>;
@@ -47,10 +45,8 @@ const validator = object({
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent,
-        PickSingleTeamComponent,
     ],
     templateUrl: './mark-completed-page.component.html',
 })

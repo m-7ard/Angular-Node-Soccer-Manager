@@ -19,10 +19,9 @@ import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
 import { ExceptionNoticeService } from '../../../../services/exception-notice-service';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
-import { ContentGridDirective } from '../../../../reusables/content-grid/content-grid.directive';
-import { ContentGridTrackDirective } from '../../../../reusables/content-grid/content-grid-track.directive';
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from "../../../../reusables/form-errors/form-errors";
+import { ContentDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     player: FormControl<Player | null>;
@@ -50,8 +49,7 @@ type IErrorSchema = IPresentationError<{
     MixinStyledButtonDirective,
     MixinStyledCardDirectivesModule,
     PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective,
+    ContentDirectivesModule,
     DividerComponent,
     FormErrorsComponent
 ],

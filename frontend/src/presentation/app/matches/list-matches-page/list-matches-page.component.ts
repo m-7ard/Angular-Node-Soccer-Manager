@@ -3,8 +3,6 @@ import { Component } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PopoverModule } from 'primeng/popover';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
@@ -15,6 +13,7 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IListMatchesResolverData } from './list-matches-page.resolver';
 import Match from '../../../models/Match';
 import { ListMatchsPageMatchElementComponent } from './list-matches-page-team-element/list-matches-page-match-element.component';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-matches-page',
@@ -30,8 +29,7 @@ import { ListMatchsPageMatchElementComponent } from './list-matches-page-team-el
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         ListMatchsPageMatchElementComponent,
     ],
     templateUrl: './list-matches-page.component.html',

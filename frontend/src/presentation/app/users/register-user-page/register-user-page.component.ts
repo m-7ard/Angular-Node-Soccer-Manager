@@ -12,10 +12,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { ExceptionNoticeService } from '../../../services/exception-notice-service';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { DividerComponent } from "../../../reusables/divider/divider.component";
+import { DividerComponent } from '../../../reusables/divider/divider.component';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -33,17 +32,16 @@ type IErrorSchema = IPresentationError<{
     selector: 'app-register-user-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    CommonModule,
-    MixinStyledButtonDirective,
-    FormErrorsComponent,
-    PageDirectivesModule,
-    ContentGridDirective,
-    ContentGridTrackDirective,
-    DividerComponent
-],
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        FormErrorsComponent,
+        PageDirectivesModule,
+        ContentDirectivesModule,
+        DividerComponent,
+    ],
     templateUrl: './register-user-page.component.html',
 })
 export class RegisterUserPageComponent {

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
 import { CoverImageComponent } from '../../../reusables/cover-image/cover-image.component';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
@@ -13,6 +11,7 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import Team from '../../../models/Team';
 import { CommonModule } from '@angular/common';
+import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-match-page-layout',
@@ -21,8 +20,7 @@ import { CommonModule } from '@angular/common';
         RouterModule,
         MixinStyledCardDirectivesModule,
         CoverImageComponent,
-        ContentGridDirective,
-        ContentGridTrackDirective,
+        ContentDirectivesModule,
         DividerComponent,
         PageDirectivesModule,
         CommonModule,
