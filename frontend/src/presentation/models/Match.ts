@@ -10,9 +10,9 @@ type MatchProps = {
     homeTeam: Team;
     awayTeam: Team;
     venue: string;
-    scheduledDate: string;
-    startDate: string | null;
-    endDate: string | null;
+    scheduledDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
     status: string;
     score: {
         homeTeamScore: number;
@@ -25,9 +25,9 @@ class Match implements MatchProps {
     homeTeam: Team;
     awayTeam: Team;
     venue: string;
-    scheduledDate: string;
-    startDate: string | null;
-    endDate: string | null;
+    scheduledDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
     status: string;
     score: { homeTeamScore: number; awayTeamScore: number } | null;
 

@@ -2,59 +2,113 @@
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
     <header
         appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
-        class="flex flex-col gap-3"
+        [appContentGridTrack]="{ contentGridTrack: 'full' }"
+        appContentGrid
+        class="flex flex-col gap-3 bg-gray-100"
     >
-            <section appMixinStyledCardSection="" class="flex flex-col gap-1">
-                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
-                    <div class="aspect-square h-full theme-avatar-any">
-                        <app-cover-image src=""></app-cover-image>
+        <section [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
+            <div class="flex flex-row gap-3 items-center justify-between">
+                <span class="grid gap-3" style="grid-template: auto / auto 1fr">
+                    <div class="aspect-square theme-avatar-any">
+                        <section class="relative h-full w-full flex">
+                            <app-cover-image src=""></app-cover-image>
+                        </section>
                     </div>
-                    <div class="token-card--header--secondary-text truncate">{{ match.homeTeam.name }}</div>
-                    <div class="token-card--header--secondary-text">
-                        {{ match.score?.homeTeamScore ?? "" }}
+                    <div class="overflow-hidden">
+                        <div class="token-card--header--primary-text">
+                            {{ match.homeTeam.name }}
+                        </div>
+                        <div class="token-card--header--secondary-text">Home Team</div>
                     </div>
-                </div>
-                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
-                    <div class="aspect-square h-full theme-avatar-any">
-                        <app-cover-image src=""></app-cover-image>
-                    </div>
-                    <div class="token-card--header--secondary-text truncate">{{ match.awayTeam.name }}</div>
-                    <div class="token-card--header--secondary-text">
-                        {{ match.score?.awayTeamScore ?? "" }}
-                    </div>
-                </div>
-            </section>
-            <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-            <div class="shrink-0 grow">
-                <div class="token-default-list">
-                    <div class="token-default-list__label">
-                        Scheduled Date
-                    </div>
-                    <div class="token-default-list__value">
-                        {{ match.scheduledDate | date:'yyyy-MM-dd HH:mm:ss' }}
-                    </div>
-                </div>
-                <div class="token-default-list">
-                    <div class="token-default-list__label">
-                        Start Date
-                    </div>
-                    <div class="token-default-list__value">
-                        {{ match.startDate == null ? "N/A" : (match.startDate | date:'yyyy-MM-dd HH:mm:ss') }}
-                    </div>
-                </div>
-                <div class="token-default-list">
-                    <div class="token-default-list__label">
-                        End Date
-                    </div>
-                    <div class="token-default-list__value">
-                        {{ match.endDate == null ? "N/A" : (match.endDate | date:'yyyy-MM-dd HH:mm:ss') }}
-                    </div>
-                </div>
+                </span>
+                <span
+                    *ngIf="match.canScore()"
+                    [appMixinStyledButton]="{
+                        theme: 'theme-Sbutton-generic-green',
+                        size: 'mixin-Sbutton-base',
+                        hasShadow: true,
+                        isStatic: true
+                    }"
+                >
+                    {{ match.score?.homeTeamScore }}
+                </span>
             </div>
+            <div class="flex flex-row gap-3 items-center justify-between">
+                <span class="grid gap-3" style="grid-template: auto / auto 1fr">
+                    <div class="aspect-square theme-avatar-any token-default-shadow">
+                        <section class="relative h-full w-full flex">
+                            <app-cover-image src=""></app-cover-image>
+                        </section>
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="token-card--header--primary-text">
+                            {{ match.awayTeam.name }}
+                        </div>
+                        <div class="token-card--header--secondary-text">Away Team</div>
+                    </div>
+                </span>
+                <span
+                    *ngIf="match.canScore()"
+                    [appMixinStyledButton]="{
+                        theme: 'theme-Sbutton-generic-green',
+                        size: 'mixin-Sbutton-base',
+                        hasShadow: true,
+                        isStatic: true
+                    }"
+                >
+                    {{ match.score?.awayTeamScore }}
+                </span>
+            </div>
+        </section>
+        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+        <section [appContentGridTrack]="{ contentGridTrack: 'base' }">
+            <div class="token-default-list">
+                <span class="token-default-list__label"> Status </span>
+                <span class="token-default-list__value">
+                    {{ match.statusLabel }}
+                </span>
+            </div>
+            <div class="token-default-list" *ngIf="match.status === 'SCHEDULED'">
+                <span class="token-default-list__label"> Scheduled Date </span>
+                <span class="token-default-list__value">
+                    {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm" }}
+                </span>
+            </div>
+            <div class="token-default-list" *ngIf="match.status === 'IN_PROGESS'">
+                <span class="token-default-list__label"> Start Date </span>
+                <span class="token-default-list__value">
+                    {{ match.startDate | date: "yyyy-MM-dd HH:mm" }}
+                </span>
+            </div>
+            <div class="token-default-list" *ngIf="match.status === 'COMPLETED'">
+                <span class="token-default-list__label"> End Date </span>
+                <span class="token-default-list__value">
+                    {{ match.endDate | date: "yyyy-MM-dd HH:mm" }}
+                </span>
+            </div>
+        </section>
     </header>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <nav appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row gap-3">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'full' }" />
+    <nav
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 overflow-auto"
+    >
+        <button
+            *ngIf="match.canScore()"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/matches/' + match.id"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Match Details
+        </button>
         <button
             *ngIf="match.canScore()"
             [appMixinStyledButton]="{
@@ -117,7 +171,7 @@
         </button>
     </nav>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <main [appContentGridTrack]="{ contentGridTrack: 'base' }">
+    <main [appContentGridTrack]="{ contentGridTrack: 'full' }">
         <router-outlet></router-outlet>
     </main>
 </div>

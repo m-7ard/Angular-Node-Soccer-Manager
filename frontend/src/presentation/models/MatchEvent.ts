@@ -6,7 +6,7 @@ type MatchEventProps = {
     player: Player;
     teamId: string;
     type: string;
-    dateOccurred: string;
+    dateOccurred: Date;
     secondaryPlayer: Player | null;
     description: string;
 };
@@ -17,7 +17,7 @@ class MatchEvent implements MatchEventProps {
     player: Player;
     teamId: string;
     type: string;
-    dateOccurred: string;
+    dateOccurred: Date;
     secondaryPlayer: Player | null;
     description: string;
 

@@ -1,5 +1,5 @@
 <!-- App -->
-<header class="mixin-content-grid p-3 relative shrink-0 overflow-x-auto token-default-shadow bg-white token-default-border-color border-b">
+<header class="mixin-content-grid p-3 relative shrink-0 overflow-x-auto token-default-shadow">
     <nav class="flex flex-row gap-3 w-fit mx-auto">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
@@ -104,6 +104,7 @@
         </div>
     </nav>
 </header>
+<app-divider class=" token-default-shadow z-10"/>
 <main class="flex flex-col grow">
     <router-outlet></router-outlet>
 </main>

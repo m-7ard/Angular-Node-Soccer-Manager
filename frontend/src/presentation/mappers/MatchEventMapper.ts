@@ -10,7 +10,7 @@ class MatchEventMapper {
             player: PlayerMapper.apiModelToDomain(source.player),
             teamId: source.teamId,
             type: source.type,
-            dateOccurred: source.dateOccured,
+            dateOccurred: new Date(source.dateOccured),
             secondaryPlayer: source.secondaryPlayer == null ? null : PlayerMapper.apiModelToDomain(source.secondaryPlayer),
             description: source.description,
         });

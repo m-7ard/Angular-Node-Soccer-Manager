@@ -20,7 +20,11 @@
         </div>
     </header>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <nav appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row gap-3 overflow-x-auto">
+    <nav
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-row gap-3 overflow-x-auto"
+    >
         <button
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',

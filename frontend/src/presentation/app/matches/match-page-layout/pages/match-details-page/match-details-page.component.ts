@@ -10,6 +10,8 @@ import MatchEvent from '../../../../../models/MatchEvent';
 import { IMatchPageLayoutResolverData } from '../../match-page-layout.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
 import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
+import { DateDifferencePipe } from '../../../../../pipes/date-difference.pipe';
 
 @Component({
   selector: 'app-match-details-page',
@@ -21,7 +23,9 @@ import { ContentDirectivesModule } from '../../../../../reusables/content-grid/c
         CoverImageComponent,
         ContentDirectivesModule,
         PageDirectivesModule,
-        DividerComponent
+        DividerComponent,
+        MixinStyledButtonDirective,
+        DateDifferencePipe
   ],
   templateUrl: './match-details-page.component.html',
 })

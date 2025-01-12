@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { ExceptionNoticeService } from '../services/exception-notice-service';
 import { ExceptionNoticePopover } from './other/exception-notice-popover.component';
+import { DividerComponent } from "../reusables/divider/divider.component";
 
 @Component({
     selector: 'app-root',
@@ -18,6 +19,7 @@ import { ExceptionNoticePopover } from './other/exception-notice-popover.compone
         MixinStyledButtonDirective,
         CommonModule,
         ExceptionNoticePopover,
+        DividerComponent
     ],
     templateUrl: './app.component.html',
     host: {

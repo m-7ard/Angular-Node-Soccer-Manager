@@ -6,8 +6,8 @@
         hasDivide: true
     }"
 >
-    <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
-        <button class="mixin-Sbutton-like mixin-Sbutton-like--static mixin-Sbutton-sm {{ match.statusColor }}">
+    <section appMixinStyledCardSection class="flex flex-row gap-3">
+        <button class="mixin-Sbutton-like mixin-Sbutton-like--static mixin-Sbutton-sm justify-center w-full {{ match.statusColor }}">
             {{ match.statusLabel }}
         </button>
     </section>
@@ -16,8 +16,8 @@
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="token-card--header--secondary-text truncate">{{ match.homeTeam.name }}</div>
-            <div class="token-card--header--secondary-text">
+            <div class="token-card--header--primary-text truncate">{{ match.homeTeam.name }}</div>
+            <div class="token-card--header--primary-text">
                 {{ match.score?.homeTeamScore ?? "" }}
             </div>
         </div>
@@ -25,8 +25,8 @@
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="token-card--header--secondary-text truncate">{{ match.awayTeam.name }}</div>
-            <div class="token-card--header--secondary-text">
+            <div class="token-card--header--primary-text truncate">{{ match.awayTeam.name }}</div>
+            <div class="token-card--header--primary-text">
                 {{ match.score?.awayTeamScore ?? "" }}
             </div>
         </div>
