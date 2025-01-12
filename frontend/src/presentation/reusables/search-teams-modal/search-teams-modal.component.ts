@@ -69,6 +69,10 @@ export class SearchTeamsModalComponent<P extends Record<string, unknown>> implem
         this.propsFactory = data.propsFactory;
     }
 
+    close() {
+        this.dialogRef.close();
+    }
+
     async onFormSubmit() {
         const rawValue = this.form.getRawValue();
         const responseObservable = this.teamDataAccess.listTeams({

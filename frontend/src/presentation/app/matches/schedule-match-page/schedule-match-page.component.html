@@ -17,7 +17,7 @@
     <section *ngIf="errors['_'] != null" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
+    <div class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
         <app-form-field name="homeTeam" [errors]="errors.homeTeamId">
             <ng-template let-name="name">
                 <app-pick-single-team [formControlName]="name" />
@@ -51,7 +51,7 @@
                 />
             </ng-template>
         </app-form-field>
-    </fieldset>
+    </div>
     <footer
         class="flex flex-row gap-3 justify-end"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"

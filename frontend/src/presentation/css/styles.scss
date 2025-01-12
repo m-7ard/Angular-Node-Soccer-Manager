@@ -22,3 +22,17 @@ body,
 button:focus {
     outline: none;
 }
+
+fieldset {
+    all: unset;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+details,
+summary {
+    all: unset; /* Removes built-in styles and functionality */
+    display: block;
+}

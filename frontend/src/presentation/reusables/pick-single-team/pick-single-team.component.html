@@ -6,6 +6,7 @@
         hasBorder: true,
         hasDivide: true
     }"
+    class="overflow-hidden"
 >
     <div appMixinStyledCardSection>
         <button
@@ -36,13 +37,13 @@
             </div>
         </section>
         <section appMixinStyledCardSection>
-            <div class="token-default-list">
-                <span class="token-default-list__label shrink-0">Id</span>
-                <span class="token-default-list__value truncate">
-                    {{ value.id }}
-                </span>
-            </div>
-            <div class="token-default-list">
+            <span class="token-default-list__value overflow-hidden">
+                <div class="truncate">
+                    {{ value.id }} {{ value.id }} {{ value.id }}
+
+                </div>
+            </span>
+            <div class="token-default-list overflow-hidden">
                 <span class="token-default-list__label shrink-0">Date Founded</span>
                 <span class="token-default-list__value truncate">
                     {{ value.dateFounded | date }}

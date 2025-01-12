@@ -70,6 +70,10 @@ export class SearchPlayersModalComponentComponent<P extends Record<string, unkno
         this.propsFactory = data.propsFactory;
     }
 
+    close() {
+        this.dialogRef.close();
+    }
+
     async onFormSubmit() {
         const rawValue = this.form.getRawValue();
         const responseObservable = this.playerDataAccess.listPlayers({
