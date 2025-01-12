@@ -24,11 +24,13 @@ button:focus {
 }
 
 fieldset {
-    all: unset;
-    display: block;
-    margin: 0;
+    border: 0;
     padding: 0;
-    border: none;
+    margin: 0;
+    min-width: 0;
+}
+body:not(:-moz-handler-blocked) fieldset {
+    display: table-cell;
 }
 
 details,
