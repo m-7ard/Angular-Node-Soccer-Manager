@@ -1,4 +1,5 @@
 import TeamMembership from "domain/entities/TeamMembership"
+import TeamMembershipDates from "domain/valueObjects/TeamMembership/TeamMembershipDates";
 import TeamMembershipDbEntity from "infrastructure/dbEntities/TeamMembershipDbEntity";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 
@@ -19,8 +20,8 @@ class TeamMembershipMapper {
             id: source.id,
             team_id: source.teamId,
             player_id: source.playerId,
-            active_from: source.activeFrom,
-            active_to: source.activeTo,
+            active_from: source.teamMembershipDates.activeFrom,
+            active_to: source.teamMembershipDates.activeTo,
             number: source.number
         })
     }
@@ -30,8 +31,10 @@ class TeamMembershipMapper {
             id: source.id,
             teamId: source.team_id,
             playerId: source.player_id,
-            activeFrom: source.active_from,
-            activeTo: source.active_to,
+            teamMembershipDates: TeamMembershipDates.executeCreate({
+                activeFrom: source.active_from,
+                activeTo: source.active_to,
+            }),
             number: source.number
         })
     }

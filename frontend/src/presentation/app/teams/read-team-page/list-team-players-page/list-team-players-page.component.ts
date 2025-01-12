@@ -4,7 +4,7 @@ import TeamPlayer from '../../../../models/TeamPlayer';
 import Team from '../../../../models/Team';
 import { CommonModule } from '@angular/common';
 import { ListTeamPlayerPageTeamPlayerElementComponent } from './list-team-players-page-team-player-element/list-team-players-page-team-player-element.component';
-import { IReadTeamResolverData } from '../read-team-page.resolver';
+import { ITeamLayoutPageResolverData } from '../team-layout-page.resolver';
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
@@ -33,10 +33,10 @@ export class ListTeamPlayersPageComponent {
     team!: Team;
     teamPlayers!: TeamPlayer[];
     
-    constructor(private _activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        const data: IReadTeamResolverData = this._activatedRoute.snapshot.parent!.data['RESOLVER_DATA'];
+        const data: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.parent!.data['RESOLVER_DATA'];
         this.team = data.team;
         this.teamPlayers = data.teamPlayers;
     }

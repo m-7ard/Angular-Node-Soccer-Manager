@@ -11,7 +11,7 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { IReadTeamResolverData } from '../read-team-page/read-team-page.resolver';
+import { ITeamLayoutPageResolverData } from '../read-team-page/team-layout-page.resolver';
 import Team from '../../../models/Team';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { CommonModule } from '@angular/common';
@@ -79,7 +79,7 @@ export class UpdateTeamPageComponent {
     }
 
     ngOnInit() {
-        const data: IReadTeamResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
+        const data: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
         this.team = data.team;
 
         this.form.patchValue(this.initialData);

@@ -1,0 +1,123 @@
+<!-- Read Team Page -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
+    <header
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="flex flex-col gap-3"
+    >
+            <section appMixinStyledCardSection="" class="flex flex-col gap-1">
+                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+                    <div class="aspect-square h-full theme-avatar-any">
+                        <app-cover-image src=""></app-cover-image>
+                    </div>
+                    <div class="token-card--header--secondary-text truncate">{{ match.homeTeam.name }}</div>
+                    <div class="token-card--header--secondary-text">
+                        {{ match.score?.homeTeamScore ?? "" }}
+                    </div>
+                </div>
+                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+                    <div class="aspect-square h-full theme-avatar-any">
+                        <app-cover-image src=""></app-cover-image>
+                    </div>
+                    <div class="token-card--header--secondary-text truncate">{{ match.awayTeam.name }}</div>
+                    <div class="token-card--header--secondary-text">
+                        {{ match.score?.awayTeamScore ?? "" }}
+                    </div>
+                </div>
+            </section>
+            <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+            <div class="shrink-0 grow">
+                <div class="token-default-list">
+                    <div class="token-default-list__label">
+                        Scheduled Date
+                    </div>
+                    <div class="token-default-list__value">
+                        {{ match.scheduledDate | date:'yyyy-MM-dd HH:mm:ss' }}
+                    </div>
+                </div>
+                <div class="token-default-list">
+                    <div class="token-default-list__label">
+                        Start Date
+                    </div>
+                    <div class="token-default-list__value">
+                        {{ match.startDate == null ? "N/A" : (match.startDate | date:'yyyy-MM-dd HH:mm:ss') }}
+                    </div>
+                </div>
+                <div class="token-default-list">
+                    <div class="token-default-list__label">
+                        End Date
+                    </div>
+                    <div class="token-default-list__value">
+                        {{ match.endDate == null ? "N/A" : (match.endDate | date:'yyyy-MM-dd HH:mm:ss') }}
+                    </div>
+                </div>
+            </div>
+    </header>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <nav appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row gap-3">
+        <button
+            *ngIf="match.canScore()"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-green',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/matches/' + match.id + '/record-goal'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Record Goal
+        </button>
+        <button
+            *ngIf="match.canTransition('IN_PROGRESS')"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/matches/' + match.id + '/mark-in-progress'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Mark In Progress
+        </button>
+        <button
+            *ngIf="match.canTransition('COMPLETED')"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/matches/' + match.id + '/mark-completed'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Mark Completed
+        </button>
+        <button
+            *ngIf="match.canTransition('CANCELLED')"
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-sm',
+                theme: 'theme-Sbutton-generic-white',
+                hasShadow: true
+            }"
+            class="justify-center shrink-0"
+            [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+        >
+            Mark Cancelled
+        </button>
+    </nav>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <main [appContentGridTrack]="{ contentGridTrack: 'base' }">
+        <router-outlet></router-outlet>
+    </main>
+</div>

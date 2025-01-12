@@ -3,7 +3,7 @@ CREATE TABLE matches (
     home_team_id VARCHAR(255) NOT NULL,
     away_team_id VARCHAR(255) NOT NULL,
     venue VARCHAR(255) NOT NULL,
-    scheduled_date DATE NOT NULL,
+    scheduled_date DATETIME NOT NULL,
     start_date DATETIME NULL,
     end_date DATETIME NULL,
     status VARCHAR(50) NOT NULL,

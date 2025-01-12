@@ -68,7 +68,7 @@ export class UpdateTeamMembershipPageComponent {
     constructor(
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
-        private _activatedRoute: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
     ) {
         this.form = new FormGroup<IFormControls>({
             activeFrom: new FormControl('', {
@@ -87,7 +87,7 @@ export class UpdateTeamMembershipPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data: IUpdateTeamMembershipResolverData = resolverData[RESOLVER_DATA_KEY];
 
             this.teamId = data.team.id;

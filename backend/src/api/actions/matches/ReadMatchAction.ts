@@ -8,7 +8,6 @@ import { Request } from "express";
 import IReadMatchRequestDTO from "api/DTOs/matches/read/IReadMatchRequestDTO";
 import IReadMatchResponseDTO from "api/DTOs/matches/read/IReadMatchResponseDTO";
 import { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IApiModelService from "api/interfaces/IApiModelService";
 import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
 
@@ -46,6 +45,8 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
         }
 
         const match = result.value;
+        console.log(match)
+        console.log(match.events)
 
         return new JsonResponse({
             status: StatusCodes.OK,

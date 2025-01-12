@@ -1,7 +1,6 @@
 import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
-import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
 import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
@@ -55,7 +54,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         const canAddTeamMembershipValidator = new CanAddTeamMembershipValidator();
         const canAddTeamMembershipResult = canAddTeamMembershipValidator.validate({
             team: team,
-            playerId: player.id,
+            player: player,
             activeFrom: command.activeFrom,
             activeTo: command.activeTo,
             number: command.number,
@@ -64,7 +63,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
             return err(canAddTeamMembershipResult.error);
         }
 
-        team.executeAddMember({ playerId: command.playerId, activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
+        team.executeAddMember({ player: player, activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
         this._teamRepository.updateAsync(team);
         return ok(undefined);
     }

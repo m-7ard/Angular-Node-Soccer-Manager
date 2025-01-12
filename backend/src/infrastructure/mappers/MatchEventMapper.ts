@@ -38,7 +38,7 @@ class MatchEventMapper {
         return new MatchEvent({
             id: source.id,
             matchId: source.match_id,
-            playerId: source.match_id,
+            playerId: source.player_id,
             teamId: source.team_id,
             type: MatchEventType.create(source.type),
             dateOccured: source.date_occured,

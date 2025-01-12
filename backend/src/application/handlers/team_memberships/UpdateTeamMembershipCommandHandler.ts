@@ -6,6 +6,7 @@ import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
 import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
+import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
 
 export type UpdateTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -30,10 +31,12 @@ export class UpdateTeamMembershipCommand implements ICommand<UpdateTeamMembershi
 export default class UpdateTeamMembershipCommandHandler implements IRequestHandler<UpdateTeamMembershipCommand, UpdateTeamMembershipCommandResult> {
     private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly playerExistsValidator: PlayerExistsValidator;
 
-    constructor(props: { teamRepository: ITeamRepository, teamExistsValidator: TeamExistsValidator; }) {
+    constructor(props: { teamRepository: ITeamRepository, teamExistsValidator: TeamExistsValidator; playerExistsValidator: PlayerExistsValidator; }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
+        this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: UpdateTeamMembershipCommand): Promise<UpdateTeamMembershipCommandResult> {
@@ -43,13 +46,21 @@ export default class UpdateTeamMembershipCommandHandler implements IRequestHandl
         }
 
         const team = teamExistsResult.value;
+
+        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.playerId });
+        if (playerExistsResult.isErr()) {
+            return err(playerExistsResult.error);
+        }
+
+        const player = playerExistsResult.value;
+
         const isTeamMemberValidator = new IsTeamMemberValidator();
         const isTeamMemberResult = isTeamMemberValidator.validate({ team: teamExistsResult.value, playerId: command.playerId });
         if (isTeamMemberResult.isErr()) {
             return err(isTeamMemberResult.error);
         }
 
-        const canUpdateTeamMembershipResult = team.canUpdateMember(command.playerId, { activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
+        const canUpdateTeamMembershipResult = team.canUpdateMember(player, { activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
         if (canUpdateTeamMembershipResult.isErr()) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
@@ -60,7 +71,7 @@ export default class UpdateTeamMembershipCommandHandler implements IRequestHandl
             );
         }
 
-        team.executeUpdateMember(command.playerId, { activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
+        team.executeUpdateMember(player, { activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });
         this._teamRepository.updateAsync(team);
         return ok(undefined);
     }

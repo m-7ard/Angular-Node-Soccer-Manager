@@ -37,8 +37,8 @@ export class MatchDataAccessService {
         return this.http.get<IListMatchesResponseDTO>(url.toString());
     }
 
-    readMatch(request: IReadMatchRequestDTO) {
-        return this.http.post<IReadMatchResponseDTO>(`${this._baseUrl}`, request);
+    readMatch(matchId: string, request: IReadMatchRequestDTO) {
+        return this.http.get<IReadMatchResponseDTO>(`${this._baseUrl}/${matchId}`, request);
     }
 
     scheduleMatch(request: IScheduleMatchRequestDTO) {

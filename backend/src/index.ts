@@ -1,6 +1,13 @@
 import createApplication from "api/createApplication";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 import responseLogger from "api/middleware/responseLogger";
 import getMigrations from "api/utils/getMigrations";
+import MatchFactory from "domain/domainFactories/MatchFactory";
+import PlayerFactory from "domain/domainFactories/PlayerFactory";
+import TeamFactory from "domain/domainFactories/TeamFactory";
+import UserFactory from "domain/domainFactories/UserFactory";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
+import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
 
 const hostname = "127.0.0.1";
@@ -13,20 +20,51 @@ async function main() {
         user: "root",
         password: "adminword",
     });
-    
+
     const migrations = await getMigrations();
     await db.initialise(migrations);
-    
+
     const app = createApplication({
         port: 3000,
         middleware: [responseLogger],
         database: db,
     });
 
-    
     const server = app.listen(port, hostname, () => {
         console.log(`Server running at http://${hostname}:${port}/`);
     });
+
+    const teamRepository = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
+    const userRepository = diContainer.resolve(DI_TOKENS.USER_REPOSITORY);
+    const playerRepository = diContainer.resolve(DI_TOKENS.PLAYER_REPOSITORY);
+    const matchRepository = diContainer.resolve(DI_TOKENS.MATCH_REPOSITORY);
+    const passwordHasher = diContainer.resolve(DI_TOKENS.PASSWORD_HASHER);
+
+    const adminUser = UserFactory.CreateNew({ id: crypto.randomUUID(), name: "admin", email: "admin@mail.com", hashedPassword: await passwordHasher.hashPassword("adminword"), isAdmin: true });
+    await userRepository.createAsync(adminUser);
+
+    const fantasyTeam = TeamFactory.CreateNew({ id: crypto.randomUUID(), dateFounded: new Date(), name: "Fantasy Team", teamMemberships: [] });
+    const localTeam = TeamFactory.CreateNew({ id: crypto.randomUUID(), dateFounded: new Date(), name: "Local Team", teamMemberships: [] });
+    await teamRepository.createAsync(fantasyTeam);
+    await teamRepository.createAsync(localTeam);
+
+    const johnDoe = PlayerFactory.CreateNew({ id: crypto.randomUUID(), name: "John Doe", activeSince: new Date() });
+    const janeDoe = PlayerFactory.CreateNew({ id: crypto.randomUUID(), name: "Jane Doe", activeSince: new Date() });
+    await playerRepository.createAsync(johnDoe);
+    await playerRepository.createAsync(janeDoe);
+
+    const johnDoeMembership = localTeam.executeAddMember({ player: johnDoe, activeFrom: new Date(), activeTo: null, number: 1 });
+    await teamRepository.updateAsync(localTeam);
+
+    const scheduledMatch = MatchFactory.CreateNew({
+        id: crypto.randomUUID(),
+        awayTeamId: localTeam.id,
+        homeTeamId: fantasyTeam.id,
+        matchDates: MatchDates.executeCreate({ scheduledDate: new Date(), startDate: null, endDate: null }),
+        status: MatchStatus.SCHEDULED,
+        venue: "venue",
+    });
+    await matchRepository.createAsync(scheduledMatch);
 }
 
 try {

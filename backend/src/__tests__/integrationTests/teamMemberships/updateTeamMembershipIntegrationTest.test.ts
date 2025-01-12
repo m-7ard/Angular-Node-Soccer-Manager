@@ -15,6 +15,7 @@ import IUpdateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/update/IUp
 import TeamMembership from "domain/entities/TeamMembership";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
+import { DateTime } from "luxon";
 
 let team_001: Team;
 let player_001: Player;
@@ -48,8 +49,8 @@ beforeEach(async () => {
 describe("Update TeamMembership Integration Test;", () => {
     it("Update Team Membership; Valid Data; Success;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
-            activeFrom: teamMembership_001.activeFrom,
-            activeTo: new Date(),
+            activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
+            activeTo: DateTime.fromJSDate(teamMembership_001.teamMembershipDates.activeFrom).plus({ minute: 1 }).toJSDate(),
             number: 10,
         };
 
@@ -76,7 +77,7 @@ describe("Update TeamMembership Integration Test;", () => {
 
     it("Update Team Membership; Team does not exist; Failure;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
-            activeFrom: teamMembership_001.activeFrom,
+            activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: new Date(),
             number: 10,
         };
@@ -96,7 +97,7 @@ describe("Update TeamMembership Integration Test;", () => {
 
     it("Update Team Membership; Player does not exist; Failure;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
-            activeFrom: teamMembership_001.activeFrom,
+            activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: new Date(),
             number: 10,
         };

@@ -1,0 +1,66 @@
+<!-- Match Details Page -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" class="grid grid-cols-2 max-[640px]:grid-cols-1">
+    <aside appPageSectionDirective class="flex flex-col gap-3">
+        <section class="flex flex-col gap-3">
+            <header>
+                <div class="token-default-title">Team Details</div>
+            </header>
+            <app-divider />
+            <div
+                [appMixinStyledCard]="{
+                    size: 'mixin-Scard-base',
+                    theme: 'theme-Scard-generic-white',
+                    hasShadow: true,
+                    hasDivide: true
+                }"
+            >
+                <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
+                    <button class="mixin-Sbutton-like mixin-Sbutton-like--static mixin-Sbutton-sm {{ match.statusColor }}">
+                        {{ match.statusLabel }}
+                    </button>
+                </section>
+                <section appMixinStyledCardSection class="flex flex-col gap-1">
+                    <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+                        <div class="aspect-square h-full theme-avatar-any">
+                            <app-cover-image src=""></app-cover-image>
+                        </div>
+                        <div class="token-card--header--primary-text truncate">{{ match.homeTeam.name }}</div>
+                        <div class="token-card--header--secondary-text">
+                            {{ match.score?.homeTeamScore ?? "" }}
+                        </div>
+                    </div>
+                    <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
+                        <div class="aspect-square h-full theme-avatar-any">
+                            <app-cover-image src=""></app-cover-image>
+                        </div>
+                        <div class="token-card--header--primary-text truncate">{{ match.awayTeam.name }}</div>
+                        <div class="token-card--header--secondary-text">
+                            {{ match.score?.awayTeamScore ?? "" }}
+                        </div>
+                    </div>
+                </section>
+                <section appMixinStyledCardSection class="overflow-hidden">
+                    <div class="token-default-list">
+                        <span class="token-default-list__label shrink-0">Scheduled Date</span>
+                        <span class="truncate token-default-list__value">
+                            {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm:ss" }}
+                        </span>
+                    </div>
+                    <div class="token-default-list">
+                        <span class="token-default-list__label shrink-0">Start Date</span>
+                        <span class="truncate token-default-list__value">
+                            {{ match.startDate == null ? "N/A" : (match.startDate | date: "yyyy-MM-dd HH:mm:ss") }}
+                        </span>
+                    </div>
+                    <div class="token-default-list">
+                        <span class="token-default-list__label shrink-0">End Date</span>
+                        <span class="truncate token-default-list__value">
+                            {{ match.endDate == null ? "N/A" : (match.endDate | date: "yyyy-MM-dd HH:mm:ss") }}
+                        </span>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </aside>
+    
+</div>

@@ -1,7 +1,6 @@
 import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import Team from "../../../domain/entities/Team";
-import ITeamRepository from "../../interfaces/ITeamRepository";
 import { err, ok } from "neverthrow";
 import TeamMembership from "domain/entities/TeamMembership";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";

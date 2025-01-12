@@ -58,9 +58,9 @@ class Mixins {
 
     async createTeamMembership(player: Player, team: Team, activeTo: Date | null, number: number) {
         const teamMembership = team.executeAddMember({
-            activeFrom: new Date(0),
+            activeFrom: DateTime.fromJSDate(team.dateFounded).plus({ minute: 1 }).toJSDate(),
             activeTo: activeTo,
-            playerId: player.id,
+            player: player,
             number: number,
         });
 

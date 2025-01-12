@@ -63,7 +63,6 @@ class Match implements MatchProps {
 
     canTransition(status: typeof matchStatuses[keyof typeof matchStatuses]) {
         const transitions = matchStatusTransitions[this.status];
-        console.log(transitions)
 
         if (transitions == null) {
             throw new Error(`Status of Match lacks a transition. Status: ${this.status}`);
@@ -74,8 +73,6 @@ class Match implements MatchProps {
 
     canScore() {
         const canScore = matchStatusIsScorable[this.status];
-
-        console.log(this.status, canScore)
 
         if (canScore == null) {
             throw new Error(`Status of Match lacks a value in matchStatusIsScorable. Status: ${this.status}`);

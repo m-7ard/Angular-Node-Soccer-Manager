@@ -56,7 +56,7 @@ function createRequestDispatcher() {
     // Team Memberships
     requestDispatcher.registerHandler(CreateTeamMembershipCommand, new CreateTeamMembershipCommandHandler({ teamRepository: teamRepository, playerExistsValidator: playerExistsValidator, teamExistsValidator: teamExistsValidator }));
     requestDispatcher.registerHandler(DeleteTeamMembershipCommand, new DeleteTeamMembershipCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator }));
-    requestDispatcher.registerHandler(UpdateTeamMembershipCommand, new UpdateTeamMembershipCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator }));
+    requestDispatcher.registerHandler(UpdateTeamMembershipCommand, new UpdateTeamMembershipCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator, playerExistsValidator: playerExistsValidator }));
     requestDispatcher.registerHandler(ReadTeamMembershipQuery, new ReadTeamMembershipQueryHandler({ teamExistsValidator: teamExistsValidator }));
 
     // Users

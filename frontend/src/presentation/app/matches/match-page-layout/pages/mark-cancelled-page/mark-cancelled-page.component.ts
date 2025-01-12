@@ -3,23 +3,23 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
-import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
-import IPresentationError from '../../../errors/IPresentationError';
+import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
+import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
+import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice-service';
+import IPresentationError from '../../../../../errors/IPresentationError';
 import { object } from 'superstruct';
 import { CommonModule } from '@angular/common';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { ContentGridTrackDirective } from '../../../reusables/content-grid/content-grid-track.directive';
-import { ContentGridDirective } from '../../../reusables/content-grid/content-grid.directive';
-import { DividerComponent } from '../../../reusables/divider/divider.component';
-import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
+import { ContentGridTrackDirective } from '../../../../../reusables/content-grid/content-grid-track.directive';
+import { ContentGridDirective } from '../../../../../reusables/content-grid/content-grid.directive';
+import { DividerComponent } from '../../../../../reusables/divider/divider.component';
+import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
+import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
+import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
+import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-team/pick-single-team.component';
+import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
+import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
 
 interface IFormControls {}
 
@@ -66,11 +66,11 @@ export class MarkCancelledPageComponent {
             }),
         });
 
-        this.activtedRoute.paramMap.subscribe((parms) => {
+        this.activtedRoute.parent?.paramMap.subscribe((parms) => {
             const matchId = parms.get('matchId');
 
             if (matchId == null) {
-                throw new ClientSideErrorException('Schedule Match Page: matchId parameter is null.');
+                throw new ClientSideErrorException('Mark Match Cancelled Page: matchId parameter is null.');
             }
 
             this.matchId = matchId;
@@ -101,7 +101,7 @@ export class MarkCancelledPageComponent {
                         return;
                     }
 
-                    this.router.navigate([`/matches`]);
+                    this.router.navigate([`/matches/${this.matchId}`]);
                 },
             });
     }

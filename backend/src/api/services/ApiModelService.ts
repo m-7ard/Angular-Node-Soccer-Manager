@@ -29,6 +29,10 @@ class ApiModelService implements IApiModelService {
             return this.playerCache.get(playerId)!;
         }
 
+        console.log(playerId)
+        console.log(playerId)
+        console.log(playerId)
+        console.log(playerId)
         const player = await this.playerRepository.getByIdAsync(playerId);
         this.playerCache.set(playerId, player);
         return player;

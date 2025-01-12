@@ -9,16 +9,16 @@ import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
-export interface IReadTeamResolverData {
+export interface ITeamLayoutPageResolverData {
     team: Team;
     teamPlayers: TeamPlayer[];
 }
 
 @Injectable({ providedIn: 'root' })
-export class ReadTeamPageResolver implements Resolve<IReadTeamResolverData> {
+export class TeamLayoutPageResolver implements Resolve<ITeamLayoutPageResolverData> {
     constructor(private _teamDataAccess: TeamDataAccessService) {}
 
-    resolve(route: ActivatedRouteSnapshot): Observable<IReadTeamResolverData> {
+    resolve(route: ActivatedRouteSnapshot): Observable<ITeamLayoutPageResolverData> {
         let teamId = route.paramMap.get('teamId');
         
         if (teamId == null) {

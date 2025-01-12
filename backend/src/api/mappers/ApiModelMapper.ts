@@ -34,8 +34,8 @@ class ApiModelMapper {
             id: membership.id,
             teamId: membership.teamId,
             playerId: membership.playerId,
-            activeFrom: membership.activeFrom.toJSON(),
-            activeTo: membership.activeTo == null ? null : membership.activeTo.toJSON(),
+            activeFrom: membership.teamMembershipDates.activeFrom.toJSON(),
+            activeTo: membership.teamMembershipDates.activeTo == null ? null : membership.teamMembershipDates.activeTo.toJSON(),
             number: membership.number,
         };
     }

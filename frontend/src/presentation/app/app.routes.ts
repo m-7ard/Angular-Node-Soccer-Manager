@@ -17,9 +17,9 @@ import { NotFoundPageComponent } from './other/not-found-page.component';
 import { InternalServerErrorPageComponent } from './other/internal-server-error-page.component copy';
 import { UnknownErrorPageComponent } from './other/unknown-error-page.component copy 2';
 import { ClientSideErrorPageComponent } from './other/client-side-error-page.component';
-import { ReadTeamPageComponent } from './teams/read-team-page/read-team-page.component';
-import { ReadTeamPageResolver } from './teams/read-team-page/read-team-page.resolver';
-import { TeamHomePageComponent } from './teams/read-team-page/team-home-page/team-home-page.component';
+import { TeamLayoutPageComponent } from './teams/read-team-page/team-layout-page.component';
+import { TeamLayoutPageResolver } from './teams/read-team-page/team-layout-page.resolver';
+import { TeamDetailsPageComponent } from './teams/read-team-page/team-details-page/team-details-page.component';
 import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
 import { RegisterUserPageComponent } from './users/register-user-page/register-user-page.component';
 import { LoginUserPageComponent } from './users/login-user-page/login-user-page.component';
@@ -29,10 +29,13 @@ import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
 import { ListMatchesPageComponent } from './matches/list-matches-page/list-matches-page.component';
 import { ListMatchesPageResolver } from './matches/list-matches-page/list-matches-page.resolver';
 import { ScheduleMatchPageComponent } from './matches/schedule-match-page/schedule-match-page.component';
-import { MarkInProgressPageComponent } from './matches/mark-in-progress-page/mark-in-progress-page.component';
-import { MarkCompletedPageComponent } from './matches/mark-completed-page/mark-completed-page.component';
-import { MarkCancelledPageComponent } from './matches/mark-cancelled-page/mark-cancelled-page.component';
-import { RecordGoalPageComponent } from './matches/record-goal-page/record-goal-page.component';
+import { MarkInProgressPageComponent } from './matches/match-page-layout/pages/mark-in-progress-page/mark-in-progress-page.component';
+import { MarkCompletedPageComponent } from './matches/match-page-layout/pages/mark-completed-page/mark-completed-page.component';
+import { MarkCancelledPageComponent } from './matches/match-page-layout/pages/mark-cancelled-page/mark-cancelled-page.component';
+import { RecordGoalPageComponent } from './matches/match-page-layout/pages/record-goal-page/record-goal-page.component';
+import { MatchPageLayoutResolver } from './matches/match-page-layout/match-page-layout';
+import { MatchPageLayoutComponent } from './matches/match-page-layout/match-page-layout.component';
+import { MatchDetailsPageComponent } from './matches/match-page-layout/pages/match-details-page/match-details-page.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -83,12 +86,12 @@ export const routes: Routes = [
             },
             {
                 path: ':teamId',
-                component: ReadTeamPageComponent,
-                resolve: { [RESOLVER_DATA_KEY]: ReadTeamPageResolver },
+                component: TeamLayoutPageComponent,
+                resolve: { [RESOLVER_DATA_KEY]: TeamLayoutPageResolver },
                 runGuardsAndResolvers: 'always',
                 canActivate: [AuthGuard],
                 children: [
-                    { path: '', component: TeamHomePageComponent },
+                    { path: '', component: TeamDetailsPageComponent },
                     { path: 'update', component: UpdateTeamPageComponent },
                     { path: 'players/add', component: CreateTeamMembershipPageComponent },
                     { path: 'players', component: ListTeamPlayersPageComponent },
@@ -127,25 +130,31 @@ export const routes: Routes = [
                 canActivate: [AuthGuard],
             },
             {
-                path: ':matchId/mark-in-progress',
-                component: MarkInProgressPageComponent,
+                path: ':matchId',
+                component: MatchPageLayoutComponent,
+                resolve: { [RESOLVER_DATA_KEY]: MatchPageLayoutResolver },
+                runGuardsAndResolvers: 'always',
                 canActivate: [AuthGuard],
-            },
-            {
-                path: ':matchId/mark-completed',
-                component: MarkCompletedPageComponent,
-                canActivate: [AuthGuard],
-            },
-            {
-                path: ':matchId/mark-cancelled',
-                component: MarkCancelledPageComponent,
-                canActivate: [AuthGuard],
-            },
-            {
-                path: ':matchId/record-goal',
-                component: RecordGoalPageComponent,
-                canActivate: [AuthGuard],
-            },
+                children: [
+                    { path: "", component: MatchDetailsPageComponent },
+                    {
+                        path: 'mark-in-progress',
+                        component: MarkInProgressPageComponent,
+                    },
+                    {
+                        path: 'mark-completed',
+                        component: MarkCompletedPageComponent,
+                    },
+                    {
+                        path: 'mark-cancelled',
+                        component: MarkCancelledPageComponent,
+                    },
+                    {
+                        path: 'record-goal',
+                        component: RecordGoalPageComponent,
+                    },
+                ]
+            }
         ],
     },
 

@@ -100,8 +100,9 @@ describe("Mark Match In Progress Integration Test;", () => {
 
     it("Mark Match In Progress; Invalid startDate; Failure;", async () => {
         const request = { ...default_request };
-        const startDate = new Date(scheduled_match.matchDates.scheduledDate);
-        startDate.setDate(startDate.getMinutes() - 1);
+        const startDate = DateTime.fromJSDate(in_progress_match.matchDates.scheduledDate!)
+            .minus({ minutes: 1 })
+            .toJSDate();
 
         request.startDate = startDate;
 

@@ -30,8 +30,8 @@ class TeamRepository implements ITeamRepository {
                             id = ${teamMembership.id},
                             team_id = ${teamMembership.teamId},
                             player_id = ${teamMembership.playerId},
-                            active_from = ${teamMembership.activeFrom},
-                            active_to = ${teamMembership.activeTo},
+                            active_from = ${teamMembership.teamMembershipDates.activeFrom},
+                            active_to = ${teamMembership.teamMembershipDates.activeTo},
                             number = ${teamMembership.number}
                 `;
 
@@ -59,8 +59,8 @@ class TeamRepository implements ITeamRepository {
                         SET 
                             team_id = ${teamMembership.teamId},
                             player_id = ${teamMembership.playerId},
-                            active_from = ${teamMembership.activeFrom},
-                            active_to = ${teamMembership.activeTo},
+                            active_from = ${teamMembership.teamMembershipDates.activeFrom},
+                            active_to = ${teamMembership.teamMembershipDates.activeTo},
                             number = ${teamMembership.number}
                         WHERE 
                             id = ${teamMembership.id}

@@ -34,14 +34,14 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     team_002 = await mixins.createTeam(2);
-    completed_match = await mixins.createCompletedMatch({
-        seed: 1,
+    in_progress_match = await mixins.createInProgressMatch({
+        seed: 3,
         awayTeam: team_001,
         homeTeam: team_002,
-        goals: []
+        goals: [],
     });
 
-    const endDate = DateTime.fromJSDate(completed_match.matchDates.startDate!)
+    const endDate = DateTime.fromJSDate(in_progress_match.matchDates.startDate!)
         .plus({ minutes: 90 })
         .toJSDate();
       
@@ -49,17 +49,17 @@ beforeEach(async () => {
         endDate: endDate,
     };
 
+    completed_match = await mixins.createCompletedMatch({
+        seed: 1,
+        awayTeam: team_001,
+        homeTeam: team_002,
+        goals: []
+    });
+
     scheduled_match = await mixins.createScheduledMatch({
         seed: 2,
         awayTeam: team_001,
         homeTeam: team_002,
-    });
-
-    in_progress_match = await mixins.createInProgressMatch({
-        seed: 3,
-        awayTeam: team_001,
-        homeTeam: team_002,
-        goals: [],
     });
 
     cancelled_match = await mixins.createCancelledMatch({

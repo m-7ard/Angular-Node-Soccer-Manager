@@ -37,7 +37,7 @@ import { ListMatchsPageMatchElementComponent } from './list-matches-page-team-el
     templateUrl: './list-matches-page.component.html',
 })
 export class ListMatchesPageComponent {
-    constructor(private _activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     matches: Match[] = null!;
 
@@ -46,7 +46,7 @@ export class ListMatchesPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IListMatchesResolverData;
             this.matches = data.matches;
         });

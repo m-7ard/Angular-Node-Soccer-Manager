@@ -37,7 +37,7 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
     templateUrl: './list-teams-page.component.html',
 })
 export class ListTeamsPageComponent {
-    constructor(private _activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     teams: Team[] = null!;
 
@@ -46,7 +46,7 @@ export class ListTeamsPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IListTeamsResolverData;
             this.teams = data.teams;
         });

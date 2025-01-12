@@ -81,6 +81,10 @@ export default class ScheduleMatchCommandHandler implements IRequestHandler<Sche
             return err(isValidMatchDatesResult.error);
         }
 
+        console.log(command.scheduledDate);
+        console.log(command.scheduledDate);
+        console.log(command.scheduledDate);
+
         const match = MatchFactory.CreateNew({
             id: command.id,
             homeTeamId: homeTeam.id,

@@ -25,13 +25,13 @@ class IsValidGoalValidator implements IValidator<{ dateOccured: Date; teamId: st
             );
         }
 
-        const awayTeamMembership = this.awayTeam.findMemberByPlayerId(goal.playerId);
-        const homeTeamMembership = this.homeTeam.findMemberByPlayerId(goal.playerId);
+        const awayTeamMembership = this.awayTeam.findActiveMemberByPlayerId(goal.playerId);
+        const homeTeamMembership = this.homeTeam.findActiveMemberByPlayerId(goal.playerId);
 
         if (awayTeamMembership != null && homeTeamMembership != null) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
-                    message: `Goal player of id "${goal.playerId}" cannot be a member of both teams.`,
+                    message: `Goal player of id "${goal.playerId}" cannot be an active member of both teams.`,
                     code: APPLICATION_VALIDATOR_CODES.IS_VALID_GOAL_ERROR,
                     path: [],
                 }),

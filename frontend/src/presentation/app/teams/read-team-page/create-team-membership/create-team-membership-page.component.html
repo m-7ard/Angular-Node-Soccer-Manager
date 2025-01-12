@@ -14,6 +14,9 @@
         <div class="token-default-title">Create Team Membership</div>
     </header>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
+        <app-form-errors [errors]="errors['_']"></app-form-errors>
+    </section>
     <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
         <app-form-field [name]="'player'" [errors]="errors.playerId">
             <ng-template let-name="name">

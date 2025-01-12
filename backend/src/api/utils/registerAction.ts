@@ -22,6 +22,7 @@ function registerAction({
             const result = await action.handle(arg);
             result.handle(res);
         } catch (err) {
+            console.warn(err);
             next(err);
         }
     };

@@ -12,27 +12,21 @@
         </button>
     </section>
     <section appMixinStyledCardSection class="flex flex-col gap-3">
-        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto auto 1fr">
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="text-sm truncate">{{ match.homeTeam.name }}</div>
-            <div class="text-sm">
-                -
-            </div>
-            <div class="text-sm">
+            <div class="token-card--header--primary-text truncate">{{ match.homeTeam.name }}</div>
+            <div class="token-card--header--secondary-text">
                 {{ match.score?.homeTeamScore ?? "" }}
             </div>
         </div>
-        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto auto 1fr">
+        <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
             <div class="aspect-square h-full theme-avatar-any">
                 <app-cover-image src=""></app-cover-image>
             </div>
-            <div class="text-sm truncate">{{ match.awayTeam.name }}</div>
-            <div class="text-sm">
-                -
-            </div>
-            <div class="text-sm">
+            <div class="token-card--header--primary-text truncate">{{ match.awayTeam.name }}</div>
+            <div class="token-card--header--secondary-text">
                 {{ match.score?.awayTeamScore ?? "" }}
             </div>
         </div>
@@ -41,24 +35,26 @@
         <div class="token-default-list">
             <span class="token-default-list__label shrink-0">Scheduled Date</span>
             <span class="truncate token-default-list__value">
-                {{ match.scheduledDate | date }}
+                {{ match.scheduledDate | date:'yyyy-MM-dd HH:mm:ss' }}
             </span>
         </div>
         <div class="token-default-list">
             <span class="token-default-list__label shrink-0">Start Date</span>
             <span class="truncate token-default-list__value">
-                {{ match.startDate == null ? "N/A" : (match.startDate | date) }}
+                {{ match.startDate == null ? "N/A" : (match.startDate | date:'yyyy-MM-dd HH:mm:ss') }}
             </span>
         </div>
         <div class="token-default-list">
             <span class="token-default-list__label shrink-0">End Date</span>
             <span class="truncate token-default-list__value">
-                {{ match.endDate == null ? "N/A" : (match.endDate | date) }}
+                {{ match.endDate == null ? "N/A" : (match.endDate | date:'yyyy-MM-dd HH:mm:ss') }}
             </span>
         </div>
     </section>
     <footer appMixinStyledCardSection class="flex flex-col gap-1">
         <button
+            [routerLink]="'/matches/' + match.id"
+            useRouterLink   
             [appMixinStyledButton]="{
                 theme: 'theme-Sbutton-generic-blue',
                 size: 'mixin-Sbutton-base'
@@ -105,50 +101,46 @@
         </header>
         <app-divider />
         <div appPanelSectionDirective class="flex flex-col gap-1">
-            <button
+            <button *ngIf="match.canScore()"
                 [routerLink]="'/matches/' + match.id + '/record-goal/'"
                 useRouterLink
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-green'
                 }"
-                [ngClass]="{ 'contrast-50': !match.canScore()}"
                 class="justify-center"
             >
                 Record Goal
             </button>
-            <button
+            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.IN_PROGRESS)"
                 [routerLink]="'/matches/' + match.id + '/mark-in-progress/'"
                 useRouterLink
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
-                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.IN_PROGRESS)}"
                 class="justify-center"
             >
                 Mark In Progress
             </button>
-            <button
+            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.COMPLETED)"
                 [routerLink]="'/matches/' + match.id + '/mark-completed/'"
                 useRouterLink
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
-                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.COMPLETED)}"
                 class="justify-center"
             >
                 Mark Completed
             </button>
-            <button
+            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.CANCELLED)"
                 [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
                 useRouterLink
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-base',
                     theme: 'theme-Sbutton-generic-blue'
                 }"
-                [ngClass]="{ 'contrast-50': !match.canTransition(match.VALID_MATCH_STATUSES.CANCELLED)}"
                 class="justify-center"
             >
                 Mark Cancelled

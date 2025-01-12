@@ -27,7 +27,7 @@ import { PageDirectivesModule } from '../../../reusables/page/page.directive.mod
     templateUrl: './list-players-page.component.html',
 })
 export class ListPlayersPageComponent {
-    constructor(private _activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     players: Player[] = null!;
 
@@ -36,7 +36,7 @@ export class ListPlayersPageComponent {
     }
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IListPlayersResolverData;
             this.players = data.players;
         });

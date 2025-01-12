@@ -87,7 +87,6 @@ export class PickSinglePlayerComponent implements ControlValueAccessor {
     }
 
     resultProps(): Array<typeof PlayerSelectResultComponent.prototype> {
-        console.log('called');
         return this.results.map((player) => ({
             isSelected: player.id === this.value?.id,
             player: player,

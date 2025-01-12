@@ -37,10 +37,10 @@ export class FrontpageComponent implements OnInit {
     public teams: Team[] = null!;
     public matches: Match[] = null!;
 
-    constructor(private _activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this._activatedRoute.data.subscribe((resolverData) => {
+        this.activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IFrontpageResolverData;
             this.players = data.players;
             this.teams = data.teams;

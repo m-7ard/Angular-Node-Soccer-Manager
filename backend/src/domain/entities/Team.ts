@@ -1,4 +1,4 @@
-import { Err, err, ok, Result } from "neverthrow";
+import { err, ok, Result } from "neverthrow";
 import TeamMembership from "./TeamMembership";
 import TeamMembershipFactory from "domain/domainFactories/TeamMembershipFactory";
 import DomainEvent from "domain/domainEvents/DomainEvent";
@@ -6,6 +6,7 @@ import TeamMembershipPendingCreationEvent from "domain/domainEvents/Team/TeamMem
 import Player from "./Player";
 import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
 import TeamMembershipPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipPendingUpdatingEvent";
+import TeamMembershipDates from "domain/valueObjects/TeamMembership/TeamMembershipDates";
 
 class Team {
     private readonly __type: "TEAM_DOMAIN" = null!;
@@ -30,27 +31,52 @@ class Team {
         return this.teamMemberships.find((membership) => membership.playerId === playerId);
     }
 
-    public canAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): Result<boolean, string> {
-        const membership = this.findMemberByPlayerId(props.playerId);
+    public findActiveMemberByPlayerId(playerId: string) {
+        const membership = this.findMemberByPlayerId(playerId);
+        if (membership == null) {
+            return null;
+        }
+
+        if (membership.isActive()) {
+            return membership;
+        }
+
+        return null;
+    }
+
+    public canAddMember(props: { player: Player; activeFrom: Date; activeTo: Date | null; number: number }): Result<boolean, string> {
+        const membership = this.findMemberByPlayerId(props.player.id);
         if (membership != null) {
             return err("Player is already a member of the team");
+        }
+
+        if (props.activeFrom < this.dateFounded) {
+            return err("Team Member's activeFrom cannot be before the team's dateFounded.");
+        }
+
+        if (props.player.activeSince > props.activeFrom) {
+            return err("Team Member's activeFrom cannot be before the player's activeFrom.");
+        }
+
+        const canCreateMembershipDatesResult = TeamMembershipDates.canCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
+        if (canCreateMembershipDatesResult.isErr()) {
+            return err(canCreateMembershipDatesResult.error);
         }
 
         return ok(true);
     }
 
-    public executeAddMember(props: { playerId: string; activeFrom: Date; activeTo: Date | null; number: number }): TeamMembership {
+    public executeAddMember(props: { player: Player; activeFrom: Date; activeTo: Date | null; number: number }): TeamMembership {
         const canAddMemberResult = this.canAddMember(props);
         if (canAddMemberResult.isErr()) {
             throw new Error(canAddMemberResult.error);
         }
-        
+
         const teamMembership = TeamMembershipFactory.CreateNew({
             id: crypto.randomUUID(),
             teamId: this.id,
-            playerId: props.playerId,
-            activeFrom: props.activeFrom,
-            activeTo: props.activeTo,
+            playerId: props.player.id,
+            teamMembershipDates: TeamMembershipDates.executeCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo }),
             number: props.number,
         });
         this.teamMemberships.push(teamMembership);
@@ -58,24 +84,31 @@ class Team {
         return teamMembership;
     }
 
-    public canUpdateMember(playerId: string, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, string> {
-        const teamMembership = this.findMemberByPlayerId(playerId);
+    public canUpdateMember(player: Player, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<TeamMembership, string> {
+        const teamMembership = this.findMemberByPlayerId(player.id);
         if (teamMembership == null) {
-            return err(`Player of id "${playerId}" is not a member of the team.`);
+            return err(`Player of id "${player.id}" is not a member of the team.`);
+        }
+
+        if (props.activeFrom < this.dateFounded) {
+            return err("Team Member's activeFrom cannot be before the team's dateFounded.");
+        }
+
+        if (player.activeSince > props.activeFrom) {
+            return err("Team Member's activeFrom cannot be before the player's activeFrom.");
         }
 
         return ok(teamMembership);
     }
 
-    public executeUpdateMember(playerId: string, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<true, string> {
-        const canUpdateTeamMembershipResult = this.canUpdateMember(playerId, props);
+    public executeUpdateMember(player: Player, props: { activeFrom: Date; activeTo: Date | null; number: number }): Result<true, string> {
+        const canUpdateTeamMembershipResult = this.canUpdateMember(player, props);
         if (canUpdateTeamMembershipResult.isErr()) {
             throw new Error(canUpdateTeamMembershipResult.error);
         }
 
         const teamMembership = canUpdateTeamMembershipResult.value;
-        teamMembership.activeFrom = props.activeFrom;
-        teamMembership.activeTo = props.activeTo;
+        teamMembership.teamMembershipDates = TeamMembershipDates.executeCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
         teamMembership.number = props.number;
         this.domainEvents.push(new TeamMembershipPendingUpdatingEvent(teamMembership));
         return ok(true);
@@ -93,7 +126,7 @@ class Team {
     public executeDeleteTeamMembershipByPlayerId(playerId: Player["id"]): void {
         const canRemoveTeamMembershipByPlayerIdResult = this.canRemoveTeamMembershipByPlayerId(playerId);
         if (canRemoveTeamMembershipByPlayerIdResult.isErr()) {
-            throw new Error(canRemoveTeamMembershipByPlayerIdResult.error)
+            throw new Error(canRemoveTeamMembershipByPlayerIdResult.error);
         }
 
         const removedMembership = canRemoveTeamMembershipByPlayerIdResult.value;

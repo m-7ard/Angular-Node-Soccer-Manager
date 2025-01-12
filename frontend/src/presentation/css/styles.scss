@@ -1,11 +1,11 @@
+@use "@angular/cdk/overlay-prebuilt.css";
+@use "./mixins.scss";
+@use "./themes.scss";
+@use "./tokens.scss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "@angular/cdk/overlay-prebuilt.css";
-@import "./mixins.scss";
-@import "./themes.scss";
-@import "./tokens.scss";
 
 html {
     background-color: rgb(245, 250, 250);
