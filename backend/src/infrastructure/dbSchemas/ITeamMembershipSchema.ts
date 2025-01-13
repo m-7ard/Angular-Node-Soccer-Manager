@@ -4,5 +4,4 @@ export default interface ITeamMembershipSchema {
     player_id: string;
     active_from: Date;
     active_to: Date | null;
-    number: number;
 }

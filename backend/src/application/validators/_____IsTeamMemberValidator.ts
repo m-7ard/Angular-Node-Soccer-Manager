@@ -9,7 +9,7 @@ class IsTeamMemberValidator implements IValidator<{ team: Team; playerId: string
     validate(input: { team: Team; playerId: string }): Result<TeamMembership, IApplicationError[]> {
         const { team, playerId } = input;
 
-        const membership = team.findMemberByPlayerId(playerId);
+        const membership = team.findActiveMemberByPlayerId(playerId);
         if (!membership) {
             return err(
                 ApplicationErrorFactory.createSingleListError({

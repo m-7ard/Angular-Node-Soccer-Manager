@@ -4,60 +4,55 @@ import { err, ok } from "neverthrow";
 import ITeamRepository from "application/interfaces/ITeamRepository";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
 import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
+import ITeamValidator from "application/interfaces/ITeamValidaror";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import { ITeamMembershipExistsValidatorFactory } from "application/interfaces/ITeamMembershipExistsValidator";
+import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamId";
 
 export type UpdateTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 
 export class UpdateTeamMembershipCommand implements ICommand<UpdateTeamMembershipCommandResult> {
     __returnType: UpdateTeamMembershipCommandResult = null!;
 
-    constructor({ teamId, playerId, activeFrom, activeTo, number }: { teamId: string; playerId: string; activeFrom: Date; activeTo: Date | null; number: number }) {
+    constructor({ teamId, activeFrom, activeTo, teamMembershipId }: { teamId: string; activeFrom: Date; activeTo: Date | null; number: number; teamMembershipId: string }) {
         this.teamId = teamId;
-        this.playerId = playerId;
         this.activeFrom = activeFrom;
         this.activeTo = activeTo;
-        this.number = number;
+        this.teamMembershipId = teamMembershipId;
     }
 
     public teamId: string;
-    public playerId: string;
     public activeFrom: Date;
     public activeTo: Date | null;
-    public number: number;
+    public teamMembershipId: string;
 }
 
 export default class UpdateTeamMembershipCommandHandler implements IRequestHandler<UpdateTeamMembershipCommand, UpdateTeamMembershipCommandResult> {
     private readonly _teamRepository: ITeamRepository;
-    private readonly teamExistsValidator: TeamExistsValidator;
-    private readonly playerExistsValidator: PlayerExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
+    private readonly teamMembershipExistsValidatorFactory: ITeamMembershipExistsValidatorFactory<TeamMembershipId>;
 
-    constructor(props: { teamRepository: ITeamRepository, teamExistsValidator: TeamExistsValidator; playerExistsValidator: PlayerExistsValidator; }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId>; teamMembershipExistsValidatorFactory: ITeamMembershipExistsValidatorFactory<TeamMembershipId> }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
-        this.playerExistsValidator = props.playerExistsValidator;
+        this.teamMembershipExistsValidatorFactory = props.teamMembershipExistsValidatorFactory;
     }
 
     async handle(command: UpdateTeamMembershipCommand): Promise<UpdateTeamMembershipCommandResult> {
-        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.teamId });
+        const teamId = TeamId.executeCreate(command.teamId);
+        const teamExistsResult = await this.teamExistsValidator.validate(teamId);
         if (teamExistsResult.isErr()) {
             return err(teamExistsResult.error);
         }
 
         const team = teamExistsResult.value;
 
-        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.playerId });
-        if (playerExistsResult.isErr()) {
-            return err(playerExistsResult.error);
-        }
-
-        const player = playerExistsResult.value;
-
-        const isTeamMemberValidator = new IsTeamMemberValidator();
-        const isTeamMemberResult = isTeamMemberValidator.validate({ team: teamExistsResult.value, playerId: command.playerId });
-        if (isTeamMemberResult.isErr()) {
-            return err(isTeamMemberResult.error);
+        const teamMembershipId = TeamMembershipId.executeCreate(command.teamId);
+        const teamMembershipExistsValidator = this.teamMembershipExistsValidatorFactory.create(team);
+        const teamMembershipExistsResult = teamMembershipExistsValidator.validate(teamMembershipId);
+        if (teamMembershipExistsResult.isErr()) {
+            return err(teamMembershipExistsResult.error);
         }
 
         const canUpdateTeamMembershipResult = team.canUpdateMember(player, { activeFrom: command.activeFrom, activeTo: command.activeTo, number: command.number });

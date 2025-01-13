@@ -5,7 +5,7 @@ import ITeamRepository from "application/interfaces/ITeamRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
+import IsTeamMemberValidator from "application/validators/_____IsTeamMemberValidator";
 
 export type DeleteTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
 

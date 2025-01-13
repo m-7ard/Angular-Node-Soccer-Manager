@@ -4,7 +4,7 @@ import Team from "../../../domain/entities/Team";
 import { err, ok } from "neverthrow";
 import TeamMembership from "domain/entities/TeamMembership";
 import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import IsTeamMemberValidator from "application/validators/IsTeamMemberValidator";
+import IsTeamMemberValidator from "application/validators/_____IsTeamMemberValidator";
 
 export type ReadTeamMembershipQueryResult = IQueryResult<{ team: Team; teamMembership: TeamMembership }, IApplicationError[]>;
 

@@ -9,6 +9,9 @@ import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
 import TeamMembershipPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipPendingUpdatingEvent";
+import TeamMembershipHistoryPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingCreationEvent";
+import TeamMembershipHistoryMapper from "infrastructure/mappers/TeamMembershipHistoryMapper";
+import TeamMembershipHistoryPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingUpdatingEvent";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -31,8 +34,7 @@ class TeamRepository implements ITeamRepository {
                             team_id = ${teamMembership.teamId},
                             player_id = ${teamMembership.playerId},
                             active_from = ${teamMembership.teamMembershipDates.activeFrom},
-                            active_to = ${teamMembership.teamMembershipDates.activeTo},
-                            number = ${teamMembership.number}
+                            active_to = ${teamMembership.teamMembershipDates.activeTo}
                 `;
 
                 await this._db.execute({
@@ -60,10 +62,44 @@ class TeamRepository implements ITeamRepository {
                             team_id = ${teamMembership.teamId},
                             player_id = ${teamMembership.playerId},
                             active_from = ${teamMembership.teamMembershipDates.activeFrom},
-                            active_to = ${teamMembership.teamMembershipDates.activeTo},
-                            number = ${teamMembership.number}
-                        WHERE 
+                            active_to = ${teamMembership.teamMembershipDates.activeTo}
+                        WHERE
                             id = ${teamMembership.id}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            } else if (event instanceof TeamMembershipHistoryPendingCreationEvent) {
+                const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
+
+                const sqlEntry = sql`
+                    INSERT INTO team_membership_histories
+                        SET 
+                            id = ${dbEntity.id},
+                            team_membership_id = ${dbEntity.team_membership_id},
+                            date_effective_from = ${dbEntity.date_effective_from},
+                            number = ${dbEntity.number},
+                            position = ${dbEntity.position}
+                `;
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            } else if (event instanceof TeamMembershipHistoryPendingUpdatingEvent) {
+                const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
+
+                const sqlEntry = sql`
+                    UPDATE team_membership_histories
+                        SET 
+                            team_membership_id = ${dbEntity.team_membership_id},
+                            date_effective_from = ${dbEntity.date_effective_from},
+                            number = ${dbEntity.number},
+                            position = ${dbEntity.position}
+                        WHERE
+                            id = ${dbEntity.id} 
                 `;
 
                 await this._db.execute({
@@ -90,6 +126,11 @@ class TeamRepository implements ITeamRepository {
 
         const team = TeamMapper.schemaToDbEntity(row);
         await team.loadTeamMemberships(this._db);
+
+        for (let i = 0; i < team.team_memberships.length; i++) {
+            const teamMembership = team.team_memberships[i];
+            await teamMembership.loadTeamMembershipHistories(this._db);
+        }
 
         return team == null ? null : TeamMapper.dbEntityToDomain(team);
     }
@@ -159,6 +200,11 @@ class TeamRepository implements ITeamRepository {
 
         for (const team of teams) {
             await team.loadTeamMemberships(this._db);
+        
+            for (let i = 0; i < team.team_memberships.length; i++) {
+                const teamMembership = team.team_memberships[i];
+                await teamMembership.loadTeamMembershipHistories(this._db);
+            }
         }
 
         return teams.map(TeamMapper.dbEntityToDomain);

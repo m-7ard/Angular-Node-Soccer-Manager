@@ -61,7 +61,6 @@ class Mixins {
             activeFrom: DateTime.fromJSDate(team.dateFounded).plus({ minute: 1 }).toJSDate(),
             activeTo: activeTo,
             player: player,
-            number: number,
         });
 
         await this._teamRepository.updateAsync(team);

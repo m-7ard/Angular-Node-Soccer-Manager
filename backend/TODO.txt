@@ -1,2 +1,1 @@
-make reusable validators.
-make a value object for the date validation in the match instead of manually doing it.
+make value object for id so we can then identify the validators easier

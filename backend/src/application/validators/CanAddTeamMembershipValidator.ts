@@ -5,10 +5,11 @@ import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import { Result, err, ok } from "neverthrow";
 
-class CanAddTeamMembershipValidator implements IValidator< { team: Team, player: Player, activeFrom: Date, activeTo: Date | null; number: number }, true> {
-    validate(input: { team: Team, player: Player, activeFrom: Date, activeTo: Date | null; number: number }): Result<true, IApplicationError[]> {
-        const { team, player, activeFrom, activeTo, number } = input;
-        const canAddMembershipResult = team.canAddMember({ player: player, activeFrom: activeFrom, activeTo: activeTo, number: number });
+interface Props { team: Team, player: Player, activeFrom: Date, activeTo: Date | null; }
+
+class CanAddTeamMembershipValidator implements IValidator<Props, true> {
+    validate(input: Props): Result<true, IApplicationError[]> {
+        const { team, player, activeFrom, activeTo } = input;
         if (canAddMembershipResult.isErr()) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
