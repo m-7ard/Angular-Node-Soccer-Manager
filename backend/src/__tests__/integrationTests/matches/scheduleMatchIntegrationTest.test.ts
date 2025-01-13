@@ -38,8 +38,8 @@ beforeEach(async () => {
     home_team = await mixins.createTeam(2);
 
     default_request = {
-        awayTeamId: away_team.id,
-        homeTeamId: home_team.id,
+        awayTeamId: away_team.id.value,
+        homeTeamId: home_team.id.value,
         scheduledDate: new Date(),
         venue: "venue place",
     };

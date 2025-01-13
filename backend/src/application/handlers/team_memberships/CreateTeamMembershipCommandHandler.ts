@@ -2,11 +2,13 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import ITeamRepository from "application/interfaces/ITeamRepository";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import ITeamValidator from "application/interfaces/ITeamValidaror";
+import ITeamValidator from "application/interfaces/ITeamValidator";
 import TeamId from "domain/valueObjects/Team/TeamId";
+import IPlayerValidator from "application/interfaces/IPlayerValidaror";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import IApplicationError from "application/errors/IApplicationError";
 
 interface Props {
     teamId: string;
@@ -45,30 +47,33 @@ export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershi
 export default class CreateTeamMembershipCommandHandler implements IRequestHandler<CreateTeamMembershipCommand, CreateTeamMembershipCommandResult> {
     private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: ITeamValidator<TeamId>;
-    private readonly playerExistsValidator: PlayerExistsValidator;
+    private readonly playerExistsValidator: IPlayerValidator<PlayerId>;
 
-    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId>; playerExistsValidator: PlayerExistsValidator }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId>; playerExistsValidator: IPlayerValidator<PlayerId> }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
         this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: CreateTeamMembershipCommand): Promise<CreateTeamMembershipCommandResult> {
+        // Team Exists
         const teamId = TeamId.executeCreate(command.teamId);
         const teamExistsResult = await this.teamExistsValidator.validate(teamId);
         if (teamExistsResult.isErr()) {
             return err(teamExistsResult.error);
         }
 
-        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.playerId });
+        const team = teamExistsResult.value;
+
+        // Player Exists
+        const playerExistsResult = await this.playerExistsValidator.validate(PlayerId.executeCreate(command.playerId));
         if (playerExistsResult.isErr()) {
             return err(playerExistsResult.error);
         }
 
-        const team = teamExistsResult.value;
         const player = playerExistsResult.value;
 
-        // Add membership to team
+        // Add Team Membership to Team
         const canAddMembershipResult = team.canAddMember({
             player: player,
             activeFrom: command.activeFrom,

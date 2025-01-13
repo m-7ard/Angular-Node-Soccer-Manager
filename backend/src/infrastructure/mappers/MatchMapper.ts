@@ -6,6 +6,7 @@ import MatchEventMapper from "./MatchEventMapper";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
+import TeamId from "domain/valueObjects/Team/TeamId";
 
 class MatchMapper {
     static schemaToDbEntity(source: IMatchSchema): MatchDbEntity {
@@ -28,8 +29,8 @@ class MatchMapper {
     static domainToDbEntity(source: Match): MatchDbEntity {
         return new MatchDbEntity({
             id: source.id,
-            home_team_id: source.homeTeamId,
-            away_team_id: source.awayTeamId,
+            home_team_id: source.homeTeamId.value,
+            away_team_id: source.awayTeamId.value,
             venue: source.venue,
             scheduled_date: source.matchDates.scheduledDate,
             start_date: source.matchDates.startDate,
@@ -53,8 +54,8 @@ class MatchMapper {
 
         const match = new Match({
             id: source.id,
-            homeTeamId: source.home_team_id,
-            awayTeamId: source.away_team_id,
+            homeTeamId: TeamId.executeCreate(source.home_team_id),
+            awayTeamId: TeamId.executeCreate(source.away_team_id),
             venue: source.venue,
             matchDates: matchDates,
             status: matchStatus,

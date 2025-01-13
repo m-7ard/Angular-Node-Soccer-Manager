@@ -3,6 +3,8 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { ok } from "neverthrow";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import TeamFactory from "domain/domainFactories/TeamFactory";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type CreateTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -29,7 +31,7 @@ export default class CreateTeamCommandHandler implements IRequestHandler<CreateT
 
     async handle(command: CreateTeamCommand): Promise<CreateTeamCommandResult> {
         const team = TeamFactory.CreateNew({
-            id: command.id,
+            id: TeamId.executeCreate(command.id),
             name: command.name,
             dateFounded: command.dateFounded,
             teamMemberships: [],

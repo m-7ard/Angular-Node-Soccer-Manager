@@ -9,7 +9,7 @@ import IReadMatchRequestDTO from "api/DTOs/matches/read/IReadMatchRequestDTO";
 import IReadMatchResponseDTO from "api/DTOs/matches/read/IReadMatchResponseDTO";
 import { ReadMatchQuery } from "application/handlers/matches/ReadMatchQueryHandler";
 import IApiModelService from "api/interfaces/IApiModelService";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IReadMatchRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IReadMatchResponseDTO | IApiError[]>;
@@ -31,7 +31,7 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),

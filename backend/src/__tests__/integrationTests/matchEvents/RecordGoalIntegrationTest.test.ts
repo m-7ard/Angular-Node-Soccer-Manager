@@ -48,7 +48,6 @@ beforeEach(async () => {
         goal_player,
         away_team,
         null,
-        1,
     );
     in_progress_match = await mixins.createInProgressMatch({
         seed: 1,
@@ -62,8 +61,8 @@ beforeEach(async () => {
         .toJSDate();
 
     default_request = {
-        teamId: goal_player_membership.teamId,
-        playerId: goal_player.id,
+        teamId: goal_player_membership.teamId.value,
+        playerId: goal_player.id.value,
         dateOccured: dateOccured,
     };
 });

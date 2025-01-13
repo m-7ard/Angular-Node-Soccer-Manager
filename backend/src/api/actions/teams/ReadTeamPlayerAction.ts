@@ -5,33 +5,32 @@ import JsonResponse from "../../responses/JsonResponse";
 import { StatusCodes } from "http-status-codes";
 import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
 import IReadTeamPlayerRequestDTO from "api/DTOs/teams/read-team-player/IReadTeamPlayerRequestDTO";
 import IReadTeamPlayerResponseDTO from "api/DTOs/teams/read-team-player/IReadTeamPlayerResponseDTO";
 import { ReadTeamMembershipQuery } from "application/handlers/team_memberships/ReadTeamMembershipQueryHandler";
 import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
-type ActionRequest = { dto: IReadTeamPlayerRequestDTO; teamId: string; playerId: string };
+type ActionRequest = { dto: IReadTeamPlayerRequestDTO; teamId: string; teamMembershipId: string };
 type ActionResponse = JsonResponse<IReadTeamPlayerResponseDTO | IApiError[]>;
 
 class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { teamId, playerId } = request;
+        const { teamId, teamMembershipId } = request;
 
         const query = new ReadTeamMembershipQuery({
             teamId: teamId,
-            playerId: playerId,
+            teamMembershipId: teamMembershipId,
         });
         const result = await this._requestDispatcher.dispatch(query);
 
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.TEAM_EXISTS_ERROR || expectedError.code === APPLICATION_VALIDATOR_CODES.IS_TEAM_MEMBER_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.TEAM_EXISTS_ERROR || expectedError.code === APPLICATION_SERVICE_CODES.IS_TEAM_MEMBER_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),
@@ -44,7 +43,7 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
-        const playerQuery = new ReadPlayerQuery({ id: playerId });
+        const playerQuery = new ReadPlayerQuery({ id: teamMembershipId });
         const playerQueryResult = await this._requestDispatcher.dispatch(playerQuery);
         if (playerQueryResult.isErr()) {
             return new JsonResponse({
@@ -69,7 +68,7 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
         return {
             dto: {},
             teamId: request.params.teamId,
-            playerId: request.params.playerId,
+            teamMembershipId: request.params.teamMembershipId,
         };
     }
 }

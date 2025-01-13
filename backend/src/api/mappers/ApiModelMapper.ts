@@ -1,6 +1,7 @@
 import IMatchApiModel from "@apiModels/IMatchApiModel";
 import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
 import ITeamApiModel from "@apiModels/ITeamApiModel";
+import ITeamMembershipHistoryApiModel from "@apiModels/ITeamMembershipHistoryApiModel";
 import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import IUserApiModel from "@apiModels/IUserApiModel";
 import IPlayerApiModel from "api/models/IPlayerApiModel";
@@ -10,12 +11,13 @@ import MatchEvent from "domain/entities/MatchEvent";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import TeamMembership from "domain/entities/TeamMembership";
+import TeamMembershipHistory from "domain/entities/TeamMembershipHistory";
 import User from "domain/entities/User";
 
 class ApiModelMapper {
     public static createTeamApiModel(team: Team): ITeamApiModel {
         return {
-            id: team.id,
+            id: team.id.value,
             name: team.name,
             dateFounded: team.dateFounded.toJSON(),
         };
@@ -23,20 +25,21 @@ class ApiModelMapper {
 
     public static createPlayerApiModel(player: Player): IPlayerApiModel {
         return {
-            id: player.id,
+            id: player.id.value,
             activeSince: player.activeSince.toJSON(),
             name: player.name,
         };
     }
 
     public static createTeamMembershipApiModel(membership: TeamMembership): ITeamMembershipApiModel {
+        const effectiveHistory = membership.getEffectiveHistory();
         return {
-            id: membership.id,
-            teamId: membership.teamId,
-            playerId: membership.playerId,
+            id: membership.id.value,
+            teamId: membership.teamId.value,
+            playerId: membership.playerId.value,
             activeFrom: membership.teamMembershipDates.activeFrom.toJSON(),
             activeTo: membership.teamMembershipDates.activeTo == null ? null : membership.teamMembershipDates.activeTo.toJSON(),
-            number: membership.number,
+            effectiveHistory: effectiveHistory == null ? null : ApiModelMapper.createTeamMembershipHistoryApiModel(effectiveHistory),
         };
     }
 
@@ -86,11 +89,21 @@ class ApiModelMapper {
             id: matchEvent.id,
             matchId: matchEvent.matchId,
             player: this.createPlayerApiModel(player),
-            teamId: matchEvent.teamId,
+            teamId: matchEvent.teamId.value,
             type: matchEvent.type.value,
             dateOccured: matchEvent.dateOccured.toString(),
             secondaryPlayer: secondaryPlayer == null ? null : this.createPlayerApiModel(secondaryPlayer),
             description: matchEvent.description,
+        };
+    }
+
+    public static createTeamMembershipHistoryApiModel(props: TeamMembershipHistory): ITeamMembershipHistoryApiModel {
+        return {
+            id: props.id.value,
+            teamMembershipId: props.teamMembershipId.value,
+            dateEffectiveFrom: props.dateEffectiveFrom.toJSON(),
+            number: props.numberValueObject.value,
+            position: props.positionValueObject.value,
         };
     }
 }

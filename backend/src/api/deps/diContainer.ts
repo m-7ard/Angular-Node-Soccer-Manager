@@ -1,16 +1,21 @@
 import IApiModelService from "api/interfaces/IApiModelService";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import IRequestDispatcher from "application/handlers/IRequestDispatcher";
+import { IAddGoalServiceFactory } from "application/interfaces/IAddGoalService";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
+import IPlayerValidator from "application/interfaces/IPlayerValidaror";
+import { ITeamMembershipExistsValidatorFactory } from "application/interfaces/ITeamMembershipExistsValidator";
 import ITeamRepository from "application/interfaces/ITeamRepository";
+import ITeamValidator from "application/interfaces/ITeamValidator";
 import IUserRepository from "application/interfaces/IUserRepository";
 import IJwtTokenService from "application/interfaces/JwtTokenService";
-import MatchExistsValidator from "application/validators/MatchExistsValidator";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import UserExistsValidator from "application/validators/UserExistsValidator";
+import MatchExistsValidator from "application/services/MatchExistsValidator";
+import UserExistsValidator from "application/services/UserExistsValidator";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 
 type TokenType<T> = T extends { __service: infer S } ? S : never;
 
@@ -34,10 +39,14 @@ export const DI_TOKENS = {
     USER_REPOSITORY: makeToken<IUserRepository>("USER_REPOSITORY"),
     MATCH_REPOSITORY: makeToken<IMatchRepository>("MATCH_REPOSITORY"),
     API_MODEL_SERVICE: makeToken<IApiModelService>("API_MODEL_SERVICE"),
-    PLAYER_EXISTS_VALIDATOR: makeToken<PlayerExistsValidator>("PLAYER_EXISTS_VALIDATOR"),
-    TEAM_EXISTS_VALIDATOR: makeToken<TeamExistsValidator>("TEAM_EXISTS_VALIDATOR"),
+
+    ADD_GOAL_SERIVICE_FACTORY: makeToken<IAddGoalServiceFactory>("ADD_GOAL_SERIVICE_FACTORY"),
+    
+    PLAYER_EXISTS_VALIDATOR: makeToken<IPlayerValidator<PlayerId>>("PLAYER_EXISTS_VALIDATOR"),
+    TEAM_EXISTS_VALIDATOR: makeToken<ITeamValidator<TeamId>>("TEAM_EXISTS_VALIDATOR"),
     USER_EXISTS_VALIDATOR: makeToken<UserExistsValidator>("USER_EXISTS_VALIDATOR"),
     MATCH_EXISTS_VALIDATOR: makeToken<MatchExistsValidator>("MATCH_EXISTS_VALIDATOR"),
+    TEAM_MEMBERSHIP_EXISTS_VALIDATOR_FACTORY: makeToken<ITeamMembershipExistsValidatorFactory<TeamMembershipId>>("TEAM_MEMBERSHIP_EXISTS_VALIDATOR_FACTORY"),
 } as const;
 
 export class DIContainer {

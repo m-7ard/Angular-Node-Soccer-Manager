@@ -36,8 +36,8 @@ beforeEach(async () => {
     home_team = await mixins.createTeam(2);
 
     default_request = {
-        awayTeamId: away_team.id,
-        homeTeamId: home_team.id,
+        awayTeamId: away_team.id.value,
+        homeTeamId: home_team.id.value,
         scheduledDate: new Date(),
         startDate: null,
         endDate: null,
@@ -118,14 +118,14 @@ describe("Create Match Integration Test - Happy Paths", () => {
     it("Create In Progress Match With Valid Score", async () => {
         const mixins = new Mixins();
         const player = await mixins.createPlayer(1);
-        const teamMembership = await mixins.createTeamMembership(player, away_team, null, 1);
+        const teamMembership = await mixins.createTeamMembership(player, away_team, null);
 
         const request = { ...default_request };
         request.status = MatchStatus.IN_PROGRESS.value;
         request.startDate = DateTime.fromJSDate(request.scheduledDate).plus({ minutes: 1 }).toJSDate();
         request.goals = {
-            "1": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id, playerId: player.id },
-            "2": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id, playerId: player.id },
+            "1": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id.value, playerId: player.id.value },
+            "2": { dateOccured: DateTime.fromJSDate(request.startDate).plus({ minutes: 1 }).toJSDate(), teamId: away_team.id.value, playerId: player.id.value },
         }
 
         const response = await adminSuperTest({

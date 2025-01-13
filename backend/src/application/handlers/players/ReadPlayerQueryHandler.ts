@@ -1,9 +1,10 @@
 import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import { err, ok } from "neverthrow";
-import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import Player from "domain/entities/Player";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
+import IPlayerValidator from "application/interfaces/IPlayerValidaror";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type ReadPlayerQueryResult = IQueryResult<Player, IApplicationError[]>;
 
@@ -18,14 +19,14 @@ export class ReadPlayerQuery implements IQuery<ReadPlayerQueryResult> {
 }
 
 export default class ReadPlayerQueryHandler implements IRequestHandler<ReadPlayerQuery, ReadPlayerQueryResult> {
-    private readonly playerExistsValidator: PlayerExistsValidator;
+    private readonly playerExistsValidator: IPlayerValidator<PlayerId>;
 
-    constructor(props: { playerExistsValidator: PlayerExistsValidator }) {
+    constructor(props: { playerExistsValidator: IPlayerValidator<PlayerId> }) {
         this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(query: ReadPlayerQuery): Promise<ReadPlayerQueryResult> {
-        const playerExistsResult = await this.playerExistsValidator.validate({ id: query.id });
+        const playerExistsResult = await this.playerExistsValidator.validate(PlayerId.executeCreate(query.id));
         if (playerExistsResult.isErr()) {
             return err(playerExistsResult.error);
         }

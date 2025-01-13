@@ -15,10 +15,12 @@ import { BcryptPasswordHasher } from "infrastructure/services/BcryptPasswordHash
 import MatchRepository from "infrastructure/repositories/MatchRepository";
 import matchesRouter from "./routers/matchesRouter";
 import ApiModelService from "./services/ApiModelService";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import MatchExistsValidator from "application/validators/MatchExistsValidator";
-import UserExistsValidator from "application/validators/UserExistsValidator";
+import PlayerExistsValidator from "application/services/PlayerExistsValidator";
+import TeamExistsValidator from "application/services/TeamExistsValidator";
+import MatchExistsValidator from "application/services/MatchExistsValidator";
+import UserExistsValidator from "application/services/UserExistsValidator";
+import AddGoalService, { AddGoalServiceFactory } from "application/services/CanAddGoalValidator";
+import { TeamMembershipExistsValidatorFactory } from "application/services/TeamMembershipValidator";
 
 export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService }) {
     const { database } = config;
@@ -44,19 +46,16 @@ export default function createApplication(config: { port: number; middleware: Ar
     diContainer.register(DI_TOKENS.USER_REPOSITORY, new UserRepository(database));
     diContainer.register(DI_TOKENS.MATCH_REPOSITORY, new MatchRepository(database));
 
-    // Validators
-    diContainer.registerFactory(DI_TOKENS.PLAYER_EXISTS_VALIDATOR, (container) => {
-        return new PlayerExistsValidator(container.resolve(DI_TOKENS.PLAYER_REPOSITORY));
-    });
-    diContainer.registerFactory(DI_TOKENS.TEAM_EXISTS_VALIDATOR, (container) => {
-        return new TeamExistsValidator(container.resolve(DI_TOKENS.TEAM_REPOSITORY));
-    });
-    diContainer.registerFactory(DI_TOKENS.USER_EXISTS_VALIDATOR, (container) => {
-        return new UserExistsValidator(container.resolve(DI_TOKENS.USER_REPOSITORY));
-    });
-    diContainer.registerFactory(DI_TOKENS.MATCH_EXISTS_VALIDATOR, (container) => {
-        return new MatchExistsValidator(container.resolve(DI_TOKENS.MATCH_REPOSITORY));
-    });
+    // Application Services
+    diContainer.registerFactory(DI_TOKENS.PLAYER_EXISTS_VALIDATOR, (container) => new PlayerExistsValidator(container.resolve(DI_TOKENS.PLAYER_REPOSITORY)));
+    diContainer.registerFactory(DI_TOKENS.TEAM_EXISTS_VALIDATOR, (container) => new TeamExistsValidator(container.resolve(DI_TOKENS.TEAM_REPOSITORY)));
+    diContainer.registerFactory(DI_TOKENS.USER_EXISTS_VALIDATOR, (container) => new UserExistsValidator(container.resolve(DI_TOKENS.USER_REPOSITORY)));
+    diContainer.registerFactory(DI_TOKENS.MATCH_EXISTS_VALIDATOR, (container) => new MatchExistsValidator(container.resolve(DI_TOKENS.MATCH_REPOSITORY)));
+    diContainer.registerFactory(
+        DI_TOKENS.ADD_GOAL_SERIVICE_FACTORY,
+        (container) => new AddGoalServiceFactory(container.resolve(DI_TOKENS.PLAYER_EXISTS_VALIDATOR), container.resolve(DI_TOKENS.TEAM_EXISTS_VALIDATOR)),
+    );
+    diContainer.registerFactory(DI_TOKENS.TEAM_MEMBERSHIP_EXISTS_VALIDATOR_FACTORY, (container) => new TeamMembershipExistsValidatorFactory());
 
     // Request Dispatcher
     const dispatcher = createRequestDispatcher();

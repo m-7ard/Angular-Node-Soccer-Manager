@@ -1,3 +1,5 @@
+import IApplicationError from "./IApplicationError";
+
 class ApplicationErrorFactory {
     static domainErrorsToApplicationErrors(errors: IDomainError[], pathPrefix: string[] = []): IApplicationError[] {
         return errors.map((error) => ({

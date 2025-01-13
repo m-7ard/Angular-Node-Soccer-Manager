@@ -37,7 +37,6 @@ beforeEach(async () => {
         player_001,
         team_001,
         null,
-        1,
     );
 
     expect(team_001).toBeDefined();

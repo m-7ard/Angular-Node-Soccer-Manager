@@ -9,7 +9,7 @@ import IDeleteMatchRequestDTO from "api/DTOs/matches/delete/IDeleteMatchRequestD
 import IDeleteMatchResponseDTO from "api/DTOs/matches/delete/IDeleteMatchResponseDTO";
 import { DeleteMatchCommand } from "application/handlers/matches/DeleteMatchCommandHandler";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IDeleteMatchRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IDeleteMatchResponseDTO | IApiError[]>;
@@ -28,7 +28,7 @@ class DeleteMatchAction implements IAction<ActionRequest, ActionResponse> {
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),

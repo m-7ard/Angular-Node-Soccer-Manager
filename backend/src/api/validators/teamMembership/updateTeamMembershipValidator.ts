@@ -5,7 +5,6 @@ import { date, integer, max, min, nullable, number, object, string } from "super
 const validatorSchema = object({
     activeFrom: date(),
     activeTo: nullable(date()),
-    number: min(max(integer(), 11), 1),
 });
 
 function updateTeamMembershipValidator(data: IUpdateTeamMembershipRequestDTO) {

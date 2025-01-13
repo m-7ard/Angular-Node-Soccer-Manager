@@ -8,6 +8,8 @@ import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import TeamId from "domain/valueObjects/Team/TeamId";
 import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
 
 const hostname = "127.0.0.1";
@@ -43,17 +45,17 @@ async function main() {
     const adminUser = UserFactory.CreateNew({ id: crypto.randomUUID(), name: "admin", email: "admin@mail.com", hashedPassword: await passwordHasher.hashPassword("adminword"), isAdmin: true });
     await userRepository.createAsync(adminUser);
 
-    const fantasyTeam = TeamFactory.CreateNew({ id: crypto.randomUUID(), dateFounded: new Date(), name: "Fantasy Team", teamMemberships: [] });
-    const localTeam = TeamFactory.CreateNew({ id: crypto.randomUUID(), dateFounded: new Date(), name: "Local Team", teamMemberships: [] });
+    const fantasyTeam = TeamFactory.CreateNew({ id: TeamId.executeCreate(crypto.randomUUID()), dateFounded: new Date(), name: "Fantasy Team", teamMemberships: [] });
+    const localTeam = TeamFactory.CreateNew({ id: TeamId.executeCreate(crypto.randomUUID()), dateFounded: new Date(), name: "Local Team", teamMemberships: [] });
     await teamRepository.createAsync(fantasyTeam);
     await teamRepository.createAsync(localTeam);
 
-    const johnDoe = PlayerFactory.CreateNew({ id: crypto.randomUUID(), name: "John Doe", activeSince: new Date() });
-    const janeDoe = PlayerFactory.CreateNew({ id: crypto.randomUUID(), name: "Jane Doe", activeSince: new Date() });
+    const johnDoe = PlayerFactory.CreateNew({ id: PlayerId.executeCreate(crypto.randomUUID()), name: "John Doe", activeSince: new Date() });
+    const janeDoe = PlayerFactory.CreateNew({ id: PlayerId.executeCreate(crypto.randomUUID()), name: "Jane Doe", activeSince: new Date() });
     await playerRepository.createAsync(johnDoe);
     await playerRepository.createAsync(janeDoe);
 
-    const johnDoeMembership = localTeam.executeAddMember({ player: johnDoe, activeFrom: new Date(), activeTo: null, number: 1 });
+    const johnDoeMembership = localTeam.executeAddMember({ player: johnDoe, activeFrom: new Date(), activeTo: null });
     await teamRepository.updateAsync(localTeam);
 
     const scheduledMatch = MatchFactory.CreateNew({

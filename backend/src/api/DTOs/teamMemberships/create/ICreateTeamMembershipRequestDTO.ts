@@ -4,6 +4,7 @@ interface ICreateTeamMembershipRequestDTO {
     activeTo: Date | null;
     number: number;
     position: string;
+    dateEffectiveFrom: Date;
 }
 
 export default ICreateTeamMembershipRequestDTO;

@@ -1,3 +1,4 @@
+import IApplicationError from "application/errors/IApplicationError";
 import { Result } from "neverthrow";
 
 interface IValidator<InputType, SuccessType> {

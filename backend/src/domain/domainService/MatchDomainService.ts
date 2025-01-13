@@ -44,7 +44,7 @@ class MatchDomainService {
     }
 
     private static validateTeams(match: Match): void {
-        if (match.homeTeamId === match.awayTeamId) {
+        if (match.homeTeamId.equals(match.awayTeamId)) {
             throw new Error("Home team cannot be the same as the away team");
         }
     }
@@ -73,12 +73,12 @@ class MatchDomainService {
         }
 
         if (match.score != null) {
-            const homeTeamGoals = goals.filter((goal) => goal.teamId === match.homeTeamId);
+            const homeTeamGoals = goals.filter((goal) => goal.teamId.equals(match.homeTeamId));
             if (homeTeamGoals.length !== match.score.homeTeamScore) {
                 throw new Error(`Home team score does not match goals. Score: ${match.score.homeTeamScore}; Goals: ${homeTeamGoals.length}`);
             }
 
-            const awayTeamGoals = goals.filter((goal) => goal.teamId === match.awayTeamId);
+            const awayTeamGoals = goals.filter((goal) => goal.teamId.equals(match.awayTeamId));
             if (awayTeamGoals.length !== match.score.awayTeamScore) {
                 throw new Error(`Away team score does not match goals. Score: ${match.score.awayTeamScore}; Goals: ${awayTeamGoals.length}`);
             }

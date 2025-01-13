@@ -3,7 +3,9 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import TeamFactory from "domain/domainFactories/TeamFactory";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import ITeamValidator from "application/interfaces/ITeamValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type UpdateTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -23,20 +25,21 @@ export class UpdateTeamCommand implements ICommand<UpdateTeamCommandResult> {
 
 export default class UpdateTeamCommandHandler implements IRequestHandler<UpdateTeamCommand, UpdateTeamCommandResult> {
     private readonly _teamRepository: ITeamRepository;
-    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
 
-    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: TeamExistsValidator }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId> }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: UpdateTeamCommand): Promise<UpdateTeamCommandResult> {
-        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.id });
+        const teamId = TeamId.executeCreate(command.id);
+        const teamExistsResult = await this.teamExistsValidator.validate(teamId);
         if (teamExistsResult.isErr()) {
             return err(teamExistsResult.error);
         }
 
-        const team =teamExistsResult.value;
+        const team = teamExistsResult.value;
 
         const updatedTeam = TeamFactory.CreateExisting({
             id: team.id,

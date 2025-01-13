@@ -12,7 +12,6 @@ import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import Match from "domain/entities/Match";
 import IMarkMatchInProgressRequestDTO from "api/DTOs/matches/markMatchInProgress/IMarkMatchInProgressRequestDTO";
 import { DateTime } from "luxon";
-import { start } from "repl";
 
 let team_001: Team;
 let team_002: Team;

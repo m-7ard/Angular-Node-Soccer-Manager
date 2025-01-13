@@ -6,12 +6,12 @@ class TeamMembershipDates {
     public activeFrom: Date;
     public activeTo: Date | null;
 
-    private constructor(value: { activeFrom: Date; activeTo: Date | null; }) {
+    private constructor(value: { activeFrom: Date; activeTo: Date | null }) {
         this.activeFrom = value.activeFrom;
         this.activeTo = value.activeTo;
     }
 
-    public static canCreate(value: { activeFrom: Date; activeTo: Date | null; }): Result<true, string> {
+    public static canCreate(value: { activeFrom: Date; activeTo: Date | null }): Result<true, string> {
         const { activeFrom, activeTo } = value;
 
         if (activeTo != null && activeTo < activeFrom) {
@@ -21,7 +21,7 @@ class TeamMembershipDates {
         return ok(true);
     }
 
-    public static executeCreate(value: { activeFrom: Date; activeTo: Date | null; }): TeamMembershipDates {
+    public static executeCreate(value: { activeFrom: Date; activeTo: Date | null }): TeamMembershipDates {
         const canCreateResult = this.canCreate(value);
         if (canCreateResult.isErr()) {
             throw new Error(canCreateResult.error);
@@ -29,6 +29,10 @@ class TeamMembershipDates {
 
         const matchDates = new TeamMembershipDates(value);
         return matchDates;
+    }
+
+    public isWithinRange(date: Date) {
+        return date >= this.activeFrom && (this.activeTo == null || date <= this.activeTo);
     }
 }
 

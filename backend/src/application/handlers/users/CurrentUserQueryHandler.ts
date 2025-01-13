@@ -7,6 +7,7 @@ import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory"
 import User from "domain/entities/User";
 import IJwtTokenService from "application/interfaces/JwtTokenService";
 import { IJwtPayload } from "application/other/jwt-payload";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type CurrentUserQueryResult = IQueryResult<User | null, IApplicationError[]>;
 

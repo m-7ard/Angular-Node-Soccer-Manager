@@ -23,7 +23,6 @@ import { ContentDirectivesModule } from '../../../reusables/content-grid/content
         RouterModule,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
-        PrimeNgPopoverDirective,
         PageDirectivesModule,
         MatMenuModule,
         PanelDirectivesModule,

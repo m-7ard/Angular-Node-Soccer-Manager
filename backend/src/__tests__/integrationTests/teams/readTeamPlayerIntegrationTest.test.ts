@@ -25,7 +25,7 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
-    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
+    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null);
 });
 
 describe("Read Team Player Integration Test;", () => {

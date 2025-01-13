@@ -11,14 +11,14 @@ import IUpdateTeamMembershipRequestDTO from "api/DTOs/teamMemberships/update/IUp
 import IUpdateTeamMembershipResponseDTO from "api/DTOs/teamMemberships/update/IUpdateTeamMembershipResponseDTO";
 import updateTeamMembershipValidator from "api/validators/teamMembership/updateTeamMembershipValidator";
 
-type ActionRequest = { teamId: string; playerId: string; dto: IUpdateTeamMembershipRequestDTO };
+type ActionRequest = { teamId: string; teamMembershipId: string; dto: IUpdateTeamMembershipRequestDTO };
 type ActionResponse = JsonResponse<IUpdateTeamMembershipResponseDTO | IApiError[]>;
 
 class UpdateTeamMembershipAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { dto, teamId, playerId } = request;
+        const { dto, teamId, teamMembershipId } = request;
 
         const validation = updateTeamMembershipValidator(dto);
         if (validation.isErr()) {
@@ -30,10 +30,9 @@ class UpdateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
 
         const command = new UpdateTeamMembershipCommand({
             teamId: teamId,
-            playerId: playerId,
+            teamMembershipId: teamMembershipId,
             activeFrom: dto.activeFrom,
             activeTo: dto.activeTo,
-            number: dto.number,
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -53,7 +52,7 @@ class UpdateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
     bind(request: Request): ActionRequest {
         return {
             teamId: request.params.teamId,
-            playerId: request.params.playerId,
+            teamMembershipId: request.params.teamMembershipId,
             dto: {
                 activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
                 activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),

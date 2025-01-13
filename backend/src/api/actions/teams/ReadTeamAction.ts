@@ -8,16 +8,16 @@ import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import IReadTeamRequestDTO from "api/DTOs/teams/read/IReadTeamRequestDTO";
 import IReadTeamResponseDTO from "api/DTOs/teams/read/IReadTeamResponseDTO";
 import { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
 import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
+import IApiModelService from "api/interfaces/IApiModelService";
 
 type ActionRequest = { dto: IReadTeamRequestDTO; teamId: string };
 type ActionResponse = JsonResponse<IReadTeamResponseDTO | IApiError[]>;
 
 class ReadTeamAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+    constructor(private readonly _requestDispatcher: IRequestDispatcher,         private readonly apiModelService: IApiModelService,) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId } = request;
@@ -30,7 +30,7 @@ class ReadTeamAction implements IAction<ActionRequest, ActionResponse> {
         if (readTeamResult.isErr()) {
             const [expectedError] = readTeamResult.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.TEAM_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.TEAM_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(readTeamResult.error),
@@ -46,29 +46,8 @@ class ReadTeamAction implements IAction<ActionRequest, ActionResponse> {
         const team = readTeamResult.value;
         const responseDTO: IReadTeamResponseDTO = {
             team: ApiModelMapper.createTeamApiModel(team),
-            teamPlayers: [],
+            teamPlayers: await this.apiModelService.createManyTeamPlayerApiModel(team.teamMemberships),
         };
-
-        for (let i = 0; i < team.teamMemberships.length; i++) {
-            const membership = team.teamMemberships[i];
-            const readPlayerQuery = new ReadPlayerQuery({
-                id: membership.playerId,
-            });
-
-            const readPlayerResult = await this._requestDispatcher.dispatch(readPlayerQuery);
-
-            if (readPlayerResult.isErr()) {
-                return new JsonResponse({
-                    status: StatusCodes.INTERNAL_SERVER_ERROR,
-                    body: ApiErrorFactory.mapApplicationErrors(readPlayerResult.error),
-                });
-            }
-
-            responseDTO.teamPlayers.push({
-                player: ApiModelMapper.createPlayerApiModel(readPlayerResult.value),
-                membership: ApiModelMapper.createTeamMembershipApiModel(membership),
-            });
-        }
 
         return new JsonResponse({
             status: StatusCodes.OK,

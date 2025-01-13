@@ -9,13 +9,16 @@ import ApiModelMapper from "api/mappers/ApiModelMapper";
 import IListTeamPlayersResponseDTO from "api/DTOs/teams/list-team-players/IListTeamPlayersResponseDTO";
 import IListTeamPlayersRequestDTO from "api/DTOs/teams/list-team-players/IListTeamPlayersRequestDTO";
 import { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
-import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
+import IApiModelService from "api/interfaces/IApiModelService";
 
 type ActionRequest = { dto: IListTeamPlayersRequestDTO; params: { teamId: string } };
 type ActionResponse = JsonResponse<IListTeamPlayersResponseDTO | IApiError[]>;
 
 class ListTeamPlayersAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+    constructor(
+        private readonly _requestDispatcher: IRequestDispatcher,
+        private readonly apiModelService: IApiModelService,
+    ) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { params } = request;
@@ -33,29 +36,8 @@ class ListTeamPlayersAction implements IAction<ActionRequest, ActionResponse> {
         const team = readTeamResult.value;
         const responseDTO: IListTeamPlayersResponseDTO = {
             team: ApiModelMapper.createTeamApiModel(team),
-            teamPlayers: []
-        }
-
-        for (let i = 0; i < team.teamMemberships.length; i++) {
-            const membership = team.teamMemberships[i];
-            const readPlayerQuery = new ReadPlayerQuery({
-                id: membership.playerId,
-            });
-
-            const readPlayerResult = await this._requestDispatcher.dispatch(readPlayerQuery);
-
-            if (readPlayerResult.isErr()) {
-                return new JsonResponse({
-                    status: StatusCodes.INTERNAL_SERVER_ERROR,
-                    body: ApiErrorFactory.mapApplicationErrors(readPlayerResult.error),
-                });
-            }
-
-            responseDTO.teamPlayers.push({
-                player: ApiModelMapper.createPlayerApiModel(readPlayerResult.value),
-                membership: ApiModelMapper.createTeamMembershipApiModel(membership)
-            })
-        }
+            teamPlayers: await this.apiModelService.createManyTeamPlayerApiModel(team.teamMemberships),
+        };
 
         return new JsonResponse({
             status: StatusCodes.OK,

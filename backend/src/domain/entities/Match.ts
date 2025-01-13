@@ -1,5 +1,4 @@
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
-import Team from "./Team";
 import MatchEvent from "./MatchEvent";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
 import { err, ok, Result } from "neverthrow";
@@ -8,11 +7,15 @@ import MatchEventType from "domain/valueObjects/MatchEvent/MatchEventType";
 import DomainEvent from "domain/domainEvents/DomainEvent";
 import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import Team from "./Team";
+import Player from "./Player";
 
 type MatchProps = {
     id: string;
-    homeTeamId: Team["id"];
-    awayTeamId: Team["id"];
+    homeTeamId: TeamId;
+    awayTeamId: TeamId;
     venue: string;
     matchDates: MatchDates;
     status: MatchStatus;
@@ -26,8 +29,8 @@ class Match {
     private readonly __type: "MATCH_DOMAIN" = null!;
 
     public id: string;
-    public homeTeamId: Team["id"];
-    public awayTeamId: Team["id"];
+    public homeTeamId: TeamId;
+    public awayTeamId: TeamId;
     public venue: string;
     public matchDates: MatchDates;
     public status: MatchStatus;
@@ -95,7 +98,9 @@ class Match {
         return [MatchStatus.IN_PROGRESS, MatchStatus.COMPLETED, MatchStatus.CANCELLED].includes(this.status);
     }
 
-    public canAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): Result<{ score: MatchScore }, string> {
+    public canAddGoal(props: { dateOccured: Date; team: Team; player: Player }): Result<{ score: MatchScore }, string> {
+        const { dateOccured, team, player } = props;
+
         if (!this.canHaveScore()) {
             return err(`Cannot add a goal to a match that cannot have a score.`);
         }
@@ -108,22 +113,31 @@ class Match {
             return err(`Cannot add goals when startDate is null.`);
         }
 
-        if (props.dateOccured < this.matchDates.startDate) {
+        if (dateOccured < this.matchDates.startDate) {
             return err(`Date occured cannot be less than start date.`);
         }
 
-        if (this.matchDates.endDate != null && props.dateOccured > this.matchDates.endDate) {
+        if (this.matchDates.endDate != null && dateOccured > this.matchDates.endDate) {
             return err(`Date occured cannot be more than end date.`);
         }
 
-        if (props.teamId !== this.homeTeamId && props.teamId !== this.awayTeamId) {
+        if (!team.id.equals(this.homeTeamId) && !team.id.equals(this.awayTeamId)) {
             return err(`Goal team does not match teams from match.`);
+        }
+
+        const teamMemberships = team.filterMembersByPlayerId(player.id);
+        if (teamMemberships.length === 0) {
+            return err(`Goal player does not have a membership in the goal team.`);
+        }
+
+        if (!teamMemberships.some((membership) => membership.teamMembershipDates.isWithinRange(dateOccured))) {
+            return err(`Goal must occur while player was / is a member.`);
         }
 
         return ok({ score: this.score });
     }
 
-    public executeAddGoal(props: { dateOccured: Date; teamId: string; playerId: string }): void {
+    public executeAddGoal(props: { dateOccured: Date; team: Team; player: Player }): void {
         const canAddGoalResult = this.canAddGoal(props);
         if (canAddGoalResult.isErr()) {
             throw new Error(canAddGoalResult.error);
@@ -134,8 +148,8 @@ class Match {
         const matchEvent = MatchEventFactory.CreateNew({
             id: crypto.randomUUID(),
             matchId: this.id,
-            playerId: props.playerId,
-            teamId: props.teamId,
+            playerId: props.player.id,
+            teamId: props.team.id,
             type: MatchEventType.GOAL,
             dateOccured: props.dateOccured,
             secondaryPlayerId: null,
@@ -145,7 +159,7 @@ class Match {
         this.events.push(matchEvent);
         this.domainEvents.push(new MatchEventPendingCreationEvent(matchEvent));
 
-        const isHomeTeamGoal = props.teamId === this.homeTeamId;
+        const isHomeTeamGoal = props.team.id.equals(this.homeTeamId);
         this.score = MatchScore.executeCreate({
             homeTeamScore: isHomeTeamGoal ? score.homeTeamScore + 1 : score.homeTeamScore,
             awayTeamScore: isHomeTeamGoal ? score.awayTeamScore : score.awayTeamScore + 1,
@@ -154,6 +168,10 @@ class Match {
 
     public getGoals() {
         return this.events.filter((event) => event.type === MatchEventType.GOAL);
+    }
+
+    public isMatchTeam(teamId: TeamId): boolean {
+        return this.homeTeamId.equals(teamId) || this.homeTeamId.equals(teamId);
     }
 }
 

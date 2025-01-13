@@ -2,10 +2,8 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
-import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import ITeamRepository from "application/interfaces/ITeamRepository";
-import MatchExistsValidator from "application/validators/MatchExistsValidator";
+import MatchExistsValidator from "application/services/MatchExistsValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 type CommandProps = {
     id: string;

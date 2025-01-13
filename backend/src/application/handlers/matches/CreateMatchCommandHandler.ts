@@ -2,20 +2,23 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
-import ITeamRepository from "application/interfaces/ITeamRepository";
 import MatchDomainService from "domain/domainService/MatchDomainService";
 import IUidRecord from "api/interfaces/IUidRecord";
-import IPlayerRepository from "application/interfaces/IPlayerRepository";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
-import IsValidGoalValidator from "application/validators/IsValidGoalValidator";
-import IsValidMatchDatesValidator from "application/validators/IsValidMatchDateValidator";
+import IsValidGoalValidator from "application/services/IsValidGoalValidator";
+import IsValidMatchDatesValidator from "application/services/IsValidMatchDateValidator";
 import MatchFactory from "domain/domainFactories/MatchFactory";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
-import CanAddGoalValidator from "application/validators/CanAddGoalValidator";
+import AddGoalService from "application/services/CanAddGoalValidator";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
+import ITeamValidator from "application/interfaces/ITeamValidator";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import IApplicationError from "application/errors/IApplicationError";
+import { IAddGoalServiceFactory } from "application/interfaces/IAddGoalService";
+import Player from "domain/entities/Player";
 
 type CommandProps = {
     id: string;
@@ -59,26 +62,27 @@ export class CreateMatchCommand implements ICommand<CreateMatchCommandResult>, C
 
 export default class CreateMatchCommandHandler implements IRequestHandler<CreateMatchCommand, CreateMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
-    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
+    private readonly addGoalServiceFactory: IAddGoalServiceFactory;
 
-    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: TeamExistsValidator; }) {
+    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: ITeamValidator<TeamId>; addGoalServiceFactory: IAddGoalServiceFactory }) {
         this._matchRepository = props.matchRepository;
         this.teamExistsValidator = props.teamExistsValidator;
+        this.addGoalServiceFactory = props.addGoalServiceFactory;
     }
 
     async handle(command: CreateMatchCommand): Promise<CreateMatchCommandResult> {
-        const homeTeamExistsResult = await this.teamExistsValidator.validate({ id: command.homeTeamId });
+        const homeTeamId = TeamId.executeCreate(command.homeTeamId);
+        const homeTeamExistsResult = await this.teamExistsValidator.validate(homeTeamId);
         if (homeTeamExistsResult.isErr()) {
             return err(homeTeamExistsResult.error);
         }
 
-        const awayTeamExistsResult = await this.teamExistsValidator.validate({ id: command.awayTeamId });
+        const awayTeamId = TeamId.executeCreate(command.awayTeamId);
+        const awayTeamExistsResult = await this.teamExistsValidator.validate(awayTeamId);
         if (awayTeamExistsResult.isErr()) {
             return err(awayTeamExistsResult.error);
         }
-
-        const homeTeam = homeTeamExistsResult.value;
-        const awayTeam = awayTeamExistsResult.value;
 
         const isValidMatchDatesValidator = new IsValidMatchDatesValidator();
         const isValidMatchDatesResult = isValidMatchDatesValidator.validate({
@@ -93,8 +97,8 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
 
         const match = MatchFactory.CreateNew({
             id: command.id,
-            homeTeamId: command.homeTeamId,
-            awayTeamId: command.awayTeamId,
+            homeTeamId: awayTeamId,
+            awayTeamId: homeTeamId,
             venue: command.venue,
             matchDates: MatchDates.executeCreate({
                 scheduledDate: command.scheduledDate,
@@ -104,37 +108,33 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
             status: MatchStatus.executeCreate(command.status),
         });
 
+        // Add Goals
         if (command.goals != null) {
             match.score = MatchScore.ZeroScore;
             const allGoalsErrors: IApplicationError[] = [];
+            const goalEntries = Object.entries(command.goals);
+            const addGoalService = this.addGoalServiceFactory.create(match);
 
-            Object.entries(command.goals).forEach(([UID, goal]) => {
-                const goalErrors: IApplicationError[] = [];
+            for (let i = 0; i < goalEntries.length; i++) {
+                const [UID, goal] = goalEntries[i];
+                const goalEntryErrors: IApplicationError[] = [];
 
-                const isValidGoalValidator = new IsValidGoalValidator(homeTeam, awayTeam);
-                const isValidGoalResult = isValidGoalValidator.validate(goal);
-                if (isValidGoalResult.isErr()) {
-                    goalErrors.push(...isValidGoalResult.error);
+                const addGoalResult = await addGoalService.tryAddGoal({ dateOccured: goal.dateOccured, playerId: PlayerId.executeCreate(goal.playerId), teamId: TeamId.executeCreate(goal.teamId) });
+                if (addGoalResult.isErr()) {
+                    goalEntryErrors.push(...addGoalResult.error);
                 }
 
-                const canAddGoalValidator = new CanAddGoalValidator(match);
-                const canAddGoalResult = canAddGoalValidator.validate(goal);
-                if (canAddGoalResult.isErr()) {
-                    goalErrors.push(...canAddGoalResult.error);
-                }
-
-                goalErrors.forEach((error) => {
+                goalEntryErrors.forEach((error) => {
                     error.path = [UID, ...error.path];
                 });
-            });
+            }
 
             if (allGoalsErrors.length) {
                 return err(allGoalsErrors);
             }
-
-            Object.values(command.goals).forEach((goal) => match.executeAddGoal(goal));
         }
 
+        // Check Integrity
         try {
             MatchDomainService.verifyIntegrity(match);
         } catch (error) {

@@ -1,4 +1,5 @@
 import Player from "domain/entities/Player";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
 import PlayerDbEntity from "infrastructure/dbEntities/PlayerDbEntity";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 
@@ -14,7 +15,7 @@ class PlayerMapper {
 
     static domainToDbEntity(source: Player): PlayerDbEntity {
         return new PlayerDbEntity({
-            id: source.id,
+            id: source.id.value,
             name: source.name,
             active_since: source.activeSince,
         })
@@ -22,7 +23,7 @@ class PlayerMapper {
 
     static dbEntityToDomain(source: PlayerDbEntity): Player {
         return new Player({
-            id: source.id,
+            id: PlayerId.executeCreate(source.id),
             name: source.name,
             activeSince: source.active_since,
         })

@@ -1,7 +1,8 @@
+import PlayerId from "domain/valueObjects/Player/PlayerId";
 import Player from "../entities/Player";
 
 class PlayerFactory {
-    static CreateNew({ id, name, activeSince }: { id: string; name: string; activeSince: Date }) {
+    static CreateNew({ id, name, activeSince }: { id: PlayerId; name: string; activeSince: Date }) {
         return new Player({
             id: id,
             name: name,
@@ -9,7 +10,7 @@ class PlayerFactory {
         });
     }
 
-    static CreateExisting({ id, name, activeSince }: { id: string; name: string; activeSince: Date }) {
+    static CreateExisting({ id, name, activeSince }: { id: PlayerId; name: string; activeSince: Date }) {
         return new Player({
             id: id,
             name: name,

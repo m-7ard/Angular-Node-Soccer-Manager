@@ -2,10 +2,9 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
-import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import PlayerFactory from "domain/domainFactories/PlayerFactory";
-import PlayerExistsValidator from "application/validators/PlayerExistsValidator";
+import IPlayerValidator from "application/interfaces/IPlayerValidaror";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type UpdatePlayerCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -23,17 +22,17 @@ export class UpdatePlayerCommand implements ICommand<UpdatePlayerCommandResult> 
     public activeSince: Date;
 }
 
-export default class CreateTeamCommandHandler implements IRequestHandler<UpdatePlayerCommand, UpdatePlayerCommandResult> {
+export default class UpdatePlayerCommandHandler implements IRequestHandler<UpdatePlayerCommand, UpdatePlayerCommandResult> {
     private readonly _playerRepository: IPlayerRepository;
-    private readonly playerExistsValidator: PlayerExistsValidator;
+    private readonly playerExistsValidator: IPlayerValidator<PlayerId>;
 
-    constructor(props: { playerRepository: IPlayerRepository; playerExistsValidator: PlayerExistsValidator }) {
+    constructor(props: { playerRepository: IPlayerRepository; playerExistsValidator: IPlayerValidator<PlayerId> }) {
         this._playerRepository = props.playerRepository;
         this.playerExistsValidator = props.playerExistsValidator;
     }
 
     async handle(command: UpdatePlayerCommand): Promise<UpdatePlayerCommandResult> {
-        const playerExistsResult = await this.playerExistsValidator.validate({ id: command.id });
+        const playerExistsResult = await this.playerExistsValidator.validate(PlayerId.executeCreate(command.id));
         if (playerExistsResult.isErr()) {
             return err(playerExistsResult.error);
         }

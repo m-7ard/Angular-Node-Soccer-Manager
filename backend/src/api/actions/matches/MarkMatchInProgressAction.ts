@@ -9,7 +9,7 @@ import parsers from "api/utils/parsers";
 import IMarkMatchInProgressRequestDTO from "api/DTOs/matches/markMatchInProgress/IMarkMatchInProgressRequestDTO";
 import IMarkMatchInProgressResponseDTO from "api/DTOs/matches/markMatchInProgress/IMarkMatchInProgressResponseDTO";
 import { MarkMatchInProgressCommand } from "application/handlers/matches/MarkMatchInProgressCommandHandler";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IMarkMatchInProgressRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IMarkMatchInProgressResponseDTO | IApiError[]>;
@@ -29,7 +29,7 @@ class MarkMatchInProgressAction implements IAction<ActionRequest, ActionResponse
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),

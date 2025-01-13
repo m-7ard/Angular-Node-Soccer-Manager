@@ -1,9 +1,12 @@
 import TeamMembershipDates from "domain/valueObjects/TeamMembership/TeamMembershipDates";
 import TeamMembership from "../entities/TeamMembership";
 import TeamMembershipHistory from "domain/entities/TeamMembershipHistory";
+import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
 
 class TeamMembershipFactory {
-    static CreateNew(props: { id: string; teamId: string; playerId: string; teamMembershipDates: TeamMembershipDates; }) {
+    static CreateNew(props: { id: TeamMembershipId; teamId: TeamId; playerId: PlayerId; teamMembershipDates: TeamMembershipDates; }) {
         return new TeamMembership({
             id: props.id,
             teamId: props.teamId,
@@ -13,7 +16,7 @@ class TeamMembershipFactory {
         });
     }
 
-    static CreateExisting(props: { id: string; teamId: string; playerId: string; teamMembershipDates: TeamMembershipDates; teamMembershipHistories: TeamMembershipHistory[] }) {
+    static CreateExisting(props: { id: TeamMembershipId; teamId: TeamId; playerId: PlayerId; teamMembershipDates: TeamMembershipDates; teamMembershipHistories: TeamMembershipHistory[] }) {
         return new TeamMembership({
             id: props.id,
             teamId: props.teamId,

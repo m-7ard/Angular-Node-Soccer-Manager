@@ -2,7 +2,7 @@ import { ValueError } from "@sinclair/typebox/build/cjs/errors";
 import API_ERROR_CODES from "./API_ERROR_CODES";
 import { Failure } from "superstruct";
 import IApiError from "./IApiError";
-import { List } from "immutable";
+import IApplicationError from "application/errors/IApplicationError";
 
 class ApiErrorFactory {
     static typeBoxErrorToApiErrors(errors: ValueError[], pathPrefix: string[] = []) {

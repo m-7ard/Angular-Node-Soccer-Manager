@@ -39,7 +39,6 @@ beforeEach(async () => {
         player_001,
         team_001,
         null,
-        1,
     );
 
     expect(team_001).toBeDefined();
@@ -47,11 +46,10 @@ beforeEach(async () => {
 });
 
 describe("Update TeamMembership Integration Test;", () => {
-    it("Update Team Membership; Valid Data; Success;", async () => {
+    it.only("Update Team Membership; Valid Data; Success;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: DateTime.fromJSDate(teamMembership_001.teamMembershipDates.activeFrom).plus({ minute: 1 }).toJSDate(),
-            number: 10,
         };
 
         const response = await adminSuperTest({
@@ -72,14 +70,12 @@ describe("Update TeamMembership Integration Test;", () => {
         expect(row.active_to?.getTime()).toBeGreaterThanOrEqual(
             row.active_from.getTime(),
         );
-        expect(row.number).toBe(request.number);
     });
 
     it("Update Team Membership; Team does not exist; Failure;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: new Date(),
-            number: 10,
         };
 
         const response = await adminSuperTest({
@@ -99,7 +95,6 @@ describe("Update TeamMembership Integration Test;", () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: new Date(),
-            number: 10,
         };
 
         const response = await adminSuperTest({

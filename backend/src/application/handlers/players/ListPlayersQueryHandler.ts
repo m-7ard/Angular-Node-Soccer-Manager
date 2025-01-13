@@ -4,6 +4,7 @@ import { ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import Player from "domain/entities/Player";
 import FilterAllPlayersCriteria from "infrastructure/contracts/FilterAllPlayersCriteria";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type ListPlayersQueryResult = IQueryResult<Player[], IApplicationError[]>;
 

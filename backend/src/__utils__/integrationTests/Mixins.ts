@@ -8,12 +8,13 @@ import MatchFactory from "domain/domainFactories/MatchFactory";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
 import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
-import MatchDomainService from "domain/domainService/MatchDomainService";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import TeamId from "domain/valueObjects/Team/TeamId";
 import { DateTime } from "luxon";
 
 class Mixins {
@@ -33,7 +34,7 @@ class Mixins {
 
     async createTeam(seed: number) {
         const team = TeamFactory.CreateNew({
-            id: `${seed}`,
+            id: TeamId.executeCreate(`${seed}`),
             name: `team_${seed}`,
             dateFounded: new Date(),
             teamMemberships: [],
@@ -46,7 +47,7 @@ class Mixins {
 
     async createPlayer(seed: number) {
         const player = PlayerFactory.CreateNew({
-            id: `${seed}`,
+            id: PlayerId.executeCreate(`${seed}`),
             name: `player_${seed}`,
             activeSince: new Date(Date.now()),
         });
@@ -56,15 +57,15 @@ class Mixins {
         return player;
     }
 
-    async createTeamMembership(player: Player, team: Team, activeTo: Date | null, number: number) {
-        const teamMembership = team.executeAddMember({
+    async createTeamMembership(player: Player, team: Team, activeTo: Date | null) {
+        const teamMembershipId = team.executeAddMember({
             activeFrom: DateTime.fromJSDate(team.dateFounded).plus({ minute: 1 }).toJSDate(),
             activeTo: activeTo,
             player: player,
         });
 
         await this._teamRepository.updateAsync(team);
-        return teamMembership;
+        return team.executeFindMemberById(teamMembershipId);
     }
 
     async createUser(seed: number, isAdmin: boolean) {
@@ -96,7 +97,7 @@ class Mixins {
         });
     }
 
-    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> }) {
+    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
         return await this.createMatch({
             seed: props.seed,
@@ -110,7 +111,7 @@ class Mixins {
         });
     }
 
-    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> }) {
+    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
         const endDate = DateTime.fromJSDate(date)
             .plus({ minutes: 90 })
@@ -152,7 +153,7 @@ class Mixins {
         homeTeam: Team;
         startDate: Date | null;
         endDate: null | Date;
-        goals: Array<{ dateOccured: Date; teamId: string; playerId: string }> | null;
+        goals: Array<{ dateOccured: Date; team: Team; player: Player }> | null;
     }) {
         const match = MatchFactory.CreateNew({
             id: `${props.seed}`,
@@ -169,7 +170,9 @@ class Mixins {
 
         if (props.goals != null) {
             match.score = MatchScore.ZeroScore;
-            props.goals.forEach(match.executeAddGoal);
+            props.goals.forEach((goal) => {
+                match.executeAddGoal({ dateOccured: goal.dateOccured, team: goal.team, player: goal.player})
+            });
         }
 
         await this._matchRepository.createAsync(match);

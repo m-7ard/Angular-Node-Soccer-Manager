@@ -1,11 +1,11 @@
 import TeamMembershipHistoryNumber from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryNumber";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
-import TeamMembership from "./TeamMembership";
-import { err, ok, Result } from "neverthrow";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
+import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 
 interface Props {
-    id: string;
-    teamMembershipId: TeamMembership["id"];
+    id: TeamMembershipHistoryId;
+    teamMembershipId: TeamMembershipId;
     dateEffectiveFrom: Date;
     numberValueObject: TeamMembershipHistoryNumber;
     positionValueObject: TeamMembershipHistoryPosition;
@@ -14,8 +14,8 @@ interface Props {
 class TeamMembershipHistory {
     private readonly __type: "TEAM_MEMBERSHIP_HISTORY_DOMAIN" = null!;
 
-    public readonly id: string;
-    public readonly teamMembershipId: TeamMembership["id"];
+    public readonly id: TeamMembershipHistoryId;
+    public readonly teamMembershipId: TeamMembershipId;
     public readonly dateEffectiveFrom: Date;
     public readonly numberValueObject: TeamMembershipHistoryNumber;
     public readonly positionValueObject: TeamMembershipHistoryPosition;

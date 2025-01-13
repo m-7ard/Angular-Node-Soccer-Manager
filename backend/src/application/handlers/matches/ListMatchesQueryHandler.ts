@@ -5,6 +5,7 @@ import IQuery, { IQueryResult } from "../IQuery";
 import Match from "domain/entities/Match";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
+import IApplicationError from "application/errors/IApplicationError";
 
 type QueryProps = {
     scheduledDate: Date | null;

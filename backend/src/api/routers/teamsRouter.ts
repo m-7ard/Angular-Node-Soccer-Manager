@@ -53,7 +53,8 @@ registerAction({
     method: "GET",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
-        return new ListTeamPlayersAction(requestDispatcher);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ListTeamPlayersAction(requestDispatcher, apiModelService);
     },
 });
 
@@ -85,7 +86,8 @@ registerAction({
     method: "GET",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
-        return new ReadTeamAction(requestDispatcher);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ReadTeamAction(requestDispatcher, apiModelService);
     },
 });
 

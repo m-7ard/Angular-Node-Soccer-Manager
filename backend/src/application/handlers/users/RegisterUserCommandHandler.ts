@@ -6,7 +6,8 @@ import UserFactory from "domain/domainFactories/UserFactory";
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
-import UserExistsValidator from "application/validators/UserExistsValidator";
+import UserExistsValidator from "application/services/UserExistsValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type RegisterUserCommandResult = ICommandResult<IApplicationError[]>;
 

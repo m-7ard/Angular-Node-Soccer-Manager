@@ -12,6 +12,9 @@ import TeamMembershipPendingUpdatingEvent from "domain/domainEvents/Team/TeamMem
 import TeamMembershipHistoryPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingCreationEvent";
 import TeamMembershipHistoryMapper from "infrastructure/mappers/TeamMembershipHistoryMapper";
 import TeamMembershipHistoryPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingUpdatingEvent";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipMapper from "infrastructure/mappers/TeamMembershipMapper";
+import TeamDbEntity from "infrastructure/dbEntities/TeamDbEntity";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -26,46 +29,24 @@ class TeamRepository implements ITeamRepository {
 
             if (event instanceof TeamMembershipPendingCreationEvent) {
                 const teamMembership = event.payload;
-
-                const sqlEntry = sql`
-                    INSERT INTO team_membership
-                        SET 
-                            id = ${teamMembership.id},
-                            team_id = ${teamMembership.teamId},
-                            player_id = ${teamMembership.playerId},
-                            active_from = ${teamMembership.teamMembershipDates.activeFrom},
-                            active_to = ${teamMembership.teamMembershipDates.activeTo}
-                `;
+                const dbEntity = TeamMembershipMapper.domainToDbEntity(teamMembership);
+                const sqlEntry = dbEntity.getInsertEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
             } else if (event instanceof TeamMembershipPendingDeletionEvent) {
-                const teamMembership = event.payload;
-
-                const sqlEntry = sql`
-                    DELETE FROM team_membership
-                        WHERE id = ${teamMembership.id}
-                `;
+                const dbEntity = TeamMembershipMapper.domainToDbEntity(event.payload);
+                const sqlEntry = dbEntity.getDeleteEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
             } else if (event instanceof TeamMembershipPendingUpdatingEvent) {
-                const teamMembership = event.payload;
-
-                const sqlEntry = sql`
-                    UPDATE team_membership
-                        SET 
-                            team_id = ${teamMembership.teamId},
-                            player_id = ${teamMembership.playerId},
-                            active_from = ${teamMembership.teamMembershipDates.activeFrom},
-                            active_to = ${teamMembership.teamMembershipDates.activeTo}
-                        WHERE
-                            id = ${teamMembership.id}
-                `;
+                const dbEntity = TeamMembershipMapper.domainToDbEntity(event.payload);
+                const sqlEntry = dbEntity.getUpdateEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
@@ -73,16 +54,7 @@ class TeamRepository implements ITeamRepository {
                 });
             } else if (event instanceof TeamMembershipHistoryPendingCreationEvent) {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
-
-                const sqlEntry = sql`
-                    INSERT INTO team_membership_histories
-                        SET 
-                            id = ${dbEntity.id},
-                            team_membership_id = ${dbEntity.team_membership_id},
-                            date_effective_from = ${dbEntity.date_effective_from},
-                            number = ${dbEntity.number},
-                            position = ${dbEntity.position}
-                `;
+                const sqlEntry = dbEntity.getInsertEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
@@ -90,17 +62,7 @@ class TeamRepository implements ITeamRepository {
                 });
             } else if (event instanceof TeamMembershipHistoryPendingUpdatingEvent) {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
-
-                const sqlEntry = sql`
-                    UPDATE team_membership_histories
-                        SET 
-                            team_membership_id = ${dbEntity.team_membership_id},
-                            date_effective_from = ${dbEntity.date_effective_from},
-                            number = ${dbEntity.number},
-                            position = ${dbEntity.position}
-                        WHERE
-                            id = ${dbEntity.id} 
-                `;
+                const sqlEntry = dbEntity.getUpdateEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
@@ -112,9 +74,8 @@ class TeamRepository implements ITeamRepository {
         team.clearEvents();
     }
 
-    async getByIdAsync(id: string): Promise<Team | null> {
-        const sqlEntry = sql`SELECT * FROM team WHERE team.id = ${id}`;
-
+    async getByIdAsync(id: TeamId): Promise<Team | null> {
+        const sqlEntry = TeamDbEntity.getByIdStatement(id.value);
         const [row] = await this._db.execute<ITeamSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
@@ -136,13 +97,8 @@ class TeamRepository implements ITeamRepository {
     }
 
     async createAsync(team: Team): Promise<void> {
-        const sqlEntry = sql`
-            INSERT INTO team
-                SET 
-                    id = ${team.id},
-                    name = ${team.name},
-                    date_founded = ${team.dateFounded}
-        `;
+        const dbEntity = TeamMapper.domainToDbEntity(team);
+        const sqlEntry = dbEntity.getInsertEntry();
 
         await this._db.execute({
             statement: sqlEntry.sql,
@@ -153,15 +109,8 @@ class TeamRepository implements ITeamRepository {
     }
 
     async updateAsync(team: Team): Promise<void> {
-        const sqlEntry = sql`
-            UPDATE team
-                SET 
-                    id = ${team.id},
-                    name = ${team.name},
-                    date_founded = ${team.dateFounded}
-                WHERE
-                    id = ${team.id}
-        `;
+        const dbEntity = TeamMapper.domainToDbEntity(team);
+        const sqlEntry = dbEntity.getUpdateEntry();
 
         await this._db.execute({
             statement: sqlEntry.sql,
@@ -181,10 +130,7 @@ class TeamRepository implements ITeamRepository {
         if (criteria.teamMembershipPlayerId != null) {
             query = query
                 .join("team_membership", "team.id", "team_membership.team_id")
-                .where(
-                    "team_membership.player_id",
-                    criteria.teamMembershipPlayerId,
-                )
+                .where("team_membership.player_id", criteria.teamMembershipPlayerId)
                 .select("team.*")
                 .distinct();
         }
@@ -200,7 +146,7 @@ class TeamRepository implements ITeamRepository {
 
         for (const team of teams) {
             await team.loadTeamMemberships(this._db);
-        
+
             for (let i = 0; i < team.team_memberships.length; i++) {
                 const teamMembership = team.team_memberships[i];
                 await teamMembership.loadTeamMembershipHistories(this._db);
@@ -213,11 +159,8 @@ class TeamRepository implements ITeamRepository {
     async deleteAsync(team: Team): Promise<void> {
         for (let i = 0; i < team.teamMemberships.length; i++) {
             const teamMembership = team.teamMemberships[i];
-
-            const sqlEntry = sql`
-                DELETE FROM team_teamship WHERE
-                    id = ${teamMembership.id}
-            `;
+            const dbEntity = TeamMembershipMapper.domainToDbEntity(teamMembership);
+            const sqlEntry = dbEntity.getDeleteEntry();
 
             const headers = await this._db.execute({
                 statement: sqlEntry.sql,
@@ -225,16 +168,12 @@ class TeamRepository implements ITeamRepository {
             });
 
             if (headers.affectedRows === 0) {
-                throw Error(
-                    `No team_membership of id "${teamMembership.id}" was deleted."`,
-                );
+                throw Error(`No team_membership of id "${teamMembership.id}" was deleted."`);
             }
         }
 
-        const sqlEntry = sql`
-            DELETE FROM team WHERE
-                id = ${team.id}
-        `;
+        const dbEntity = TeamMapper.domainToDbEntity(team);
+        const sqlEntry = dbEntity.getDeleteEntry();
 
         const headers = await this._db.execute({
             statement: sqlEntry.sql,

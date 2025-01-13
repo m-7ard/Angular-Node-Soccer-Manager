@@ -5,7 +5,8 @@ import IMatchRepository from "application/interfaces/IMatchRepository";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import MatchDomainService from "domain/domainService/MatchDomainService";
-import MatchExistsValidator from "application/validators/MatchExistsValidator";
+import MatchExistsValidator from "application/services/MatchExistsValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 type CommandProps = {
     id: string;

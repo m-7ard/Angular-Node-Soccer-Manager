@@ -1,25 +1,27 @@
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import IGoalData from "application/contracts/IGoalData";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import IApplicationError from "application/errors/IApplicationError";
 import IValidator from "application/interfaces/IValidator";
 import Team from "domain/entities/Team";
 import { err, ok, Result } from "neverthrow";
 
-class IsValidGoalValidator implements IValidator<{ dateOccured: Date; teamId: string; playerId: string }, true> {
+class IsValidGoalValidator implements IValidator<IGoalData, true> {
     constructor(
         private readonly homeTeam: Team,
         private readonly awayTeam: Team,
     ) {
-        if (homeTeam.id === awayTeam.id) {
+        if (homeTeam.id.equals(awayTeam.id)) {
             throw new Error("Home team and away team cannot be the same team.");
         }
     }
 
-    validate(goal: { dateOccured: Date; teamId: string; playerId: string }): Result<true, IApplicationError[]> {
-        if (goal.teamId !== this.homeTeam.id && goal.teamId !== this.awayTeam.id) {
+    validate(goal: IGoalData): Result<true, IApplicationError[]> {
+        if (!goal.teamId.equals(this.homeTeam.id) && !goal.teamId.equals(this.awayTeam.id)) {
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Goal team id does not match the home team or away team.`,
-                    code: APPLICATION_VALIDATOR_CODES.IS_VALID_GOAL_ERROR,
+                    code: APPLICATION_SERVICE_CODES.IS_VALID_GOAL_ERROR,
                     path: [],
                 }),
             );
@@ -32,7 +34,7 @@ class IsValidGoalValidator implements IValidator<{ dateOccured: Date; teamId: st
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Goal player of id "${goal.playerId}" cannot be an active member of both teams.`,
-                    code: APPLICATION_VALIDATOR_CODES.IS_VALID_GOAL_ERROR,
+                    code: APPLICATION_SERVICE_CODES.IS_VALID_GOAL_ERROR,
                     path: [],
                 }),
             );
@@ -44,7 +46,7 @@ class IsValidGoalValidator implements IValidator<{ dateOccured: Date; teamId: st
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `Player of id "${goal.playerId}" does not exist on Home Team or Away Team.`,
-                    code: APPLICATION_VALIDATOR_CODES.IS_VALID_GOAL_ERROR,
+                    code: APPLICATION_SERVICE_CODES.IS_VALID_GOAL_ERROR,
                     path: [],
                 }),
             );

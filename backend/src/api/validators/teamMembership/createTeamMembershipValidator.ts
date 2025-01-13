@@ -8,6 +8,7 @@ const validatorSchema = object({
     activeTo: nullable(date()),
     number: min(max(integer(), 11), 1),
     position: string(),
+    dateEffectiveFrom: date(),
 });
 
 function createTeamMembershipValidator(data: ICreateTeamMembershipRequestDTO) {

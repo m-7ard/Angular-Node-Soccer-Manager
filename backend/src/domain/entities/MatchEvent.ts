@@ -1,16 +1,16 @@
-import Team from "./Team";
 import Match from "./Match";
-import Player from "./Player";
 import MatchEventType from "domain/valueObjects/MatchEvent/MatchEventType";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import TeamId from "domain/valueObjects/Team/TeamId";
 
 type MatchEventProps = {
     id: string;
     matchId: Match["id"];
-    playerId: Player["id"];
-    teamId: Team["id"];
+    playerId: PlayerId;
+    teamId: TeamId;
     type: MatchEventType;
     dateOccured: Date;
-    secondaryPlayerId: Player["id"] | null;
+    secondaryPlayerId: PlayerId | null;
     description: string;
     createdAt: Date;
     updatedAt: Date;
@@ -21,11 +21,11 @@ class MatchEvent {
 
     public id: string;
     public matchId: Match["id"];
-    public playerId: Player["id"];
-    public teamId: Team["id"];
+    public playerId: PlayerId;
+    public teamId: TeamId;
     public type: MatchEventType;
     public dateOccured: Date;
-    public secondaryPlayerId: Player["id"] | null;
+    public secondaryPlayerId: PlayerId | null;
     public description: string;
     public createdAt: Date;
     public updatedAt: Date;

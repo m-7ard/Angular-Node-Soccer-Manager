@@ -30,8 +30,8 @@ beforeEach(async () => {
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
     player_002 = await mixins.createPlayer(2);
-    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
-    teamMembership_002 = await mixins.createTeamMembership(player_002, team_001, null, 1);
+    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null);
+    teamMembership_002 = await mixins.createTeamMembership(player_002, team_001, null);
 });
 
 describe("Read Team Integration Test;", () => {

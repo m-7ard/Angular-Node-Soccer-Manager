@@ -1,16 +1,16 @@
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IMatchRepository from "application/interfaces/IMatchRepository";
-import ITeamRepository from "application/interfaces/ITeamRepository";
-import MatchDomainService from "domain/domainService/MatchDomainService";
 import { err, ok } from "neverthrow";
 import ICommand, { ICommandResult } from "../ICommand";
 import { IRequestHandler } from "../IRequestHandler";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
 import MatchFactory from "domain/domainFactories/MatchFactory";
-import IsValidMatchDatesValidator from "application/validators/IsValidMatchDateValidator";
+import IsValidMatchDatesValidator from "application/services/IsValidMatchDateValidator";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import ITeamValidator from "application/interfaces/ITeamValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 type CommandProps = {
     id: string;
@@ -42,9 +42,9 @@ export class ScheduleMatchCommand implements ICommand<ScheduleMatchCommandResult
 
 export default class ScheduleMatchCommandHandler implements IRequestHandler<ScheduleMatchCommand, ScheduleMatchCommandResult> {
     private readonly _matchRepository: IMatchRepository;
-    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
 
-    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: TeamExistsValidator }) {
+    constructor(props: { matchRepository: IMatchRepository; teamExistsValidator: ITeamValidator<TeamId> }) {
         this._matchRepository = props.matchRepository;
         this.teamExistsValidator = props.teamExistsValidator;
     }
@@ -58,12 +58,12 @@ export default class ScheduleMatchCommandHandler implements IRequestHandler<Sche
             }))
         }
 
-        const homeTeamExistsResult = await this.teamExistsValidator.validate({ id: command.homeTeamId });
+        const homeTeamExistsResult = await this.teamExistsValidator.validate(TeamId.executeCreate(command.homeTeamId));
         if (homeTeamExistsResult.isErr()) {
             return err(homeTeamExistsResult.error);
         }
 
-        const awayTeamExistsResult = await this.teamExistsValidator.validate({ id: command.awayTeamId });
+        const awayTeamExistsResult = await this.teamExistsValidator.validate(TeamId.executeCreate(command.awayTeamId));
         if (awayTeamExistsResult.isErr()) {
             return err(awayTeamExistsResult.error);
         }

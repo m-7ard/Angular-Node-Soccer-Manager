@@ -56,7 +56,7 @@ describe("Delete Player Integration Test;", () => {
     it("Delete Player; Player has memberships and cannot be deleted; Failure;", async () => {
         const mixins = new Mixins();
         const team_001 = await mixins.createTeam(1);
-        const teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
+        const teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null);
 
         const request: IDeletePlayerRequestDTO = {};
         const response = await adminSuperTest({

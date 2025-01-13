@@ -2,7 +2,9 @@ import { IRequestHandler } from "../IRequestHandler";
 import ICommand, { ICommandResult } from "../ICommand";
 import { err, ok } from "neverthrow";
 import ITeamRepository from "../../interfaces/ITeamRepository";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import ITeamValidator from "application/interfaces/ITeamValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type DeleteTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -18,15 +20,16 @@ export class DeleteTeamCommand implements ICommand<DeleteTeamCommandResult> {
 
 export default class DeleteTeamCommandHandler implements IRequestHandler<DeleteTeamCommand, DeleteTeamCommandResult> {
     private readonly _teamRepository: ITeamRepository;
-    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
 
-    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: TeamExistsValidator }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId> }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: DeleteTeamCommand): Promise<DeleteTeamCommandResult> {
-        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.id });
+        const teamId = TeamId.executeCreate(command.id);
+        const teamExistsResult = await this.teamExistsValidator.validate(teamId);
         if (teamExistsResult.isErr()) {
             return err(teamExistsResult.error);
         }

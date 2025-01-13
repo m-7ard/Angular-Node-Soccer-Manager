@@ -1,11 +1,12 @@
 import TeamMembership from "domain/entities/TeamMembership";
 import TeamMembershipHistory from "domain/entities/TeamMembershipHistory";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 import TeamMembershipHistoryNumber from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryNumber";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
 
 class TeamMembershipHistoryFactory {
     static CreateNew(props: { 
-        id: string;
+        id: TeamMembershipHistoryId;
         teamMembershipId: TeamMembership["id"];
         dateEffectiveFrom: Date;
         numberValueObject: TeamMembershipHistoryNumber;
@@ -21,7 +22,7 @@ class TeamMembershipHistoryFactory {
     }
 
     static CreateExisting(props: { 
-        id: string;
+        id: TeamMembershipHistoryId;
         teamMembershipId: TeamMembership["id"];
         dateEffectiveFrom: Date;
         numberValueObject: TeamMembershipHistoryNumber;

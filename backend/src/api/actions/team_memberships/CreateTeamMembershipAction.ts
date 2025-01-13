@@ -33,7 +33,9 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
             playerId: dto.playerId,
             activeFrom: dto.activeFrom,
             activeTo: dto.activeTo,
-            number: dto.number
+            number: dto.number,
+            position: dto.position,
+            dateEffectiveFrom: dto.dateEffectiveFrom
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -57,7 +59,9 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
                 playerId: request.body.playerId,
                 activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
                 activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),
-                number: request.body.number
+                number: request.body.number,
+                position: request.body.position,
+                dateEffectiveFrom: parsers.parseDateOrElse(request.body.dateEffectiveFrom, "Invalid Date"),
             },
         };
     }

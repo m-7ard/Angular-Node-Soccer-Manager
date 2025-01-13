@@ -11,7 +11,7 @@ import { Request } from "express";
 import parsers from "api/utils/parsers";
 import { CreateMatchCommand } from "application/handlers/matches/CreateMatchCommandHandler";
 import { Map } from "immutable";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: ICreateMatchRequestDTO };
 type ActionResponse = JsonResponse<ICreateMatchResponseDTO | IApiError[]>;
@@ -49,8 +49,8 @@ class CreateMatchAction implements IAction<ActionRequest, ActionResponse> {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
                 body: ApiErrorFactory.mapApplicationErrors(result.error, {
-                    [APPLICATION_VALIDATOR_CODES.IS_VALID_GOAL_ERROR]: ["goals"],
-                    [APPLICATION_VALIDATOR_CODES.CAN_ADD_GOAL_ERROR]: ["goals"]
+                    [APPLICATION_SERVICE_CODES.IS_VALID_GOAL_ERROR]: ["goals"],
+                    [APPLICATION_SERVICE_CODES.CAN_ADD_GOAL_ERROR]: ["goals"]
                 }),
             });
         }

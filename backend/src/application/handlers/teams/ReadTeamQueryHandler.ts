@@ -2,7 +2,9 @@ import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import Team from "../../../domain/entities/Team";
 import { err, ok } from "neverthrow";
-import TeamExistsValidator from "application/validators/TeamExistsValidator";
+import TeamId from "domain/valueObjects/Team/TeamId";
+import ITeamValidator from "application/interfaces/ITeamValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type ReadTeamQueryResult = IQueryResult<Team, IApplicationError[]>;
 
@@ -17,16 +19,17 @@ export class ReadTeamQuery implements IQuery<ReadTeamQueryResult> {
 }
 
 export default class ReadTeamQueryHandler implements IRequestHandler<ReadTeamQuery, ReadTeamQueryResult> {
-    private readonly teamExistsValidator: TeamExistsValidator;
+    private readonly teamExistsValidator: ITeamValidator<TeamId>;
     
     constructor(props: {
-        teamExistsValidator: TeamExistsValidator;
+        teamExistsValidator: ITeamValidator<TeamId>;
     }) {
         this.teamExistsValidator = props.teamExistsValidator;
     }
 
     async handle(command: ReadTeamQuery): Promise<ReadTeamQueryResult> {
-        const teamExistsResult = await this.teamExistsValidator.validate({ id: command.id });
+        const teamId = TeamId.executeCreate(command.id);
+        const teamExistsResult = await this.teamExistsValidator.validate(teamId);
         if (teamExistsResult.isErr()) {
             return err(teamExistsResult.error);
         }

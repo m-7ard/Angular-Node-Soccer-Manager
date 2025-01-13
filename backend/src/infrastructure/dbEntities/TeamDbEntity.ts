@@ -3,6 +3,7 @@ import TeamMembershipDbEntity from "./TeamMembershipDbEntity";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 import TeamMembershipMapper from "infrastructure/mappers/TeamMembershipMapper";
+import sql from "sql-template-tag";
 
 class TeamDbEntity implements ITeamSchema {
     constructor(props: { id: string; name: string; date_founded: Date }) {
@@ -19,8 +20,41 @@ class TeamDbEntity implements ITeamSchema {
     public id: string;
     public name: string;
     public date_founded: Date;
-    
+
     public team_memberships: TeamMembershipDbEntity[] = [];
+
+    public getInsertEntry() {
+        return sql`
+            INSERT INTO team
+                SET 
+                    id = ${this.id},
+                    name = ${this.name},
+                    date_founded = ${this.date_founded}
+        `;
+    }
+
+    public getUpdateEntry() {
+        return sql`
+            UPDATE team
+                SET 
+                    id = ${this.id},
+                    name = ${this.name},
+                    date_founded = ${this.date_founded}
+                WHERE
+                    id = ${this.id}
+        `;
+    }
+
+    public getDeleteEntry() {
+        return sql`
+            DELETE FROM team WHERE
+                id = ${this.id}
+        `;
+    }
+
+    public static getByIdStatement(id: TeamDbEntity["id"]) {
+        return sql`SELECT * FROM team WHERE team.id = ${id}`;
+    }
 }
 
 export default TeamDbEntity;

@@ -14,6 +14,7 @@ import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
+import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
 
 let team_001: Team;
 let player_001: Player;
@@ -39,10 +40,12 @@ beforeEach(async () => {
 describe("Create TeamMembership Integration Test;", () => {
     it("Create Team Membership; Valid Data; Success;", async () => {
         const request: ICreateTeamMembershipRequestDTO = {
-            playerId: player_001.id,
+            playerId: player_001.id.value,
             activeFrom: new Date(),
             activeTo: null,
             number: 5,
+            position: TeamMembershipHistoryPosition.ATTACKING_MIDFIELDER.value,
+            dateEffectiveFrom: new Date()
         };
 
         const response = await adminSuperTest({
@@ -64,10 +67,12 @@ describe("Create TeamMembership Integration Test;", () => {
         const INVALID_TEAM_ID = "INVALID";
 
         const request: ICreateTeamMembershipRequestDTO = {
-            playerId: player_001.id,
+            playerId: player_001.id.value,
             activeFrom: new Date(),
             activeTo: null,
             number: 5,
+            position: TeamMembershipHistoryPosition.ATTACKING_MIDFIELDER.value,
+            dateEffectiveFrom: new Date()
         };
 
         const response = await adminSuperTest({

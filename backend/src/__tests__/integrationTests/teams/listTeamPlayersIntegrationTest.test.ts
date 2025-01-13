@@ -28,12 +28,12 @@ beforeEach(async () => {
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
     player_002 = await mixins.createPlayer(2);
-    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null, 1);
-    teamMembership_002 = await mixins.createTeamMembership(player_002, team_001, null, 1);
+    teamMembership_001 = await mixins.createTeamMembership(player_001, team_001, null);
+    teamMembership_002 = await mixins.createTeamMembership(player_002, team_001, null);
 });
 
 describe("List Team Players Integration Test;", () => {
-    it("List Team Players; No Args; Success;", async () => {
+    it.only("List Team Players; No Args; Success;", async () => {
         const request: IListTeamPlayersRequestDTO = {};
 
         const response = await supertest(server).get(`/api/teams/${team_001.id}/players`).send(request).set("Content-Type", "application/json");

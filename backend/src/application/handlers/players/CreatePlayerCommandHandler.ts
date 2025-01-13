@@ -3,6 +3,8 @@ import ICommand, { ICommandResult } from "../ICommand";
 import { ok } from "neverthrow";
 import IPlayerRepository from "application/interfaces/IPlayerRepository";
 import Player from "domain/entities/Player";
+import IApplicationError from "application/errors/IApplicationError";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
 
 export type CreatePlayerCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -31,7 +33,7 @@ export default class CreateTeamCommandHandler
 
     async handle(command: CreatePlayerCommand): Promise<CreatePlayerCommandResult> {
         const player = new Player({
-            id: command.id,
+            id: PlayerId.executeCreate(command.id),
             name: command.name,
             activeSince: command.activeSince,
         });

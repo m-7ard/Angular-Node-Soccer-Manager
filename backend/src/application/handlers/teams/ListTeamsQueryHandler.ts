@@ -4,7 +4,8 @@ import Team from "../../../domain/entities/Team";
 import ITeamRepository from "../../interfaces/ITeamRepository";
 import { err, ok } from "neverthrow";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
-import TeamMembership from "domain/entities/TeamMembership";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type ListTeamsQueryResult = IQueryResult<Team[], IApplicationError[]>;
 
@@ -13,7 +14,7 @@ export class ListTeamsQuery implements IQuery<ListTeamsQueryResult> {
 
     constructor(props: {
         name: string | null;
-        teamMembershipPlayerId: TeamMembership["playerId"] | null;
+        teamMembershipPlayerId: string | null;
         limitBy: number | null;
     }) {
         this.name = props.name;
@@ -22,7 +23,7 @@ export class ListTeamsQuery implements IQuery<ListTeamsQueryResult> {
     }
 
     public name: string | null;
-    public teamMembershipPlayerId: TeamMembership["playerId"] | null;
+    public teamMembershipPlayerId: string | null;
     public limitBy: number | null;
 }
 
@@ -40,9 +41,13 @@ export default class ListTeamsQueryHandler implements IRequestHandler<ListTeamsQ
             query.limitBy = 24;
         }
 
+        if (query.teamMembershipPlayerId != null && !PlayerId.canCreate(query.teamMembershipPlayerId)) {
+            query.teamMembershipPlayerId = null;
+        }
+
         const criteria = new FilterAllTeamsCriteria({
             name: query.name,
-            teamMembershipPlayerId: query.teamMembershipPlayerId,
+            teamMembershipPlayerId: query.teamMembershipPlayerId == null ? null : PlayerId.executeCreate(query.teamMembershipPlayerId),
             limitBy: query.limitBy
         })
         

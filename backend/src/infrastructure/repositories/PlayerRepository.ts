@@ -1,13 +1,12 @@
 import Player from "domain/entities/Player";
 import IDatabaseService from "../../api/interfaces/IDatabaseService";
 import IPlayerRepository from "../../application/interfaces/IPlayerRepository";
-import sql from "sql-template-tag";
 import PlayerMapper from "infrastructure/mappers/PlayerMapper";
 import PlayerDbEntity from "infrastructure/dbEntities/PlayerDbEntity";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
-import toSqlDate from "utils/toSqlDate";
 import FilterAllPlayersCriteria from "infrastructure/contracts/FilterAllPlayersCriteria";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
 
 class PlayerRepository implements IPlayerRepository {
     private readonly _db: IDatabaseService;
@@ -17,10 +16,8 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async deleteAsync(player: Player): Promise<void> {
-        const sqlEntry = sql`
-            DELETE FROM player WHERE
-                id = ${player.id}
-        `;
+        const dbEntity = PlayerMapper.domainToDbEntity(player);
+        const sqlEntry = dbEntity.getDeleteStatement();
 
         const headers = await this._db.execute({
             statement: sqlEntry.sql,
@@ -32,12 +29,8 @@ class PlayerRepository implements IPlayerRepository {
         }
     }
 
-    async getByIdAsync(id: string): Promise<Player | null> {
-        const sqlEntry = sql`
-            SELECT * FROM player WHERE
-                id = ${id}
-        `;
-
+    async getByIdAsync(id: PlayerId): Promise<Player | null> {
+        const sqlEntry = PlayerDbEntity.getByIdStatement(id.value);
         const [player] = await this._db.execute<PlayerDbEntity | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
@@ -47,13 +40,8 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async createAsync(player: Player): Promise<Player> {
-        const sqlEntry = sql`
-            INSERT INTO player
-                SET 
-                    id = ${player.id},
-                    name = ${player.name},
-                    active_since = ${toSqlDate(player.activeSince)}
-        `;
+        const dbEntity = PlayerMapper.domainToDbEntity(player);
+        const sqlEntry = dbEntity.getInsertStatement();
 
         await this._db.execute({
             statement: sqlEntry.sql,
@@ -64,14 +52,8 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async updateAsync(player: Player): Promise<Player> {
-        const sqlEntry = sql`
-            UPDATE player
-                SET
-                    name = ${player.name},
-                    active_since = ${player.activeSince}
-                WHERE
-                    id = ${player.id}
-        `;
+        const dbEntity = PlayerMapper.domainToDbEntity(player);
+        const sqlEntry = dbEntity.getUpdateStatement();
 
         await this._db.execute({
             statement: sqlEntry.sql,

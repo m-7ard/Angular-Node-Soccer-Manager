@@ -1,5 +1,6 @@
 import IMatchApiModel from "@apiModels/IMatchApiModel";
 import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
+import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import IApiModelService from "api/interfaces/IApiModelService";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
@@ -9,6 +10,9 @@ import Match from "domain/entities/Match";
 import MatchEvent from "domain/entities/MatchEvent";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
+import TeamMembership from "domain/entities/TeamMembership";
+import PlayerId from "domain/valueObjects/Player/PlayerId";
+import TeamId from "domain/valueObjects/Team/TeamId";
 import PlayerRepository from "infrastructure/repositories/PlayerRepository";
 import TeamRepository from "infrastructure/repositories/TeamRepository";
 
@@ -24,21 +28,17 @@ class ApiModelService implements IApiModelService {
         this.teamRepository = new TeamRepository(db);
     }
 
-    private async getPlayerFromCacheOrDb(playerId: Player["id"]): Promise<Player | null> {
+    private async getPlayerFromCacheOrDb(playerId: PlayerId): Promise<Player | null> {
         if (this.playerCache.has(playerId)) {
             return this.playerCache.get(playerId)!;
         }
 
-        console.log(playerId)
-        console.log(playerId)
-        console.log(playerId)
-        console.log(playerId)
         const player = await this.playerRepository.getByIdAsync(playerId);
         this.playerCache.set(playerId, player);
         return player;
     }
 
-    private async getTeamFromCacheOrDb(teamId: Team["id"]): Promise<Team | null> {
+    private async getTeamFromCacheOrDb(teamId: TeamId): Promise<Team | null> {
         if (this.teamCache.has(teamId)) {
             return this.teamCache.get(teamId)!;
         }
@@ -96,6 +96,27 @@ class ApiModelService implements IApiModelService {
         for (let i = 0; i < matchEvents.length; i++) {
             const matchEvent = matchEvents[i];
             results.push(await this.createMatchEventApiModel(matchEvent));
+        }
+
+        return results;
+    }
+
+    async createTeamPlayerApiModel(teamMembership: TeamMembership): Promise<ITeamPlayerApiModel> {
+        const player = await this.getPlayerFromCacheOrDb(teamMembership.playerId);
+        if (player == null) throw new Error("Player does not exist.");
+
+        return {
+            membership: ApiModelMapper.createTeamMembershipApiModel(teamMembership),
+            player: ApiModelMapper.createPlayerApiModel(player),
+        };
+    }
+
+    async createManyTeamPlayerApiModel(teamMemberships: Array<TeamMembership>): Promise<ITeamPlayerApiModel[]> {
+        const results: ITeamPlayerApiModel[] = [];
+
+        for (let i = 0; i < teamMemberships.length; i++) {
+            const teamMembership = teamMemberships[i];
+            results.push(await this.createTeamPlayerApiModel(teamMembership));
         }
 
         return results;

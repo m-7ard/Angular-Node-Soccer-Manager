@@ -1,5 +1,6 @@
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import IApplicationError from "application/errors/IApplicationError";
 import IValidator from "application/interfaces/IValidator";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import { err, ok, Result } from "neverthrow";
@@ -13,7 +14,7 @@ class IsValidMatchDatesValidator implements IValidator<{ scheduledDate: Date; st
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: createMatchDatesResults.error,
-                    code: APPLICATION_VALIDATOR_CODES.IS_VALID_MATCH_DATES_ERROR,
+                    code: APPLICATION_SERVICE_CODES.IS_VALID_MATCH_DATES_ERROR,
                     path: [],
                 }),
             );

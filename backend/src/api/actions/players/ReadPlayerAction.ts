@@ -10,7 +10,7 @@ import IReadPlayerResponseDTO from "api/DTOs/players/read/IReadPlayerResponseDTO
 import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IReadPlayerRequestDTO, playerId: string; };
 type ActionResponse = JsonResponse<IReadPlayerResponseDTO | IApiError[]>;
@@ -29,7 +29,7 @@ class ReadPlayerAction implements IAction<ActionRequest, ActionResponse> {
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.PLAYER_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.PLAYER_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),

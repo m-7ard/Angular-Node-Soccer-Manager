@@ -1,5 +1,4 @@
 import IPasswordHasher from "application/interfaces/IPasswordHasher";
-import IUserRepository from "application/interfaces/IUserRepository";
 import IJwtTokenService from "application/interfaces/JwtTokenService";
 import IQuery, { IQueryResult } from "../IQuery";
 import { IRequestHandler } from "../IRequestHandler";
@@ -7,7 +6,8 @@ import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory"
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import { err, ok } from "neverthrow";
 import { JWT_ROLES } from "application/other/jwt-payload";
-import UserExistsValidator from "application/validators/UserExistsValidator";
+import UserExistsValidator from "application/services/UserExistsValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 export type LoginUserQueryResult = IQueryResult<{ jwtToken: string }, IApplicationError[]>;
 

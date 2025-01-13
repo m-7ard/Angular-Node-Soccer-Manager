@@ -26,6 +26,14 @@ class TeamId {
         const matchDates = new TeamId(value);
         return matchDates;
     }
+
+    public equals(other: TeamId) {
+        return other.value === this.value;
+    }
+
+    toString() {
+        return this.value;
+    }
 }
 
 export default TeamId;

@@ -9,7 +9,7 @@ import { MarkMatchCancelledCommand } from "application/handlers/matches/MarkMatc
 import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import IAction from "../IAction";
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IMarkMatchCancelledRequestDTO; matchId: string };
 type ActionResponse = JsonResponse<IMarkMatchCancelledResponseDTO | IApiError[]>;
@@ -28,7 +28,7 @@ class MarkMatchCancelledAction implements IAction<ActionRequest, ActionResponse>
         if (result.isErr()) {
             const [expectedError] = result.error;
 
-            if (expectedError.code === APPLICATION_VALIDATOR_CODES.MATCH_EXISTS_ERROR) {
+            if (expectedError.code === APPLICATION_SERVICE_CODES.MATCH_EXISTS_ERROR) {
                 return new JsonResponse({
                     status: StatusCodes.NOT_FOUND,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),

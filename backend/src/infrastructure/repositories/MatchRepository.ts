@@ -8,6 +8,7 @@ import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesC
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
 import MatchEventMapper from "infrastructure/mappers/MatchEventMapper";
+import MatchDbEntity from "infrastructure/dbEntities/MatchDbEntity";
 
 class MatchRepository implements IMatchRepository {
     private readonly _db: IDatabaseService;
@@ -22,21 +23,8 @@ class MatchRepository implements IMatchRepository {
 
             if (event instanceof MatchEventPendingCreationEvent) {
                 const matchEvent = event.payload;
-                const matchEventDbEntity =
-                    MatchEventMapper.domainToDbEntity(matchEvent);
-
-                const sqlEntry = sql`
-                    INSERT INTO match_events
-                        SET
-                            id = ${matchEventDbEntity.id},
-                            match_id = ${matchEventDbEntity.match_id},
-                            player_id = ${matchEventDbEntity.player_id},
-                            team_id = ${matchEventDbEntity.team_id},
-                            type = ${matchEventDbEntity.type},
-                            date_occured = ${matchEventDbEntity.date_occured},
-                            secondary_player_id = ${matchEventDbEntity.secondary_player_id},
-                            description = ${matchEventDbEntity.description}
-                `;
+                const dbEntity = MatchEventMapper.domainToDbEntity(matchEvent);
+                const sqlEntry = dbEntity.getInsertStatement();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
@@ -50,12 +38,8 @@ class MatchRepository implements IMatchRepository {
 
     async deleteAsync(match: Match): Promise<void> {
         for (let i = 0; i < match.events.length; i++) {
-            const event = match.events[i];
-
-            const sqlEntry = sql`
-                DELETE FROM match_events WHERE
-                    id = ${event.id}
-            `;
+            const dbEntity = MatchEventMapper.domainToDbEntity(match.events[i]);
+            const sqlEntry = dbEntity.getDeleteStatement();
 
             const headers = await this._db.execute({
                 statement: sqlEntry.sql,
@@ -63,16 +47,12 @@ class MatchRepository implements IMatchRepository {
             });
 
             if (headers.affectedRows === 0) {
-                throw Error(
-                    `No \`match_events\` of id "${event.id}" was deleted."`,
-                );
+                throw Error(`No \`match_events\` of id "${dbEntity.id}" was deleted."`);
             }
         }
 
-        const sqlEntry = sql`
-            DELETE FROM matches WHERE
-                id = ${match.id}
-        `;
+        const dbEntity = MatchMapper.domainToDbEntity(match);
+        const sqlEntry = dbEntity.getDeleteEntry();
 
         const headers = await this._db.execute({
             statement: sqlEntry.sql,
@@ -80,13 +60,12 @@ class MatchRepository implements IMatchRepository {
         });
 
         if (headers.affectedRows === 0) {
-            throw Error(`No \`matches\` of id "${match.id} was deleted."`);
+            throw Error(`No \`matches\` of id "${dbEntity.id} was deleted."`);
         }
     }
 
     async getByIdAsync(id: string): Promise<Match | null> {
-        const sqlEntry = sql`SELECT * FROM matches WHERE id = ${id}`;
-
+        const sqlEntry = MatchDbEntity.getByIdStatement(id);
         const [row] = await this._db.execute<IMatchSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
@@ -104,21 +83,7 @@ class MatchRepository implements IMatchRepository {
 
     async createAsync(match: Match): Promise<void> {
         const dbEntity = MatchMapper.domainToDbEntity(match);
-
-        const sqlEntry = sql`
-            INSERT INTO matches
-                SET 
-                    id = ${dbEntity.id},
-                    home_team_id = ${dbEntity.home_team_id},
-                    away_team_id = ${dbEntity.away_team_id},
-                    venue = ${dbEntity.venue},
-                    scheduled_date = ${dbEntity.scheduled_date},
-                    start_date = ${dbEntity.start_date},
-                    end_date = ${dbEntity.end_date},
-                    status = ${dbEntity.status},
-                    home_team_score = ${dbEntity.home_team_score},
-                    away_team_score = ${dbEntity.away_team_score}
-        `;
+        const sqlEntry = dbEntity.getInsertEntry();
 
         await this._db.execute({
             statement: sqlEntry.sql,
@@ -138,10 +103,7 @@ class MatchRepository implements IMatchRepository {
             const endOfDay = new Date(criteria.scheduledDate);
             endOfDay.setHours(24, 0, 0, 0);
 
-            query = query.whereBetween("scheduled_date", [
-                startOfDay,
-                endOfDay,
-            ]);
+            query = query.whereBetween("scheduled_date", [startOfDay, endOfDay]);
         }
 
         if (criteria.status != null) {
@@ -168,24 +130,7 @@ class MatchRepository implements IMatchRepository {
 
     async updateAsync(match: Match): Promise<void> {
         const dbEntity = MatchMapper.domainToDbEntity(match);
-
-        const sqlEntry = sql`
-            UPDATE matches
-                SET 
-                    id = ${dbEntity.id},
-                    home_team_id = ${dbEntity.home_team_id},
-                    away_team_id = ${dbEntity.away_team_id},
-                    venue = ${dbEntity.venue},
-                    scheduled_date = ${dbEntity.scheduled_date},
-                    start_date = ${dbEntity.start_date},
-                    end_date = ${dbEntity.end_date},
-                    status = ${dbEntity.status},
-                    home_team_score = ${dbEntity.home_team_score},
-                    away_team_score = ${dbEntity.away_team_score}
-                WHERE 
-                    id = ${dbEntity.id}
-
-        `;
+        const sqlEntry = dbEntity.getUpdateEntry();
 
         await this._db.execute({
             statement: sqlEntry.sql,

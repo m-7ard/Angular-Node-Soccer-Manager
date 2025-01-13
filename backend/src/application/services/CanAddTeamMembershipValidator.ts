@@ -1,5 +1,6 @@
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import IApplicationError from "application/errors/IApplicationError";
 import IValidator from "application/interfaces/IValidator";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
@@ -14,7 +15,7 @@ class CanAddTeamMembershipValidator implements IValidator<Props, true> {
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: canAddMembershipResult.error,
-                    code: APPLICATION_VALIDATOR_CODES.CAN_ADD_TEAM_MEMBERSHIP_ERROR,
+                    code: APPLICATION_SERVICE_CODES.CAN_ADD_TEAM_MEMBERSHIP_ERROR,
                     path: [],
                 }
             ));

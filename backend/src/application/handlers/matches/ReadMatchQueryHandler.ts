@@ -5,7 +5,8 @@ import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory"
 import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import IQuery, { IQueryResult } from "../IQuery";
 import Match from "domain/entities/Match";
-import MatchExistsValidator from "application/validators/MatchExistsValidator";
+import MatchExistsValidator from "application/services/MatchExistsValidator";
+import IApplicationError from "application/errors/IApplicationError";
 
 type QueryProps = {
     id: string;

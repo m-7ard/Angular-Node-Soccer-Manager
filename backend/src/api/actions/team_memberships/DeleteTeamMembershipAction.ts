@@ -9,18 +9,18 @@ import IDeleteTeamMembershipRequestDTO from "api/DTOs/teamMemberships/delete/IDe
 import IDeleteTeamMembershipResponseDTO from "api/DTOs/teamMemberships/delete/IDeleteTeamMembershipResponseDTO";
 import { DeleteTeamMembershipCommand } from "application/handlers/team_memberships/DeleteTeamMembershipCommandHandler";
 
-type ActionRequest = { teamId: string; playerId: string; dto: IDeleteTeamMembershipRequestDTO };
+type ActionRequest = { teamId: string; teamMembershipId: string; dto: IDeleteTeamMembershipRequestDTO };
 type ActionResponse = JsonResponse<IDeleteTeamMembershipResponseDTO | IApiError[]>;
 
 class DeleteTeamMembershipAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { teamId, playerId } = request;
+        const { teamId, teamMembershipId } = request;
 
         const command = new DeleteTeamMembershipCommand({
             teamId: teamId,
-            playerId: playerId,
+            teamMembershipId: teamMembershipId
         });
         const result = await this._requestDispatcher.dispatch(command);
 
@@ -40,7 +40,7 @@ class DeleteTeamMembershipAction implements IAction<ActionRequest, ActionRespons
     bind(request: Request): ActionRequest {
         return {
             teamId: request.params.teamId,
-            playerId: request.params.playerId,
+            teamMembershipId: request.params.teamMembershipId,
             dto: {},
         };
     }

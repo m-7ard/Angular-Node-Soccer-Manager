@@ -1,5 +1,6 @@
-import APPLICATION_VALIDATOR_CODES from "application/errors/APPLICATION_VALIDATOR_CODES";
+import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import IApplicationError from "application/errors/IApplicationError";
 import IUserRepository from "application/interfaces/IUserRepository";
 import IValidator from "application/interfaces/IValidator";
 import User from "domain/entities/User";
@@ -15,7 +16,7 @@ class UserExistsValidator implements IValidator<{ email: string }, User> {
             return err(
                 ApplicationErrorFactory.createSingleListError({
                     message: `User of email "${input.email}" does not exist.`,
-                    code: APPLICATION_VALIDATOR_CODES.USER_EXISTS_ERROR,
+                    code: APPLICATION_SERVICE_CODES.USER_EXISTS_ERROR,
                     path: [],
                 }),
             );
