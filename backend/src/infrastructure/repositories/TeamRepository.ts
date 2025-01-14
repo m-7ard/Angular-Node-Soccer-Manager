@@ -4,7 +4,6 @@ import ITeamRepository from "../../application/interfaces/ITeamRepository";
 import Team from "domain/entities/Team";
 import ITeamSchema from "infrastructure/dbSchemas/ITeamSchema";
 import TeamMapper from "infrastructure/mappers/TeamMapper";
-import sql from "sql-template-tag";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
@@ -130,7 +129,7 @@ class TeamRepository implements ITeamRepository {
         if (criteria.teamMembershipPlayerId != null) {
             query = query
                 .join("team_membership", "team.id", "team_membership.team_id")
-                .where("team_membership.player_id", criteria.teamMembershipPlayerId)
+                .where("team_membership.player_id", criteria.teamMembershipPlayerId.value)
                 .select("team.*")
                 .distinct();
         }

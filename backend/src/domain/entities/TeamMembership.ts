@@ -44,7 +44,7 @@ class TeamMembership implements Props {
     public getEffectiveHistory(): TeamMembershipHistory | null {
         const [effectiveHistory] = this.teamMembershipHistories
             .filter((teamMembershipHistory) => teamMembershipHistory.isEffective())
-            .sort((a, b) => b.dateEffectiveFrom.getTime() - a.dateEffectiveFrom.getTime())[0];
+            .sort((a, b) => b.dateEffectiveFrom.getTime() - a.dateEffectiveFrom.getTime());
         
         return effectiveHistory ?? null;
     }

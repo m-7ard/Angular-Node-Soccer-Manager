@@ -29,15 +29,15 @@ beforeEach(async () => {
 });
 
 describe("Read Team Player Integration Test;", () => {
-    it("Read Team Players; No Args; Success;", async () => {
+    it("Read Team Player; No Args; Success;", async () => {
         const request: IReadTeamPlayerRequestDTO = {};
 
-        const response = await supertest(server).get(`/api/teams/${team_001.id}/players/${player_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).get(`/api/teams/${team_001.id}/players/${teamMembership_001.id}`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IReadTeamPlayerResponseDTO = response.body;
-        expect(body.team.id).toEqual(team_001.id);
-        expect(body.teamPlayer.player.id).toEqual(player_001.id);
-        expect(body.teamPlayer.membership.id).toEqual(teamMembership_001.id);
+        expect(body.team.id).toEqual(team_001.id.value);
+        expect(body.teamPlayer.player.id).toEqual(player_001.id.value);
+        expect(body.teamPlayer.membership.id).toEqual(teamMembership_001.id.value);
     });
 });

@@ -1,7 +1,7 @@
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import supertest from "supertest";
-import { db, disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
+import { disposeIntegrationTest, resetIntegrationTest, server, setUpIntegrationTest } from "../../../__utils__/integrationTests/integrationTest.setup";
 import Team from "domain/entities/Team";
 import Mixins from "__utils__/integrationTests/Mixins";
 import IReadTeamResponseDTO from "api/DTOs/teams/read/IReadTeamResponseDTO";
@@ -42,7 +42,7 @@ describe("Read Team Integration Test;", () => {
 
         expect(response.status).toBe(200);
         const body: IReadTeamResponseDTO = response.body;
-        expect(body.team.id).toEqual(team_001.id);
+        expect(body.team.id).toEqual(team_001.id.value);
         expect(body.teamPlayers.length).toEqual(2);
     });
 

@@ -27,7 +27,7 @@ export default class DeleteTeamMembershipCommandHandler implements IRequestHandl
     private readonly _teamRepository: ITeamRepository;
     private readonly teamExistsValidator: ITeamValidator<TeamId>;
 
-    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId>;  }) {
+    constructor(props: { teamRepository: ITeamRepository; teamExistsValidator: ITeamValidator<TeamId> }) {
         this._teamRepository = props.teamRepository;
         this.teamExistsValidator = props.teamExistsValidator;
     }
@@ -48,6 +48,9 @@ export default class DeleteTeamMembershipCommandHandler implements IRequestHandl
         if (canDeleteTeamMembershipResult.isErr()) {
             return err(ApplicationErrorFactory.createSingleListError({ code: APPLICATION_ERROR_CODES.NotAllowed, message: canDeleteTeamMembershipResult.error, path: [] }));
         }
+
+        // Delete Team Membership
+        team.executeDeleteTeamMembership(teamMembershipId);
 
         this._teamRepository.updateAsync(team);
         return ok(undefined);

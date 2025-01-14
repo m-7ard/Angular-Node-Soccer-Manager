@@ -93,7 +93,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/delete-membership/:playerId",
+    path: "/:teamId/delete-membership/:teamMembershipId",
     method: "DELETE",
     guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
@@ -104,7 +104,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/players/:playerId/update",
+    path: "/:teamId/players/:teamMembershipId/update",
     method: "PUT",
     guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
@@ -115,11 +115,12 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/players/:playerId",
+    path: "/:teamId/players/:teamMembershipId",
     method: "GET",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
-        return new ReadTeamPlayerAction(requestDispatcher);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ReadTeamPlayerAction(requestDispatcher, apiModelService);
     },
 });
 

@@ -12,9 +12,9 @@ import Player from "domain/entities/Player";
 import API_ERROR_CODES from "api/errors/API_ERROR_CODES";
 import IApiError from "api/errors/IApiError";
 import TeamMembership from "domain/entities/TeamMembership";
-import IDeletePlayerRequestDTO from "api/DTOs/players/delete/IDeletePlayerRequestDTO";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
+import IDeleteTeamMembershipRequestDTO from "api/DTOs/teamMemberships/delete/IDeleteTeamMembershipRequestDTO";
 
 let team_001: Team;
 let player_001: Player;
@@ -45,12 +45,12 @@ beforeEach(async () => {
 
 describe("Delete TeamMembership Integration Test;", () => {
     it("Delete Team Membership; Valid Data; Success;", async () => {
-        const request: IDeletePlayerRequestDTO = {};
+        const request: IDeleteTeamMembershipRequestDTO = {};
 
         const response = await adminSuperTest({
             agent: supertest(server)
                 .delete(
-                    `/api/teams/${team_001.id}/delete-membership/${player_001.id}`,
+                    `/api/teams/${team_001.id}/delete-membership/${teamMembership_001.id}`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -67,12 +67,12 @@ describe("Delete TeamMembership Integration Test;", () => {
     it("Delete Team Membership; Team does not exist; Failure;", async () => {
         const INVALID_TEAM_ID = "INVALID";
 
-        const request: IDeletePlayerRequestDTO = {};
+        const request: IDeleteTeamMembershipRequestDTO = {};
 
         const response = await adminSuperTest({
             agent: supertest(server)
                 .delete(
-                    `/api/teams/${INVALID_TEAM_ID}/delete-membership/${player_001.id}`,
+                    `/api/teams/${INVALID_TEAM_ID}/delete-membership/${teamMembership_001.id}`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -84,10 +84,10 @@ describe("Delete TeamMembership Integration Test;", () => {
         expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
     });
 
-    it("Delete Team Membership; Player does not exist; Failure;", async () => {
+    it("Delete Team Membership; TeamMembership does not exist; Failure;", async () => {
         const INVALID_ID = "INVALID";
 
-        const request: IDeletePlayerRequestDTO = {};
+        const request: IDeleteTeamMembershipRequestDTO = {};
 
         const response = await adminSuperTest({
             agent: supertest(server)

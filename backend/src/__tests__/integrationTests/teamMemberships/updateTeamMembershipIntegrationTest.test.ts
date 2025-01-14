@@ -46,7 +46,7 @@ beforeEach(async () => {
 });
 
 describe("Update TeamMembership Integration Test;", () => {
-    it.only("Update Team Membership; Valid Data; Success;", async () => {
+    it("Update Team Membership; Valid Data; Success;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: DateTime.fromJSDate(teamMembership_001.teamMembershipDates.activeFrom).plus({ minute: 1 }).toJSDate(),
@@ -55,7 +55,7 @@ describe("Update TeamMembership Integration Test;", () => {
         const response = await adminSuperTest({
             agent: supertest(server)
                 .put(
-                    `/api/teams/${team_001.id}/players/${player_001.id}/update`,
+                    `/api/teams/${team_001.id}/players/${teamMembership_001.id}/update`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -80,7 +80,7 @@ describe("Update TeamMembership Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .put(`/api/teams/${INVALID_ID}/players/${player_001.id}/update`)
+                .put(`/api/teams/${INVALID_ID}/players/${teamMembership_001.id}/update`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -91,7 +91,7 @@ describe("Update TeamMembership Integration Test;", () => {
         expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
     });
 
-    it("Update Team Membership; Player does not exist; Failure;", async () => {
+    it("Update Team Membership; Team Membership does not exist; Failure;", async () => {
         const request: IUpdateTeamMembershipRequestDTO = {
             activeFrom: teamMembership_001.teamMembershipDates.activeFrom,
             activeTo: new Date(),

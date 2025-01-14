@@ -5,7 +5,6 @@ import { Result } from "neverthrow";
 
 interface IAddGoalService {
     tryAddGoal(goal: IGoalData): Promise<Result<true, IApplicationError[]>>;
-    tryAddGoal(goal: IGoalData): Promise<Result<true, IApplicationError[]>>;
 }
 
 export interface IAddGoalServiceFactory {

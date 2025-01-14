@@ -2,7 +2,6 @@ import IDatabaseService from "../../api/interfaces/IDatabaseService";
 import Match from "domain/entities/Match";
 import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
 import MatchMapper from "infrastructure/mappers/MatchMapper";
-import sql from "sql-template-tag";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
 import knexQueryBuilder from "api/deps/knexQueryBuilder";

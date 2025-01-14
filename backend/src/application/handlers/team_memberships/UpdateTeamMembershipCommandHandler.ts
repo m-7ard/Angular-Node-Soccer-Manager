@@ -58,7 +58,7 @@ export default class UpdateTeamMembershipCommandHandler implements IRequestHandl
         const team = teamExistsResult.value;
 
         // Team Membership Exists
-        const teamMembershipId = TeamMembershipId.executeCreate(command.teamId);
+        const teamMembershipId = TeamMembershipId.executeCreate(command.teamMembershipId);
         const teamMembershipExistsValidator = this.teamMembershipExistsValidatorFactory.create(team);
         const teamMembershipExistsResult = teamMembershipExistsValidator.validate(teamMembershipId);
         if (teamMembershipExistsResult.isErr()) {

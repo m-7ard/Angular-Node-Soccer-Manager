@@ -21,7 +21,7 @@ class AddGoalService implements IAddGoalService {
     async tryAddGoal(goal: IGoalData): Promise<Result<true, IApplicationError[]>> {
         // Is Match Team
         const isMatchTeam = this.match.isMatchTeam(goal.teamId);
-        if (isMatchTeam) {
+        if (!isMatchTeam) {
             return err(ApplicationErrorFactory.createSingleListError({ message: `Team of id "${TeamId}" is not a Match Team.`, path: [], code: APPLICATION_ERROR_CODES.StateMismatch }));
         }
 

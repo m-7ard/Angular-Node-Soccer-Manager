@@ -56,7 +56,6 @@ class UpdateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
             dto: {
                 activeFrom: parsers.parseDateOrElse(request.body.activeFrom, "Invalid Date"),
                 activeTo: request.body.activeTo == null ? null : parsers.parseDateOrElse(request.body.activeTo, "Invalid Date"),
-                number: request.body.number,
             },
         };
     }

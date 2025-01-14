@@ -9,14 +9,14 @@ import ApiModelMapper from "api/mappers/ApiModelMapper";
 import IReadTeamPlayerRequestDTO from "api/DTOs/teams/read-team-player/IReadTeamPlayerRequestDTO";
 import IReadTeamPlayerResponseDTO from "api/DTOs/teams/read-team-player/IReadTeamPlayerResponseDTO";
 import { ReadTeamMembershipQuery } from "application/handlers/team_memberships/ReadTeamMembershipQueryHandler";
-import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
 import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
+import IApiModelService from "api/interfaces/IApiModelService";
 
 type ActionRequest = { dto: IReadTeamPlayerRequestDTO; teamId: string; teamMembershipId: string };
 type ActionResponse = JsonResponse<IReadTeamPlayerResponseDTO | IApiError[]>;
 
 class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
+    constructor(private readonly requestDispatcher: IRequestDispatcher, private readonly apiModelService: IApiModelService) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId, teamMembershipId } = request;
@@ -25,7 +25,7 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
             teamId: teamId,
             teamMembershipId: teamMembershipId,
         });
-        const result = await this._requestDispatcher.dispatch(query);
+        const result = await this.requestDispatcher.dispatch(query);
 
         if (result.isErr()) {
             const [expectedError] = result.error;
@@ -43,23 +43,11 @@ class ReadTeamPlayerAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
-        const playerQuery = new ReadPlayerQuery({ id: teamMembershipId });
-        const playerQueryResult = await this._requestDispatcher.dispatch(playerQuery);
-        if (playerQueryResult.isErr()) {
-            return new JsonResponse({
-                status: StatusCodes.INTERNAL_SERVER_ERROR,
-                body: ApiErrorFactory.mapApplicationErrors(playerQueryResult.error),
-            });
-        }
-
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
                 team: ApiModelMapper.createTeamApiModel(result.value.team),
-                teamPlayer: {
-                    membership: ApiModelMapper.createTeamMembershipApiModel(result.value.teamMembership),
-                    player: ApiModelMapper.createPlayerApiModel(playerQueryResult.value),
-                },
+                teamPlayer: await this.apiModelService.createTeamPlayerApiModel(result.value.teamMembership),
             },
         });
     }

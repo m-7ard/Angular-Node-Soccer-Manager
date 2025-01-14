@@ -97,8 +97,8 @@ export default class CreateMatchCommandHandler implements IRequestHandler<Create
 
         const match = MatchFactory.CreateNew({
             id: command.id,
-            homeTeamId: awayTeamId,
-            awayTeamId: homeTeamId,
+            homeTeamId: homeTeamId,
+            awayTeamId: awayTeamId,
             venue: command.venue,
             matchDates: MatchDates.executeCreate({
                 scheduledDate: command.scheduledDate,

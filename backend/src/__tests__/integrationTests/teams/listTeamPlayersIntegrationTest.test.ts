@@ -33,14 +33,14 @@ beforeEach(async () => {
 });
 
 describe("List Team Players Integration Test;", () => {
-    it.only("List Team Players; No Args; Success;", async () => {
+    it("List Team Players; No Args; Success;", async () => {
         const request: IListTeamPlayersRequestDTO = {};
 
         const response = await supertest(server).get(`/api/teams/${team_001.id}/players`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IListTeamPlayersResponseDTO = response.body;
-        expect(body.team.id).toEqual(team_001.id);
+        expect(body.team.id).toEqual(team_001.id.value);
         expect(body.teamPlayers.length).toEqual(2);
     });
 });

@@ -1,3 +1,6 @@
+const SECONDS = 1000;
+jest.setTimeout(70 * SECONDS)
+
 import createApplication from "api/createApplication";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import responseLogger from "api/middleware/responseLogger";

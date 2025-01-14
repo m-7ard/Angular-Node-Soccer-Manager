@@ -171,7 +171,7 @@ class Match {
     }
 
     public isMatchTeam(teamId: TeamId): boolean {
-        return this.homeTeamId.equals(teamId) || this.homeTeamId.equals(teamId);
+        return this.homeTeamId.equals(teamId) || this.awayTeamId.equals(teamId);
     }
 }
 
