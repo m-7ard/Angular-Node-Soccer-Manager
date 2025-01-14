@@ -104,7 +104,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/players/:teamMembershipId/update",
+    path: "/:teamId/memberships/:teamMembershipId/update",
     method: "PUT",
     guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
@@ -115,7 +115,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/players/:teamMembershipId",
+    path: "/:teamId/memberships/:teamMembershipId",
     method: "GET",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);

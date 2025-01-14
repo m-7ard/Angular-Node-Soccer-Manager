@@ -45,8 +45,6 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
         }
 
         const match = result.value;
-        console.log(match)
-        console.log(match.events)
 
         return new JsonResponse({
             status: StatusCodes.OK,

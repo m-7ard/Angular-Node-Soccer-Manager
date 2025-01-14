@@ -1,5 +1,5 @@
 import ITeamMembershipHistorySchema from "infrastructure/dbSchemas/ITeamMembershipHistorySchema";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class TeamMembershipHistoryDbEntity implements ITeamMembershipHistorySchema {
     constructor(props: ITeamMembershipHistorySchema) {
@@ -16,9 +16,11 @@ class TeamMembershipHistoryDbEntity implements ITeamMembershipHistorySchema {
     number: number;
     position: string;
 
+    public static readonly TABLE_NAME = "team_membership_histories";
+
     public getInsertEntry() {
         return sql`
-            INSERT INTO team_membership_histories
+            INSERT INTO ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     team_membership_id = ${this.team_membership_id},
@@ -30,7 +32,7 @@ class TeamMembershipHistoryDbEntity implements ITeamMembershipHistorySchema {
 
     public getUpdateEntry() {
         return sql`
-            UPDATE team_membership_histories
+            UPDATE ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
                 SET 
                     team_membership_id = ${this.team_membership_id},
                     date_effective_from = ${this.date_effective_from},

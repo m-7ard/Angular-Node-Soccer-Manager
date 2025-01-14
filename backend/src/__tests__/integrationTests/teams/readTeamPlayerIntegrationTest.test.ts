@@ -32,7 +32,7 @@ describe("Read Team Player Integration Test;", () => {
     it("Read Team Player; No Args; Success;", async () => {
         const request: IReadTeamPlayerRequestDTO = {};
 
-        const response = await supertest(server).get(`/api/teams/${team_001.id}/players/${teamMembership_001.id}`).send(request).set("Content-Type", "application/json");
+        const response = await supertest(server).get(`/api/teams/${team_001.id}/memberships/${teamMembership_001.id}`).send(request).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IReadTeamPlayerResponseDTO = response.body;

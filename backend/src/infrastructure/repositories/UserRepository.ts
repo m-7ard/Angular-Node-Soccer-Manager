@@ -2,9 +2,9 @@ import IDatabaseService from "api/interfaces/IDatabaseService";
 import IUserRepository from "application/interfaces/IUserRepository";
 import sql from "sql-template-tag";
 import User from "domain/entities/User";
-import toSqlDate from "utils/toSqlDate";
 import IUserSchema from "infrastructure/dbSchemas/IUserSchema";
 import UserMapper from "infrastructure/mappers/UserMapper";
+import UserDbEntity from "infrastructure/dbEntities/UserDbEntity";
 
 class UserRepository implements IUserRepository {
     private readonly _db: IDatabaseService;
@@ -14,10 +14,7 @@ class UserRepository implements IUserRepository {
     }
 
     async getByEmailAsync(email: string): Promise<User | null> {
-        const sqlEntry = sql`
-            SELECT * FROM users
-                WHERE email = ${email}
-        `;
+        const sqlEntry = sql`SELECT * FROM users WHERE email = ${email}`;
 
         const [row] = await this._db.execute<IUserSchema | null>({
             statement: sqlEntry.sql,
@@ -34,17 +31,7 @@ class UserRepository implements IUserRepository {
 
     async createAsync(user: User): Promise<void> {
         const dbEntity = UserMapper.domainToDbEntity(user);
-
-        const sqlEntry = sql`
-            INSERT INTO users
-                SET 
-                    id = ${dbEntity.id},
-                    name = ${dbEntity.name},
-                    email = ${dbEntity.email},
-                    hashed_password = ${dbEntity.hashed_password},
-                    date_created = ${toSqlDate(dbEntity.date_created)},
-                    is_admin = ${dbEntity.is_admin}
-        `;
+        const sqlEntry = dbEntity.getInsertEntry();
 
         await this._db.execute({
             statement: sqlEntry.sql,
@@ -57,10 +44,7 @@ class UserRepository implements IUserRepository {
     }
 
     async getByIdAsync(id: string): Promise<User | null> {
-        const sqlEntry = sql`
-            SELECT * FROM users
-                WHERE id = ${id}
-        `;
+        const sqlEntry = UserDbEntity.getByIdStatement(id);
 
         const [row] = await this._db.execute<IUserSchema | null>({
             statement: sqlEntry.sql,
@@ -78,8 +62,6 @@ class UserRepository implements IUserRepository {
     async deleteAsync(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-
-    
 }
 
 export default UserRepository;

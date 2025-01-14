@@ -55,7 +55,7 @@ describe("Update TeamMembership Integration Test;", () => {
         const response = await adminSuperTest({
             agent: supertest(server)
                 .put(
-                    `/api/teams/${team_001.id}/players/${teamMembership_001.id}/update`,
+                    `/api/teams/${team_001.id}/memberships/${teamMembership_001.id}/update`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -80,7 +80,7 @@ describe("Update TeamMembership Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .put(`/api/teams/${INVALID_ID}/players/${teamMembership_001.id}/update`)
+                .put(`/api/teams/${INVALID_ID}/memberships/${teamMembership_001.id}/update`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -99,7 +99,7 @@ describe("Update TeamMembership Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .put(`/api/teams/${team_001.id}/players/${INVALID_ID}/update`)
+                .put(`/api/teams/${team_001.id}/memberships/${INVALID_ID}/update`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,

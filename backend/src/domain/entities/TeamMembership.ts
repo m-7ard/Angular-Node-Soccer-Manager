@@ -50,6 +50,10 @@ class TeamMembership implements Props {
     }
 
     public canAddHistory(props: { dateEffectiveFrom: Date; number: number; position: string }): Result<boolean, string> {
+        if (!this.teamMembershipDates.isWithinRange(props.dateEffectiveFrom)) {
+            return err(`History's dateEffectiveFrom must be within the Membership's activeFrom and activeTo date range.`);
+        }
+        
         const numberResult = TeamMembershipHistoryNumber.canCreate(props.number);
         if (numberResult.isErr()) {
             return err(numberResult.error);

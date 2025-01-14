@@ -1,6 +1,6 @@
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 import TeamMembershipDbEntity from "./TeamMembershipDbEntity";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class PlayerDbEntity implements IPlayerSchema {
     constructor(props: { id: string; name: string; active_since: Date }) {
@@ -14,17 +14,18 @@ class PlayerDbEntity implements IPlayerSchema {
     public active_since: Date;
 
     public team_memberships: TeamMembershipDbEntity[] = [];
+    public static readonly TABLE_NAME = "player";
 
     public getDeleteStatement() {
         return sql`
-            DELETE FROM player WHERE
+            DELETE FROM ${raw(PlayerDbEntity.TABLE_NAME)} WHERE
                 id = ${this.id}
         `;
     }
 
     public getInsertStatement() {
         return sql`
-            INSERT INTO player
+            INSERT INTO ${raw(PlayerDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     name = ${this.name},
@@ -34,7 +35,7 @@ class PlayerDbEntity implements IPlayerSchema {
 
     public getUpdateStatement() {
         return sql`
-            UPDATE player
+            UPDATE ${raw(PlayerDbEntity.TABLE_NAME)}
                 SET
                     name = ${this.name},
                     active_since = ${this.active_since}
@@ -45,7 +46,7 @@ class PlayerDbEntity implements IPlayerSchema {
 
     public static getByIdStatement(id: PlayerDbEntity["id"]) {
         return sql`
-            SELECT * FROM player WHERE
+            SELECT * FROM ${raw(PlayerDbEntity.TABLE_NAME)} WHERE
                 id = ${id}
         `;
     }

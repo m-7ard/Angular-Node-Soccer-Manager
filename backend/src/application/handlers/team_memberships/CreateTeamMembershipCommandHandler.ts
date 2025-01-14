@@ -17,7 +17,6 @@ interface Props {
     activeTo: Date | null;
     number: number;
     position: string;
-    dateEffectiveFrom: Date;
 }
 
 export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError[]>;
@@ -25,14 +24,13 @@ export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError
 export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershipCommandResult>, Props {
     __returnType: CreateTeamMembershipCommandResult = null!;
 
-    constructor({ teamId, playerId, activeFrom, activeTo, number, position, dateEffectiveFrom }: Props) {
+    constructor({ teamId, playerId, activeFrom, activeTo, number, position }: Props) {
         this.teamId = teamId;
         this.playerId = playerId;
         this.activeFrom = activeFrom;
         this.activeTo = activeTo;
         this.number = number;
         this.position = position;
-        this.dateEffectiveFrom = dateEffectiveFrom;
     }
 
     public teamId: string;
@@ -41,7 +39,6 @@ export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershi
     public activeTo: Date | null;
     public number: number;
     public position: string;
-    public dateEffectiveFrom: Date;
 }
 
 export default class CreateTeamMembershipCommandHandler implements IRequestHandler<CreateTeamMembershipCommand, CreateTeamMembershipCommandResult> {
@@ -97,7 +94,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         });
 
         // Add history to membership
-        const canAddTeamMembershipHistory = team.canAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.dateEffectiveFrom });
+        const canAddTeamMembershipHistory = team.canAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.activeFrom });
 
         if (canAddTeamMembershipHistory.isErr()) {
             return err(
@@ -109,7 +106,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
             );
         }
 
-        team.executeAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.dateEffectiveFrom });
+        team.executeAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.activeFrom });
 
         // Update team aggregate
         this._teamRepository.updateAsync(team);

@@ -1,4 +1,5 @@
 import IUserSchema from "infrastructure/dbSchemas/IUserSchema";
+import sql, { raw } from "sql-template-tag";
 
 class UserDbEntity implements IUserSchema {
     private readonly __type: "USER_DOMAIN" = null!;
@@ -18,6 +19,25 @@ class UserDbEntity implements IUserSchema {
     public hashed_password: string;
     public date_created: Date;
     public is_admin: 0 | 1;
+
+    public static readonly TABLE_NAME = "users";
+
+    public getInsertEntry() {
+        return sql`
+            INSERT INTO ${raw(UserDbEntity.TABLE_NAME)}
+                SET 
+                    id = ${this.id},
+                    name = ${this.name},
+                    email = ${this.email},
+                    hashed_password = ${this.hashed_password},
+                    date_created = ${this.date_created},
+                    is_admin = ${this.is_admin}
+        `;
+    }
+
+    public static getByIdStatement(id: UserDbEntity["id"]) {
+        return sql`SELECT * FROM ${raw(UserDbEntity.TABLE_NAME)} WHERE id = ${id}`;
+    }
 }
 
 export default UserDbEntity;

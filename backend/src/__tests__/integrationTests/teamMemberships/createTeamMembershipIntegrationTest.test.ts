@@ -45,7 +45,6 @@ describe("Create TeamMembership Integration Test;", () => {
             activeTo: null,
             number: 5,
             position: TeamMembershipHistoryPosition.ATTACKING_MIDFIELDER.value,
-            dateEffectiveFrom: new Date()
         };
 
         const response = await adminSuperTest({
@@ -60,6 +59,9 @@ describe("Create TeamMembership Integration Test;", () => {
         const rows = await db.query<ITeamMembershipSchema>({
             statement: "SELECT * FROM team_membership",
         });
+
+        
+
         expect(rows.length).toBe(1);
     });
 
@@ -72,7 +74,6 @@ describe("Create TeamMembership Integration Test;", () => {
             activeTo: null,
             number: 5,
             position: TeamMembershipHistoryPosition.ATTACKING_MIDFIELDER.value,
-            dateEffectiveFrom: new Date()
         };
 
         const response = await adminSuperTest({

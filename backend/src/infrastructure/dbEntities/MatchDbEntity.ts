@@ -4,7 +4,7 @@ import MatchEventDbEntity from "./MatchEventDbEntity";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import IMatchEventSchema from "infrastructure/dbSchemas/IMatchEventSchema";
 import MatchEventMapper from "infrastructure/mappers/MatchEventMapper";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class MatchDbEntity implements IMatchSchema {
     id: string;
@@ -25,7 +25,7 @@ class MatchDbEntity implements IMatchSchema {
     events: MatchEventDbEntity[] = [];
 
     public async loadMatchEvents(db: IDatabaseService): Promise<void> {
-        const matchEvents = await db.query<IMatchEventSchema>({ statement: `SELECT * FROM match_events WHERE match_id = '${this.id}'` });
+        const matchEvents = await db.query<IMatchEventSchema>({ statement: `SELECT * FROM ${MatchEventDbEntity.TABLE_NAME} WHERE match_id = '${this.id}'` });
         this.events = matchEvents.map((row) => MatchEventMapper.schemaToDbEntity(row));
     }
 
@@ -44,9 +44,11 @@ class MatchDbEntity implements IMatchSchema {
         this.updated_at = props.updated_at;
     }
 
+    public static readonly TABLE_NAME = "matches";
+
     public getInsertEntry() {
         return sql`
-            INSERT INTO matches
+            INSERT INTO ${raw(MatchDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     home_team_id = ${this.home_team_id},
@@ -63,7 +65,7 @@ class MatchDbEntity implements IMatchSchema {
 
     public getUpdateEntry() {
         return sql`
-            UPDATE matches
+            UPDATE ${raw(MatchDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     home_team_id = ${this.home_team_id},
@@ -82,13 +84,13 @@ class MatchDbEntity implements IMatchSchema {
 
     public getDeleteEntry() {
         return  sql`
-            DELETE FROM matches WHERE
+            DELETE FROM ${raw(MatchDbEntity.TABLE_NAME)} WHERE
                 id = ${this.id}
         `;
     }
     
     public static getByIdStatement(id: TeamDbEntity["id"]) {
-        return sql`SELECT * FROM matches WHERE id = ${id}`;
+        return sql`SELECT * FROM ${raw(MatchDbEntity.TABLE_NAME)} WHERE id = ${id}`;
     }
 }
 

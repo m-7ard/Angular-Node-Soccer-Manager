@@ -5,7 +5,7 @@ import TeamMembershipHistoryDbEntity from "./TeamMembershipHistoryDbEntity";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import TeamMembershipHistoryMapper from "infrastructure/mappers/TeamMembershipHistoryMapper";
 import ITeamMembershipHistorySchema from "infrastructure/dbSchemas/ITeamMembershipHistorySchema";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class TeamMembershipDbEntity implements ITeamMembershipSchema {
     constructor(props: ITeamMembershipSchema) {
@@ -27,14 +27,15 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema {
     public player: PlayerDbEntity | null = null;
 
     public async loadTeamMembershipHistories(db: IDatabaseService): Promise<void> {
-        const teamMembershipHistories = await db.query<ITeamMembershipHistorySchema>({ statement: `SELECT * FROM team_membership_histories WHERE team_membership_id = '${this.id}'` });
+        const teamMembershipHistories = await db.query<ITeamMembershipHistorySchema>({ statement: `SELECT * FROM ${TeamMembershipHistoryDbEntity.TABLE_NAME} WHERE team_membership_id = '${this.id}'` });
         this.team_membership_histories = teamMembershipHistories.map((row) => TeamMembershipHistoryMapper.schemaToDbEntity(row));
     }
 
+    public static readonly TABLE_NAME = "team_membership";
 
     public getInsertEntry() {
         return sql`
-            INSERT INTO team_membership
+            INSERT INTO ${raw(TeamMembershipDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     team_id = ${this.team_id},
@@ -46,7 +47,7 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema {
     
     public getUpdateEntry() {
         return sql`
-            UPDATE team_membership
+            UPDATE ${raw(TeamMembershipDbEntity.TABLE_NAME)}
                 SET 
                     team_id = ${this.team_id},
                     player_id = ${this.player_id},
@@ -59,7 +60,7 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema {
 
     public getDeleteEntry() {
         return sql`
-            DELETE FROM team_membership
+            DELETE FROM ${raw(TeamMembershipDbEntity.TABLE_NAME)}
                 WHERE id = ${this.id}
         `
     }

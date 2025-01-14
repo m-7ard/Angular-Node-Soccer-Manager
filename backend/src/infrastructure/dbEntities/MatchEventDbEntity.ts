@@ -1,7 +1,7 @@
 import IMatchEventSchema from "infrastructure/dbSchemas/IMatchEventSchema";
 import PlayerDbEntity from "./PlayerDbEntity";
 import TeamDbEntity from "./TeamDbEntity";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class MatchEventDbEntity implements IMatchEventSchema {
     id: string;
@@ -44,9 +44,11 @@ class MatchEventDbEntity implements IMatchEventSchema {
         this.updated_at = props.updated_at;
     }
 
+    public static readonly TABLE_NAME = "match_events";
+
     public getInsertStatement() {
         return sql`
-            INSERT INTO match_events
+            INSERT INTO ${raw(MatchEventDbEntity.TABLE_NAME)}
                 SET
                     id = ${this.id},
                     match_id = ${this.match_id},
@@ -61,7 +63,7 @@ class MatchEventDbEntity implements IMatchEventSchema {
 
     public getDeleteStatement() {
         return sql`
-            DELETE FROM match_events WHERE
+            DELETE FROM ${raw(MatchEventDbEntity.TABLE_NAME)} WHERE
                 id = ${this.id}
         `;
     }

@@ -3,7 +3,7 @@ import TeamMembershipDbEntity from "./TeamMembershipDbEntity";
 import IDatabaseService from "api/interfaces/IDatabaseService";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 import TeamMembershipMapper from "infrastructure/mappers/TeamMembershipMapper";
-import sql from "sql-template-tag";
+import sql, { raw } from "sql-template-tag";
 
 class TeamDbEntity implements ITeamSchema {
     constructor(props: { id: string; name: string; date_founded: Date }) {
@@ -13,7 +13,7 @@ class TeamDbEntity implements ITeamSchema {
     }
 
     public async loadTeamMemberships(db: IDatabaseService): Promise<void> {
-        const teamMemberships = await db.query<ITeamMembershipSchema>({ statement: `SELECT * FROM team_membership WHERE team_id = '${this.id}'` });
+        const teamMemberships = await db.query<ITeamMembershipSchema>({ statement: `SELECT * FROM ${TeamMembershipDbEntity.TABLE_NAME} WHERE team_id = '${this.id}'` });
         this.team_memberships = teamMemberships.map((row) => TeamMembershipMapper.schemaToDbEntity(row));
     }
 
@@ -23,9 +23,11 @@ class TeamDbEntity implements ITeamSchema {
 
     public team_memberships: TeamMembershipDbEntity[] = [];
 
+    public static readonly TABLE_NAME = "team";
+
     public getInsertEntry() {
         return sql`
-            INSERT INTO team
+            INSERT INTO ${raw(TeamDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     name = ${this.name},
@@ -35,7 +37,7 @@ class TeamDbEntity implements ITeamSchema {
 
     public getUpdateEntry() {
         return sql`
-            UPDATE team
+            UPDATE ${raw(TeamDbEntity.TABLE_NAME)}
                 SET 
                     id = ${this.id},
                     name = ${this.name},
@@ -47,13 +49,13 @@ class TeamDbEntity implements ITeamSchema {
 
     public getDeleteEntry() {
         return sql`
-            DELETE FROM team WHERE
+            DELETE FROM ${raw(TeamDbEntity.TABLE_NAME)} WHERE
                 id = ${this.id}
         `;
     }
 
     public static getByIdStatement(id: TeamDbEntity["id"]) {
-        return sql`SELECT * FROM team WHERE team.id = ${id}`;
+        return sql`SELECT * FROM ${raw(TeamDbEntity.TABLE_NAME)} WHERE ${raw(TeamDbEntity.TABLE_NAME)}.id = ${id}`;
     }
 }
 
