@@ -9,6 +9,7 @@ import TeamId from "domain/valueObjects/Team/TeamId";
 import IPlayerValidator from "application/interfaces/IPlayerValidaror";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import IApplicationError from "application/errors/IApplicationError";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 
 interface Props {
     id: string;
@@ -111,7 +112,12 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
             );
         }
 
-        team.executeAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.activeFrom });
+        team.executeAddHistoryToTeamMembership(teamMembershipId, {
+            id: TeamMembershipHistoryId.executeCreate(crypto.randomUUID()),
+            number: command.number,
+            position: command.position,
+            dateEffectiveFrom: command.activeFrom,
+        });
 
         // Update team aggregate
         await this._teamRepository.updateAsync(team);

@@ -25,6 +25,8 @@ import MarkMatchCompletedCommandHandler, { MarkMatchCompletedCommand } from "app
 import MarkMatchCancelledCommandHandler, { MarkMatchCancelledCommand } from "application/handlers/matches/MarkMatchCancelledCommandHandler";
 import ScheduleMatchCommandHandler, { ScheduleMatchCommand } from "application/handlers/matches/ScheduleMatchCommandHandler";
 import RecordGoalCommandHandler, { RecordGoalCommand } from "application/handlers/matchEvents/RecordGoalCommandHandler";
+import CreateTeamMembershipHistoryCommandHandler, { CreateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/CreateTeamMembershipHistoryCommandHandler";
+import UpdateTeamMembershipHistoryCommandHandler, { UpdateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/UpdateTeamMembershipHistoryCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -77,6 +79,15 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(
         ReadTeamMembershipQuery,
         new ReadTeamMembershipQueryHandler({ teamExistsValidator: teamExistsValidator, teamMembershipValidatorFactory: teamMembershipExistsValidatorFactory }),
+    );
+    // Team Membership Histories
+    requestDispatcher.registerHandler(
+        CreateTeamMembershipHistoryCommand,
+        new CreateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }),
+    );
+    requestDispatcher.registerHandler(
+        UpdateTeamMembershipHistoryCommand,
+        new UpdateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }),
     );
 
     // Users

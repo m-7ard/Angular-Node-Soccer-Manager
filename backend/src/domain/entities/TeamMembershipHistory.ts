@@ -14,11 +14,11 @@ interface Props {
 class TeamMembershipHistory {
     private readonly __type: "TEAM_MEMBERSHIP_HISTORY_DOMAIN" = null!;
 
-    public readonly id: TeamMembershipHistoryId;
-    public readonly teamMembershipId: TeamMembershipId;
-    public readonly dateEffectiveFrom: Date;
-    public readonly numberValueObject: TeamMembershipHistoryNumber;
-    public readonly positionValueObject: TeamMembershipHistoryPosition;
+    public id: TeamMembershipHistoryId;
+    public teamMembershipId: TeamMembershipId;
+    public dateEffectiveFrom: Date;
+    public numberValueObject: TeamMembershipHistoryNumber;
+    public positionValueObject: TeamMembershipHistoryPosition;
 
     constructor({ id, teamMembershipId, dateEffectiveFrom, numberValueObject, positionValueObject }: Props) {
         this.id = id;

@@ -27,6 +27,10 @@ class TeamMembershipHistoryId {
         return matchDates;
     }
 
+    public equals(other: TeamMembershipHistoryId) {
+        return other.value === this.value;
+    }
+
     toString() {
         return this.value;
     }

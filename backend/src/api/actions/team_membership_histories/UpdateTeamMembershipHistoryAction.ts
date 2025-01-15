@@ -6,21 +6,21 @@ import { StatusCodes } from "http-status-codes";
 import IApiError from "api/errors/IApiError";
 import ApiErrorFactory from "api/errors/ApiErrorFactory";
 import parsers from "api/utils/parsers";
-import ICreateTeamMembershipHistoryRequestDTO from "api/DTOs/teamMembershipHistories/create/ICreateTeamMembershipHistoryRequestDTO";
-import ICreateTeamMembershipHistoryResponseDTO from "api/DTOs/teamMembershipHistories/create/ICreateTeamMembershipHistoryResponseDTO";
-import createTeamMembershipHistoryValidator from "api/validators/teamMembershipHistory/createTeamMembershipHistoryValidator";
-import { CreateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/CreateTeamMembershipHistoryCommandHandler";
+import IUpdateTeamMembershipHistoryRequestDTO from "api/DTOs/teamMembershipHistories/update/IUpdateTeamMembershipHistoryRequestDTO";
+import IUpdateTeamMembershipHistoryResponseDTO from "api/DTOs/teamMembershipHistories/update/IUpdateTeamMembershipHistoryResponseDTO";
+import updateTeamMembershipHistoryValidator from "api/validators/teamMembershipHistory/updateTeamMembershipHistoryValidator";
+import { UpdateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/UpdateTeamMembershipHistoryCommandHandler";
 
-type ActionRequest = { teamId: string; teamMembershipId: string; dto: ICreateTeamMembershipHistoryRequestDTO };
-type ActionResponse = JsonResponse<ICreateTeamMembershipHistoryResponseDTO | IApiError[]>;
+type ActionRequest = { teamId: string; teamMembershipId: string; teamMembershipHistoryId: string; dto: IUpdateTeamMembershipHistoryRequestDTO };
+type ActionResponse = JsonResponse<IUpdateTeamMembershipHistoryResponseDTO | IApiError[]>;
 
-class CreateTeamMembershipHistoryAction implements IAction<ActionRequest, ActionResponse> {
+class UpdateTeamMembershipHistoryAction implements IAction<ActionRequest, ActionResponse> {
     constructor(private readonly _requestDispatcher: IRequestDispatcher) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
-        const { dto, teamId, teamMembershipId } = request;
+        const { dto, teamId, teamMembershipId, teamMembershipHistoryId } = request;
 
-        const validation = createTeamMembershipHistoryValidator(dto);
+        const validation = updateTeamMembershipHistoryValidator(dto);
         if (validation.isErr()) {
             return new JsonResponse({
                 status: StatusCodes.BAD_REQUEST,
@@ -28,12 +28,10 @@ class CreateTeamMembershipHistoryAction implements IAction<ActionRequest, Action
             });
         }
 
-        const id = crypto.randomUUID();
-
-        const command = new CreateTeamMembershipHistoryCommand({
-            id: id,
+        const command = new UpdateTeamMembershipHistoryCommand({
             teamId: teamId,
             teamMembershipId: teamMembershipId,
+            teamMembershipHistoryId: teamMembershipHistoryId,
             dateEffectiveFrom: dto.dateEffectiveFrom,
             number: dto.number,
             position: dto.position,
@@ -52,7 +50,7 @@ class CreateTeamMembershipHistoryAction implements IAction<ActionRequest, Action
             body: {
                 teamId: teamId,
                 teamMembershipId: teamMembershipId,
-                teamMembershipHistoryId: id,
+                teamMembershipHistoryId: teamMembershipHistoryId,
             },
         });
     }
@@ -61,6 +59,7 @@ class CreateTeamMembershipHistoryAction implements IAction<ActionRequest, Action
         return {
             teamId: request.params.teamId,
             teamMembershipId: request.params.teamMembershipId,
+            teamMembershipHistoryId: request.params.teamMembershipHistoryId,
             dto: {
                 dateEffectiveFrom: parsers.parseDateOrElse(request.body.dateEffectiveFrom, "Invalid Date"),
                 number: request.body.number,
@@ -70,4 +69,4 @@ class CreateTeamMembershipHistoryAction implements IAction<ActionRequest, Action
     }
 }
 
-export default CreateTeamMembershipHistoryAction;
+export default UpdateTeamMembershipHistoryAction;

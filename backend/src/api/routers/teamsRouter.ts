@@ -12,6 +12,8 @@ import DeleteTeamMembershipAction from "api/actions/team_memberships/DeleteTeamM
 import UpdateTeamMembershipAction from "api/actions/team_memberships/UpdateTeamMembershipAction";
 import ReadTeamPlayerAction from "api/actions/teams/ReadTeamPlayerAction";
 import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
+import CreateTeamMembershipHistoryAction from "api/actions/team_membership_histories/CreateTeamMembershipHistoryAction";
+import UpdateTeamMembershipHistoryAction from "api/actions/team_membership_histories/UpdateTeamMembershipHistoryAction";
 
 const teamsRouter = Router();
 
@@ -121,6 +123,26 @@ registerAction({
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
         return new ReadTeamPlayerAction(requestDispatcher, apiModelService);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/memberships/:teamMembershipId/create-history",
+    method: "POST",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new CreateTeamMembershipHistoryAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/memberships/:teamMembershipId/histories/:teamMembershipHistoryId/update",
+    method: "POST",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new UpdateTeamMembershipHistoryAction(requestDispatcher);
     },
 });
 

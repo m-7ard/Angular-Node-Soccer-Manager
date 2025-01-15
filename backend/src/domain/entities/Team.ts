@@ -10,6 +10,7 @@ import TeamMembershipDates from "domain/valueObjects/TeamMembership/TeamMembersh
 import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 
 class Team {
     private readonly __type: "TEAM_DOMAIN" = null!;
@@ -244,7 +245,7 @@ class Team {
         return ok(teamMembership);
     }
 
-    public executeAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { number: number; position: string; dateEffectiveFrom: Date }) {
+    public executeAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { id: TeamMembershipHistoryId; number: number; position: string; dateEffectiveFrom: Date }) {
         const canAddHistoryToTeamMembershipResult = this.canAddHistoryToTeamMembership(teamMembershipId, props);
         if (canAddHistoryToTeamMembershipResult.isErr()) {
             throw new Error(canAddHistoryToTeamMembershipResult.error);
@@ -252,6 +253,32 @@ class Team {
 
         const teamMembership = canAddHistoryToTeamMembershipResult.value;
         teamMembership.executeAddHistory(props);
+        this.domainEvents.push(...teamMembership.pullDomainEvent());
+    }
+
+    public canUpdateTeamMembershipHistory(teamMembershipId: TeamMembershipId, teamMembershipHistoryId: TeamMembershipHistoryId, props: { number: number; position: string; dateEffectiveFrom: Date }): Result<TeamMembership, string> {
+        const findTeamMembershipResult = this.tryFindMemberById(teamMembershipId);
+        if (findTeamMembershipResult.isErr()) {
+            return err(findTeamMembershipResult.error);
+        }
+
+        const teamMembership = findTeamMembershipResult.value;
+        const canUpdateHistoryResult = teamMembership.canUpdateHistory(teamMembershipHistoryId, props);
+        if (canUpdateHistoryResult.isErr()) {
+            return err(canUpdateHistoryResult.error);
+        }
+
+        return ok(teamMembership);
+    }
+
+    public executeUpdateTeamMembershipHistory(teamMembershipId: TeamMembershipId, teamMembershipHistoryId: TeamMembershipHistoryId, props: { number: number; position: string; dateEffectiveFrom: Date }): void {
+        const canUpdateTeamMembershipHistoryResult = this.canUpdateTeamMembershipHistory(teamMembershipId, teamMembershipHistoryId, props);
+        if (canUpdateTeamMembershipHistoryResult.isErr()) {
+            new Error(canUpdateTeamMembershipHistoryResult.error);
+        }
+
+        const teamMembership = this.executeFindMemberById(teamMembershipId);
+        teamMembership.executeUpdateHistory(teamMembershipHistoryId, props);
         this.domainEvents.push(...teamMembership.pullDomainEvent());
     }
 }

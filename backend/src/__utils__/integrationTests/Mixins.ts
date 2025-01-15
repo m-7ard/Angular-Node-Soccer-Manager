@@ -10,11 +10,13 @@ import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
+import TeamMembership from "domain/entities/TeamMembership";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 import { DateTime } from "luxon";
 
 class Mixins {
@@ -69,6 +71,14 @@ class Mixins {
         return team.executeFindMemberById(teamMembershipId);
     }
 
+    async createTeamMembershipHistory(team: Team, teamMembership: TeamMembership, props: { position: string; dateEffectiveFrom: Date; number: number }) {
+        const teamMembershipHistoryId = TeamMembershipHistoryId.executeCreate(crypto.randomUUID());
+        team.executeAddHistoryToTeamMembership(teamMembership.id, { id: teamMembershipHistoryId, dateEffectiveFrom: props.dateEffectiveFrom, number: props.number, position: props.position });
+
+        await this._teamRepository.updateAsync(team);
+        return teamMembership.executeFindHistoryById(teamMembershipHistoryId);
+    }
+
     async createUser(seed: number, isAdmin: boolean) {
         const password = `hashed_password_${seed}`;
         const user = UserFactory.CreateNew({
@@ -114,10 +124,7 @@ class Mixins {
 
     async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
-        const endDate = DateTime.fromJSDate(date)
-            .plus({ minutes: 90 })
-            .toJSDate();
-        
+        const endDate = DateTime.fromJSDate(date).plus({ minutes: 90 }).toJSDate();
 
         return await this.createMatch({
             seed: props.seed,
@@ -172,7 +179,7 @@ class Mixins {
         if (props.goals != null) {
             match.score = MatchScore.ZeroScore;
             props.goals.forEach((goal) => {
-                match.executeAddGoal({ dateOccured: goal.dateOccured, team: goal.team, player: goal.player})
+                match.executeAddGoal({ dateOccured: goal.dateOccured, team: goal.team, player: goal.player });
             });
         }
 
