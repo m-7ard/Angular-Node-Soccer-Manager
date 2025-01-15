@@ -29,7 +29,8 @@ class TeamMembershipHistory {
     }
 
     public isEffective() {
-        return this.dateEffectiveFrom <= new Date();
+        const now = new Date();
+        return this.dateEffectiveFrom <= now;
     }
 }
 

@@ -26,7 +26,7 @@ class TeamMembership implements Props {
         this.id = id;
         this.teamId = teamId;
         this.playerId = playerId;
-        this.teamMembershipHistories = teamMembershipHistories;
+        this.teamMembershipHistories = teamMembershipHistories.sort((a, b) => b.dateEffectiveFrom.getTime() - a.dateEffectiveFrom.getTime());
         this.teamMembershipDates = teamMembershipDates;
     }
 
@@ -42,18 +42,40 @@ class TeamMembership implements Props {
     }
 
     public getEffectiveHistory(): TeamMembershipHistory | null {
-        const [effectiveHistory] = this.teamMembershipHistories
-            .filter((teamMembershipHistory) => teamMembershipHistory.isEffective())
-            .sort((a, b) => b.dateEffectiveFrom.getTime() - a.dateEffectiveFrom.getTime());
-        
+        const [effectiveHistory] = this.teamMembershipHistories.filter((teamMembershipHistory) => teamMembershipHistory.isEffective());
+
         return effectiveHistory ?? null;
+    }
+
+    public getEffectiveHistoryForDate(date: Date): TeamMembershipHistory | null {
+        let left = 0;
+        let right = this.teamMembershipHistories.length - 1;
+        let result: TeamMembershipHistory | null = null;
+
+        while (left <= right) {
+            const mid = Math.floor((left + right) / 2);
+            const currentHistory = this.teamMembershipHistories[mid];
+            const nextHistory = mid > 0 ? this.teamMembershipHistories[mid - 1] : null;
+
+            if (currentHistory.dateEffectiveFrom <= date) {
+                if (nextHistory == null || nextHistory.dateEffectiveFrom > date) {
+                    result = currentHistory;
+                    break;
+                }
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return result;
     }
 
     public canAddHistory(props: { dateEffectiveFrom: Date; number: number; position: string }): Result<boolean, string> {
         if (!this.teamMembershipDates.isWithinRange(props.dateEffectiveFrom)) {
             return err(`History's dateEffectiveFrom must be within the Membership's activeFrom and activeTo date range.`);
         }
-        
+
         const numberResult = TeamMembershipHistoryNumber.canCreate(props.number);
         if (numberResult.isErr()) {
             return err(numberResult.error);
@@ -95,6 +117,19 @@ class TeamMembership implements Props {
         }
 
         return results;
+    }
+
+    public isConflictingDate(date: TeamMembershipDates): boolean {
+        const activeFromOverlaps = this.teamMembershipDates.isWithinRange(date.activeFrom);
+        if (activeFromOverlaps) return true;
+
+        const activeToOverlaps = date.activeTo != null ? this.teamMembershipDates.isWithinRange(date.activeTo) : false;
+        if (activeToOverlaps) return true;
+
+        const futureMembershipExists = date.activeTo == null ? this.teamMembershipDates.activeFrom >= date.activeFrom : false;
+        if (futureMembershipExists) return true;
+
+        return false;
     }
 
     public id: TeamMembershipId;

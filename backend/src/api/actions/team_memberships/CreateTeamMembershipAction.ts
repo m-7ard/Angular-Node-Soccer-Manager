@@ -28,7 +28,10 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
             });
         }
 
+        const id = crypto.randomUUID();
+
         const command = new CreateTeamMembershipCommand({
+            id: id,
             teamId: teamId,
             playerId: dto.playerId,
             activeFrom: dto.activeFrom,
@@ -47,7 +50,10 @@ class CreateTeamMembershipAction implements IAction<ActionRequest, ActionRespons
 
         return new JsonResponse({
             status: StatusCodes.CREATED,
-            body: {},
+            body: {
+                teamMembershipId: id,
+                teamId: teamId,
+            },
         });
     }
 

@@ -1,5 +1,6 @@
 import IMatchApiModel from "@apiModels/IMatchApiModel";
 import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
+import IMatchTeamPlayerApiModel from "@apiModels/IMatchPlayerApiModel";
 import ITeamApiModel from "@apiModels/ITeamApiModel";
 import ITeamMembershipHistoryApiModel from "@apiModels/ITeamMembershipHistoryApiModel";
 import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
@@ -104,6 +105,15 @@ class ApiModelMapper {
             dateEffectiveFrom: props.dateEffectiveFrom.toJSON(),
             number: props.numberValueObject.value,
             position: props.positionValueObject.value,
+        };
+    }
+
+    public static createMatchTeamPlayerApiModel(match: Match, teamMembership: TeamMembership): IMatchTeamPlayerApiModel {
+        const effectiveHistoryForDate =  match.matchDates.startDate == null ? null : teamMembership.getEffectiveHistoryForDate(match.matchDates.startDate);
+        
+        return {
+            id: teamMembership.playerId.value,
+            teamMembershipHistory: effectiveHistoryForDate == null ? null : ApiModelMapper.createTeamMembershipHistoryApiModel(effectiveHistoryForDate)
         };
     }
 }

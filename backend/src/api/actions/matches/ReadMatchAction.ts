@@ -51,6 +51,7 @@ class ReadMatchAction implements IAction<ActionRequest, ActionResponse> {
             body: {
                 match: await this._apiModelService.createMatchApiModel(match),
                 matchEvents: await this._apiModelService.createManyMatchEventApiModel(match.events),
+                matchParticipants: await this._apiModelService.createMatchParticipantsApiModel(match),
             },
         });
     }

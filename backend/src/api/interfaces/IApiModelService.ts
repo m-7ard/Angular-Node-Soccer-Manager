@@ -1,5 +1,6 @@
 import IMatchApiModel from "@apiModels/IMatchApiModel";
 import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
+import IMatchParticipantsApiModel from "@apiModels/IMatchParticipantsApiModel";
 import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import Match from "domain/entities/Match";
 import MatchEvent from "domain/entities/MatchEvent";
@@ -12,6 +13,7 @@ interface IApiModelService {
     createManyMatchEventApiModel(matchEvents: MatchEvent[]): Promise<IMatchEventApiModel[]>;
     createTeamPlayerApiModel(teamMembership: TeamMembership): Promise<ITeamPlayerApiModel>;
     createManyTeamPlayerApiModel(teamMemberships: Array<TeamMembership>): Promise<ITeamPlayerApiModel[]>;
+    createMatchParticipantsApiModel(match: Match): Promise<IMatchParticipantsApiModel>;
 }
 
 export default IApiModelService;

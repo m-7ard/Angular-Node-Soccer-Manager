@@ -11,6 +11,7 @@ import PlayerId from "domain/valueObjects/Player/PlayerId";
 import IApplicationError from "application/errors/IApplicationError";
 
 interface Props {
+    id: string;
     teamId: string;
     playerId: string;
     activeFrom: Date;
@@ -24,7 +25,8 @@ export type CreateTeamMembershipCommandResult = ICommandResult<IApplicationError
 export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershipCommandResult>, Props {
     __returnType: CreateTeamMembershipCommandResult = null!;
 
-    constructor({ teamId, playerId, activeFrom, activeTo, number, position }: Props) {
+    constructor({ id, teamId, playerId, activeFrom, activeTo, number, position }: Props) {
+        this.id = id;
         this.teamId = teamId;
         this.playerId = playerId;
         this.activeFrom = activeFrom;
@@ -33,6 +35,7 @@ export class CreateTeamMembershipCommand implements ICommand<CreateTeamMembershi
         this.position = position;
     }
 
+    public id: string;
     public teamId: string;
     public playerId: string;
     public activeFrom: Date;
@@ -72,6 +75,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
 
         // Add Team Membership to Team
         const canAddMembershipResult = team.canAddMember({
+            id: command.id,
             player: player,
             activeFrom: command.activeFrom,
             activeTo: command.activeTo,
@@ -88,6 +92,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         }
 
         const teamMembershipId = team.executeAddMember({
+            id: command.id,
             player: player,
             activeFrom: command.activeFrom,
             activeTo: command.activeTo,
@@ -109,7 +114,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         team.executeAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.activeFrom });
 
         // Update team aggregate
-        this._teamRepository.updateAsync(team);
+        await this._teamRepository.updateAsync(team);
         return ok(undefined);
     }
 }

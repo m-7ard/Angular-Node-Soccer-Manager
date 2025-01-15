@@ -15,6 +15,9 @@ import IApiError from "api/errors/IApiError";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import ITeamMembershipSchema from "infrastructure/dbSchemas/ITeamMembershipSchema";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
+import TeamRepository from "infrastructure/repositories/TeamRepository";
+import ICreateTeamMembershipResponseDTO from "api/DTOs/teamMemberships/create/ICreateTeamMembershipResponseDTO";
+import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 
 let team_001: Team;
 let player_001: Player;
@@ -56,13 +59,14 @@ describe("Create TeamMembership Integration Test;", () => {
         });
 
         expect(response.status).toBe(201);
-        const rows = await db.query<ITeamMembershipSchema>({
-            statement: "SELECT * FROM team_membership",
-        });
-
-        
-
-        expect(rows.length).toBe(1);
+        const body: ICreateTeamMembershipResponseDTO = response.body;        
+        const repo = new TeamRepository(db);
+        const team = (await repo.getByIdAsync(team_001.id))!;
+        expect(team.teamMemberships.length).toBe(1);
+        const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId));
+        expect(teamMembership).not.toBeNull();
+        expect(teamMembership?.teamMembershipHistories.length).toBe(1);
+        expect(teamMembership!.getEffectiveHistory()).not.toBeNull();
     });
 
     it("Create Team Membership; Team does not exist; Failure;", async () => {

@@ -77,36 +77,90 @@ class Team {
         return null;
     }
 
-    public canAddMember(props: { player: Player; activeFrom: Date; activeTo: Date | null }): Result<boolean, string> {
-        const membership = this.findMemberByPlayerId(props.player.id);
-        if (membership != null) {
-            return err("Player is already a member of the team");
+    private tryVerifyMemberIntegrity(
+        teamMembership: TeamMembership | null,
+        player: Player,
+        props: {
+            activeFrom: Date;
+            activeTo: Date | null;
+        },
+    ): Result<true, string> {
+        // Create dates
+        const canCreateTeamMembershipDatesResult = TeamMembershipDates.canCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
+        if (canCreateTeamMembershipDatesResult.isErr()) {
+            return err(canCreateTeamMembershipDatesResult.error);
         }
 
+        const teamMembershipDates = TeamMembershipDates.executeCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
+
+        // Is overlapping / conflicting date
+        const playerTeamMemberships = this.filterMembersByPlayerId(player.id);
+        const conflictsWithMemberships = playerTeamMemberships.some((playerMembership) => {
+            if (playerMembership === teamMembership) return false;
+            return playerMembership.isConflictingDate(teamMembershipDates);
+        });
+
+        if (conflictsWithMemberships) {
+            return err("team membership active dates overlap with already existing team memberships' active dates");
+        }
+
+        // Is membership activeFrom before team was founded
         if (props.activeFrom < this.dateFounded) {
             return err("Team Member's activeFrom cannot be before the team's dateFounded.");
         }
 
-        if (props.player.activeSince > props.activeFrom) {
+        // Is membership activeFrom before player was active
+        if (player.activeSince > props.activeFrom) {
             return err("Team Member's activeFrom cannot be before the player's activeFrom.");
         }
 
-        const canCreateMembershipDatesResult = TeamMembershipDates.canCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
-        if (canCreateMembershipDatesResult.isErr()) {
-            return err(canCreateMembershipDatesResult.error);
+        // Are there upcoming teamMembershipHistories
+        if (props.activeTo != null && teamMembership != null) {
+            const upcomingMemberHistories = teamMembership.filterHistories({ dateEffectiveFromAfter: props.activeTo });
+            if (upcomingMemberHistories.length) {
+                const requiredDate = Math.max(...upcomingMemberHistories.map(({ dateEffectiveFrom }) => dateEffectiveFrom.getTime()));
+                const requiredDateString = new Date(requiredDate).toJSON();
+
+                return err(
+                    `team membership's activeTo date must be null while it has TeamMembershipHistories with a dateEffectiveFrom greater than the activeTo, make sure to delete them or set activeTo to a date equal or greater than ${requiredDateString}.`,
+                );
+            }
         }
 
         return ok(true);
     }
 
-    public executeAddMember(props: { player: Player; activeFrom: Date; activeTo: Date | null }): TeamMembershipId {
+    public canAddMember(props: { id: string; player: Player; activeFrom: Date; activeTo: Date | null }): Result<boolean, string> {
+        // Create id
+        const canCreateIdResult = TeamMembershipId.canCreate(props.id);
+        if (canCreateIdResult.isErr()) {
+            return err(canCreateIdResult.error);
+        }
+
+        const id = TeamMembershipId.executeCreate(props.id);
+
+        // Does membership already exist
+        const membershipById = this.findMemberById(id);
+        if (membershipById != null) {
+            return err(`Membership with id "${id}" already exists on the team.`);
+        }
+
+        const canVerifyIntegrityResult = this.tryVerifyMemberIntegrity(null, props.player, { activeFrom: props.activeFrom, activeTo: props.activeTo });
+        if (canVerifyIntegrityResult.isErr()) {
+            return err(canVerifyIntegrityResult.error);
+        }
+
+        return ok(true);
+    }
+
+    public executeAddMember(props: { id: string; player: Player; activeFrom: Date; activeTo: Date | null }): TeamMembershipId {
         const canAddMemberResult = this.canAddMember(props);
         if (canAddMemberResult.isErr()) {
             throw new Error(canAddMemberResult.error);
         }
 
         const teamMembership = TeamMembershipFactory.CreateNew({
-            id: TeamMembershipId.executeCreate(crypto.randomUUID()),
+            id: TeamMembershipId.executeCreate(props.id),
             teamId: this.id,
             playerId: props.player.id,
             teamMembershipDates: TeamMembershipDates.executeCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo }),
@@ -118,6 +172,7 @@ class Team {
     }
 
     public canUpdateMember(teamMembershipId: TeamMembershipId, player: Player, props: { activeFrom: Date; activeTo: Date | null }): Result<true, string> {
+        // Does membership exist
         const tryFindTeamMemberResult = this.tryFindMemberById(teamMembershipId);
         if (tryFindTeamMemberResult.isErr()) {
             return err(tryFindTeamMemberResult.error);
@@ -125,30 +180,14 @@ class Team {
 
         const teamMembership = tryFindTeamMemberResult.value;
 
+        // Does membership player match operation player
         if (!teamMembership.playerId.equals(player.id)) {
             return err("TeamMemberships's playerId does not match Player's id.");
         }
 
-        if (props.activeTo != null) {
-            const upcomingMemberHistories = teamMembership.filterHistories({ dateEffectiveFromAfter: props.activeTo });
-            if (upcomingMemberHistories.length) {
-                return err(
-                    "TeamMembership's activeTo date cannot be null while it has TeamMembershipHistories with a dateEffectiveFrom greater than the activeTo, make sure to delete them or set activeTo to a greater date.",
-                );
-            }
-        }
-
-        if (props.activeFrom < this.dateFounded) {
-            return err("TeamMembership's activeFrom cannot be before the Team's dateFounded.");
-        }
-
-        if (player.activeSince > props.activeFrom) {
-            return err("TeamMembership's activeFrom cannot be before the Player's activeSince.");
-        }
-
-        const canCreateTeamMembershipDatesResult = TeamMembershipDates.canCreate({ activeFrom: props.activeFrom, activeTo: props.activeTo });
-        if (canCreateTeamMembershipDatesResult.isErr()) {
-            return err(canCreateTeamMembershipDatesResult.error);
+        const canVerifyIntegrityResult = this.tryVerifyMemberIntegrity(teamMembership, player, { activeFrom: props.activeFrom, activeTo: props.activeTo });
+        if (canVerifyIntegrityResult.isErr()) {
+            return err(canVerifyIntegrityResult.error);
         }
 
         return ok(true);
@@ -213,6 +252,7 @@ class Team {
 
         const teamMembership = canAddHistoryToTeamMembershipResult.value;
         teamMembership.executeAddHistory(props);
+        this.domainEvents.push(...teamMembership.pullDomainEvent());
     }
 }
 

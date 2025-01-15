@@ -1,9 +1,3 @@
-import diContainer, { DI_TOKENS } from "api/deps/diContainer";
-import IMatchRepository from "application/interfaces/IMatchRepository";
-import IPasswordHasher from "application/interfaces/IPasswordHasher";
-import IPlayerRepository from "application/interfaces/IPlayerRepository";
-import ITeamRepository from "application/interfaces/ITeamRepository";
-import IUserRepository from "application/interfaces/IUserRepository";
 import MatchFactory from "domain/domainFactories/MatchFactory";
 import PlayerFactory from "domain/domainFactories/PlayerFactory";
 import TeamFactory from "domain/domainFactories/TeamFactory";
@@ -18,21 +12,7 @@ import TeamId from "domain/valueObjects/Team/TeamId";
 import { DateTime } from "luxon";
 
 class Mixins {
-    private readonly _teamRepository: ITeamRepository;
-    private readonly _playerRepository: IPlayerRepository;
-    private readonly _matchRepository: IMatchRepository;
-    private readonly _userRepository: IUserRepository;
-    private readonly _passwordHasher: IPasswordHasher;
-
-    constructor() {
-        this._teamRepository = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
-        this._playerRepository = diContainer.resolve(DI_TOKENS.PLAYER_REPOSITORY);
-        this._matchRepository = diContainer.resolve(DI_TOKENS.MATCH_REPOSITORY);
-        this._userRepository = diContainer.resolve(DI_TOKENS.USER_REPOSITORY);
-        this._passwordHasher = diContainer.resolve(DI_TOKENS.PASSWORD_HASHER);
-    }
-
-    async createTeam(seed: number) {
+    static createTeam(seed: number) {
         const team = TeamFactory.CreateNew({
             id: TeamId.executeCreate(`${seed}`),
             name: `team_${seed}`,
@@ -40,24 +20,20 @@ class Mixins {
             teamMemberships: [],
         });
 
-        await this._teamRepository.createAsync(team);
-
         return team;
     }
 
-    async createPlayer(seed: number) {
+    static createPlayer(seed: number) {
         const player = PlayerFactory.CreateNew({
             id: PlayerId.executeCreate(`${seed}`),
             name: `player_${seed}`,
             activeSince: new Date(Date.now()),
         });
 
-        await this._playerRepository.createAsync(player);
-
         return player;
     }
 
-    async createTeamMembership(player: Player, team: Team, activeTo: Date | null) {
+    static createTeamMembership(player: Player, team: Team, activeTo: Date | null) {
         const teamMembershipId = team.executeAddMember({
             id: crypto.randomUUID(),
             activeFrom: DateTime.fromJSDate(team.dateFounded).plus({ minute: 1 }).toJSDate(),
@@ -65,28 +41,25 @@ class Mixins {
             player: player,
         });
 
-        await this._teamRepository.updateAsync(team);
         return team.executeFindMemberById(teamMembershipId);
     }
 
-    async createUser(seed: number, isAdmin: boolean) {
+    static createUser(seed: number, isAdmin: boolean) {
         const password = `hashed_password_${seed}`;
         const user = UserFactory.CreateNew({
             id: `${seed}`,
             name: `user_${seed}`,
             email: `user_${seed}@email.com`,
-            hashedPassword: await this._passwordHasher.hashPassword(password),
+            hashedPassword: password,
             isAdmin: isAdmin,
         });
-
-        await this._userRepository.createAsync(user);
 
         return { user, password };
     }
 
-    async createScheduledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team }) {
+    static createScheduledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team }) {
         const date = new Date();
-        return await this.createMatch({
+        return Mixins.createMatch({
             seed: props.seed,
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
@@ -98,9 +71,9 @@ class Mixins {
         });
     }
 
-    async createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
+    static createInProgressMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
-        return await this.createMatch({
+        return Mixins.createMatch({
             seed: props.seed,
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
@@ -112,14 +85,14 @@ class Mixins {
         });
     }
 
-    async createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
+    static createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
         const endDate = DateTime.fromJSDate(date)
             .plus({ minutes: 90 })
             .toJSDate();
         
 
-        return await this.createMatch({
+        return Mixins.createMatch({
             seed: props.seed,
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
@@ -131,10 +104,10 @@ class Mixins {
         });
     }
 
-    async createCancelledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team }) {
+    static createCancelledMatch(props: { seed: number; awayTeam: Team; homeTeam: Team }) {
         const date = new Date();
 
-        return await this.createMatch({
+        return Mixins.createMatch({
             seed: props.seed,
             awayTeam: props.awayTeam,
             homeTeam: props.homeTeam,
@@ -146,7 +119,7 @@ class Mixins {
         });
     }
 
-    private async createMatch(props: {
+    private static createMatch(props: {
         seed: number;
         scheduledDate: Date;
         status: string;
@@ -176,14 +149,8 @@ class Mixins {
             });
         }
 
-        await this._matchRepository.createAsync(match);
-        const insertedMatch = await this._matchRepository.getByIdAsync(match.id);
 
-        if (insertedMatch == null) {
-            throw new Error(`Errors occured while trying to create match in Mixins: Match was not inserted.`);
-        }
-
-        return insertedMatch;
+        return match;
     }
 }
 

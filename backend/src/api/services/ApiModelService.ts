@@ -1,5 +1,6 @@
 import IMatchApiModel from "@apiModels/IMatchApiModel";
 import IMatchEventApiModel from "@apiModels/IMatchEventApiModel";
+import IMatchParticipantsApiModel from "@apiModels/IMatchParticipantsApiModel";
 import ITeamPlayerApiModel from "@apiModels/ITeamPlayerApiModel";
 import IApiModelService from "api/interfaces/IApiModelService";
 import IDatabaseService from "api/interfaces/IDatabaseService";
@@ -120,6 +121,19 @@ class ApiModelService implements IApiModelService {
         }
 
         return results;
+    }
+
+    async createMatchParticipantsApiModel(match: Match): Promise<IMatchParticipantsApiModel> {
+        const homeTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
+        if (homeTeam == null) throw new Error("Home Team doesn't exist.")
+
+        const awayTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
+        if (awayTeam == null) throw new Error("Away Team doesn't exist.")
+
+        return {
+            awayTeamPlayers: awayTeam.teamMemberships.map((teamMembership) => ApiModelMapper.createMatchTeamPlayerApiModel(match, teamMembership)),
+            homeTeamPlayers: homeTeam.teamMemberships.map((teamMembership) => ApiModelMapper.createMatchTeamPlayerApiModel(match, teamMembership))
+        }
     }
 }
 
