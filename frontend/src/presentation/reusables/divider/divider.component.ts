@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-divider',
   standalone: true,
   imports: [CommonModule],
-  template: `<hr class="h-0 w-full border-bottom border-gray-300 shadow-lg" />`
+  template: `<hr class="h-0 w-full border-bottom border-gray-200" />`
 })
 export class DividerComponent {
 

@@ -1,6 +1,6 @@
 @layer components {
     .theme-input-generic-white {
-        @apply border flex flex-grow border-gray-300;
+        @apply border flex flex-grow border-gray-200;
 
         > input {
             @apply text-gray-900 bg-white focus:bg-gray-300;
@@ -42,7 +42,7 @@
 
     .theme-Sbutton-generic-white {
         $root: &;
-        @apply border border-gray-300 text-gray-800;
+        @apply border border-gray-200 text-gray-800;
 
         &:not(&.active) {
             @apply bg-white;

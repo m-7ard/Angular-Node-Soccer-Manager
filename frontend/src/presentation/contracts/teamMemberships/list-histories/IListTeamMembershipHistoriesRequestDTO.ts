@@ -1,0 +1,3 @@
+interface IListTeamMembershipHistoriesRequestDTO {}
+
+export default IListTeamMembershipHistoriesRequestDTO;

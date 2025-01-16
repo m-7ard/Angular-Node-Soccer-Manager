@@ -55,7 +55,7 @@ async function main() {
     await playerRepository.createAsync(johnDoe);
     await playerRepository.createAsync(janeDoe);
 
-    const johnDoeMembership = localTeam.executeAddMember({ player: johnDoe, activeFrom: new Date(), activeTo: null });
+    const johnDoeMembership = localTeam.executeAddMember({ id: crypto.randomUUID(), player: johnDoe, activeFrom: new Date(), activeTo: null });
     await teamRepository.updateAsync(localTeam);
 
     const scheduledMatch = MatchFactory.CreateNew({

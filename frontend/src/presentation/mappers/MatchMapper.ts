@@ -1,6 +1,7 @@
 import IMatchApiModel from '@apiModels/IMatchApiModel';
 import Match from '../models/Match';
 import TeamMapper from './TeamMapper';
+import MatchStatus from '../app/values/MatchStatus';
 
 class MatchMapper {
     static apiModelToDomain(source: IMatchApiModel) {
@@ -12,7 +13,7 @@ class MatchMapper {
             scheduledDate: new Date(source.scheduledDate),
             startDate: source.startDate == null ? null : new Date(source.startDate),
             endDate: source.endDate == null ? null : new Date(source.endDate),
-            status: source.status,
+            status: MatchStatus.executeCreate(source.status),
             score: source.score,
         });
     }

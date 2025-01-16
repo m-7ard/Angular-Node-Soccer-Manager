@@ -21,13 +21,11 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
 interface IFormControls {
     activeFrom: FormControl<string>;
     activeTo: FormControl<string>;
-    number: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
     activeFrom: string[];
     activeTo: string[];
-    number: string[];
 }>;
 
 @Component({
@@ -60,8 +58,7 @@ export class UpdateTeamMembershipPageComponent {
 
         return {
             activeFrom: parsers.parseJsDateToInputDate(membership.activeFrom),
-            activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDate(membership.activeTo),
-            number: membership.number.toString(),
+            activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDate(membership.activeTo)
         };
     }
 
@@ -76,10 +73,6 @@ export class UpdateTeamMembershipPageComponent {
                 validators: [Validators.required],
             }),
             activeTo: new FormControl('', {
-                nonNullable: true,
-                validators: [Validators.required],
-            }),
-            number: new FormControl('', {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
@@ -109,7 +102,6 @@ export class UpdateTeamMembershipPageComponent {
             .updateTeamMembership(this.teamId, this.playerId, {
                 activeFrom: new Date(rawValue.activeFrom),
                 activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
-                number: parseInt(rawValue.number),
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {

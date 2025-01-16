@@ -32,15 +32,15 @@
     }
 
     .token-default-shadow {
-        box-shadow: 0 2px 8px 0px rgba(#0000001f, 0.1);
+        box-shadow: 0 2px 4px 0px rgba(#9689891f, 0.1);
     }
 
     .token-default-border-color {
-        @apply border-gray-300;
+        @apply border-gray-200;
     }
 
     .token-default-divide-color {
-        @apply divide-gray-300;
+        @apply divide-gray-200;
     }
 
     .token-default-avatar {

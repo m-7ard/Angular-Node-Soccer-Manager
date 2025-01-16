@@ -12,6 +12,7 @@ import { PrimeNgPopoverDirective } from '../../../../reusables/prime-ng-popover/
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import Match from '../../../../models/Match';
 import { DeleteMatchModalProps, DeleteMatchModal } from '../../delete-match-component/delete-match-component.component';
+import { MatchStatusServiceService } from '../../../../services/match-status-service.service';
 
 @Component({
     selector: 'app-list-matches-page-match-element',
@@ -39,6 +40,8 @@ export class ListMatchsPageMatchElementComponent {
 
     @ViewChild('op') op!: Popover;
     private dialog = inject(Dialog);
+
+    constructor(readonly matchStatusService: MatchStatusServiceService) {}
 
     openDeleteMatchModal(): void {
         const data: DeleteMatchModalProps = {

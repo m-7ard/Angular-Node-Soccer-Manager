@@ -1,8 +1,5 @@
-import matchStatusColors from '../app/values/matchStatusColors';
+import MatchStatus from '../app/values/MatchStatus';
 import matchStatuses from '../app/values/matchStatuses';
-import matchStatusIsScorable from '../app/values/matchStatusIsScorable';
-import matchStatusLabels from '../app/values/matchStatusLabels';
-import matchStatusTransitions from '../app/values/matchStatusTransitions';
 import Team from './Team';
 
 type MatchProps = {
@@ -13,7 +10,7 @@ type MatchProps = {
     scheduledDate: Date;
     startDate: Date | null;
     endDate: Date | null;
-    status: string;
+    status: MatchStatus;
     score: {
         homeTeamScore: number;
         awayTeamScore: number;
@@ -28,7 +25,7 @@ class Match implements MatchProps {
     scheduledDate: Date;
     startDate: Date | null;
     endDate: Date | null;
-    status: string;
+    status: MatchStatus;
     score: { homeTeamScore: number; awayTeamScore: number } | null;
 
     constructor(props: MatchProps) {
@@ -44,44 +41,20 @@ class Match implements MatchProps {
     }
 
     get statusLabel() {
-        const label = matchStatusLabels[this.status];
-        if (label == null) {
-            throw new Error(`Status of Match lacks a label. Status: ${this.status}`);
-        }
-
-        return label;
+        return this.status.label;
     }
 
     get statusColor() {
-        const color = matchStatusColors[this.status];
-        if (color == null) {
-            throw new Error(`Status of Match lacks a color. Status: ${this.status}`);
-        }
-
-        return color;
+        return this.status.colors;
     }
 
-    canTransition(status: typeof matchStatuses[keyof typeof matchStatuses]) {
-        const transitions = matchStatusTransitions[this.status];
-
-        if (transitions == null) {
-            throw new Error(`Status of Match lacks a transition. Status: ${this.status}`);
-        }
-
-        return transitions.includes(status);
+    canTransition(status: MatchStatus) {
+        return this.status.canTransition(status);
     }
 
     canScore() {
-        const canScore = matchStatusIsScorable[this.status];
-
-        if (canScore == null) {
-            throw new Error(`Status of Match lacks a value in matchStatusIsScorable. Status: ${this.status}`);
-        }
-
-        return canScore;
+        this.status.isScorable;
     }
-
-    public VALID_MATCH_STATUSES = matchStatuses;
 }
 
 export default Match;

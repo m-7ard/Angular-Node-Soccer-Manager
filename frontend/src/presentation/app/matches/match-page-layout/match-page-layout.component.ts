@@ -12,6 +12,7 @@ import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import Team from '../../../models/Team';
 import { CommonModule } from '@angular/common';
 import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { MatchStatusServiceService } from '../../../services/match-status-service.service';
 
 @Component({
     selector: 'app-match-page-layout',
@@ -32,7 +33,7 @@ export class MatchPageLayoutComponent implements OnInit {
     match!: Match;
     matchEvents!: MatchEvent[];
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute, readonly matchStatusService: MatchStatusServiceService) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(data => {

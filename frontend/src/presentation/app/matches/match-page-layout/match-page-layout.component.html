@@ -65,22 +65,22 @@
             <div class="token-default-list">
                 <span class="token-default-list__label"> Status </span>
                 <span class="token-default-list__value">
-                    {{ match.statusLabel }}
+                    {{ match.status.label }}
                 </span>
             </div>
-            <div class="token-default-list" *ngIf="match.status === 'SCHEDULED'">
+            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.SCHEDULED">
                 <span class="token-default-list__label"> Scheduled Date </span>
                 <span class="token-default-list__value">
                     {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm" }}
                 </span>
             </div>
-            <div class="token-default-list" *ngIf="match.status === 'IN_PROGESS'">
+            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.IN_PROGRESS">
                 <span class="token-default-list__label"> Start Date </span>
                 <span class="token-default-list__value">
                     {{ match.startDate | date: "yyyy-MM-dd HH:mm" }}
                 </span>
             </div>
-            <div class="token-default-list" *ngIf="match.status === 'COMPLETED'">
+            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED">
                 <span class="token-default-list__label"> End Date </span>
                 <span class="token-default-list__value">
                     {{ match.endDate | date: "yyyy-MM-dd HH:mm" }}
@@ -125,7 +125,7 @@
             Record Goal
         </button>
         <button
-            *ngIf="match.canTransition('IN_PROGRESS')"
+            *ngIf="match.status === matchStatusService.MatchStatusCls.IN_PROGRESS"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
                 theme: 'theme-Sbutton-generic-white',
@@ -140,7 +140,7 @@
             Mark In Progress
         </button>
         <button
-            *ngIf="match.canTransition('COMPLETED')"
+            *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
                 theme: 'theme-Sbutton-generic-white',
@@ -155,7 +155,7 @@
             Mark Completed
         </button>
         <button
-            *ngIf="match.canTransition('CANCELLED')"
+            *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
                 theme: 'theme-Sbutton-generic-white',

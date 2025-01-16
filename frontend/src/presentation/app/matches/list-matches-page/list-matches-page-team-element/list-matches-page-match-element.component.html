@@ -112,7 +112,7 @@
             >
                 Record Goal
             </button>
-            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.IN_PROGRESS)"
+            <button *ngIf="match.canTransition(matchStatusService.MatchStatusCls.COMPLETED)"
                 [routerLink]="'/matches/' + match.id + '/mark-in-progress/'"
                 useRouterLink
                 [appMixinStyledButton]="{
@@ -123,7 +123,7 @@
             >
                 Mark In Progress
             </button>
-            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.COMPLETED)"
+            <button *ngIf="match.canTransition(matchStatusService.MatchStatusCls.COMPLETED)"
                 [routerLink]="'/matches/' + match.id + '/mark-completed/'"
                 useRouterLink
                 [appMixinStyledButton]="{
@@ -134,7 +134,7 @@
             >
                 Mark Completed
             </button>
-            <button *ngIf="match.canTransition(match.VALID_MATCH_STATUSES.CANCELLED)"
+            <button *ngIf="match.canTransition(matchStatusService.MatchStatusCls.CANCELLED)"
                 [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
                 useRouterLink
                 [appMixinStyledButton]="{

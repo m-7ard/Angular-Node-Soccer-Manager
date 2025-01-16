@@ -113,6 +113,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                 activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
                 playerId: rawValue.player?.id as string,
                 number: parseInt(rawValue.number),
+                position: ""
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
