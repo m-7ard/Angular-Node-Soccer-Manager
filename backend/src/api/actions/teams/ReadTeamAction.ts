@@ -9,7 +9,6 @@ import IReadTeamRequestDTO from "api/DTOs/teams/read/IReadTeamRequestDTO";
 import IReadTeamResponseDTO from "api/DTOs/teams/read/IReadTeamResponseDTO";
 import { ReadTeamQuery } from "application/handlers/teams/ReadTeamQueryHandler";
 import ApiModelMapper from "api/mappers/ApiModelMapper";
-import { ReadPlayerQuery } from "application/handlers/players/ReadPlayerQueryHandler";
 import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 import IApiModelService from "api/interfaces/IApiModelService";
 
@@ -17,7 +16,10 @@ type ActionRequest = { dto: IReadTeamRequestDTO; teamId: string };
 type ActionResponse = JsonResponse<IReadTeamResponseDTO | IApiError[]>;
 
 class ReadTeamAction implements IAction<ActionRequest, ActionResponse> {
-    constructor(private readonly _requestDispatcher: IRequestDispatcher,         private readonly apiModelService: IApiModelService,) {}
+    constructor(
+        private readonly _requestDispatcher: IRequestDispatcher,
+        private readonly apiModelService: IApiModelService,
+    ) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
         const { teamId } = request;

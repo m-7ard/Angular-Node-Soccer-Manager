@@ -14,6 +14,7 @@ import ReadTeamPlayerAction from "api/actions/teams/ReadTeamPlayerAction";
 import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
 import CreateTeamMembershipHistoryAction from "api/actions/team_membership_histories/CreateTeamMembershipHistoryAction";
 import UpdateTeamMembershipHistoryAction from "api/actions/team_membership_histories/UpdateTeamMembershipHistoryAction";
+import ListTeamMembershipHistoriesAction from "api/actions/team_memberships/ListTeamMembershipHistories";
 
 const teamsRouter = Router();
 
@@ -139,10 +140,21 @@ registerAction({
 registerAction({
     router: teamsRouter,
     path: "/:teamId/memberships/:teamMembershipId/histories/:teamMembershipHistoryId/update",
-    method: "POST",
+    method: "PUT",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new UpdateTeamMembershipHistoryAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/memberships/:teamMembershipId/histories/",
+    method: "GET",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        const apiModelService = diContainer.resolve(DI_TOKENS.API_MODEL_SERVICE);
+        return new ListTeamMembershipHistoriesAction(requestDispatcher, apiModelService);
     },
 });
 

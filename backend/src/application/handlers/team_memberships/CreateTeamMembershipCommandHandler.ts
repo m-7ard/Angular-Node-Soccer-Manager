@@ -100,7 +100,13 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         });
 
         // Add history to membership
-        const canAddTeamMembershipHistory = team.canAddHistoryToTeamMembership(teamMembershipId, { number: command.number, position: command.position, dateEffectiveFrom: command.activeFrom });
+        const teamMembershipHistoryId = crypto.randomUUID();
+        const canAddTeamMembershipHistory = team.canAddHistoryToTeamMembership(teamMembershipId, {
+            id: teamMembershipHistoryId,
+            number: command.number,
+            position: command.position,
+            dateEffectiveFrom: command.activeFrom,
+        });
 
         if (canAddTeamMembershipHistory.isErr()) {
             return err(
@@ -113,7 +119,7 @@ export default class CreateTeamMembershipCommandHandler implements IRequestHandl
         }
 
         team.executeAddHistoryToTeamMembership(teamMembershipId, {
-            id: TeamMembershipHistoryId.executeCreate(crypto.randomUUID()),
+            id: teamMembershipHistoryId,
             number: command.number,
             position: command.position,
             dateEffectiveFrom: command.activeFrom,

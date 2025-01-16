@@ -36,11 +36,7 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     player_001 = await mixins.createPlayer(1);
-    team_membership_001 = await mixins.createTeamMembership(
-        player_001,
-        team_001,
-        null,
-    );
+    team_membership_001 = await mixins.createTeamMembership(player_001, team_001, null);
 
     expect(team_001).toBeDefined();
     expect(player_001).toBeDefined();
@@ -49,17 +45,14 @@ beforeEach(async () => {
 describe("Create TeamMembershipHistory Integration Test;", () => {
     it("Create TeamMembershipHistory; Valid first history; Success;", async () => {
         const request: ICreateTeamMembershipHistoryRequestDTO = {
-            dateEffectiveFrom:
-                team_membership_001.teamMembershipDates.activeFrom,
+            dateEffectiveFrom: team_membership_001.teamMembershipDates.activeFrom,
             number: 5,
             position: TeamMembershipHistoryPosition.ATTACKING_MIDFIELDER.value,
         };
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(
-                    `/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`,
-                )
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -69,30 +62,33 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
         const body: ICreateTeamMembershipHistoryResponseDTO = response.body;
         const repo = new TeamRepository(db);
         const team = (await repo.getByIdAsync(team_001.id))!;
-        const teamMembership = team.findMemberById(
-            TeamMembershipId.executeCreate(body.teamMembershipId),
-        )!;
+        const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId))!;
         expect(teamMembership.teamMembershipHistories.length).toBe(1);
         const [history] = teamMembership.teamMembershipHistories;
         expect(history.id.value).toBe(body.teamMembershipHistoryId);
     });
 
     it("Create TeamMembershipHistory; Valid second history; Success;", async () => {
-        team_001.executeAddHistoryToTeamMembership(team_membership_001.id, { id: TeamMembershipHistoryId.executeCreate(crypto.randomUUID()), dateEffectiveFrom: team_membership_001.teamMembershipDates.activeFrom, number: 1, position: TeamMembershipHistoryPosition.GOALKEEPER.value  })
+        team_001.executeAddHistoryToTeamMembership(team_membership_001.id, {
+            id: crypto.randomUUID(),
+            dateEffectiveFrom: team_membership_001.teamMembershipDates.activeFrom,
+            number: 1,
+            position: TeamMembershipHistoryPosition.GOALKEEPER.value,
+        });
         const repo = new TeamRepository(db);
         await repo.updateAsync(team_001);
 
         const request: ICreateTeamMembershipHistoryRequestDTO = {
-            dateEffectiveFrom: DateTime.fromJSDate(team_membership_001.teamMembershipDates.activeFrom).plus({ minute: 1 }).toJSDate(),
+            dateEffectiveFrom: DateTime.fromJSDate(team_membership_001.teamMembershipDates.activeFrom)
+                .plus({ minute: 1 })
+                .toJSDate(),
             number: 10,
             position: TeamMembershipHistoryPosition.CENTER_FORWARD.value,
         };
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(
-                    `/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`,
-                )
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -101,32 +97,37 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
         expect(response.status).toBe(201);
         const body: ICreateTeamMembershipHistoryResponseDTO = response.body;
         const team = (await repo.getByIdAsync(team_001.id))!;
-        const teamMembership = team.findMemberById(
-            TeamMembershipId.executeCreate(body.teamMembershipId),
-        )!;
+        const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId))!;
         expect(teamMembership.teamMembershipHistories.length).toBe(2);
-        const teamMembershipHistory = teamMembership.teamMembershipHistories.find((history) => history.id.value == body.teamMembershipHistoryId);
+        const teamMembershipHistory = teamMembership.teamMembershipHistories.find(
+            (history) => history.id.value == body.teamMembershipHistoryId,
+        );
         expect(teamMembershipHistory).not.toBeNull();
         expect(teamMembershipHistory?.numberValueObject.value).toBe(10);
-        expect(teamMembershipHistory?.positionValueObject.value).toBe(TeamMembershipHistoryPosition.CENTER_FORWARD.value);
+        expect(teamMembershipHistory?.positionValueObject.value).toBe(
+            TeamMembershipHistoryPosition.CENTER_FORWARD.value,
+        );
     });
 
     it("Create TeamMembershipHistory; Invalid data (date out of range); Success;", async () => {
-        team_001.executeUpdateMember(team_membership_001.id, player_001, { activeFrom: new Date(), activeTo: new Date() });
+        team_001.executeUpdateMember(team_membership_001.id, player_001, {
+            activeFrom: new Date(),
+            activeTo: new Date(),
+        });
         const repo = new TeamRepository(db);
         await repo.updateAsync(team_001);
 
         const request: ICreateTeamMembershipHistoryRequestDTO = {
-            dateEffectiveFrom: DateTime.fromJSDate(team_membership_001.teamMembershipDates.activeFrom).plus({ minute: 100 }).toJSDate(),
+            dateEffectiveFrom: DateTime.fromJSDate(team_membership_001.teamMembershipDates.activeFrom)
+                .plus({ minute: 100 })
+                .toJSDate(),
             number: 10,
             position: TeamMembershipHistoryPosition.CENTER_FORWARD.value,
         };
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(
-                    `/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`,
-                )
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,

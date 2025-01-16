@@ -230,7 +230,7 @@ class Team {
         this.domainEvents.push(new TeamMembershipPendingDeletionEvent(deletedTeamMembership));
     }
 
-    public canAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { number: number; position: string; dateEffectiveFrom: Date }): Result<TeamMembership, string> {
+    public canAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { id: string; number: number; position: string; dateEffectiveFrom: Date }): Result<TeamMembership, string> {
         const findTeamMembershipResult = this.tryFindMemberById(teamMembershipId);
         if (findTeamMembershipResult.isErr()) {
             return err(findTeamMembershipResult.error);
@@ -245,18 +245,23 @@ class Team {
         return ok(teamMembership);
     }
 
-    public executeAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { id: TeamMembershipHistoryId; number: number; position: string; dateEffectiveFrom: Date }) {
+    public executeAddHistoryToTeamMembership(teamMembershipId: TeamMembershipId, props: { id: string; number: number; position: string; dateEffectiveFrom: Date }): TeamMembershipHistoryId {
         const canAddHistoryToTeamMembershipResult = this.canAddHistoryToTeamMembership(teamMembershipId, props);
         if (canAddHistoryToTeamMembershipResult.isErr()) {
             throw new Error(canAddHistoryToTeamMembershipResult.error);
         }
 
         const teamMembership = canAddHistoryToTeamMembershipResult.value;
-        teamMembership.executeAddHistory(props);
+        const teamMembershipHistoryId = teamMembership.executeAddHistory(props);
         this.domainEvents.push(...teamMembership.pullDomainEvent());
+        return teamMembershipHistoryId;
     }
 
-    public canUpdateTeamMembershipHistory(teamMembershipId: TeamMembershipId, teamMembershipHistoryId: TeamMembershipHistoryId, props: { number: number; position: string; dateEffectiveFrom: Date }): Result<TeamMembership, string> {
+    public canUpdateTeamMembershipHistory(
+        teamMembershipId: TeamMembershipId,
+        teamMembershipHistoryId: TeamMembershipHistoryId,
+        props: { number: number; position: string; dateEffectiveFrom: Date },
+    ): Result<TeamMembership, string> {
         const findTeamMembershipResult = this.tryFindMemberById(teamMembershipId);
         if (findTeamMembershipResult.isErr()) {
             return err(findTeamMembershipResult.error);
@@ -271,7 +276,11 @@ class Team {
         return ok(teamMembership);
     }
 
-    public executeUpdateTeamMembershipHistory(teamMembershipId: TeamMembershipId, teamMembershipHistoryId: TeamMembershipHistoryId, props: { number: number; position: string; dateEffectiveFrom: Date }): void {
+    public executeUpdateTeamMembershipHistory(
+        teamMembershipId: TeamMembershipId,
+        teamMembershipHistoryId: TeamMembershipHistoryId,
+        props: { number: number; position: string; dateEffectiveFrom: Date },
+    ): void {
         const canUpdateTeamMembershipHistoryResult = this.canUpdateTeamMembershipHistory(teamMembershipId, teamMembershipHistoryId, props);
         if (canUpdateTeamMembershipHistoryResult.isErr()) {
             new Error(canUpdateTeamMembershipHistoryResult.error);

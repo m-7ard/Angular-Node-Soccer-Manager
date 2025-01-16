@@ -72,8 +72,7 @@ class Mixins {
     }
 
     async createTeamMembershipHistory(team: Team, teamMembership: TeamMembership, props: { position: string; dateEffectiveFrom: Date; number: number }) {
-        const teamMembershipHistoryId = TeamMembershipHistoryId.executeCreate(crypto.randomUUID());
-        team.executeAddHistoryToTeamMembership(teamMembership.id, { id: teamMembershipHistoryId, dateEffectiveFrom: props.dateEffectiveFrom, number: props.number, position: props.position });
+        const teamMembershipHistoryId = team.executeAddHistoryToTeamMembership(teamMembership.id, { id: crypto.randomUUID(), dateEffectiveFrom: props.dateEffectiveFrom, number: props.number, position: props.position });
 
         await this._teamRepository.updateAsync(team);
         return teamMembership.executeFindHistoryById(teamMembershipHistoryId);

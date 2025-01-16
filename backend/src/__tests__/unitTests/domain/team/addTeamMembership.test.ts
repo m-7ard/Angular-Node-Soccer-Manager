@@ -12,8 +12,8 @@ beforeAll(() => {});
 afterAll(() => {});
 
 beforeEach(async () => {
-    player_001 = Mixins.createPlayer(1);
-    team_001 = Mixins.createTeam(1);
+    player_001 = Mixins.createNewPlayer(1);
+    team_001 = Mixins.createNewTeam(1);
     // const teamMembership_001 = Mixins.createTeamMembership()
 });
 

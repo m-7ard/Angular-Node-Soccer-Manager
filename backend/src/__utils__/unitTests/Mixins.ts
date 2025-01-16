@@ -4,15 +4,18 @@ import TeamFactory from "domain/domainFactories/TeamFactory";
 import UserFactory from "domain/domainFactories/UserFactory";
 import Player from "domain/entities/Player";
 import Team from "domain/entities/Team";
+import TeamMembership from "domain/entities/TeamMembership";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
+import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
 import { DateTime } from "luxon";
 
 class Mixins {
-    static createTeam(seed: number) {
+    static createNewTeam(seed: number) {
         const team = TeamFactory.CreateNew({
             id: TeamId.executeCreate(`${seed}`),
             name: `team_${seed}`,
@@ -23,11 +26,32 @@ class Mixins {
         return team;
     }
 
-    static createPlayer(seed: number) {
+    static createOldTeam(seed: number) {
+        const team = TeamFactory.CreateNew({
+            id: TeamId.executeCreate(`${seed}`),
+            name: `team_${seed}`,
+            dateFounded: DateTime.fromJSDate(new Date()).minus({ days: 1 }).toJSDate(),
+            teamMemberships: [],
+        });
+
+        return team;
+    }
+
+    static createNewPlayer(seed: number) {
         const player = PlayerFactory.CreateNew({
             id: PlayerId.executeCreate(`${seed}`),
             name: `player_${seed}`,
             activeSince: new Date(Date.now()),
+        });
+
+        return player;
+    }
+
+    static createOldPlayer(seed: number) {
+        const player = PlayerFactory.CreateNew({
+            id: PlayerId.executeCreate(`${seed}`),
+            name: `player_${seed}`,
+            activeSince: DateTime.fromJSDate(new Date()).minus({ days: 1 }).toJSDate(),
         });
 
         return player;
@@ -42,6 +66,30 @@ class Mixins {
         });
 
         return team.executeFindMemberById(teamMembershipId);
+    }
+
+    static createStartTeamMembershipHistory(teamMembership: TeamMembership, seed: number) {
+        const teamMembershipId = teamMembership.executeAddHistory({
+            id: seed.toString(),
+            dateEffectiveFrom: teamMembership.teamMembershipDates.activeFrom,
+            number: 1,
+            position: TeamMembershipHistoryPosition.GOALKEEPER.value,
+        });
+        const teamMembershipHistory = teamMembership.executeFindHistoryById(teamMembershipId);
+
+        return teamMembershipHistory;
+    }
+
+    static createFutureTeamMembershipHistory(teamMembership: TeamMembership, seed: number) {
+        const teamMembershipId = teamMembership.executeAddHistory({
+            id: seed.toString(),
+            dateEffectiveFrom: DateTime.fromJSDate(new Date()).plus({ years: 1, seconds: seed }).toJSDate(),
+            number: 1,
+            position: TeamMembershipHistoryPosition.GOALKEEPER.value,
+        });
+        const teamMembershipHistory = teamMembership.executeFindHistoryById(teamMembershipId);
+
+        return teamMembershipHistory;
     }
 
     static createUser(seed: number, isAdmin: boolean) {
@@ -87,10 +135,7 @@ class Mixins {
 
     static createCompletedMatch(props: { seed: number; awayTeam: Team; homeTeam: Team; goals: Array<{ dateOccured: Date; team: Team; player: Player }> }) {
         const date = new Date();
-        const endDate = DateTime.fromJSDate(date)
-            .plus({ minutes: 90 })
-            .toJSDate();
-        
+        const endDate = DateTime.fromJSDate(date).plus({ minutes: 90 }).toJSDate();
 
         return Mixins.createMatch({
             seed: props.seed,
@@ -145,10 +190,9 @@ class Mixins {
         if (props.goals != null) {
             match.score = MatchScore.ZeroScore;
             props.goals.forEach((goal) => {
-                match.executeAddGoal({ dateOccured: goal.dateOccured, team: goal.team, player: goal.player})
+                match.executeAddGoal({ dateOccured: goal.dateOccured, team: goal.team, player: goal.player });
             });
         }
-
 
         return match;
     }

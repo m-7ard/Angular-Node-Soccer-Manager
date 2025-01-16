@@ -50,28 +50,38 @@ class TeamMembership implements Props {
     public getEffectiveHistoryForDate(date: Date): TeamMembershipHistory | null {
         let left = 0;
         let right = this.teamMembershipHistories.length - 1;
-        let result: TeamMembershipHistory | null = null;
 
         while (left <= right) {
             const mid = Math.floor((left + right) / 2);
-            const currentHistory = this.teamMembershipHistories[mid];
-            const nextHistory = mid > 0 ? this.teamMembershipHistories[mid - 1] : null;
+            const history = this.teamMembershipHistories[mid];
 
-            if (currentHistory.dateEffectiveFrom <= date) {
-                if (nextHistory == null || nextHistory.dateEffectiveFrom > date) {
-                    result = currentHistory;
-                    break;
-                }
+            if (history.dateEffectiveFrom === date) {
+                return history;
+            } else if (history.dateEffectiveFrom > date) {
                 right = mid - 1;
             } else {
+                const nextHistory = this.teamMembershipHistories[mid + 1];
+                if (nextHistory == null) {
+                    return history;
+                }
+                
+                if (nextHistory.dateEffectiveFrom > date) {
+                    return history;
+                }
+
                 left = mid + 1;
             }
         }
 
-        return result;
+        return null;
     }
 
-    public canAddHistory(props: { dateEffectiveFrom: Date; number: number; position: string }): Result<boolean, string> {
+    public canAddHistory(props: { id: string; dateEffectiveFrom: Date; number: number; position: string }): Result<boolean, string> {
+        const canCreateIdResult = TeamMembershipHistoryId.canCreate(props.id);
+        if (canCreateIdResult.isErr()) {
+            return err(canCreateIdResult.error);
+        }
+
         const tryVerifyHistoryIntegrityResult = this.tryVerifyHistoryIntegrity(props);
         if (tryVerifyHistoryIntegrityResult.isErr()) {
             return err(tryVerifyHistoryIntegrityResult.error);
@@ -80,14 +90,15 @@ class TeamMembership implements Props {
         return ok(true);
     }
 
-    public executeAddHistory(props: { id: TeamMembershipHistoryId; dateEffectiveFrom: Date; number: number; position: string }): Result<boolean, string> {
+    public executeAddHistory(props: { id: string; dateEffectiveFrom: Date; number: number; position: string }): TeamMembershipHistoryId {
         const canAddHistoryResult = this.canAddHistory(props);
         if (canAddHistoryResult.isErr()) {
-            return err(canAddHistoryResult.error);
+            throw new Error(canAddHistoryResult.error);
         }
 
+        const teamMembershipHistoryId = TeamMembershipHistoryId.executeCreate(props.id);
         const history = TeamMembershipHistoryFactory.CreateNew({
-            id: props.id,
+            id: teamMembershipHistoryId,
             dateEffectiveFrom: props.dateEffectiveFrom,
             teamMembershipId: this.id,
             positionValueObject: TeamMembershipHistoryPosition.executeCreate(props.position),
@@ -97,7 +108,7 @@ class TeamMembership implements Props {
         this.teamMembershipHistories.push(history);
         this.domainEvents.push(new TeamMembershipHistoryPendingCreationEvent(history));
 
-        return ok(true);
+        return teamMembershipHistoryId;
     }
 
     public tryFindHistoryById(id: TeamMembershipHistoryId): Result<TeamMembershipHistory, string> {

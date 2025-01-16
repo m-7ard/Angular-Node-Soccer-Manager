@@ -59,7 +59,7 @@ describe("Update TeamMembershipHistory Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(
+                .put(
                     `/api/teams/${team_001.id}/memberships/${team_membership_001.id}/histories/${team_membership_history_001.id}/update`,
                 )
                 .send(request)
@@ -97,7 +97,7 @@ describe("Update TeamMembershipHistory Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(
+                .put(
                     `/api/teams/${team_001.id}/memberships/${team_membership_001.id}/histories/${team_membership_history_001.id}/update`,
                 )
                 .send(request)
