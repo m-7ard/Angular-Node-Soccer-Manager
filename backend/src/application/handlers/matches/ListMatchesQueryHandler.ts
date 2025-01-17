@@ -11,6 +11,7 @@ type QueryProps = {
     scheduledDate: Date | null;
     status: string | null;
     limitBy: number | null;
+    teamId: string | null;
 };
 
 export type ListMatchesQueryResult = IQueryResult<Match[], IApplicationError[]>;
@@ -22,11 +23,13 @@ export class ListMatchesQuery implements IQuery<ListMatchesQueryResult>, QueryPr
         this.scheduledDate = props.scheduledDate;
         this.status = props.status;
         this.limitBy = props.limitBy;
+        this.teamId = props.teamId;
     }
 
     scheduledDate: Date | null;
     status: string | null;
     limitBy: number | null;
+    teamId: string | null;
 }
 
 export default class ListMatchesQueryHandler implements IRequestHandler<ListMatchesQuery, ListMatchesQueryResult> {
@@ -52,6 +55,7 @@ export default class ListMatchesQueryHandler implements IRequestHandler<ListMatc
             limitBy: query.limitBy,
             scheduledDate: query.scheduledDate,
             status: query.status,
+            teamId: query.teamId,
         });
 
         const matches = await this._matchRepository.filterAllAsync(criteria);

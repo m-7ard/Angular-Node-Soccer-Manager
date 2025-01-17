@@ -113,6 +113,10 @@ class MatchRepository implements IMatchRepository {
             query = query.limit(criteria.limitBy);
         }
 
+        if (criteria.teamId != null) {
+            query = query.where("away_team_id", criteria.teamId).orWhere("home_team_id", criteria.teamId);
+        } 
+
         const queryString = query.toString();
 
         const rows = await this._db.query<IMatchSchema>({

@@ -6,6 +6,7 @@ const validatorSchema = object({
     scheduledDate: nullable(date()),
     status: nullable(string()),
     limitBy: nullable(max(min(number(), 0), 100)),
+    teamId: nullable(string()),
 });
 
 function listMatchesValidator(data: IListMatchesRequestDTO) {

@@ -4,7 +4,7 @@ import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
 import CreateMatchAction from "api/actions/matches/CreateMatchAction";
 import ReadMatchAction from "api/actions/matches/ReadMatchAction";
-import ListMatchesAction from "api/actions/matches/ListMatchAction";
+import ListMatchesAction from "api/actions/matches/ListMatchesAction";
 import MarkMatchInProgressAction from "api/actions/matches/MarkMatchInProgressAction";
 import MarkMatchCompletedAction from "api/actions/matches/MarkMatchCompletedAction";
 import MarkMatchCancelledAction from "api/actions/matches/MarkMatchCancelledAction";

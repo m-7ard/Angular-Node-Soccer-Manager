@@ -17,8 +17,8 @@ type ActionResponse = JsonResponse<IListMatchesResponseDTO | IApiError[]>;
 
 class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
     constructor(
-        private readonly _requestDispatcher: IRequestDispatcher,
-        private readonly _apiModelService: IApiModelService,
+        private readonly requestDispatcher: IRequestDispatcher,
+        private readonly apiModelService: IApiModelService,
     ) {}
 
     async handle(request: ActionRequest): Promise<ActionResponse> {
@@ -35,8 +35,9 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
             scheduledDate: dto.scheduledDate,
             status: dto.status,
             limitBy: dto.limitBy,
+            teamId: dto.teamId
         });
-        const result = await this._requestDispatcher.dispatch(command);
+        const result = await this.requestDispatcher.dispatch(command);
 
         if (result.isErr()) {
             return new JsonResponse({
@@ -48,7 +49,7 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
         return new JsonResponse({
             status: StatusCodes.OK,
             body: {
-                matches: await this._apiModelService.createManyMatchApiModels(result.value),
+                matches: await this.apiModelService.createManyMatchApiModels(result.value),
             },
         });
     }
@@ -59,6 +60,7 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
                 scheduledDate: request.query.scheduledDate == null ? null : parsers.parseDateOrElse(request.query.scheduledDate, null),
                 limitBy: Number(request.query.limitBy),
                 status: request.query.status as string,
+                teamId: request.query.teamId as string,
             },
         };
     }

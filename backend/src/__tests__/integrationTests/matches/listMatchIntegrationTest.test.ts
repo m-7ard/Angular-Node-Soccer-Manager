@@ -27,6 +27,7 @@ let default_request: IListMatchesRequestDTO = {
     limitBy: null,
     scheduledDate: null,
     status: null,
+    teamId: null
 };
 
 beforeAll(async () => {
@@ -42,6 +43,7 @@ beforeEach(async () => {
     const mixins = new Mixins();
     team_001 = await mixins.createTeam(1);
     team_002 = await mixins.createTeam(2);
+    team_003 = await mixins.createTeam(3);
 
     match_001 = await mixins.createScheduledMatch({
         seed: 1,
@@ -58,8 +60,8 @@ beforeEach(async () => {
 
     match_003 = await mixins.createCompletedMatch({
         seed: 3,
-        awayTeam: team_001,
-        homeTeam: team_002,
+        awayTeam: team_002,
+        homeTeam: team_003,
         goals: [],
     });
 });
@@ -116,5 +118,19 @@ describe("List Matches Integration Test;", () => {
         expect(response.status).toBe(200);
         const body: IListMatchesResponseDTO = response.body;
         expect(body.matches.length).toBe(expectAmount);
+    });
+
+    it("List Matches; By Team Id; Success;", async () => {
+        const request = { ...default_request };
+        request.teamId = team_003.id.value;
+        const url = urlWithQuery(BASE_URL, request);
+
+        const response = await supertest(server)
+            .get(`${url}`)
+            .set("Content-Type", "application/json");
+
+        expect(response.status).toBe(200);
+        const body: IListMatchesResponseDTO = response.body;
+        expect(body.matches.length).toBe(1);
     });
 });
