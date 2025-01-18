@@ -3,20 +3,20 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import IPresentationError from '../../../errors/IPresentationError';
-import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
-import parsers from '../../../utils/parsers';
+import IPresentationError from '../../../../errors/IPresentationError';
+import PresentationErrorFactory from '../../../../errors/PresentationErrorFactory';
+import { TeamDataAccessService } from '../../../../services/data-access/team-data-access.service';
+import parsers from '../../../../utils/parsers';
 import { IUpdateTeamMembershipResolverData } from './update-team-membership-page.resolver';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import TeamPlayer from '../../../models/TeamPlayer';
-import Team from '../../../models/Team';
-import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
+import { CharFieldComponent } from '../../../../reusables/char-field/char-field.component';
+import { FormFieldComponent } from '../../../../reusables/form-field/form-field.component';
+import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
+import TeamPlayer from '../../../../models/TeamPlayer';
+import Team from '../../../../models/Team';
+import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
+import { FormErrorsComponent } from '../../../../reusables/form-errors/form-errors';
 import { CommonModule } from '@angular/common';
-import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
+import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 
 interface IFormControls {
     activeFrom: FormControl<string>;
@@ -51,7 +51,7 @@ export class UpdateTeamMembershipPageComponent {
 
     teamPlayer: TeamPlayer = null!;
 
-    playerId: string = null!;
+    teamMembershipId: string = null!;
 
     private get initialData() {
         const membership = this.teamPlayer.membership;
@@ -84,7 +84,7 @@ export class UpdateTeamMembershipPageComponent {
             const data: IUpdateTeamMembershipResolverData = resolverData[RESOLVER_DATA_KEY];
 
             this.teamId = data.team.id;
-            this.playerId = data.teamPlayer.player.id;
+            this.teamMembershipId = data.teamPlayer.player.id;
 
             const teamPlayer = data.teamPlayer;
 
@@ -99,7 +99,7 @@ export class UpdateTeamMembershipPageComponent {
         const rawValue = this.form.getRawValue();
 
         this.teamDataAccess
-            .updateTeamMembership(this.teamId, this.playerId, {
+            .updateTeamMembership(this.teamId, this.teamMembershipId, {
                 activeFrom: new Date(rawValue.activeFrom),
                 activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
             })

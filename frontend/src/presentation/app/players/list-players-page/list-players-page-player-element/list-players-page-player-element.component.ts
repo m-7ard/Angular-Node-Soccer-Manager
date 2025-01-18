@@ -1,11 +1,10 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { CoverImageComponent } from '../../../../reusables/cover-image/cover-image.component';
 import Player from '../../../../models/Player';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-text.component';
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
-import { MatMenuModule } from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
 import { DeletePlayerModalProps, DeletePlayerModal } from '../../delete-player-modal/delete-player-modal.component';
 import { PanelDirectivesModule } from '../../../../reusables/panel/panel.directive.module';

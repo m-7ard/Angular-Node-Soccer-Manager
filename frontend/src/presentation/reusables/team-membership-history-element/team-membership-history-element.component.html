@@ -1,0 +1,40 @@
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true,
+        hasBorder: true
+    }"
+>
+    <section appMixinStyledCardSection>
+        <div class="token-default-list">
+            <div class="token-default-list__label ">
+                Date Effective From
+            </div>
+            <div class="token-default-list__value ">
+                {{ teamMembershipHistory.dateEffectiveFrom | date }}
+            </div>
+        </div>
+    </section>
+    <section appMixinStyledCardSection>
+        <ul>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Number
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.number }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Position
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.position.label }}
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>

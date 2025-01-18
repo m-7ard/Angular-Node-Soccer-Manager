@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CoverImageComponent } from '../../../../../reusables/cover-image/cover-image.component';
 import { CommonModule } from '@angular/common';
 import { Dialog } from '@angular/cdk/dialog';
@@ -31,16 +31,23 @@ import { PrimeNgPopoverDirective } from '../../../../../reusables/prime-ng-popov
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,
+        RouterModule
     ],
     templateUrl: './list-team-players-page-team-player-element.component.html',
 })
-export class ListTeamPlayerPageTeamPlayerElementComponent {
+export class ListTeamPlayerPageTeamPlayerElementComponent implements OnInit {
     @Input() teamPlayer!: TeamPlayer;
     @Input() team!: Team;
     @Output() onDelete = new EventEmitter<TeamPlayer>();
 
     @ViewChild('op') op!: Popover;
     private dialog = inject(Dialog);
+
+    url!: string;
+
+    ngOnInit(): void {
+        this.url = '/teams/' + this.team.id + '/memberships/' + this.teamPlayer.membership.id;
+    }
 
     openDeleteMembershipModal(): void {
         const data: DeleteTeamMembershipModalProps = {

@@ -8,6 +8,7 @@ import TeamPlayer from '../../../models/TeamPlayer';
 import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
+import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
 
 export interface ITeamLayoutPageResolverData {
     team: Team;
@@ -16,16 +17,19 @@ export interface ITeamLayoutPageResolverData {
 
 @Injectable({ providedIn: 'root' })
 export class TeamLayoutPageResolver implements Resolve<ITeamLayoutPageResolverData> {
-    constructor(private _teamDataAccess: TeamDataAccessService) {}
+    constructor(
+        private teamDataAccess: TeamDataAccessService,
+        private matchDataAccess: MatchDataAccessService,
+    ) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<ITeamLayoutPageResolverData> {
         let teamId = route.paramMap.get('teamId');
-        
+
         if (teamId == null) {
             throw new ClientSideErrorException('Read Team Page: teamId parameter is null.');
         }
 
-        return this._teamDataAccess.readTeam(teamId).pipe(
+        const teamData = this.teamDataAccess.readTeam(teamId).pipe(
             map((response) => ({
                 team: TeamMapper.apiModelToDomain(response.team),
                 teamPlayers: response.teamPlayers.map(TeamPlayerMapper.apiModelToDomain),
@@ -34,5 +38,7 @@ export class TeamLayoutPageResolver implements Resolve<ITeamLayoutPageResolverDa
                 throw getRoutableException(error);
             }),
         );
+
+        return teamData;
     }
 }

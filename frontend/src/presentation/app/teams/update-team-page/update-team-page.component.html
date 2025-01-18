@@ -5,16 +5,16 @@
     [appPageDirective]="{ pageSize: 'mixin-page-base' }"
     appContentGrid
 >
-    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }">
+    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'lg' }">
         <div>
             <div class="token-default-title">Update Team</div>
         </div>
     </header>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'lg' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'lg' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
+    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'lg' }" class="flex flex-col gap-3">
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">
                 <app-char-field
@@ -39,10 +39,10 @@
             </ng-template>
         </app-form-field>
     </fieldset>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'lg' }" />
     <footer
         appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        [appContentGridTrack]="{ contentGridTrack: 'lg' }"
         class="flex flex-row gap-3 justify-end"
     >
         <button

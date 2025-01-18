@@ -3,21 +3,21 @@
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
     (reset)="onReset()"
-    [appPageDirective]="{ pageSize: 'mixin-page-base' }"
     appContentGrid
+    [appPageDirective]="{ pageSize: 'mixin-page-base' }"
 >
     <header
         appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        [appContentGridTrack]="{ contentGridTrack: 'lg' }"
         class="flex flex-row gap-3 items-center justify-between"
     >
         <div class="token-default-title">Create Team Membership</div>
     </header>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" *ngIf="errors['_'] != null">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'lg' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'lg' }" *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
+    <fieldset appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'lg' }" class="flex flex-col gap-3">
         <app-form-field [name]="'player'" [errors]="errors.playerId">
             <ng-template let-name="name">
                 <app-pick-single-player [formControlName]="name"></app-pick-single-player>
@@ -59,11 +59,19 @@
                 ></app-char-field>
             </ng-template>
         </app-form-field>
+        <app-form-field [name]="'position'" [errors]="errors.position">
+            <ng-template let-name="name">
+                <app-select
+                    [formControlName]="name"
+                    [options]="playerPositionSingleton.options"
+                ></app-select>
+            </ng-template>
+        </app-form-field>
     </fieldset>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'lg' }" />
     <footer
         appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        [appContentGridTrack]="{ contentGridTrack: 'lg' }"
         class="flex flex-row gap-3 justify-end"
     >
         <button

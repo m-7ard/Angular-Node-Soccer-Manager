@@ -9,7 +9,7 @@ import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors'
 import { TeamDataAccessService } from '../../../services/data-access/team-data-access.service';
 import Team from '../../../models/Team';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 import { DividerComponent } from "../../../reusables/divider/divider.component";

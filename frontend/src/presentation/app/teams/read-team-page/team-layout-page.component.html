@@ -1,28 +1,11 @@
 <!-- Team Layout Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid class="overflow-hidden">
-    <header
-        appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
-        class="flex flex-row gap-3 items-center"
-    >
-        <div class="grid gap-3" style="grid-template: auto / auto 1fr">
-            <div class="aspect-square theme-avatar-any">
-                <section class="relative h-full w-full flex">
-                    <app-cover-image src=""></app-cover-image>
-                </section>
-            </div>
-            <div class="overflow-hidden">
-                <div class="token-card--header--primary-text">
-                    {{ team.name }}
-                </div>
-                <div class="token-card--header--secondary-text">Spain</div>
-            </div>
-        </div>
+    <header appPageSectionDirective class="flex flex-col gap-3">
+        <div class="token-default-title">{{ team.name }}</div>
     </header>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <app-divider/>
     <nav
         appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
         class="flex flex-row gap-3 overflow-x-auto"
     >
         <button
@@ -82,8 +65,8 @@
             Add Player
         </button>
     </nav>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <main [appContentGridTrack]="{ contentGridTrack: 'base' }">
+    <app-divider/>
+    <div [appContentGridTrack]="{ contentGridTrack: 'lg' }">
         <router-outlet></router-outlet>
-    </main>
+    </div>
 </div>

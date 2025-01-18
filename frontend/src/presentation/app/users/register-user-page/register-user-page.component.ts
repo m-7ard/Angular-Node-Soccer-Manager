@@ -11,10 +11,10 @@ import { catchError, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -39,7 +39,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './register-user-page.component.html',

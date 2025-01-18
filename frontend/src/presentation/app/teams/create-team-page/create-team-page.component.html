@@ -7,17 +7,17 @@
     appContentGrid
 >
     <section
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        [appContentGridTrack]="{ contentGridTrack: 'full' }"
         appPageSectionDirective
         class="flex flex-row gap-3 items-center justify-between"
     >
         <div class="token-default-title">Create Team</div>
     </section>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <section *ngIf="errors['_'] != null" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'full' }" />
+    <section *ngIf="errors['_'] != null" [appContentGridTrack]="{ contentGridTrack: 'full' }" appPageSectionDirective>
         <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
-    <fieldset class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'base' }" appPageSectionDirective>
+    <fieldset class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'full' }" appPageSectionDirective>
         <app-form-field [name]="'name'" [errors]="errors.name">
             <ng-template let-name="name">
                 <app-char-field
@@ -45,7 +45,7 @@
     </fieldset>
     <footer
         class="flex flex-row gap-3 justify-end"
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        [appContentGridTrack]="{ contentGridTrack: 'full' }"
         appPageSectionDirective
     >
         <button

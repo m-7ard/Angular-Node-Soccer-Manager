@@ -6,7 +6,7 @@ import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
 import IPresentationError from '../../../../../errors/IPresentationError';
 import { object } from 'superstruct';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { PageDirectivesModule } from '../../../../../reusables/page/page.directi
 import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-team/pick-single-team.component';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
-import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {}
 
@@ -36,7 +36,7 @@ const validator = object({});
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './mark-cancelled-page.component.html',

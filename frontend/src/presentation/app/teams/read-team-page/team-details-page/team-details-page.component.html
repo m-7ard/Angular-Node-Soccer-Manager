@@ -1,201 +1,101 @@
 <!-- Team Details Page -->
-<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" class="grid grid-cols-2 max-[640px]:grid-cols-1">
-    <section appPageSectionDirective class="flex flex-col gap-3">
-        <header>
-            <div class="token-default-title">Team Details</div>
-        </header>
-        <app-divider />
-        <div
-            [appMixinStyledCard]="{
-                size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white',
-                hasShadow: true,
-                hasDivide: true
-            }"
-        >
-            <header appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
-                <span class="relative h-full flex aspect-square theme-avatar-any">
-                    <app-cover-image src=""></app-cover-image>
-                </span>
-                <span class="overflow-hidden">
-                    <div class="token-default-title">
-                        {{ team.name }}
-                    </div>
-                    <div class="truncate token-card--header--secondary-text">
-                        <app-zeebra-text></app-zeebra-text>
-                    </div>
-                </span>
-            </header>
-            <ul appMixinStyledCardSection>
-                <li class="token-default-list">
-                    <span class="token-default-list__label shrink-0">Team Id</span>
-                    <span class="truncate token-default-list__value">
-                        {{ team.id }}
-                    </span>
-                </li>
-                <li class="token-default-list">
-                    <span class="token-default-list__label shrink-0">Date Founded</span>
-                    <span class="truncate token-default-list__value">
-                        {{ team.dateFounded | date }}
-                    </span>
-                </li>
-                <li class="token-default-list">
-                    <span class="token-default-list__label shrink-0">Membership Count</span>
-                    <span class="truncate token-default-list__value">
-                        {{ teamPlayers.length }}
-                    </span>
-                </li>
-                <li class="token-default-list">
-                    <span class="token-default-list__label shrink-0">Active Members</span>
-                    <span class="truncate token-default-list__value">
-                        {{ activePlayers.length }}
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <section appPageSectionDirective class="flex flex-col gap-3">
-        <header class="flex flex-row gap-3 items-center justify-between">
-            <div class="token-default-title">Latest Match</div>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white',
-                    hasShadow: true
-                }"
-            >
-                All Matches
-            </button>
-        </header>
-        <app-divider />
-        <div
-            *ngFor="let i of matchesRange"
-            [appMixinStyledCard]="{
-                size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white',
-                hasShadow: true,
-                hasDivide: true
-            }"
-        >
-            <section appMixinStyledCardSection class="flex flex-row gap-3 items-center">
-                <button
-                    [appMixinStyledButton]="{
-                        size: 'mixin-Sbutton-sm',
-                        theme: 'theme-Sbutton-generic-yellow',
-                        isStatic: true
-                    }"
-                    routerLink="/matches/"
-                >
-                    Pending
-                </button>
-                <button
-                    [appMixinStyledButton]="{
-                        size: 'mixin-Sbutton-sm',
-                        theme: 'theme-Sbutton-generic-white'
-                    }"
-                    routerLink="/matches/"
-                    class="ml-auto"
-                >
-                    Details
-                </button>
-            </section>
-            <section appMixinStyledCardSection class="flex flex-col gap-3">
-                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
-                    <div class="aspect-square h-full theme-avatar-any">
-                        <app-cover-image src=""></app-cover-image>
-                    </div>
-                    <div class="text-sm truncate">Home Team</div>
-                    <div class="flex flex-row gap-3 text-sm">
-                        <div>
-                            {{ (i * 77) % 3 }}
-                        </div>
-                    </div>
+<main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }">
+    <header appPageSectionDirective>
+        <div class="token-default-title">Team Details</div>
+    </header>
+    <app-divider />
+    <section appPageSectionDirective class="flex flex-col gap-1">
+        <div class="token-base-text font-bold">Team Information</div>
+        <ul>
+            <li class="token-default-list">
+                <div class="token-default-list__label">
+                    Name
                 </div>
-                <div class="grid gap-3 items-center" style="grid-template-columns: auto auto 1fr">
-                    <div class="aspect-square h-full theme-avatar-any">
-                        <app-cover-image src=""></app-cover-image>
-                    </div>
-                    <div class="text-sm truncate">Away Team</div>
-                    <div class="flex flex-row gap-3 text-sm">
-                        <div>
-                            {{ (i * 77) % 3 }}
-                        </div>
-                    </div>
+                <div class="token-default-list__value truncate">
+                    {{ team.name }}
                 </div>
-            </section>
-        </div>
-    </section>
-    <section appPageSectionDirective class="flex flex-col gap-3">
-        <header class="flex flex-row gap-3 items-center justify-between">
-            <div class="token-default-title">Active Team Players</div>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white',
-                    hasShadow: true
-                }"
-            >
-                Team Players
-            </button>
-        </header>
-        <app-divider />
-        <div
-            [appMixinStyledCard]="{
-                size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white',
-                hasShadow: true,
-                hasDivide: true
-            }"
-        >
-            <section
-                appMixinStyledCardSection
-                class="grid gap-3"
-                style="grid-template: auto / auto 1fr"
-                *ngFor="let teamPlayer of activePlayers"
-            >
-                <div class="aspect-square theme-avatar-any">
-                    <section class="relative h-full w-full flex">
-                        <app-cover-image src=""></app-cover-image>
-                    </section>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">
+                    Id
                 </div>
-                <div class="overflow-hidden">
-                    <div class="token-card--header--primary-text">
-                        {{ teamPlayer.player.name }}
-                    </div>
-                    <div class="truncate token-card--header--secondary-text">
-                        <app-zeebra-text></app-zeebra-text>
-                    </div>
+                <div class="token-default-list__value truncate">
+                    {{ team.id }}
                 </div>
-            </section>
-        </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">
+                    Date Founded
+                </div>
+                <div class="token-default-list__value truncate">
+                    {{ team.dateFounded | date }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">
+                    Active Members Count
+                </div>
+                <div class="token-default-list__value truncate">
+                    {{ activePlayers.length }}
+                </div>
+            </li>
+        </ul>
     </section>
-    <section appPageSectionDirective class="flex flex-col gap-3">
-        <header>
-            <div class="token-default-title">Team News</div>
-        </header>
-        <app-divider />
-        <div
-            [appMixinStyledCard]="{
-                size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white',
-                hasShadow: true,
-                hasDivide: true
-            }"
-        >
-            <section
-                appMixinStyledCardSection
-                class="grid gap-3"
-                style="grid-template: auto / auto 1fr"
-                *ngFor="let i of matchesRange"
-            >
-                <span class="relative h-full aspect-square flex token-default-avatar">
-                    <app-cover-image src="" />
-                </span>
-                <span class="overflow-hidden">
-                    <div class="token-card--header--primary-text truncate">Something Happened To Team eeeeeeeeeeee</div>
-                    <div class="token-card--header--secondary-text truncate">http://wikipedia.com</div>
-                </span>
-            </section>
-        </div>
+    <app-divider />
+    <section appPageSectionDirective class="flex flex-col gap-1">
+        <div class="token-base-text font-bold">In Progress Matches</div>
+        <ul class="token-default-flex-row flex-wrap">
+            <li *ngFor="let match of inProgressMatches">
+                <app-match-element [match]="match" />
+            </li>
+            <li *ngIf="inProgressMatches.length === 0" class="token-base-text">Nothing To See Here Yet</li>
+        </ul>
     </section>
-</div>
+    <app-divider />
+    <section appPageSectionDirective class="flex flex-col gap-1">
+        <div class="token-base-text font-bold">Recent Matches</div>
+        <ul class="token-default-flex-row flex-wrap">
+            <li *ngFor="let match of recentMatches">
+                <app-match-element [match]="match" />
+            </li>
+            <li *ngIf="recentMatches.length === 0" class="token-base-text">Nothing To See Here Yet</li>
+        </ul>
+    </section>
+    <app-divider />
+    <section appPageSectionDirective class="flex flex-col gap-1">
+        <div class="token-base-text font-bold">Active Members</div>
+        <ul class="token-default-flex-row flex-wrap">
+            <div class="token-default-flex-row flex-wrap" *ngIf="activePlayers.length">
+                <li *ngFor="let teamMember of activePlayers">
+                    <div
+                        [appMixinStyledCard]="{
+                            size: 'mixin-Scard-base',
+                            theme: 'theme-Scard-generic-white',
+                            hasShadow: true,
+                            hasDivide: true,
+                            hasBorder: true
+                        }"
+                        class="grow basis-1/4"
+                    >
+                        <section class="grid gap-3" style="grid-template-columns: auto 1fr" appMixinStyledCardSection>
+                            <div class="aspect-square token-default-avatar">
+                                <app-cover-image
+                                    src="https://media.gettyimages.com/id/2156815463/photo/lisbon-portugal-cristiano-ronaldo-of-portugal-poses-for-a-portrait-during-the-portugal.jpg?s=612x612&w=gi&k=20&c=w2qJefWbNVSPSP4L29CjtaeB4R0CiL2VWohDuKpGF_A="
+                                />
+                            </div>
+                            <div>
+                                <div class="token-base-text font-bold">
+                                    {{ teamMember.player.name }}
+                                </div>
+                                <div class="token-base-text">
+                                    {{ teamMember.membership.effectiveHistory?.position?.label ?? "Unkown Position" }}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </li>
+            </div>
+            <li *ngIf="activePlayers.length === 0" class="token-base-text">Nothing To See Here Yet</li>
+        </ul>
+    </section>
+</main>

@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { DividerComponent } from "../../../reusables/divider/divider.component";
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -43,7 +43,7 @@ type IErrorSchema = IPresentationError<{
     CommonModule,
     DividerComponent,
     PageDirectivesModule,
-    ContentDirectivesModule,
+    ContentGridDirectivesModule,
 ],
     templateUrl: './update-team-page.component.html',
 })

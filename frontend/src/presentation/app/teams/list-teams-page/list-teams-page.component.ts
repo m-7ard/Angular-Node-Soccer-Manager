@@ -12,7 +12,7 @@ import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-teams-page',
@@ -28,7 +28,7 @@ import { ContentDirectivesModule } from '../../../reusables/content-grid/content
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
     ],
     templateUrl: './list-teams-page.component.html',
 })

@@ -11,10 +11,10 @@ import { CharFieldComponent } from '../../../reusables/char-field/char-field.com
 import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { DividerComponent } from "../../../reusables/divider/divider.component";
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     email: FormControl<string>;
@@ -38,7 +38,7 @@ type IErrorSchema = IPresentationError<{
     FormErrorsComponent,
     DividerComponent,
     PageDirectivesModule,
-    ContentDirectivesModule,
+    ContentGridDirectivesModule,
 ],
     templateUrl: './login-user-page.component.html',
 })

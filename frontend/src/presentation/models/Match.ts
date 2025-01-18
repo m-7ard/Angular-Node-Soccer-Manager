@@ -1,5 +1,4 @@
 import MatchStatus from '../app/values/MatchStatus';
-import matchStatuses from '../app/values/matchStatuses';
 import Team from './Team';
 
 type MatchProps = {
@@ -54,6 +53,18 @@ class Match implements MatchProps {
 
     canScore() {
         this.status.isScorable;
+    }
+
+    getStatusDate() {
+        if (this.status === MatchStatus.SCHEDULED) {
+            return this.scheduledDate;
+        } else if (this.status === MatchStatus.IN_PROGRESS) {
+            return this.startDate;
+        } else if (this.status === MatchStatus.COMPLETED) {
+            return this.endDate;
+        }
+
+        return null;
     }
 }
 

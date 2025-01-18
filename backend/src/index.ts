@@ -10,6 +10,7 @@ import MatchDates from "domain/valueObjects/Match/MatchDates";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
+import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
 import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
 
 const hostname = "127.0.0.1";
@@ -55,7 +56,9 @@ async function main() {
     await playerRepository.createAsync(johnDoe);
     await playerRepository.createAsync(janeDoe);
 
-    const johnDoeMembership = localTeam.executeAddMember({ id: crypto.randomUUID(), player: johnDoe, activeFrom: new Date(), activeTo: null });
+    const johnDoeMembershipId = localTeam.executeAddMember({ id: crypto.randomUUID(), player: johnDoe, activeFrom: new Date(), activeTo: null });
+    localTeam.executeAddHistoryToTeamMembership(johnDoeMembershipId, { id: crypto.randomUUID(), number: 1, position: TeamMembershipHistoryPosition.GOALKEEPER.value, dateEffectiveFrom: new Date() });
+
     await teamRepository.updateAsync(localTeam);
 
     const scheduledMatch = MatchFactory.CreateNew({

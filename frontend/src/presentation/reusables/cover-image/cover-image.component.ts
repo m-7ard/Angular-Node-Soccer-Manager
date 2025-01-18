@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './cover-image.component.html',
+  host: { class: "block h-full w-full" }
 })
 export class CoverImageComponent {
     @Input() src?: string;

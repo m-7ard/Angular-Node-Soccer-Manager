@@ -11,8 +11,8 @@ import { ListTeamPlayersPageComponent } from './teams/read-team-page/list-team-p
 import { UpdatePlayerPageComponent } from './players/update-player-page/update-player-page.component';
 import { UpdatePlayerPageResolver } from './players/update-player-page/update-player-page.resolver';
 import { UpdateTeamPageComponent } from './teams/update-team-page/update-team-page.component';
-import { UpdateTeamMembershipPageComponent } from './teams/update-team-membership-page/update-team-membership-page.component';
-import { UpdateTeamMembershipPageResolver } from './teams/update-team-membership-page/update-team-membership-page.resolver';
+import { UpdateTeamMembershipPageComponent } from './teams/team-player-layout/update-team-membership-page/update-team-membership-page.component';
+import { UpdateTeamMembershipPageResolver } from './teams/team-player-layout/update-team-membership-page/update-team-membership-page.resolver';
 import { NotFoundPageComponent } from './other/not-found-page.component';
 import { InternalServerErrorPageComponent } from './other/internal-server-error-page.component copy';
 import { UnknownErrorPageComponent } from './other/unknown-error-page.component copy 2';
@@ -36,6 +36,10 @@ import { RecordGoalPageComponent } from './matches/match-page-layout/pages/recor
 import { MatchPageLayoutResolver } from './matches/match-page-layout/match-page-layout.resolver';
 import { MatchPageLayoutComponent } from './matches/match-page-layout/match-page-layout.component';
 import { MatchDetailsPageComponent } from './matches/match-page-layout/pages/match-details-page/match-details-page.component';
+import { TeamDetailsPageResolver } from './teams/read-team-page/team-details-page/team-details-page.resolver';
+import { TeamPlayerLayoutComponent } from './teams/team-player-layout/team-player-layout.component';
+import { TeamPlayerLayoutPageResolver } from './teams/team-player-layout/team-player-layout.resolver';
+import { TeamPlayerDetailsPageComponent } from './teams/team-player-layout/team-player-details-page/team-player-details-page.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -53,7 +57,6 @@ export const routes: Routes = [
                 path: '',
                 component: ListPlayersPageComponent,
                 resolve: { [RESOLVER_DATA_KEY]: ListPlayersPageResolver },
-                canActivate: [AuthGuard],
             },
             {
                 path: 'create',
@@ -77,7 +80,6 @@ export const routes: Routes = [
                 path: '',
                 component: ListTeamsPageComponent,
                 resolve: { [RESOLVER_DATA_KEY]: ListTeamsPageResolver },
-                canActivate: [AuthGuard],
             },
             {
                 path: 'create',
@@ -86,19 +88,39 @@ export const routes: Routes = [
             },
             {
                 path: ':teamId',
-                component: TeamLayoutPageComponent,
-                resolve: { [RESOLVER_DATA_KEY]: TeamLayoutPageResolver },
-                runGuardsAndResolvers: 'always',
-                canActivate: [AuthGuard],
                 children: [
-                    { path: '', component: TeamDetailsPageComponent },
-                    { path: 'update', component: UpdateTeamPageComponent },
-                    { path: 'players/add', component: CreateTeamMembershipPageComponent },
-                    { path: 'players', component: ListTeamPlayersPageComponent },
                     {
-                        path: 'players/:playerId/update',
-                        component: UpdateTeamMembershipPageComponent,
-                        resolve: { [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver },
+                        path: 'memberships/:teamMembershipId',
+                        component: TeamPlayerLayoutComponent,
+                        resolve: { [RESOLVER_DATA_KEY]: TeamPlayerLayoutPageResolver },
+                        runGuardsAndResolvers: 'always',
+                        children: [
+                            {
+                                path: '',
+                                component: TeamPlayerDetailsPageComponent,
+                            },
+                            {
+                                path: 'update',
+                                component: UpdateTeamMembershipPageComponent,
+                                resolve: { [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver },
+                            },
+                        ],
+                    },
+                    {
+                        path: '',
+                        component: TeamLayoutPageComponent,
+                        resolve: { [RESOLVER_DATA_KEY]: TeamLayoutPageResolver },
+                        runGuardsAndResolvers: 'always',
+                        children: [
+                            {
+                                path: '',
+                                component: TeamDetailsPageComponent,
+                                resolve: { [RESOLVER_DATA_KEY]: TeamDetailsPageResolver },
+                            },
+                            { path: 'update', component: UpdateTeamPageComponent },
+                            { path: 'players/add', component: CreateTeamMembershipPageComponent },
+                            { path: 'players', component: ListTeamPlayersPageComponent },
+                        ],
                     },
                 ],
             },
@@ -122,7 +144,6 @@ export const routes: Routes = [
                 path: '',
                 component: ListMatchesPageComponent,
                 resolve: { [RESOLVER_DATA_KEY]: ListMatchesPageResolver },
-                canActivate: [AuthGuard],
             },
             {
                 path: 'schedule',
@@ -134,9 +155,8 @@ export const routes: Routes = [
                 component: MatchPageLayoutComponent,
                 resolve: { [RESOLVER_DATA_KEY]: MatchPageLayoutResolver },
                 runGuardsAndResolvers: 'always',
-                canActivate: [AuthGuard],
                 children: [
-                    { path: "", component: MatchDetailsPageComponent },
+                    { path: '', component: MatchDetailsPageComponent },
                     {
                         path: 'mark-in-progress',
                         component: MarkInProgressPageComponent,
@@ -153,8 +173,8 @@ export const routes: Routes = [
                         path: 'record-goal',
                         component: RecordGoalPageComponent,
                     },
-                ]
-            }
+                ],
+            },
         ],
     },
 

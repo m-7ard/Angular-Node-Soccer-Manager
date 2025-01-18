@@ -10,12 +10,12 @@ import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -39,7 +39,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './create-team-page.component.html',

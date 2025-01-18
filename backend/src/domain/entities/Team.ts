@@ -96,23 +96,25 @@ class Team {
 
         // Is overlapping / conflicting date
         const playerTeamMemberships = this.filterMembersByPlayerId(player.id);
-        const conflictsWithMemberships = playerTeamMemberships.some((playerMembership) => {
+        const conflictsWithMembership = playerTeamMemberships.find((playerMembership) => {
             if (playerMembership === teamMembership) return false;
             return playerMembership.isConflictingDate(teamMembershipDates);
         });
 
-        if (conflictsWithMemberships) {
-            return err("team membership active dates overlap with already existing team memberships' active dates");
+        if (conflictsWithMembership != null) {
+            return err(
+                `Team Member's active dates (${props.activeFrom} to ${props.activeTo}) overlap with an existing team membership active from ${conflictsWithMembership.teamMembershipDates.activeFrom} to ${conflictsWithMembership.teamMembershipDates.activeTo}. Please choose a date range that does not conflict with existing memberships.`,
+            );
         }
 
         // Is membership activeFrom before team was founded
         if (props.activeFrom < this.dateFounded) {
-            return err("Team Member's activeFrom cannot be before the team's dateFounded.");
+            return err(`Team Member's activeFrom (${props.activeFrom}) cannot be before the team's dateFounded (${this.dateFounded}).`);
         }
 
         // Is membership activeFrom before player was active
         if (player.activeSince > props.activeFrom) {
-            return err("Team Member's activeFrom cannot be before the player's activeFrom.");
+            return err(`Team Member's activeFrom ${props.activeFrom} cannot be before the player's activeFrom (${player.activeSince}).`);
         }
 
         // Are there upcoming teamMembershipHistories
@@ -123,7 +125,7 @@ class Team {
                 const requiredDateString = new Date(requiredDate).toJSON();
 
                 return err(
-                    `team membership's activeTo date must be null while it has TeamMembershipHistories with a dateEffectiveFrom greater than the activeTo, make sure to delete them or set activeTo to a date equal or greater than ${requiredDateString}.`,
+                    `Team Member's activeTo date must be null while it has Team Membership Histories with a dateEffectiveFrom greater than the activeTo, make sure to delete them or set activeTo to a date equal or greater than ${requiredDateString}.`,
                 );
             }
         }
@@ -183,7 +185,7 @@ class Team {
 
         // Does membership player match operation player
         if (!teamMembership.playerId.equals(player.id)) {
-            return err("TeamMemberships's playerId does not match Player's id.");
+            return err(`TeamMemberships's playerId (${teamMembership.playerId}) does not match Player's id (${player.id}).`);
         }
 
         const canVerifyIntegrityResult = this.tryVerifyMemberIntegrity(teamMembership, player, { activeFrom: props.activeFrom, activeTo: props.activeTo });
@@ -213,7 +215,7 @@ class Team {
 
         const teamMembership = tryFindTeamMemberResult.value;
         if (teamMembership.teamMembershipHistories.length) {
-            return err("Cannot delete TeamMembership while it has TeamMembershipHistories asscociated with it. Make sure to delte them.");
+            return err("Cannot delete TeamMembership while it has TeamMembershipHistories asscociated with it. Make sure to delete them first.");
         }
 
         return ok(true);

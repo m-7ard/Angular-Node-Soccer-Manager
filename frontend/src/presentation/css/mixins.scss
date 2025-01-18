@@ -64,10 +64,17 @@
     .mixin-page-like {
         @apply flex flex-col grow;
     }
+    
+    .mixin-page-like--subpage {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 
     .mixin-page-base {
+        @apply px-4;
+
         > [data-role="page-section"] {
-            @apply p-4;
+            @apply py-4;
         }
     }
 
@@ -143,6 +150,22 @@
 
         > [data-track="sm"] {
             @apply max-w-[450px];
+        }
+    }
+
+    .mixin-select-like {
+        @apply overflow-auto;
+
+        > [data-role="option"] {
+            @apply flex items-center box-border select-none
+        }
+    }
+
+    .mixin-select-base {
+        @apply rounded-lg token-default-shadow max-h-[140px];
+
+        > [data-role="option"] {
+            @apply gap-2 px-4 py-1 text-base;
         }
     }
 }

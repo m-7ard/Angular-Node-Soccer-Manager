@@ -10,7 +10,7 @@ import { TeamDataAccessService } from '../../../services/data-access/team-data-a
 import Team from '../../../models/Team';
 import TeamPlayer from '../../../models/TeamPlayer';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';

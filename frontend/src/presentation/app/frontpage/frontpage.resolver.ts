@@ -20,19 +20,19 @@ export interface IFrontpageResolverData {
 @Injectable({ providedIn: 'root' })
 export class FrontpageResolver implements Resolve<IFrontpageResolverData> {
     constructor(
-        private readonly _playerDataAccess: PlayerDataAccessService,
-        private readonly _teamDataAccess: TeamDataAccessService,
-        private readonly _matchDataAccess: MatchDataAccessService,
+        private readonly playerDataAccess: PlayerDataAccessService,
+        private readonly teamDataAccess: TeamDataAccessService,
+        private readonly matchDataAccess: MatchDataAccessService,
     ) {}
 
     resolve(): Observable<IFrontpageResolverData> {
-        const playersRequest = this._playerDataAccess.listPlayers({ name: null, limitBy: null }).pipe(
+        const playersRequest = this.playerDataAccess.listPlayers({ name: null, limitBy: null }).pipe(
             map((response) => {
                 return response.players.map(PlayerMapper.apiModelToDomain);
             }),
         );
 
-        const teamsRequest = this._teamDataAccess
+        const teamsRequest = this.teamDataAccess
             .listTeams({ name: null, limitBy: 5, teamMembershipPlayerId: null })
             .pipe(
                 map((response) => {
@@ -40,8 +40,8 @@ export class FrontpageResolver implements Resolve<IFrontpageResolverData> {
                 }),
             );
 
-        const matchesRequest = this._matchDataAccess
-            .listMatches({ limitBy: 24, status: null, scheduledDate: null })
+        const matchesRequest = this.matchDataAccess
+            .listMatches({ limitBy: 24, status: null, scheduledDate: null, teamId: null })
             .pipe(
                 map((response) => {
                     return response.matches.map(MatchMapper.apiModelToDomain);

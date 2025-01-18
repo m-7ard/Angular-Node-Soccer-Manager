@@ -14,12 +14,12 @@ import { PageDirectivesModule } from '../../../../../reusables/page/page.directi
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
 import structErrorToPresentationError from '../../../../../utils/structErrorToPresentationError';
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import IPresentationError from '../../../../../errors/IPresentationError';
 import { object, date } from 'superstruct';
-import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     endDate: FormControl<string>;
@@ -45,7 +45,7 @@ const validator = object({
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './mark-completed-page.component.html',

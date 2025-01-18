@@ -9,7 +9,7 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-read-team-page',
@@ -19,7 +19,7 @@ import { ContentDirectivesModule } from '../../../reusables/content-grid/content
         MixinStyledCardDirectivesModule,
         CoverImageComponent,
         MixinStyledButtonDirective,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
         PageDirectivesModule,
     ],

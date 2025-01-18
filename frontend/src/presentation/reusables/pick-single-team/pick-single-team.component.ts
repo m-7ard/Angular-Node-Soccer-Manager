@@ -41,8 +41,6 @@ export class PickSingleTeamComponent implements ControlValueAccessor {
 
     @Input() value: Team | null = null;
 
-    ngOnInit(): void {}
-
     propsFactoryFactory() {
         return (team: Team) => {
             return {

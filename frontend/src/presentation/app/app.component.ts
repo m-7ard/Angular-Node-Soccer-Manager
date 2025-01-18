@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ModalTriggerDirective } from '../reusables/modal/modal-trigger.directive';
 import { DrawerModalComponent } from '../reusables/modal/example.component';
 import { MixinStyledButtonDirective } from '../reusables/styled-button/styled-button.directive';
 import { AuthService } from '../services/auth-service';
 import { CommonModule } from '@angular/common';
-import { ExceptionNoticeService } from '../services/exception-notice-service';
+import { ExceptionNoticeService } from '../services/exception-notice.service';
 import { ExceptionNoticePopover } from './other/exception-notice-popover.component';
 import { DividerComponent } from "../reusables/divider/divider.component";
+import { ContentGridDirectivesModule } from '../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +20,8 @@ import { DividerComponent } from "../reusables/divider/divider.component";
         MixinStyledButtonDirective,
         CommonModule,
         ExceptionNoticePopover,
-        DividerComponent
+        DividerComponent,
+        ContentGridDirectivesModule
     ],
     templateUrl: './app.component.html',
     host: {
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit {
     otherTitle = '0';
     isAuthenticated: boolean = null!;
     error: Error | null = null;
+    @Input() topBarTemplate!: TemplateRef<any>;
 
     constructor(
         readonly authService: AuthService,

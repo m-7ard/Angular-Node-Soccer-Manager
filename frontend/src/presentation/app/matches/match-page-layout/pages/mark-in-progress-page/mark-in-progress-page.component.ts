@@ -15,11 +15,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
 import structErrorToPresentationError from '../../../../../utils/structErrorToPresentationError';
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
-import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     startDate: FormControl<string>;
@@ -45,7 +45,7 @@ const validator = object({
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './mark-in-progress-page.component.html',

@@ -12,7 +12,8 @@ import { DividerComponent } from '../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/styled-card.module';
 import Match from '../../models/Match';
-import { ContentDirectivesModule } from '../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../reusables/content-grid/content-grid.directive.module';
+import { MatchStatusSingleton } from '../../services/match-status-singleton.service';
 
 @Component({
     selector: 'app-frontpage',
@@ -25,7 +26,7 @@ import { ContentDirectivesModule } from '../../reusables/content-grid/content-gr
         CoverImageComponent,
         ZeebraTextComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent
     ],
     templateUrl: './frontpage.component.html',
@@ -35,14 +36,16 @@ export class FrontpageComponent implements OnInit {
     public teams: Team[] = null!;
     public matches: Match[] = null!;
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute, readonly matchStatusSingleton: MatchStatusSingleton) {}
+
+    public matchesDate = new Date();
 
     ngOnInit() {
         this.activatedRoute.data.subscribe((resolverData) => {
             const data = resolverData[RESOLVER_DATA_KEY] as IFrontpageResolverData;
             this.players = data.players;
             this.teams = data.teams;
-            this.matches = data.matches;
+            this.matches = [...data.matches,...data.matches,...data.matches,...data.matches,...data.matches,...data.matches,...data.matches,...data.matches];
         });
     }
 }

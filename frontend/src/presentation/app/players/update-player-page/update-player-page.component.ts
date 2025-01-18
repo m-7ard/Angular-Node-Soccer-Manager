@@ -13,13 +13,13 @@ import { IUpdatePlayerResolverData } from './update-player-page.resolver';
 import parsers from '../../../utils/parsers';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import Player from '../../../models/Player';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -43,7 +43,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent
     ],
     templateUrl: './update-player-page.component.html',

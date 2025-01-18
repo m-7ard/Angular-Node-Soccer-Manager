@@ -8,7 +8,7 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-players-page',
@@ -19,7 +19,7 @@ import { ContentDirectivesModule } from '../../../reusables/content-grid/content
         MixinStyledButtonDirective,
         ListPlayersPagePlayerElementComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './list-players-page.component.html',

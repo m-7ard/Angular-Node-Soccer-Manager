@@ -4,62 +4,40 @@
         size: 'mixin-Scard-base',
         theme: 'theme-Scard-generic-white',
         hasShadow: true,
-        hasDivide: true
+        hasDivide: true,
+        hasBorder: true
     }"
 >
-    <main appMixinStyledCardSection class="grid gap-3" style="grid-template: auto / auto 1fr">
-        <div class="aspect-square theme-avatar-any">
-            <section class="relative h-full w-full flex">
-                <app-cover-image src=""></app-cover-image>
-            </section>
+    <section class="grid gap-3" style="grid-template-columns: auto 1fr;" appMixinStyledCardSection>
+        <div class="aspect-square token-default-avatar">
+            <app-cover-image  src="https://media.gettyimages.com/id/2156815463/photo/lisbon-portugal-cristiano-ronaldo-of-portugal-poses-for-a-portrait-during-the-portugal.jpg?s=612x612&w=gi&k=20&c=w2qJefWbNVSPSP4L29CjtaeB4R0CiL2VWohDuKpGF_A=" />
         </div>
-        <div class="overflow-hidden">
-            <div class="token-card--header--primary-text">
+        <div>
+            <div class="token-default-title">
                 {{ player.name }}
             </div>
-            <div class="truncate token-card--header--secondary-text">
-                <app-zeebra-text></app-zeebra-text>
+            <div class="token-base-text">
+                Country
             </div>
         </div>
-    </main>
-    <section appMixinStyledCardSection>
-        <div class="token-default-list">
-            <span class="token-default-list__label shrink-0">Id</span>
-            <span class="truncate token-default-list__value">
-                {{ player.id }}
-            </span>
-        </div>
-        <div class="token-default-list">
-            <span class="token-default-list__label shrink-0">Active Since</span>
-            <span class="truncate token-default-list__value">
-                {{ player.activeSince | date }}
-            </span>
-        </div>
     </section>
-    <footer appMixinStyledCardSection class="flex flex-col gap-1">
-        <button
-            [appMixinStyledButton]="{
-                theme: 'theme-Sbutton-generic-blue',
-                size: 'mixin-Sbutton-base'
-            }"
-            class="justify-center"
-        >
-            Details
-        </button>
+    <!--
+    <section appMixinStyledCardSection>
         <button
             [appMixinStyledButton]="{
                 theme: 'theme-Sbutton-generic-white',
                 size: 'mixin-Sbutton-base'
             }"
-            class="justify-center"
+            class="justify-center w-full"
             primeNgPopoverDirective
             [popover]="op"
+            [positioning]="{ left: '0px', top: '100%' }"
         >
             Other Options
         </button>
-    </footer>
+    </section>
+    -->
 </div>
-
 <p-popover #op class="fixed mt-1">
     <div
         [appPanelDirective]="{
@@ -69,8 +47,8 @@
             panelHasShadow: true
         }"
     >
-        <header appPanelSectionDirective class="flex flex-row justify-between items-center">
-            <div class="token-base-title">Other Options</div>
+        <header appPanelSectionDirective class="flex flex-row justify-between items-center w-[350px]">
+            <div class="token-base-text">Other Options</div>
             <button
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-sm',

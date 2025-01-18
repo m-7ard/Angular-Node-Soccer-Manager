@@ -58,8 +58,8 @@ export class TeamDataAccessService {
         return this.http.get<IReadTeamResponseDTO>(`${this._baseUrl}/${teamId}`);
     }
 
-    readTeamPlayer(teamId: string, playerId: string) {
-        return this.http.get<IReadTeamPlayerResponseDTO>(`${this._baseUrl}/${teamId}/players/${playerId}`);
+    readTeamPlayer(teamId: string, membershipId: string) {
+        return this.http.get<IReadTeamPlayerResponseDTO>(`${this._baseUrl}/${teamId}/memberships/${membershipId}`);
     }
 
     updateTeam(teamId: string, request: IUpdateTeamRequestDTO) {

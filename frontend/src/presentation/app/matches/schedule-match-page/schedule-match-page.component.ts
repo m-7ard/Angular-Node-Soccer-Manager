@@ -10,7 +10,7 @@ import { PageDirectivesModule } from '../../../reusables/page/page.directive.mod
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import IPresentationError from '../../../errors/IPresentationError';
 import Team from '../../../models/Team';
 import { object, string, date } from 'superstruct';
@@ -20,7 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { PickSingleTeamComponent } from '../../../reusables/pick-single-team/pick-single-team.component';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     homeTeam: FormControl<Team | null>;
@@ -55,7 +55,7 @@ const validator = object({
         MixinStyledCardDirectivesModule,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
         PickSingleTeamComponent,
     ],

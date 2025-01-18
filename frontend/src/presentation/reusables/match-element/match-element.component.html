@@ -1,0 +1,52 @@
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true,
+        hasBorder: true
+    }"
+    class="basis-1/4 min-w-[250px] grow"
+>
+    <section appMixinStyledCardSection class="grid gap-4" style="grid-template-columns: 1fr auto auto">
+        <ul class="flex flex-col gap-3 grow justify-center">
+            <li class="grid items-center gap-3" style="grid-template-columns: auto 1fr auto">
+                <div class="h-6 aspect-square">
+                    <app-cover-image className="theme-avatar-any" />
+                </div>
+                <div class="token-base-text truncate">
+                    {{ match.homeTeam.name }}
+                </div>
+                <div class="token-base-text" *ngIf="match.canScore()">
+                    {{ match.score?.homeTeamScore }}
+                </div>
+            </li>
+            <li class="grid items-center gap-3" style="grid-template-columns: auto 1fr auto">
+                <div class="h-6 aspect-square">
+                    <app-cover-image className="theme-avatar-any" />
+                </div>
+                <div class="token-base-text truncate">
+                    {{ match.awayTeam.name }}
+                </div>
+                <div class="token-base-text" *ngIf="match.canScore()">
+                    {{ match.score?.awayTeamScore }}
+                </div>
+            </li>
+        </ul>
+        <app-divider [isVertical]="true" />
+        <ul class="h-full flex flex-col gap-1 justify-center items-center">
+            <div class="token-base-text break-all">
+                {{ match.status.label }}
+            </div>
+            <div
+                [appMixinStyledButton]="{
+                    theme: 'theme-Sbutton-generic-white',
+                    size: 'mixin-Sbutton-sm',
+                    isStatic: true
+                }"
+            >
+                {{ match.getStatusDate() | date: "hh:mm" }}
+            </div>
+        </ul>
+    </section>
+</div>

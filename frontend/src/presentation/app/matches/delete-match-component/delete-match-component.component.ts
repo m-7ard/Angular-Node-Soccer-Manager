@@ -6,7 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { CommonModule } from '@angular/common';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';

@@ -9,7 +9,7 @@ import Match from '../../../../../models/Match';
 import MatchEvent from '../../../../../models/MatchEvent';
 import { IMatchPageLayoutResolverData } from '../../match-page-layout.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
-import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { DateDifferencePipe } from '../../../../../pipes/date-difference.pipe';
 
@@ -21,7 +21,7 @@ import { DateDifferencePipe } from '../../../../../pipes/date-difference.pipe';
         MixinStyledCardDirectivesModule,
         RouterModule,
         CoverImageComponent,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         PageDirectivesModule,
         DividerComponent,
         MixinStyledButtonDirective,

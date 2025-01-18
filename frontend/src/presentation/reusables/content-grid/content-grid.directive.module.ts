@@ -6,4 +6,4 @@ import { ContentGridDirective } from './content-grid.directive';
   declarations: [ContentGridDirective, ContentGridTrackDirective],
   exports: [ContentGridDirective, ContentGridTrackDirective],
 })
-export class ContentDirectivesModule {}
+export class ContentGridDirectivesModule {}

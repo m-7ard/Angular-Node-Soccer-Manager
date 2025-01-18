@@ -16,18 +16,21 @@ import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/
 import Team from '../../../../models/Team';
 import { ITeamLayoutPageResolverData } from '../team-layout-page.resolver';
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
-import { ExceptionNoticeService } from '../../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../../services/exception-notice.service';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
-import { FormErrorsComponent } from "../../../../reusables/form-errors/form-errors";
-import { ContentDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
+import { FormErrorsComponent } from '../../../../reusables/form-errors/form-errors';
+import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
+import { SelectComponent } from '../../../../reusables/select/select.component';
+import { PlayerPositionSingleton } from '../../../../services/player-position-singleton.service';
 
 interface IFormControls {
     player: FormControl<Player | null>;
     activeFrom: FormControl<string>;
     activeTo: FormControl<string>;
     number: FormControl<string>;
+    position: FormControl<string>;
 }
 
 type IErrorSchema = IPresentationError<{
@@ -35,24 +38,26 @@ type IErrorSchema = IPresentationError<{
     activeFrom: string[];
     activeTo: string[];
     number: string[];
+    position: string[];
 }>;
 
 @Component({
     selector: 'app-create-team-membership-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    FormFieldComponent,
-    CharFieldComponent,
-    PickSinglePlayerComponent,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirectivesModule,
-    PageDirectivesModule,
-    ContentDirectivesModule,
-    DividerComponent,
-    FormErrorsComponent
-],
+        ReactiveFormsModule,
+        CommonModule,
+        FormFieldComponent,
+        CharFieldComponent,
+        PickSinglePlayerComponent,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirectivesModule,
+        PageDirectivesModule,
+        ContentGridDirectivesModule,
+        DividerComponent,
+        FormErrorsComponent,
+        SelectComponent,
+    ],
     templateUrl: './create-team-membership-page.component.html',
 })
 export class CreateTeamMembershipPageComponent implements OnInit {
@@ -62,10 +67,11 @@ export class CreateTeamMembershipPageComponent implements OnInit {
     team: Team = null!;
 
     constructor(
-        private router: Router,
-        private teamDataAccess: TeamDataAccessService,
-        private activatedRoute: ActivatedRoute,
-        private exceptionNoticeService: ExceptionNoticeService,
+        private readonly router: Router,
+        private readonly teamDataAccess: TeamDataAccessService,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly exceptionNoticeService: ExceptionNoticeService,
+        readonly playerPositionSingleton: PlayerPositionSingleton
     ) {
         this.form = new FormGroup<IFormControls>({
             player: new FormControl(null, {
@@ -81,6 +87,10 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                 validators: [Validators.required],
             }),
             number: new FormControl('', {
+                nonNullable: true,
+                validators: [Validators.required],
+            }),
+            position: new FormControl('', {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
@@ -113,7 +123,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
                 activeTo: rawValue.activeTo === '' ? null : new Date(rawValue.activeTo),
                 playerId: rawValue.player?.id as string,
                 number: parseInt(rawValue.number),
-                position: ""
+                position: rawValue.position,
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {

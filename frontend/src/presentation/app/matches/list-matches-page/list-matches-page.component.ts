@@ -13,7 +13,7 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IListMatchesResolverData } from './list-matches-page.resolver';
 import Match from '../../../models/Match';
 import { ListMatchsPageMatchElementComponent } from './list-matches-page-team-element/list-matches-page-match-element.component';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-matches-page',
@@ -28,7 +28,7 @@ import { ContentDirectivesModule } from '../../../reusables/content-grid/content
         PanelDirectivesModule,
         DividerComponent,
         PopoverModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         ListMatchsPageMatchElementComponent,
     ],
     templateUrl: './list-matches-page.component.html',

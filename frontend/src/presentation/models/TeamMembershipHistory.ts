@@ -1,3 +1,5 @@
+import PlayerPosition from "../app/values/PlayerPosition";
+
 class TeamMembershipHistory {
     constructor({
         id,
@@ -10,7 +12,7 @@ class TeamMembershipHistory {
         teamMembershipId: string;
         dateEffectiveFrom: string;
         number: number;
-        position: string;
+        position: PlayerPosition;
     }) {
         this.id = id;
         this.teamMembershipId = teamMembershipId;
@@ -23,7 +25,7 @@ class TeamMembershipHistory {
     teamMembershipId: string;
     dateEffectiveFrom: string;
     number: number;
-    position: string;
+    position: PlayerPosition;
 }
 
 export default TeamMembershipHistory;

@@ -8,29 +8,32 @@ import TeamPlayer from '../../../models/TeamPlayer';
 import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
+import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
 
-export interface IUpdateTeamMembershipResolverData {
+export interface ITeamPlayerLayoutPageResolverData {
     team: Team;
     teamPlayer: TeamPlayer;
 }
 
 @Injectable({ providedIn: 'root' })
-export class UpdateTeamMembershipPageResolver implements Resolve<IUpdateTeamMembershipResolverData> {
-    constructor(private _teamDataAccess: TeamDataAccessService) {}
+export class TeamPlayerLayoutPageResolver implements Resolve<ITeamPlayerLayoutPageResolverData> {
+    constructor(
+        private teamDataAccess: TeamDataAccessService,
+        private matchDataAccess: MatchDataAccessService,
+    ) {}
 
-    resolve(route: ActivatedRouteSnapshot): Observable<IUpdateTeamMembershipResolverData> {
-        let teamId = route.parent!.paramMap.get('teamId');
-
+    resolve(route: ActivatedRouteSnapshot): Observable<ITeamPlayerLayoutPageResolverData> {
+        let teamId = route.paramMap.get('teamId');
         if (teamId == null) {
-            throw new ClientSideErrorException('Update Team Page: teamId param is null.');
+            throw new ClientSideErrorException('Team Player Layout: teamId parameter is null.');
         }
 
-        const playerId = route.paramMap.get('playerId');
-        if (playerId == null) {
-            throw new ClientSideErrorException('Update Team Page: playerId param is null.');
-        }
+        let teamMembershipId = route.paramMap.get('teamMembershipId');
 
-        return this._teamDataAccess.readTeamPlayer(teamId, playerId).pipe(
+        if (teamMembershipId == null) {
+            throw new ClientSideErrorException('Team Player Layout: teamMembershipId parameter is null.');
+        }
+        const teamData = this.teamDataAccess.readTeamPlayer(teamId, teamMembershipId).pipe(
             map((response) => ({
                 team: TeamMapper.apiModelToDomain(response.team),
                 teamPlayer: TeamPlayerMapper.apiModelToDomain(response.teamPlayer),
@@ -39,5 +42,7 @@ export class UpdateTeamMembershipPageResolver implements Resolve<IUpdateTeamMemb
                 throw getRoutableException(error);
             }),
         );
+
+        return teamData;
     }
 }

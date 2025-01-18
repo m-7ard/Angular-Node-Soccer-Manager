@@ -20,6 +20,7 @@ export class ListMatchesPageResolver implements Resolve<IListMatchesResolverData
                 scheduledDate: null,
                 status: null,
                 limitBy: null,
+                teamId: null
             })
             .pipe(
                 map((dto) => ({ matches: dto.matches.map(MatchMapper.apiModelToDomain) })),

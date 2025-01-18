@@ -38,7 +38,7 @@
   .token-default-title {
     @apply text-lg font-bold text-gray-800;
   }
-  .token-base-title {
+  .token-base-text {
     @apply text-base font-bold text-gray-800;
   }
 }/*# sourceMappingURL=tokens.css.map */

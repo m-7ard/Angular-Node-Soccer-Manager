@@ -1,6 +1,6 @@
 <!-- App -->
-<header class="mixin-content-grid p-3 relative shrink-0 overflow-x-auto token-default-shadow">
-    <nav class="flex flex-row gap-3 w-fit mx-auto">
+<header class="mixin-content-grid p-3 relative shrink-0 overflow-x-auto token-default-shadow bg-white">
+    <nav class="flex flex-row gap-3">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 [appMixinStyledButton]="{
@@ -9,7 +9,6 @@
                 }"
                 type="button"
                 (mouseup)="authService.logout()"
-                class="ml-auto"
             >
                 Logout
             </button>
@@ -24,7 +23,6 @@
                     theme: 'theme-Sbutton-generic-yellow'
                 }"
                 [routerLinkActiveOptions]="{ exact: true }"
-                class="ml-auto"
             >
                 Login
             </a>
@@ -42,6 +40,7 @@
             </a>
         </ng-template>
         <a
+            class="ml-auto"
             routerLink="/"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
@@ -104,10 +103,56 @@
         </div>
     </nav>
 </header>
-<app-divider class=" token-default-shadow z-10"/>
+<app-divider/>
 <main class="flex flex-col grow">
     <router-outlet></router-outlet>
 </main>
+<app-divider class="z-10"/>
+<!--
+<footer appContentGrid class="py-3 px-4 bg-gray-100">
+    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" class="flex flex-row gap-y-3 gap-x-6 flex-wrap">
+        <div class="shrink-0 flex flex-col gap-1">
+            <div class="token-default-title">
+                Soccer Team Manager
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                Using Angular & Node
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                Implementing DDD Methodologies
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                Integration Tested API
+            </div> 
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                Implementing Layered Architecture
+            </div>
+        </div>
+        <div class="shrink-0 flex flex-col gap-1">
+            <div class="token-default-title">
+                Made by M-7ard
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                https://github.com/m-7ard
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                https://github.com/m-7ard/Angular-Node-Soccer-Manager
+            </div>
+        </div>
+        <div class="shrink-0 flex flex-col gap-1">
+            <div class="token-default-title">
+                Other Portfolio Project of M-7ard
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                https://github.com/m-7ard/Dotnet-React-Order-Display-System-
+            </div>
+            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
+                https://github.com/m-7ard/Dotnet-MVC-News-Service
+            </div>
+        </div>
+    </section>
+</footer>
+-->
 <ng-content *ngIf="error != null">
     <app-exception-notice-popover
         [error]="error"

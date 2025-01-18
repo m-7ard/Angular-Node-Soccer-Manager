@@ -9,6 +9,7 @@ import { Popover } from 'primeng/popover';
 })
 export class PrimeNgPopoverDirective implements OnInit {
     @Input() popover!: Popover;
+    @Input() positioning: Partial<Record<"top" | "left" | "bottom" | "right", string>> = { top: '100%', right: '0px', left: '0px' };
 
     constructor(private el: ElementRef) {}
 
@@ -22,7 +23,7 @@ export class PrimeNgPopoverDirective implements OnInit {
         if (!targetElement) return;
 
         const referenceElement = this.el.nativeElement;
-        positionFixedContainer(targetElement, referenceElement, { top: '100%', right: '0px', left: '0px' });
+        positionFixedContainer(targetElement, referenceElement, this.positioning);
         fitFixedContainer(targetElement);
     };
 

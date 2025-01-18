@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
-import { ExceptionNoticeService } from '../../../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
 import structErrorToPresentationError from '../../../../../utils/structErrorToPresentationError';
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
@@ -23,7 +23,7 @@ import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-te
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
 import { PickSinglePlayerComponent } from "../../../../../reusables/pick-single-player/pick-single-player.component";
-import { ContentDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     team: FormControl<Team | null>;
@@ -55,7 +55,7 @@ const validator = object({
     MixinStyledCardDirectivesModule,
     FormErrorsComponent,
     PageDirectivesModule,
-    ContentDirectivesModule,
+    ContentGridDirectivesModule,
     DividerComponent,
     PickSingleTeamComponent,
     PickSinglePlayerComponent

@@ -10,7 +10,12 @@ import { ZeebraTextComponent } from '../../../../reusables/zeebra-text/zeebra-te
 import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
-import { DividerComponent } from "../../../../reusables/divider/divider.component";
+import { DividerComponent } from '../../../../reusables/divider/divider.component';
+import { ITeamDetailsPageResolverData } from './team-details-page.resolver';
+import Match from '../../../../models/Match';
+import MatchStatus from '../../../values/MatchStatus';
+import { MatchElementComponent } from '../../../../reusables/match-element/match-element.component';
+import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-team-details-page',
@@ -23,14 +28,17 @@ import { DividerComponent } from "../../../../reusables/divider/divider.componen
         ZeebraTextComponent,
         MixinStyledButtonDirective,
         PageDirectivesModule,
-        DividerComponent
+        DividerComponent,
+        MatchElementComponent,
+        ContentGridDirectivesModule,
     ],
     templateUrl: './team-details-page.component.html',
 })
 export class TeamDetailsPageComponent {
     team!: Team;
     teamPlayers!: TeamPlayer[];
-    public matchesRange = Array.from({ length: 1 }, (_, i) => i + 1);
+    inProgressMatches!: Match[];
+    recentMatches!: Match[];
 
     get activePlayers() {
         return this.teamPlayers.filter((teamPlayer) => teamPlayer.isActive());
@@ -39,8 +47,12 @@ export class TeamDetailsPageComponent {
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        const data: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
-        this.team = data.team;
-        this.teamPlayers = data.teamPlayers;
+        const data: ITeamDetailsPageResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
+        this.inProgressMatches = data.matches.filter((match) => match.status === MatchStatus.IN_PROGRESS);
+        this.recentMatches = data.matches;
+
+        const parentData: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];
+        this.team = parentData.team;
+        this.teamPlayers = parentData.teamPlayers;
     }
 }

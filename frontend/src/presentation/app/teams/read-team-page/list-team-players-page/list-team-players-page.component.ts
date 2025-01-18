@@ -9,7 +9,7 @@ import { MixinStyledButtonDirective } from '../../../../reusables/styled-button/
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
-import { ContentDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
 
 @Component({
     selector: 'app-list-team-players-page',
@@ -21,7 +21,7 @@ import { ContentDirectivesModule } from '../../../../reusables/content-grid/cont
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './list-team-players-page.component.html',

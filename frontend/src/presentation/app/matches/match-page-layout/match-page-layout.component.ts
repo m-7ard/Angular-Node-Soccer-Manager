@@ -11,8 +11,8 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import Team from '../../../models/Team';
 import { CommonModule } from '@angular/common';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
-import { MatchStatusServiceService } from '../../../services/match-status-service.service';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { MatchStatusSingleton } from '../../../services/match-status-singleton.service';
 
 @Component({
     selector: 'app-match-page-layout',
@@ -21,7 +21,7 @@ import { MatchStatusServiceService } from '../../../services/match-status-servic
         RouterModule,
         MixinStyledCardDirectivesModule,
         CoverImageComponent,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
         PageDirectivesModule,
         CommonModule,
@@ -33,7 +33,7 @@ export class MatchPageLayoutComponent implements OnInit {
     match!: Match;
     matchEvents!: MatchEvent[];
 
-    constructor(private activatedRoute: ActivatedRoute, readonly matchStatusService: MatchStatusServiceService) {}
+    constructor(private activatedRoute: ActivatedRoute, readonly matchStatusService: MatchStatusSingleton) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(data => {

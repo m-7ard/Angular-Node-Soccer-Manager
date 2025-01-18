@@ -10,11 +10,11 @@ import { FormFieldComponent } from '../../../reusables/form-field/form-field.com
 import { CommonModule } from '@angular/common';
 import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -37,7 +37,7 @@ type IErrorSchema = IPresentationError<{
         MixinStyledButtonDirective,
         FormErrorsComponent,
         PageDirectivesModule,
-        ContentDirectivesModule,
+        ContentGridDirectivesModule,
         DividerComponent,
     ],
     templateUrl: './create-player-page.component.html',

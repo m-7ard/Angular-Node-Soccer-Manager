@@ -9,10 +9,7 @@
     (reset)="onReset($event)"
 >
     <header appMixinStyledCardSection class="flex flex-row gap-3 items-center justify-between flex-wrap">
-        <div>
-            <div class="token-card--header--primary-text">Update Team Membership</div>
-            <div class="token-card--header--secondary-text">{{ teamPlayer.player.name }} from {{ team.name }}</div>
-        </div>
+        <div class="token-default-title">Update Team Membership</div>
     </header>
     <section appMixinStyledCardSection *ngIf="errors['_'] != null">
         <app-form-errors [errors]="errors['_']"></app-form-errors>

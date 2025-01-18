@@ -8,7 +8,7 @@ import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { ExceptionNoticeService } from '../../../services/exception-notice-service';
+import { ExceptionNoticeService } from '../../../services/exception-notice.service';
 import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.module';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { DividerComponent } from "../../../reusables/divider/divider.component";
