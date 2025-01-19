@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, TemplateRef } from '@angular/core';
-import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ModalTriggerDirective } from '../reusables/modal/modal-trigger.directive';
 import { DrawerModalComponent } from '../reusables/modal/example.component';
 import { MixinStyledButtonDirective } from '../reusables/styled-button/styled-button.directive';
@@ -7,8 +7,9 @@ import { AuthService } from '../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { ExceptionNoticeService } from '../services/exception-notice.service';
 import { ExceptionNoticePopover } from './other/exception-notice-popover.component';
-import { DividerComponent } from "../reusables/divider/divider.component";
+import { DividerComponent } from '../reusables/divider/divider.component';
 import { ContentGridDirectivesModule } from '../reusables/content-grid/content-grid.directive.module';
+import { PageDirectivesModule } from '../reusables/page/page.directive.module';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,8 @@ import { ContentGridDirectivesModule } from '../reusables/content-grid/content-g
         CommonModule,
         ExceptionNoticePopover,
         DividerComponent,
-        ContentGridDirectivesModule
+        ContentGridDirectivesModule,
+        PageDirectivesModule,
     ],
     templateUrl: './app.component.html',
     host: {
@@ -36,15 +38,51 @@ export class AppComponent implements OnInit {
     error: Error | null = null;
     @Input() topBarTemplate!: TemplateRef<any>;
 
+    // BreadCrumb
+    // ----------------------------------------------
+    breadcrumbs: Array<{ label: string; url: string }> = [];
+
+    private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: any[] = []): any[] {
+        const children = route.children;
+
+        for (const child of children) {
+            const routeURL: string = child.snapshot.url.map((segment) => segment.path).join('/');
+            const fullURL = routeURL ? `${url}/${routeURL}` : url;
+
+            if (child.snapshot.data['breadcrumb']) {
+                let label = child.snapshot.data['breadcrumb'];
+
+                if (label == null) {
+                    continue;
+                }
+
+                // Replace placeholders with actual parameters
+                if (child.snapshot.params) {
+                    Object.keys(child.snapshot.params).forEach((key) => {
+                        label = label.replace(`:${key}`, child.snapshot.params[key]);
+                    });
+                }
+
+                breadcrumbs.push({ label, url: fullURL });
+            }
+
+            // Recurse into child routes
+            return this.createBreadcrumbs(child, fullURL, breadcrumbs);
+        }
+
+        return breadcrumbs;
+    }
+    // ----------------------------------------------
+
     constructor(
         readonly authService: AuthService,
         readonly exceptionNoticeService: ExceptionNoticeService,
         private readonly router: Router,
+        private activatedRoute: ActivatedRoute,
     ) {
-        // setInterval(() => {
-        //     this.otherTitle = (parseInt(this.otherTitle) + 1).toString();
-        //     console.log("new title: ", this.otherTitle)
-        // }, 1000);
+        this.router.events.subscribe(() => {
+            this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+        });
     }
 
     ngOnInit(): void {

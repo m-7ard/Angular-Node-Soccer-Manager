@@ -1,50 +1,49 @@
 <!-- List Teams Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <header appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'full' }">
-        <div class="token-default-title">List Teams</div>
-    </header>
+    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-header-section">
+        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row gap-3">
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                class="shrink-0"
+            >
+                Filter
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                class="shrink-0"
+            >
+                Order By
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                [routerLink]="'/teams/create'"
+            >
+                Create Team
+            </button>
+        </nav>
+    </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'full' }" />
-    <nav appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'full' }" class="flex flex-row gap-3">
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="shrink-0"
-        >
-            Filter
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="shrink-0"
-        >
-            Order By
-        </button>
-        <button
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            [routerLink]="'/teams/create'"
-        >
-            Create Team
-        </button>
-    </nav>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'full' }" />
-    <div appPageSectionDirective class="flex flex-row gap-3 flex-wrap" [appContentGridTrack]="{ contentGridTrack: 'full' }">
-        <ng-container *ngFor="let team of teams">
-            <app-list-teams-page-team-element
-                [team]="team"
-                (onDelete)="onDeleteTeam($event)"
-                class="w-[380px] basis-1/4 grow"
-                [routerLink]="'/teams/' + team.id"
-            ></app-list-teams-page-team-element>
-        </ng-container>
-    </div>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-body-section grow"
+    >
+        <div class="flex flex-row gap-3 flex-wrap">
+            <ng-container *ngFor="let team of teams">
+                <app-team-element [team]="team" class="w-[380px] basis-1/4 grow" />
+            </ng-container>
+        </div>
+    </section>
 </div>

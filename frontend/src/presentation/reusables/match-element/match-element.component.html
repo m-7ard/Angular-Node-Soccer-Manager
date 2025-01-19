@@ -6,7 +6,8 @@
         hasDivide: true,
         hasBorder: true
     }"
-    class="basis-1/4 min-w-[250px] grow"
+    class="basis-1/4 min-w-[250px] grow token-hover-element"
+    [routerLink]="'/matches/' + match.id"
 >
     <section appMixinStyledCardSection class="grid gap-4" style="grid-template-columns: 1fr auto auto">
         <ul class="flex flex-col gap-3 grow justify-center">

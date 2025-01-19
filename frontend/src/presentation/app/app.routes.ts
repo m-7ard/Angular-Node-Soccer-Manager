@@ -26,9 +26,9 @@ import { LoginUserPageComponent } from './users/login-user-page/login-user-page.
 import { FrontpageResolver } from './frontpage/frontpage.resolver';
 import { AuthGuard } from '../guards/auth-guard';
 import { PageDoesNotExistPageComponent } from './other/page-does-not-exist';
-import { ListMatchesPageComponent } from './matches/list-matches-page/list-matches-page.component';
-import { ListMatchesPageResolver } from './matches/list-matches-page/list-matches-page.resolver';
-import { ScheduleMatchPageComponent } from './matches/schedule-match-page/schedule-match-page.component';
+import { ListMatchesPageComponent } from './matches/matches-layout/pages/list-matches-page/list-matches-page.component';
+import { ListMatchesPageResolver } from './matches/matches-layout/pages/list-matches-page/list-matches-page.resolver';
+import { ScheduleMatchPageComponent } from './matches/matches-layout/pages/schedule-match-page/schedule-match-page.component';
 import { MarkInProgressPageComponent } from './matches/match-page-layout/pages/mark-in-progress-page/mark-in-progress-page.component';
 import { MarkCompletedPageComponent } from './matches/match-page-layout/pages/mark-completed-page/mark-completed-page.component';
 import { MarkCancelledPageComponent } from './matches/match-page-layout/pages/mark-cancelled-page/mark-cancelled-page.component';
@@ -40,6 +40,7 @@ import { TeamDetailsPageResolver } from './teams/read-team-page/team-details-pag
 import { TeamPlayerLayoutComponent } from './teams/team-player-layout/team-player-layout.component';
 import { TeamPlayerLayoutPageResolver } from './teams/team-player-layout/team-player-layout.resolver';
 import { TeamPlayerDetailsPageComponent } from './teams/team-player-layout/team-player-details-page/team-player-details-page.component';
+import { MatchesLayoutComponent } from './matches/matches-layout/matches-layout.component';
 
 export const routes: Routes = [
     // Frontpage
@@ -47,6 +48,7 @@ export const routes: Routes = [
         path: '',
         component: FrontpageComponent,
         resolve: { [RESOLVER_DATA_KEY]: FrontpageResolver },
+        data: { breadcrumb: 'Home' },
     },
 
     // Players Module
@@ -75,11 +77,13 @@ export const routes: Routes = [
     // Teams Module
     {
         path: 'teams',
+        data: { breadcrumb: 'Teams' },
         children: [
             {
                 path: '',
                 component: ListTeamsPageComponent,
                 resolve: { [RESOLVER_DATA_KEY]: ListTeamsPageResolver },
+                data: { breadcrumb: null },
             },
             {
                 path: 'create',
@@ -88,24 +92,8 @@ export const routes: Routes = [
             },
             {
                 path: ':teamId',
+                data: { breadcrumb: ':teamId' },
                 children: [
-                    {
-                        path: 'memberships/:teamMembershipId',
-                        component: TeamPlayerLayoutComponent,
-                        resolve: { [RESOLVER_DATA_KEY]: TeamPlayerLayoutPageResolver },
-                        runGuardsAndResolvers: 'always',
-                        children: [
-                            {
-                                path: '',
-                                component: TeamPlayerDetailsPageComponent,
-                            },
-                            {
-                                path: 'update',
-                                component: UpdateTeamMembershipPageComponent,
-                                resolve: { [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver },
-                            },
-                        ],
-                    },
                     {
                         path: '',
                         component: TeamLayoutPageComponent,
@@ -113,13 +101,45 @@ export const routes: Routes = [
                         runGuardsAndResolvers: 'always',
                         children: [
                             {
+                                path: 'memberships',
+                                component: ListTeamPlayersPageComponent,
+                                data: { breadcrumb: 'Memberships' },
+                            },
+                            {
+                                path: 'memberships/add',
+                                component: CreateTeamMembershipPageComponent,
+                                data: { breadcrumb: 'Create Membership' },
+                            },
+                            {
                                 path: '',
                                 component: TeamDetailsPageComponent,
                                 resolve: { [RESOLVER_DATA_KEY]: TeamDetailsPageResolver },
                             },
-                            { path: 'update', component: UpdateTeamPageComponent },
-                            { path: 'players/add', component: CreateTeamMembershipPageComponent },
-                            { path: 'players', component: ListTeamPlayersPageComponent },
+                            { path: 'update', component: UpdateTeamPageComponent, data: { breadcrumb: 'Update' } },
+                        ],
+                        data: { breadcrumb: null },
+                    },
+                    {
+                        path: 'memberships',
+                        data: { breadcrumb: 'Memberships' },
+                        children: [
+                            {
+                                path: ':teamMembershipId',
+                                component: TeamPlayerLayoutComponent,
+                                resolve: { [RESOLVER_DATA_KEY]: TeamPlayerLayoutPageResolver },
+                                runGuardsAndResolvers: 'always',
+                                children: [
+                                    {
+                                        path: '',
+                                        component: TeamPlayerDetailsPageComponent,
+                                    },
+                                    {
+                                        path: 'update',
+                                        component: UpdateTeamMembershipPageComponent,
+                                        resolve: { [RESOLVER_DATA_KEY]: UpdateTeamMembershipPageResolver },
+                                    },
+                                ],
+                            },
                         ],
                     },
                 ],
@@ -130,25 +150,35 @@ export const routes: Routes = [
     // Users Module
     {
         path: 'users',
+        data: { breadcrumb: 'Users' },
         children: [
-            { path: 'register', component: RegisterUserPageComponent },
-            { path: 'login', component: LoginUserPageComponent },
+            { path: 'register', component: RegisterUserPageComponent, data: { breadcrumb: 'Register' } },
+            { path: 'login', component: LoginUserPageComponent, data: { breadcrumb: 'Login' } },
         ],
     },
 
     // Matches Module
     {
         path: 'matches',
+        data: { breadcrumb: 'Matches' },
         children: [
             {
                 path: '',
-                component: ListMatchesPageComponent,
-                resolve: { [RESOLVER_DATA_KEY]: ListMatchesPageResolver },
-            },
-            {
-                path: 'schedule',
-                component: ScheduleMatchPageComponent,
-                canActivate: [AuthGuard],
+                component: MatchesLayoutComponent,
+                children: [
+                    {
+                        path: '',
+                        component: ListMatchesPageComponent,
+                        resolve: { [RESOLVER_DATA_KEY]: ListMatchesPageResolver },
+                        data: { breadcrumb: null },
+                    },
+                    {
+                        path: 'schedule',
+                        component: ScheduleMatchPageComponent,
+                        canActivate: [AuthGuard],
+                        data: { breadcrumb: 'Schedule' },
+                    },
+                ],
             },
             {
                 path: ':matchId',

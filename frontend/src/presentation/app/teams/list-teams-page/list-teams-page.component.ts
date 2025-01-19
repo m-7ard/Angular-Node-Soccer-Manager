@@ -13,23 +13,25 @@ import { PanelDirectivesModule } from '../../../reusables/panel/panel.directive.
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { TeamElementComponent } from "../../../reusables/team-element/team-element.component";
 
 @Component({
     selector: 'app-list-teams-page',
     standalone: true,
     imports: [
-        CommonModule,
-        ListTeamsPageTeamElementComponent,
-        RouterModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirectivesModule,
-        PageDirectivesModule,
-        MatMenuModule,
-        PanelDirectivesModule,
-        DividerComponent,
-        PopoverModule,
-        ContentGridDirectivesModule,
-    ],
+    CommonModule,
+    ListTeamsPageTeamElementComponent,
+    RouterModule,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    PageDirectivesModule,
+    MatMenuModule,
+    PanelDirectivesModule,
+    DividerComponent,
+    PopoverModule,
+    ContentGridDirectivesModule,
+    TeamElementComponent
+],
     templateUrl: './list-teams-page.component.html',
 })
 export class ListTeamsPageComponent {

@@ -1,50 +1,39 @@
-<!-- Team Layout Page -->
-<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid class="overflow-hidden">
-
+<!-- Matches Layout -->
+<div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
     <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
         <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
             <button
                 class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/'"
+                routerLink="/matches"
                 routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
                 ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
             >
-                Team Details
+                List
             </button>
             <app-divider [isVertical]="true" />
             <button
                 class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships'"
+                routerLink="/matches/create"
                 routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
                 ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
             >
-                Team Players
+                Create
             </button>
             <app-divider [isVertical]="true" />
             <button
                 class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/update'"
+                routerLink="/matches/schedule"
                 routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
                 ariaCurrentWhenActive="page"
-            >
-                Update Team
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships/add'"
-                routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
             >
-                Add Player
+                Schedule
             </button>
             <app-divider [isVertical]="true" />
         </nav>
     </section>
     <app-divider />
-    <router-outlet></router-outlet>
+    <router-outlet />
 </div>

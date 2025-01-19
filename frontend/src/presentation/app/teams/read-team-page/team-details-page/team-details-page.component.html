@@ -1,49 +1,49 @@
 <!-- Team Details Page -->
-<main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }">
-    <header appPageSectionDirective>
-        <div class="token-default-title">Team Details</div>
-    </header>
-    <app-divider />
-    <section appPageSectionDirective class="flex flex-col gap-1">
-        <div class="token-base-text font-bold">Team Information</div>
-        <ul>
+<main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="grid gap-3 token-body-section"
+        style="grid-template-columns: auto 1fr;"
+    >
+        <div class="aspect-square h-full max-w-[80px] max-h-[80px]">
+            <app-cover-image className="token-default-avatar " />
+        </div>
+        <ul class="overflow-hidden">
             <li class="token-default-list">
-                <div class="token-default-list__label">
-                    Name
-                </div>
+                <div class="token-default-list__label">Name</div>
                 <div class="token-default-list__value truncate">
                     {{ team.name }}
                 </div>
             </li>
             <li class="token-default-list">
-                <div class="token-default-list__label">
-                    Id
-                </div>
+                <div class="token-default-list__label">Id</div>
                 <div class="token-default-list__value truncate">
                     {{ team.id }}
                 </div>
             </li>
             <li class="token-default-list">
-                <div class="token-default-list__label">
-                    Date Founded
-                </div>
+                <div class="token-default-list__label">Date Founded</div>
                 <div class="token-default-list__value truncate">
                     {{ team.dateFounded | date }}
                 </div>
             </li>
             <li class="token-default-list">
-                <div class="token-default-list__label">
-                    Active Members Count
-                </div>
+                <div class="token-default-list__label">Active Members Count</div>
                 <div class="token-default-list__value truncate">
                     {{ activePlayers.length }}
                 </div>
             </li>
         </ul>
     </section>
-    <app-divider />
-    <section appPageSectionDirective class="flex flex-col gap-1">
-        <div class="token-base-text font-bold">In Progress Matches</div>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="flex flex-col gap-3 token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <div class="token-default-title">In Progress Matches</div>
+        <app-divider />
         <ul class="token-default-flex-row flex-wrap">
             <li *ngFor="let match of inProgressMatches">
                 <app-match-element [match]="match" />
@@ -51,9 +51,14 @@
             <li *ngIf="inProgressMatches.length === 0" class="token-base-text">Nothing To See Here Yet</li>
         </ul>
     </section>
-    <app-divider />
-    <section appPageSectionDirective class="flex flex-col gap-1">
-        <div class="token-base-text font-bold">Recent Matches</div>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="flex flex-col gap-3 token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <div class="token-default-title">Recent Matches</div>
+        <app-divider />
         <ul class="token-default-flex-row flex-wrap">
             <li *ngFor="let match of recentMatches">
                 <app-match-element [match]="match" />
@@ -61,9 +66,14 @@
             <li *ngIf="recentMatches.length === 0" class="token-base-text">Nothing To See Here Yet</li>
         </ul>
     </section>
-    <app-divider />
-    <section appPageSectionDirective class="flex flex-col gap-1">
-        <div class="token-base-text font-bold">Active Members</div>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="flex flex-col gap-3 token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <div class="token-default-title">Active Members</div>
+        <app-divider />
         <ul class="token-default-flex-row flex-wrap">
             <div class="token-default-flex-row flex-wrap" *ngIf="activePlayers.length">
                 <li *ngFor="let teamMember of activePlayers">
@@ -84,7 +94,7 @@
                                 />
                             </div>
                             <div>
-                                <div class="token-base-text font-bold">
+                                <div class="token-default-title">
                                     {{ teamMember.player.name }}
                                 </div>
                                 <div class="token-base-text">

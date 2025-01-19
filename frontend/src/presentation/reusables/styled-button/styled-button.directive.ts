@@ -15,6 +15,7 @@ export class MixinStyledButtonDirective implements OnChanges {
             | 'theme-Sbutton-generic-blue';
         hasShadow?: boolean;
         isStatic?: boolean;
+        isSharp?: boolean;
     };
 
     private baseClass = 'mixin-Sbutton-like';
@@ -30,7 +31,7 @@ export class MixinStyledButtonDirective implements OnChanges {
         // Apply base class
         this.renderer.addClass(this.el.nativeElement, this.baseClass);
 
-        const { size, theme, hasShadow = false, isStatic = false } = this.appMixinStyledButton;
+        const { size, theme, hasShadow = false, isStatic = false, isSharp = false } = this.appMixinStyledButton;
 
         // Apply initial size and theme classes
         if (size) {
@@ -49,6 +50,10 @@ export class MixinStyledButtonDirective implements OnChanges {
         if (isStatic) {
             this.renderer.addClass(this.el.nativeElement, 'mixin-Sbutton-like--static');
             this.renderer.addClass(this.el.nativeElement, `${theme}--static`);
+        }
+
+        if (isSharp) {
+            this.renderer.addClass(this.el.nativeElement, 'mixin-Sbutton-like--sharp')
         }
     }
 

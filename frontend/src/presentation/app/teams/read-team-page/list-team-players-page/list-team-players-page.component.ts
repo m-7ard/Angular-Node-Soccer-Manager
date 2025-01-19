@@ -33,6 +33,7 @@ export class ListTeamPlayersPageComponent {
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
+        console.log(123)
         const data: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.parent!.data['RESOLVER_DATA'];
         this.team = data.team;
         this.teamPlayers = data.teamPlayers;

@@ -45,7 +45,7 @@ export class ListTeamsPageTeamElementComponent implements OnInit {
     seePlayersRoute!: string;
 
     ngOnInit(): void {
-        this.seePlayersRoute = `/teams/${this.team.id}/players`;
+        this.seePlayersRoute = `/teams/${this.team.id}/memberships`;
     }
 
     openDeleteTeamModal(): void {

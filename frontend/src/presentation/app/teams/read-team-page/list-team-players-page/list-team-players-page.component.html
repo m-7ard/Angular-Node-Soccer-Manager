@@ -1,6 +1,10 @@
 <!-- List Team Players Page -->
 <header [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
-    <div class="flex flex-row gap-3 flex-wrap" appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'full' }">
+    <section
+        appPageSectionDirective
+        class="flex flex-col gap-3 token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
         <ng-container *ngFor="let teamPlayer of teamPlayers">
             <app-list-team-players-page-team-player-element
                 [teamPlayer]="teamPlayer"
@@ -9,5 +13,5 @@
                 class="min-w-[200px] basis-1/5 grow"
             ></app-list-team-players-page-team-player-element>
         </ng-container>
-    </div>
+    </section>
 </header>

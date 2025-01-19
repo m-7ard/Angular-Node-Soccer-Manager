@@ -1,177 +1,59 @@
 <!-- Read Team Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <header
-        appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'full' }"
-        appContentGrid
-        class="flex flex-col gap-3 bg-gray-100"
-    >
-        <section [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-col gap-3">
-            <div class="flex flex-row gap-3 items-center justify-between">
-                <span class="grid gap-3" style="grid-template: auto / auto 1fr">
-                    <div class="aspect-square theme-avatar-any">
-                        <section class="relative h-full w-full flex">
-                            <app-cover-image src=""></app-cover-image>
-                        </section>
-                    </div>
-                    <div class="overflow-hidden">
-                        <div class="token-card--header--primary-text">
-                            {{ match.homeTeam.name }}
-                        </div>
-                        <div class="token-card--header--secondary-text">Home Team</div>
-                    </div>
-                </span>
-                <span
-                    *ngIf="match.canScore()"
-                    [appMixinStyledButton]="{
-                        theme: 'theme-Sbutton-generic-green',
-                        size: 'mixin-Sbutton-base',
-                        hasShadow: true,
-                        isStatic: true
-                    }"
-                >
-                    {{ match.score?.homeTeamScore }}
-                </span>
-            </div>
-            <div class="flex flex-row gap-3 items-center justify-between">
-                <span class="grid gap-3" style="grid-template: auto / auto 1fr">
-                    <div class="aspect-square theme-avatar-any token-default-shadow">
-                        <section class="relative h-full w-full flex">
-                            <app-cover-image src=""></app-cover-image>
-                        </section>
-                    </div>
-                    <div class="overflow-hidden">
-                        <div class="token-card--header--primary-text">
-                            {{ match.awayTeam.name }}
-                        </div>
-                        <div class="token-card--header--secondary-text">Away Team</div>
-                    </div>
-                </span>
-                <span
-                    *ngIf="match.canScore()"
-                    [appMixinStyledButton]="{
-                        theme: 'theme-Sbutton-generic-green',
-                        size: 'mixin-Sbutton-base',
-                        hasShadow: true,
-                        isStatic: true
-                    }"
-                >
-                    {{ match.score?.awayTeamScore }}
-                </span>
-            </div>
-        </section>
-        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-        <section [appContentGridTrack]="{ contentGridTrack: 'base' }">
-            <div class="token-default-list">
-                <span class="token-default-list__label"> Status </span>
-                <span class="token-default-list__value">
-                    {{ match.status.label }}
-                </span>
-            </div>
-            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.SCHEDULED">
-                <span class="token-default-list__label"> Scheduled Date </span>
-                <span class="token-default-list__value">
-                    {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm" }}
-                </span>
-            </div>
-            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.IN_PROGRESS">
-                <span class="token-default-list__label"> Start Date </span>
-                <span class="token-default-list__value">
-                    {{ match.startDate | date: "yyyy-MM-dd HH:mm" }}
-                </span>
-            </div>
-            <div class="token-default-list" *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED">
-                <span class="token-default-list__label"> End Date </span>
-                <span class="token-default-list__value">
-                    {{ match.endDate | date: "yyyy-MM-dd HH:mm" }}
-                </span>
-            </div>
-        </section>
-    </header>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'full' }" />
-    <nav
-        appPageSectionDirective
-        [appContentGridTrack]="{ contentGridTrack: 'base' }"
-        class="flex flex-row gap-3 overflow-auto"
-    >
-        <button
-            *ngIf="match.canScore()"
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="justify-center shrink-0"
-            [routerLink]="'/matches/' + match.id"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page"
-        >
-            Match Details
-        </button>
-        <button
-            *ngIf="match.canScore()"
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-green',
-                hasShadow: true
-            }"
-            class="justify-center shrink-0"
-            [routerLink]="'/matches/' + match.id + '/record-goal'"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page"
-        >
-            Record Goal
-        </button>
-        <button
-            *ngIf="match.status === matchStatusService.MatchStatusCls.IN_PROGRESS"
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="justify-center shrink-0"
-            [routerLink]="'/matches/' + match.id + '/mark-in-progress'"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page"
-        >
-            Mark In Progress
-        </button>
-        <button
-            *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="justify-center shrink-0"
-            [routerLink]="'/matches/' + match.id + '/mark-completed'"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page"
-        >
-            Mark Completed
-        </button>
-        <button
-            *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
-            [appMixinStyledButton]="{
-                size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
-            }"
-            class="justify-center shrink-0"
-            [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page"
-        >
-            Mark Cancelled
-        </button>
-    </nav>
-    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
-    <main [appContentGridTrack]="{ contentGridTrack: 'full' }">
-        <router-outlet></router-outlet>
-    </main>
+    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
+        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
+            <button
+                class="token-nav-section-button"
+                [routerLink]="'/matches/' + match.id"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                Details
+            </button>
+            <app-divider [isVertical]="true" />
+            <button
+                class="token-nav-section-button"
+                [routerLink]="'/matches/' + match.id + '/record-goal'"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                Record Goal
+            </button>
+            <app-divider [isVertical]="true" />
+            <button
+                *ngIf="match.status === matchStatusService.MatchStatusCls.SCHEDULED"
+                class="token-nav-section-button"
+                [routerLink]="'/matches/' + match.id + '/mark-in-progress'"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+            >
+                Mark In Progress
+            </button>
+            <button
+                *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
+                class="token-nav-section-button"
+                [routerLink]="'/matches/' + match.id + '/mark-completed'"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+            >
+                Mark Completed
+            </button>
+            <button
+                *ngIf="match.status === matchStatusService.MatchStatusCls.COMPLETED"
+                class="token-nav-section-button"
+                [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+            >
+                Mark Cancelled
+            </button>
+        </nav>
+    </section>
+    <app-divider />
+    <router-outlet></router-outlet>
 </div>

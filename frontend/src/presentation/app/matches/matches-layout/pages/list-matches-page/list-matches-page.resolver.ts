@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { catchError, map, Observable } from 'rxjs';
-import getRoutableException from '../../../utils/getRoutableException';
-import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
-import Match from '../../../models/Match';
-import MatchMapper from '../../../mappers/MatchMapper';
+import getRoutableException from '../../../../../utils/getRoutableException';
+import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
+import Match from '../../../../../models/Match';
+import MatchMapper from '../../../../../mappers/MatchMapper';
 
 export interface IListMatchesResolverData {
     matches: Match[];

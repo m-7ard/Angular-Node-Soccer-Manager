@@ -32,7 +32,7 @@
     }
 
     .token-default-shadow {
-        box-shadow: 0 0px 6px 2px rgba(0, 0, 0, 0.025);
+        box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.05);
     }
 
     .token-default-border-color {
@@ -69,5 +69,59 @@
 
     .token-hover-element {
         @apply hover:scale-95 transition-all cursor-pointer;
+    }
+
+    .token-header-section {
+        @apply bg-white;
+
+        > * {
+            @apply py-2 px-4 border-x token-default-border-color;
+        }
+    }
+
+    .token-breadcrumb-section {
+        @apply bg-white;
+
+        > * {
+            @apply border-x token-default-border-color flex;
+        }
+    }
+
+    .token-nav-section {
+        @apply bg-white;
+
+        > * {
+            @apply border-x token-default-border-color;
+        }
+    }
+
+    .token-body-section {
+        @apply border-x token-default-border-color;
+    }
+
+    .token-nav-section-button {
+        @apply shrink-0 border-b-4 mixin-Sbutton-like mixin-Sbutton-base rounded-none;
+
+        &:not(.active) {
+            @apply token-default-border-color;
+        }
+
+        &:hover,
+        &.active {
+            @apply border-blue-400 bg-gray-100;
+        }
+    }
+
+    .token-breadcrumb-section-button {
+        @apply shrink-0 border-r-4 mixin-Sbutton-like mixin-Sbutton-sm rounded-none;
+
+        &:not(.active) {
+            @apply token-default-border-color;
+        }
+
+        &:hover,
+        &.active {
+            @apply border-blue-400 bg-gray-100;
+        }
     }
 }

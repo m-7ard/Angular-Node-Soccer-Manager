@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import Team from '../../../models/Team';
 import TeamPlayer from '../../../models/TeamPlayer';
 import { ITeamLayoutPageResolverData } from './team-layout-page.resolver';
@@ -10,6 +10,7 @@ import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
 import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-read-team-page',
@@ -22,6 +23,7 @@ import { ContentGridDirectivesModule } from '../../../reusables/content-grid/con
         ContentGridDirectivesModule,
         DividerComponent,
         PageDirectivesModule,
+        CommonModule
     ],
     templateUrl: './team-layout-page.component.html',
 })
@@ -29,7 +31,10 @@ export class TeamLayoutPageComponent implements OnInit {
     team!: Team;
     teamPlayers!: TeamPlayer[];
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(
+        private activatedRoute: ActivatedRoute,
+    ) {
+    }
 
     ngOnInit() {
         const data: ITeamLayoutPageResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];

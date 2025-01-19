@@ -1,4 +1,4 @@
-<!-- Login User Page -->
+<!-- Schedule Match Page -->
 <form
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
@@ -11,26 +11,37 @@
         class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <header>
-            <div class="token-default-title">Login User</div>
-        </header>
-        <app-divider />
-        <section *ngIf="errors['_'] != null">
+        <section
+            [appContentGridTrack]="{ contentGridTrack: 'base' }"
+            appPageSectionDirective
+            class="token-default-flex-row items-center justify-between"
+        >
+            <div class="token-default-title">Schedule Match</div>
+        </section>
+        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+        <section
+            *ngIf="errors['_'] != null"
+            [appContentGridTrack]="{ contentGridTrack: 'base' }"
+            appPageSectionDirective
+        >
             <app-form-errors [errors]="errors['_']"></app-form-errors>
         </section>
-        <fieldset class="token-default-flex-col">
-            <app-form-field [name]="'email'" [errors]="errors.email">
+        <fieldset
+            class="token-default-flex-col"
+            [appContentGridTrack]="{ contentGridTrack: 'base' }"
+            appPageSectionDirective
+        >
+            <app-form-field name="homeTeam" [errors]="errors.homeTeamId">
                 <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                    ></app-char-field>
+                    <app-pick-single-team [formControlName]="name" />
                 </ng-template>
             </app-form-field>
-            <app-form-field [name]="'password'" [errors]="errors.password">
+            <app-form-field name="awayTeam" [errors]="errors.awayTeamId">
+                <ng-template let-name="name">
+                    <app-pick-single-team [formControlName]="name" />
+                </ng-template>
+            </app-form-field>
+            <app-form-field name="venue" [errors]="errors.venue">
                 <ng-template let-name="name">
                     <app-char-field
                         [formControlName]="name"
@@ -38,12 +49,27 @@
                             size: 'mixin-char-input-base',
                             theme: 'theme-input-generic-white'
                         }"
-                        type="password"
-                    ></app-char-field>
+                    />
+                </ng-template>
+            </app-form-field>
+            <app-form-field name="scheduledDate" [errors]="errors.scheduledDate">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        [type]="'datetime-local'"
+                    />
                 </ng-template>
             </app-form-field>
         </fieldset>
-        <footer class="token-default-flex-row justify-end">
+        <footer
+            class="token-default-flex-row justify-end"
+            [appContentGridTrack]="{ contentGridTrack: 'base' }"
+            appPageSectionDirective
+        >
             <button
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-base',
@@ -59,7 +85,7 @@
                     theme: 'theme-Sbutton-generic-green'
                 }"
             >
-                Login User
+                Schedule
             </button>
         </footer>
     </section>

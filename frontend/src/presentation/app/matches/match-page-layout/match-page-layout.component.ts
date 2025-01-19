@@ -9,7 +9,6 @@ import Match from '../../../models/Match';
 import MatchEvent from '../../../models/MatchEvent';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
-import Team from '../../../models/Team';
 import { CommonModule } from '@angular/common';
 import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 import { MatchStatusSingleton } from '../../../services/match-status-singleton.service';
