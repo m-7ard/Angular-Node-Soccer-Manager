@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
@@ -20,6 +20,9 @@ import structErrorToPresentationError from '../../../../../utils/structErrorToPr
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import Match from '../../../../../models/Match';
+import { IMatchPageLayoutResolverData } from '../../match-page-layout.resolver';
+import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
 
 interface IFormControls {
     startDate: FormControl<string>;
@@ -49,17 +52,21 @@ const validator = object({
         DividerComponent,
     ],
     templateUrl: './mark-in-progress-page.component.html',
+    providers: [DatePipe],
 })
 export class MarkInProgressPageComponent implements OnInit {
     form!: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
-    matchId!: string;
+    match!: Match;
+
+    startDateHelperTexts!: string[];
 
     constructor(
         private activtedRoute: ActivatedRoute,
         private router: Router,
         private matchDataAccess: MatchDataAccessService,
         private exceptionNoticeService: ExceptionNoticeService,
+        private datePipe: DatePipe,
     ) {}
 
     ngOnInit(): void {
@@ -71,14 +78,18 @@ export class MarkInProgressPageComponent implements OnInit {
         });
 
         this.activtedRoute.parent?.paramMap.subscribe((parms) => {
-            const matchId = parms.get('matchId');
+            const data: IMatchPageLayoutResolverData = this.activtedRoute.parent?.snapshot.data[RESOLVER_DATA_KEY];
 
-            if (matchId == null) {
-                throw new ClientSideErrorException('Mark Match In Progress Page: matchId parameter is null.');
+            if (data == null) {
+                throw new ClientSideErrorException('Mark Match In Progress Page: Could not get match data.');
             }
 
-            this.matchId = matchId;
+            this.match = data.match;
         });
+
+        this.startDateHelperTexts = [
+            `Start Date must be greater or equal than ${this.datePipe.transform(this.match.scheduledDate, 'yyyy-MM-dd HH:mm:ss')}`,
+        ];
     }
 
     onReset() {
@@ -101,7 +112,7 @@ export class MarkInProgressPageComponent implements OnInit {
         const data = validation.value;
 
         this.matchDataAccess
-            .markInProgress(this.matchId, { startDate: data.startDate })
+            .markInProgress(this.match.id, { startDate: data.startDate })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
                     if (err.status === 400) {
@@ -119,7 +130,7 @@ export class MarkInProgressPageComponent implements OnInit {
                         return;
                     }
 
-                    this.router.navigate([`/matches/${this.matchId}`]);
+                    this.router.navigate([`/matches/${this.match.id}`]);
                 },
             });
     }

@@ -1,0 +1,30 @@
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true,
+        hasBorder: true
+    }"
+    class="token-hover-element"
+    [routerLink]="url"
+>
+    <section appMixinStyledCardSection>
+        <div class="aspect-[3/4] token-default-avatar">
+            <app-cover-image src="https://media.gettyimages.com/id/2156815463/photo/lisbon-portugal-cristiano-ronaldo-of-portugal-poses-for-a-portrait-during-the-portugal.jpg?s=612x612&w=gi&k=20&c=w2qJefWbNVSPSP4L29CjtaeB4R0CiL2VWohDuKpGF_A=" />
+        </div>
+    </section>
+    <section appMixinStyledCardSection>
+        <div>
+            <div class="token-default-title">
+                {{ teamPlayer.player.name }}
+            </div>
+            <div class="token-base-text">
+                {{ teamPlayer.membership.effectiveHistory?.position?.label ?? "Unkown Position" }}
+            </div>
+            <div class="token-base-text">
+                {{ teamPlayer.membership.activeFrom | date }} - {{ teamPlayer.membership.activeTo == null ? "Now" : (teamPlayer.membership.activeTo | date) }}
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import MatchStatus from '../app/values/MatchStatus';
+import MatchStatus from '../values/MatchStatus';
 
 @Injectable({
     providedIn: 'root',

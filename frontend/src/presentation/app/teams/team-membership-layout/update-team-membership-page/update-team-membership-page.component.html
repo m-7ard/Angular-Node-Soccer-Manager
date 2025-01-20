@@ -1,0 +1,72 @@
+<!-- Update Team Membership Page -->
+<form
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white'
+    }"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    (reset)="onReset($event)"
+    appContentGrid
+    [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }"
+>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-default-flex-col token-body-section"
+    >
+        <header>
+            <div class="token-default-title">Update Team Membership</div>
+        </header>
+        <app-divider />
+        <section *ngIf="errors['_'] != null">
+            <app-form-errors [errors]="errors['_']"></app-form-errors>
+        </section>
+        <fieldset class="token-default-flex-col">
+            <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        [type]="'date'"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+            <app-form-field [name]="'activeTo'" [errors]="errors.activeTo">
+                <ng-template let-name="name">
+                    <app-char-field
+                        [formControlName]="name"
+                        [options]="{
+                            size: 'mixin-char-input-base',
+                            theme: 'theme-input-generic-white'
+                        }"
+                        [type]="'date'"
+                    ></app-char-field>
+                </ng-template>
+            </app-form-field>
+        </fieldset>
+        <app-divider />
+        <footer class="token-default-flex-row justify-end">
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-white'
+                }"
+                type="reset"
+            >
+                Reset
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-base',
+                    theme: 'theme-Sbutton-generic-green'
+                }"
+            >
+                Update Team Membership
+            </button>
+        </footer>
+    </section>
+</form>

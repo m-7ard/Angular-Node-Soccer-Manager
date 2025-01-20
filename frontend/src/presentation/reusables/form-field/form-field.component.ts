@@ -11,7 +11,8 @@ export class FormFieldComponent implements OnInit {
     @Input() errors?: string[];
     @Input() name!: string;
     @Input() label?: string;
-    @Input() row: boolean = false;
+    @Input() row?: boolean = false;
+    @Input() helperTexts?: string[] = [];
     @ContentChild(TemplateRef) template = null!;
     context: { name: string } = null!;
 

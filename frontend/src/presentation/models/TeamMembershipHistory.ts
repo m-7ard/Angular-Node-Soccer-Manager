@@ -1,4 +1,4 @@
-import PlayerPosition from "../app/values/PlayerPosition";
+import PlayerPosition from "../values/PlayerPosition";
 
 class TeamMembershipHistory {
     constructor({

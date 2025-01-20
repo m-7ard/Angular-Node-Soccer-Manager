@@ -1,58 +1,65 @@
 <!-- Match Details Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <aside appPageSectionDirective class="flex flex-col gap-3" appContentGrid>
-        <section class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'base' }">
-            <header>
-                <div class="token-default-title">Match Details</div>
-            </header>
-            <div
-                [appMixinStyledCard]="{
-                    size: 'mixin-Scard-base',
-                    theme: 'theme-Scard-generic-white',
-                    hasShadow: true,
-                    hasDivide: true
-                }"
-            >
-                <section appMixinStyledCardSection class="overflow-hidden">
-                    <div class="token-default-list">
-                        <span class="token-default-list__label shrink-0">Scheduled Date</span>
-                        <span class="truncate token-default-list__value">
-                            {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm:ss" }}
-                        </span>
-                    </div>
-                    <div class="token-default-list">
-                        <span class="token-default-list__label shrink-0">Start Date</span>
-                        <span class="truncate token-default-list__value">
-                            {{ match.startDate == null ? "N/A" : (match.startDate | date: "yyyy-MM-dd HH:mm:ss") }}
-                        </span>
-                    </div>
-                    <div class="token-default-list">
-                        <span class="token-default-list__label shrink-0">End Date</span>
-                        <span class="truncate token-default-list__value">
-                            {{ match.endDate == null ? "N/A" : (match.endDate | date: "yyyy-MM-dd HH:mm:ss") }}
-                        </span>
-                    </div>
-                </section>
-                <section appMixinStyledCardSection class="overflow-hidden">
-                    <div class="token-default-list">
-                        <span class="token-default-list__label shrink-0">Venue</span>
-                        <span class="truncate token-default-list__value">
-                            {{ match.venue }}
-                        </span>
-                    </div>
-                </section>
-            </div>
-        </section>
-    </aside>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="grid grid-cols-3 gap-3 token-body-section items-center justify-items-center"
+    >
+        <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
+            <app-cover-image className="token-default-avatar " />
+        </div>
+        <div class="token-default-title">
+            {{ match.score?.homeTeamScore }} : {{ match.score?.awayTeamScore }}
+        </div>
+        <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
+            <app-cover-image className="token-default-avatar " />
+        </div>
+        <div class="token-base-text text-center">
+            {{ match.homeTeam.name }}
+        </div>
+        <div class="token-base-text">
+            {{ match.status.label }}
+        </div>
+        <div class="token-base-text text-center">
+            {{ match.awayTeam.name }}
+        </div>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="token-body-section">
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Scheduled Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.scheduledDate | date: "yyyy-MM-dd HH:mm:ss" }}
+            </span>
+        </div>
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Start Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.startDate == null ? "N/A" : (match.startDate | date: "yyyy-MM-dd HH:mm:ss") }}
+            </span>
+        </div>
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">End Date</span>
+            <span class="truncate token-default-list__value">
+                {{ match.endDate == null ? "N/A" : (match.endDate | date: "yyyy-MM-dd HH:mm:ss") }}
+            </span>
+        </div>
+        <div class="token-default-list">
+            <span class="token-default-list__label shrink-0">Venue</span>
+            <span class="truncate token-default-list__value">
+                {{ match.venue }}
+            </span>
+        </div>
+    </section>
     <app-divider />
-    <aside appPageSectionDirective class="flex flex-col gap-3 bg-gray-100" appContentGrid>
-        <header [appContentGridTrack]="{ contentGridTrack: 'base' }">
+    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="token-body-section grow token-default-flex-col">
+        <header>
             <div class="token-default-title">Match Events</div>
         </header>
-        <section class="flex flex-col gap-3" [appContentGridTrack]="{ contentGridTrack: 'sm' }">
+        <app-divider />
+        <section class="token-default-flex-col">
             <div
-                class="grid items-center gap-3"
-                style="grid-template-columns: 1fr auto 1fr"
+                class="token-default-flex-row items-center"
                 *ngFor="let matchEvent of matchEvents"
             >
                 <span
@@ -60,19 +67,21 @@
                     [appMixinStyledCard]="{
                         size: 'mixin-Scard-base',
                         theme: 'theme-Scard-generic-white',
-                        hasShadow: true
+                        hasShadow: true,
+                        hasBorder: true
                     }"
+                    class="grow"
                 >
                     <section class="overflow-hidden items-end flex flex-col" appMixinStyledCardSection>
-                        <div class="token-card--header--primary-text">
-                            {{ matchEvent.type }}
+                        <div class="token-default-title ">
+                            {{ matchEvent.type | titlecase }}
                         </div>
-                        <div class="token-card--header--secondary-text">
+                        <div class="token-base-text">
                             {{ matchEvent.player.name }}
                         </div>
                     </section>
                 </span>
-                <span class="col-start-2 row-start-1">
+                <span>
                     <button
                         [appMixinStyledButton]="{
                             size: 'mixin-Sbutton-base',
@@ -89,20 +98,21 @@
                     [appMixinStyledCard]="{
                         size: 'mixin-Scard-base',
                         theme: 'theme-Scard-generic-white',
-                        hasShadow: true
+                        hasShadow: true,
+                        hasBorder: true
                     }"
-                    class="col-start-3"
+                    class="grow"
                 >
                     <section class="overflow-hidden" appMixinStyledCardSection>
-                        <div class="token-card--header--primary-text">
-                            {{ matchEvent.type }}
+                        <div class="token-default-title ">
+                            {{ matchEvent.type | titlecase }}
                         </div>
-                        <div class="token-card--header--secondary-text">
+                        <div class="token-base-text">
                             {{ matchEvent.player.name }}
                         </div>
                     </section>
                 </span>
             </div>
         </section>
-    </aside>
+    </section>
 </div>

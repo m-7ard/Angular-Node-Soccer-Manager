@@ -1,7 +1,7 @@
 import IMatchApiModel from '@apiModels/IMatchApiModel';
 import Match from '../models/Match';
 import TeamMapper from './TeamMapper';
-import MatchStatus from '../app/values/MatchStatus';
+import MatchStatus from '../values/MatchStatus';
 
 class MatchMapper {
     static apiModelToDomain(source: IMatchApiModel) {

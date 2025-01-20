@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import PlayerPosition from '../app/values/PlayerPosition';
+import PlayerPosition from '../values/PlayerPosition';
 import convertToTitleCase from '../utils/convertToTitleCase';
 
 @Injectable({

@@ -1,4 +1,4 @@
-import MatchStatus from '../app/values/MatchStatus';
+import MatchStatus from '../values/MatchStatus';
 import Team from './Team';
 
 type MatchProps = {

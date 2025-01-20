@@ -1,6 +1,6 @@
 import ITeamMembershipHistoryApiModel from "@apiModels/ITeamMembershipHistoryApiModel";
 import TeamMembershipHistory from "../models/TeamMembershipHistory";
-import PlayerPosition from "../app/values/PlayerPosition";
+import PlayerPosition from "../values/PlayerPosition";
 
 class TeamMembershipHistoryMapper {
     static apiModelToDomain(source: ITeamMembershipHistoryApiModel) {

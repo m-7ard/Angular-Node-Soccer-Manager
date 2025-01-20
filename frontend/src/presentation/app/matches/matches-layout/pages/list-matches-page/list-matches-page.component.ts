@@ -13,7 +13,7 @@ import { IListMatchesResolverData } from './list-matches-page.resolver';
 import Match from '../../../../../models/Match';
 import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 import { CoverImageComponent } from '../../../../../reusables/cover-image/cover-image.component';
-import { MatchElementComponent } from '../../../../../reusables/match-element/match-element.component';
+import { MatchElementComponent } from '../../../../../reusables/model-elements/match-element/match-element.component';
 
 @Component({
     selector: 'app-list-matches-page',

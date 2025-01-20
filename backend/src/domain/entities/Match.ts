@@ -53,7 +53,7 @@ class Match {
         this.status = props.status;
         this.score = props.score;
         this.createdAt = props.createdAt;
-        this.events = props.events;
+        this.events = props.events.sort(((a, b) => a.dateOccured.getTime() - b.dateOccured.getTime()));
         this.updatedAt = props.updatedAt;
         this.updatedAt = props.updatedAt;
     }

@@ -1,0 +1,31 @@
+<main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="grid gap-3 token-body-section"
+        style="grid-template-columns: auto 1fr"
+    >
+        <div class="aspect-square h-full max-w-[80px] max-h-[80px]">
+            <app-cover-image className="token-default-avatar " />
+        </div>
+        <ul>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Number
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.number }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Position
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.position.label }}
+                </div>
+            </li>
+        </ul>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+</main>

@@ -13,6 +13,8 @@ import IDeleteTeamResponseDTO from '../../contracts/teams/delete/IDeleteTeamResp
 import IReadTeamPlayerResponseDTO from '../../contracts/teams/read-team-player/IReadTeamPlayerResponseDTO';
 import IUpdateTeamMembershipRequestDTO from '../../contracts/teamMemberships/update/IUpdateTeamMembershipRequestDTO';
 import IListTeamsRequestDTO from '../../contracts/teams/list/IListTeamsRequestDTO';
+import IListTeamMembershipHistoriesRequestDTO from '../../contracts/teamMemberships/list-histories/IListTeamMembershipHistoriesRequestDTO';
+import IListTeamMembershipHistoriesResponseDTO from '../../contracts/teamMemberships/list-histories/IListTeamMembershipHistoriesResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -34,7 +36,10 @@ export class TeamDataAccessService {
     }
 
     removePlayer(teamId: string, playerId: string, request: IDeleteTeamMembershipRequestDTO) {
-        return this.http.delete<IDeleteTeamMembershipResponseDTO>(`${this._baseUrl}/${teamId}/delete-membership/${playerId}`, request);
+        return this.http.delete<IDeleteTeamMembershipResponseDTO>(
+            `${this._baseUrl}/${teamId}/delete-membership/${playerId}`,
+            request,
+        );
     }
 
     listTeams(request: IListTeamsRequestDTO) {
@@ -48,10 +53,6 @@ export class TeamDataAccessService {
         });
 
         return this.http.get<IListTeamsResponseDTO>(url.toString());
-    }
-
-    listTeamPlayers(teamId: string) {
-        return this.http.get<IListTeamPlayersResponseDTO>(`${this._baseUrl}/${teamId}/players`);
     }
 
     readTeam(teamId: string) {
@@ -72,5 +73,22 @@ export class TeamDataAccessService {
 
     delete(teamId: string) {
         return this.http.delete<IDeleteTeamResponseDTO>(`${this._baseUrl}/${teamId}/delete`);
+    }
+
+    listTeamMembershipHistories(
+        teamId: string,
+        teamMembershipId: string,
+        request: IListTeamMembershipHistoriesRequestDTO,
+    ) {
+        const url = new URL(`${this._baseUrl}/${teamId}/memberships/${teamMembershipId}/histories`);
+        Object.entries(request).forEach(([key, val]) => {
+            if (val == null) {
+                return;
+            }
+
+            url.searchParams.append(key, val);
+        });
+
+        return this.http.get<IListTeamMembershipHistoriesResponseDTO>(url.toString());
     }
 }

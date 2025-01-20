@@ -16,4 +16,10 @@
             {{ message }}
         </div>
     </div>
+
+    <div *ngIf="helperTexts?.length" class="flex flex-col gap-0.5">
+        <div *ngFor="let helperText of helperTexts" class="text-xs text-gray-700">
+            &bull; {{ helperText }}
+        </div>
+    </div>
 </div>

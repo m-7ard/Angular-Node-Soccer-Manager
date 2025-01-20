@@ -13,7 +13,7 @@ import { ExceptionNoticeService } from '../../../../../services/exception-notice
 import structErrorToPresentationError from '../../../../../utils/structErrorToPresentationError';
 import validateSuperstruct from '../../../../../utils/validateSuperstuct';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
 import { DividerComponent } from '../../../../../reusables/divider/divider.component';
 import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
@@ -22,8 +22,11 @@ import { PageDirectivesModule } from '../../../../../reusables/page/page.directi
 import { PickSingleTeamComponent } from '../../../../../reusables/pick-single-team/pick-single-team.component';
 import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
-import { PickSinglePlayerComponent } from "../../../../../reusables/pick-single-player/pick-single-player.component";
+import { PickSinglePlayerComponent } from '../../../../../reusables/pick-single-player/pick-single-player.component';
 import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import Match from '../../../../../models/Match';
+import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
+import { IMatchPageLayoutResolverData } from '../../match-page-layout.resolver';
 
 interface IFormControls {
     team: FormControl<Team | null>;
@@ -47,31 +50,37 @@ const validator = object({
     selector: 'app-record-goal-page',
     standalone: true,
     imports: [
-    ReactiveFormsModule,
-    CharFieldComponent,
-    FormFieldComponent,
-    CommonModule,
-    MixinStyledButtonDirective,
-    MixinStyledCardDirectivesModule,
-    FormErrorsComponent,
-    PageDirectivesModule,
-    ContentGridDirectivesModule,
-    DividerComponent,
-    PickSingleTeamComponent,
-    PickSinglePlayerComponent
-],
+        ReactiveFormsModule,
+        CharFieldComponent,
+        FormFieldComponent,
+        CommonModule,
+        MixinStyledButtonDirective,
+        MixinStyledCardDirectivesModule,
+        FormErrorsComponent,
+        PageDirectivesModule,
+        ContentGridDirectivesModule,
+        DividerComponent,
+        PickSingleTeamComponent,
+        PickSinglePlayerComponent,
+    ],
     templateUrl: './record-goal-page.component.html',
+    providers: [DatePipe],
 })
 export class RecordGoalPageComponent {
     form!: FormGroup<IFormControls>;
     errors: IErrorSchema = {};
-    matchId!: string;
+    match!: Match;
+
+    dateOccuredHelperTexts!: string[];
+    teamIdHelperText!: string[];
+    playerIdHelperText!: string[];
 
     constructor(
         private activtedRoute: ActivatedRoute,
         private router: Router,
         private matchDataAccess: MatchDataAccessService,
         private exceptionNoticeService: ExceptionNoticeService,
+        private datePipe: DatePipe,
     ) {}
 
     ngOnInit(): void {
@@ -89,14 +98,25 @@ export class RecordGoalPageComponent {
         });
 
         this.activtedRoute.parent?.paramMap.subscribe((parms) => {
-            const matchId = parms.get('matchId');
+            const data: IMatchPageLayoutResolverData = this.activtedRoute.parent?.snapshot.data[RESOLVER_DATA_KEY];
 
-            if (matchId == null) {
-                throw new ClientSideErrorException('Record Goal Page: matchId parameter is null.');
+            if (data == null) {
+                throw new ClientSideErrorException('Record Goal Page: Could not get match data.');
             }
 
-            this.matchId = matchId;
+            this.match = data.match;
         });
+
+        this.dateOccuredHelperTexts = [
+            `Date Occured must be greater or equal than ${this.datePipe.transform(this.match.startDate, 'yyyy-MM-dd HH:mm:ss')}`,
+        ];
+        this.teamIdHelperText = [
+            `Goal Team must be a member of either team "${this.match.homeTeam.name}" (Home Team) or "${this.match.awayTeam.name}" (Away Team)`,
+        ];
+        this.playerIdHelperText = [
+            `Goal Player must be a member of either team "${this.match.homeTeam.name}" (Home Team) or "${this.match.awayTeam.name}" (Away Team)`,
+            `Goal Player must have a valid team membership where the Match's start date (${this.match.startDate}) falls within its active date range.`,
+        ];
     }
 
     onReset() {
@@ -121,7 +141,7 @@ export class RecordGoalPageComponent {
         const data = validation.value;
 
         this.matchDataAccess
-            .recordGoal(this.matchId, {
+            .recordGoal(this.match.id, {
                 teamId: data.teamId,
                 playerId: data.playerId,
                 dateOccured: data.dateOccured,
@@ -143,7 +163,7 @@ export class RecordGoalPageComponent {
                         return;
                     }
 
-                    this.router.navigate([`/matches/${this.matchId}`]);
+                    this.router.navigate([`/matches/${this.match.id}`]);
                 },
             });
     }

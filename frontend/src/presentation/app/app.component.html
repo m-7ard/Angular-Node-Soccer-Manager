@@ -115,9 +115,9 @@
     <header
         [appContentGridTrack]="{ contentGridTrack: 'full' }"
         appContentGrid
-        class="token-breadcrumb-section overflow-x-auto shrink-0"
+        class="token-breadcrumb-section"
     >
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }">
+        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="overflow-x-auto shrink-0">
             <div
                 *ngFor="let breadcrumb of breadcrumbs"
                 class="token-breadcrumb-section-button"

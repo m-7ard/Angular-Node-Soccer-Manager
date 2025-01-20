@@ -1,0 +1,37 @@
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true,
+        hasBorder: true
+    }"
+    class="token-hover-element"
+    [routerLink]="'/teams/' + teamMembership.teamId + '/memberships/' + teamMembership.id + '/histories/' + teamMembershipHistory.id"
+>
+    <section appMixinStyledCardSection>
+            <div class="token-base-text">
+                {{ teamMembershipHistory.dateEffectiveFrom | date }}
+            </div>
+    </section>
+    <section appMixinStyledCardSection>
+        <ul>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Number
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.number }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label ">
+                    Position
+                </div>
+                <div class="token-default-list__value ">
+                    {{ teamMembershipHistory.position.label }}
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>
