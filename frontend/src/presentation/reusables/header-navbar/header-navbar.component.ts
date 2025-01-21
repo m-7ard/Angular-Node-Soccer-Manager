@@ -23,8 +23,8 @@ export type HeaderNavbarProps = Array<{ label: string; url: string }>
                     >
                         {{ button.label }}
                     </button>
+                    <app-divider [isVertical]="true" />
                 </ng-container>
-                <app-divider [isVertical]="true" />
             </nav>
         </section>
     `,

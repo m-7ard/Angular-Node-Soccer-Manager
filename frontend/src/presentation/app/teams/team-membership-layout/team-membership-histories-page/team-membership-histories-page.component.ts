@@ -11,6 +11,7 @@ import { ITeamMembershipHistoriesPageResolverData } from './team-membership-hist
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
 import TeamMembershipHistory from '../../../../models/TeamMembershipHistory';
 import { TeamMembershipHistoryElement } from "../../../../reusables/model-elements/team-membership-history-element/team-membership-history-element.component";
+import TeamMembership from '../../../../models/TeamMembership';
 
 @Component({
     selector: 'app-team-membership-histories-page',
@@ -30,12 +31,14 @@ import { TeamMembershipHistoryElement } from "../../../../reusables/model-elemen
 })
 export class TeamMembershipHistoriesPageComponent implements OnInit {
     public teamMembershipHistories!: TeamMembershipHistory[];
+    public teamMembership!: TeamMembership;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit(): void {
         const data: ITeamMembershipHistoriesPageResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
         this.teamMembershipHistories = data.teamMembershipHistories;
+        this.teamMembership = data.teamMembership;
     }
 
 

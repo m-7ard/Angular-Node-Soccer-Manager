@@ -8,24 +8,37 @@
         <div class="aspect-square h-full max-w-[80px] max-h-[80px]">
             <app-cover-image className="token-default-avatar " />
         </div>
-        <ul>
+        <ul class="overflow-hidden">
             <li class="token-default-list">
-                <div class="token-default-list__label ">
-                    Number
+                <div class="token-default-list__label">Id</div>
+                <div class="token-default-list__value truncate">
+                    {{ teamMembershipHistory.id }}
                 </div>
-                <div class="token-default-list__value ">
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Date Effective From</div>
+                <div class="token-default-list__value truncate">
+                    {{ teamMembershipHistory.dateEffectiveFrom | date:"yyyy-MM-dd HH:mm:ss" }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Number</div>
+                <div class="token-default-list__value">
                     {{ teamMembershipHistory.number }}
                 </div>
             </li>
             <li class="token-default-list">
-                <div class="token-default-list__label ">
-                    Position
-                </div>
-                <div class="token-default-list__value ">
+                <div class="token-default-list__label">Position</div>
+                <div class="token-default-list__value">
                     {{ teamMembershipHistory.position.label }}
                 </div>
             </li>
         </ul>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-body-section grow"
+    ></section>
 </main>

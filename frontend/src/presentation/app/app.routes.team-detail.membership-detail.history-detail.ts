@@ -3,6 +3,7 @@ import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
 import { TeamMembershipHistoryLayoutComponent } from './teams/team-membership-history-layout/team-membership-history-layout.component';
 import { TeamMembershipHistoryLayoutResolver } from './teams/team-membership-history-layout/team-membership-history-layout.resolver';
 import { TeamMembershipHistoryDetailsPageComponent } from './teams/team-membership-history-layout/team-membership-history-details-page/team-membership-history-details-page.component';
+import { UpdateTeamMembershipHistoryPageComponent } from './teams/team-membership-history-layout/update-team-membership-history-page/update-team-membership-history-page.component';
 
 export const teamMembershipHistoryDetailRoutes: Routes = [
     {
@@ -16,6 +17,11 @@ export const teamMembershipHistoryDetailRoutes: Routes = [
                 path: '',
                 component: TeamMembershipHistoryDetailsPageComponent,
                 data: { breadcrumb: null },
+            },
+            {
+                path: 'update',
+                component: UpdateTeamMembershipHistoryPageComponent,
+                data: { breadcrumb: "History" },
             },
         ],
     },

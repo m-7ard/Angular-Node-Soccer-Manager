@@ -6,9 +6,12 @@ import getRoutableException from '../../../../utils/getRoutableException';
 import TeamMembershipHistory from '../../../../models/TeamMembershipHistory';
 import { TeamDataAccessService } from '../../../../services/data-access/team-data-access.service';
 import TeamMembershipHistoryMapper from '../../../../mappers/TeamMembershipHistoryMapper';
+import TeamMembership from '../../../../models/TeamMembership';
+import TeamMembershipMapper from '../../../../mappers/MembershipMapper';
 
 export interface ITeamMembershipHistoriesPageResolverData {
     teamMembershipHistories: TeamMembershipHistory[];
+    teamMembership: TeamMembership;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,6 +36,7 @@ export class TeamMembershipHistoriesPageResolver implements Resolve<ITeamMembers
                 teamMembershipHistories: response.teamMembershipHistories.map(
                     TeamMembershipHistoryMapper.apiModelToDomain,
                 ),
+                teamMembership: TeamMembershipMapper.apiModelToDomain(response.teamPlayer.membership)
             })),
             catchError((error) => {
                 throw getRoutableException(error);

@@ -4,8 +4,13 @@ import InternalServerErrorException from "../exceptions/InternalServerErrorExcep
 import NotFoundException from "../exceptions/NotFoundException";
 import UnkownErrorException from "../exceptions/UnkownErrorException";
 import UnautorizedException from "../exceptions/UnautorizedException";
+import RoutableException from "../exceptions/RoutableException";
 
 export default function getRoutableException(error: unknown) {
+    if (error instanceof RoutableException) {
+        return error;
+    }
+
     if (!(error instanceof HttpErrorResponse)) {
         return new ClientSideErrorException(JSON.stringify(error));
     }

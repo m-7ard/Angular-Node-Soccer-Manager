@@ -15,6 +15,7 @@ export const teamDetailRoutes: Routes = [
         component: TeamLayoutPageComponent,
         resolve: { [RESOLVER_DATA_KEY]: TeamLayoutPageResolver },
         runGuardsAndResolvers: 'always',
+        data: { breadcrumb: null },
         children: [
             {
                 path: 'memberships',
@@ -37,10 +38,10 @@ export const teamDetailRoutes: Routes = [
                 data: { breadcrumb: 'Update' },
             },
         ],
-        data: { breadcrumb: null },
     },
     {
         path: 'memberships',
+        data: { breadcrumb: "Memberships" },
         children: teamMembershipRoutes,
     },
 ];

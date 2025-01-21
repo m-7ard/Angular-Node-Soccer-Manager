@@ -9,6 +9,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     handleError(error: any): void {
         let errorMessage = 'An unexpected error occurred.';
 
+        console.log("balls: ", error)
         if (error instanceof RoutableException) {
             this._router.navigate([error.route], { state: { error: error } });
             return;

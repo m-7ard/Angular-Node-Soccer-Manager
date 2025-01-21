@@ -11,6 +11,7 @@ import { MixinStyledButtonDirective } from '../../../reusables/styled-button/sty
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { FormFieldComponent, HeaderNavbarProps } from '../../../reusables/header-navbar/header-navbar.component';
+import TeamMembershipHistory from '../../../models/TeamMembershipHistory';
 
 @Component({
     standalone: true,
@@ -29,6 +30,7 @@ import { FormFieldComponent, HeaderNavbarProps } from '../../../reusables/header
 export class TeamMembershipHistoryLayoutComponent implements OnInit {
     team!: Team;
     teamPlayer!: TeamPlayer;
+    teamMembershipHistory!: TeamMembershipHistory;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 
@@ -36,23 +38,20 @@ export class TeamMembershipHistoryLayoutComponent implements OnInit {
         const data: ITeamMembershipHistoryLayoutResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
         this.team = data.team;
         this.teamPlayer = data.teamPlayer;
+        this.teamMembershipHistory = data.teamMembershipHistory;
 
         this.navbarProps = [
             {
-                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}`,
+                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}/histories/${this.teamMembershipHistory.id}`,
                 label: 'Details',
             },
             {
-                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}/histories`,
-                label: 'Membership Histories',
-            },
-            {
-                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}/update`,
+                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}/histories/${this.teamMembershipHistory.id}/update`,
                 label: 'Update',
             },
             {
-                url: `/teams/${this.team.id}/${this.teamPlayer.membership.id}/memberships/histories/create`,
-                label: 'Create Membership History',
+                url: `/teams/${this.team.id}/memberships/${this.teamPlayer.membership.id}/histories/${this.teamMembershipHistory.id}/delete`,
+                label: 'Delete',
             },
         ];
     }

@@ -19,6 +19,5 @@ export class TeamMembershipHistoryElement implements OnInit {
 
     ngOnInit(): void {
         this.url = `/teams/${this.teamMembership.teamId}/memberships/${this.teamMembership.id}/histories/${this.teamMembershipHistory.id}`;
-        console.log(this.url);
     }
 }

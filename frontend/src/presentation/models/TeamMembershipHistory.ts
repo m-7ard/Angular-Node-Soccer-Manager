@@ -10,7 +10,7 @@ class TeamMembershipHistory {
     }: {
         id: string;
         teamMembershipId: string;
-        dateEffectiveFrom: string;
+        dateEffectiveFrom: Date;
         number: number;
         position: PlayerPosition;
     }) {
@@ -23,7 +23,7 @@ class TeamMembershipHistory {
 
     id: string;
     teamMembershipId: string;
-    dateEffectiveFrom: string;
+    dateEffectiveFrom: Date;
     number: number;
     position: PlayerPosition;
 }

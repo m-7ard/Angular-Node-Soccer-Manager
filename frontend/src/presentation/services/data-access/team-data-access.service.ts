@@ -15,6 +15,8 @@ import IUpdateTeamMembershipRequestDTO from '../../contracts/teamMemberships/upd
 import IListTeamsRequestDTO from '../../contracts/teams/list/IListTeamsRequestDTO';
 import IListTeamMembershipHistoriesRequestDTO from '../../contracts/teamMemberships/list-histories/IListTeamMembershipHistoriesRequestDTO';
 import IListTeamMembershipHistoriesResponseDTO from '../../contracts/teamMemberships/list-histories/IListTeamMembershipHistoriesResponseDTO';
+import IUpdateTeamMembershipHistoryRequestDTO from '../../contracts/teamMembershipHistories/update/IUpdateTeamMembershipHistoryRequestDTO';
+import IUpdateTeamMembershipHistoryResponseDTO from '../../contracts/teamMembershipHistories/update/IUpdateTeamMembershipHistoryResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -90,5 +92,17 @@ export class TeamDataAccessService {
         });
 
         return this.http.get<IListTeamMembershipHistoriesResponseDTO>(url.toString());
+    }
+
+    updateTeamMembershipHistory(
+        teamId: string,
+        teamMembershipId: string,
+        teamMembershipHistoryId: string,
+        request: IUpdateTeamMembershipHistoryRequestDTO,
+    ) {
+        return this.http.put<IUpdateTeamMembershipHistoryResponseDTO>(
+            `${this._baseUrl}/${teamId}/memberships/${teamMembershipId}/histories/${teamMembershipHistoryId}/update`,
+            request,
+        );
     }
 }

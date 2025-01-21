@@ -30,7 +30,10 @@ export class ClientSideErrorPageComponent {
 
     constructor(private router: Router) {
         const navigation = this.router.getCurrentNavigation();
+
+
         const state = navigation?.extras.state;
+        console.log(state)
         if (state == null) {
             this.error = this.FALLBACK;
             return;

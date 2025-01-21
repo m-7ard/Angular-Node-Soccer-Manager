@@ -21,10 +21,22 @@ type Option<T> = { label: string; value: T };
     ],
 })
 export class SelectComponent<T> implements ControlValueAccessor, OnInit {
-    @Input() options!: Array<Option<T>>;
+    @Input() set options(value: Array<Option<T>>) {
+        this._options = value;
+        this.labelMap = new Map(value.map((option) => [option.value, option.label]));
+        if (this.value) {
+            this.label = this.getLabelForValue(this.value);
+        }
+    }
+    get options(): Array<Option<T>> {
+        return this._options;
+    }
+    private _options!: Array<Option<T>>;
+
     @Input() value: T | null = null;
-    
-    public label: string = "---";
+
+    public label: string = '---';
+    private labelMap = new Map<T, string>();
 
     @ViewChild('op') op!: Popover;
 
@@ -36,14 +48,8 @@ export class SelectComponent<T> implements ControlValueAccessor, OnInit {
         this.op.hide();
     }
 
-    private getLabelForValue(value: T) {
-        const label = this.options.find((pair) => pair.value === value)?.label ?? "---";
-
-        if (label == null) {
-            throw new Error(`Select could not find a label for value ${JSON.stringify(this.value)}.`);
-        }
-
-        return label
+    private getLabelForValue(value: T): string {
+        return this.labelMap.get(value) ?? '---';
     }
 
     ngOnInit(): void {
@@ -51,11 +57,11 @@ export class SelectComponent<T> implements ControlValueAccessor, OnInit {
             this.label = this.getLabelForValue(this.value);
         }
     }
-    
 
     // ControlValueAccessor methods
     writeValue(value: T): void {
         this.value = value;
+        this.label = this.getLabelForValue(value);
     }
 
     registerOnChange(fn: (value: T) => void): void {
@@ -66,10 +72,6 @@ export class SelectComponent<T> implements ControlValueAccessor, OnInit {
         this.onTouched = fn;
     }
 
-    private onChange: (value: T) => void = () => {
-        throw new Error('Not implemented.');
-    };
-    private onTouched: () => void = () => {
-        throw new Error('Not implemented.');
-    };
+    private onChange(value: T) {}
+    private onTouched: () => void = () => {};
 }

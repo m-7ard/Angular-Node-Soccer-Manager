@@ -41,11 +41,13 @@ export class TeamMembershipHistoryLayoutResolver implements Resolve<ITeamMembers
 
         const teamData = this.teamDataAccess.listTeamMembershipHistories(teamId, teamMembershipId, {}).pipe(
             map((response) => {
-                const teamMembershipHistory = response.teamMembershipHistories.find(
+        const teamMembershipHistory = response.teamMembershipHistories.find(
                     (history) => history.id === teamMembershipHistoryId,
                 );
+                console.log(teamMembershipHistory)
+
                 if (teamMembershipHistory == null) {
-                    throw new Error(
+                    throw new ClientSideErrorException(
                         `TeamMembershipHistory of id "${teamMembershipHistoryId}" does not exist in the repsonse.`,
                     );
                 }

@@ -7,7 +7,7 @@ class TeamMembershipHistoryMapper {
         return new TeamMembershipHistory({
             id: source.id,
             teamMembershipId: source.teamMembershipId,
-            dateEffectiveFrom: source.dateEffectiveFrom,
+            dateEffectiveFrom: new Date(source.dateEffectiveFrom),
             number: source.number,
             position: PlayerPosition.executeCreate(source.position),
         });
