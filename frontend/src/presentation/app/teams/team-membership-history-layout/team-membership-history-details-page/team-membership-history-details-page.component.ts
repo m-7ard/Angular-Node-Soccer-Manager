@@ -8,13 +8,7 @@ import { MatchElementComponent } from '../../../../reusables/model-elements/matc
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-card/styled-card.module';
 import { ITeamMembershipHistoryLayoutResolverData } from '../team-membership-history-layout.resolver';
-import Match from '../../../../models/Match';
-import Team from '../../../../models/Team';
-import TeamPlayer from '../../../../models/TeamPlayer';
 import { RESOLVER_DATA_KEY } from '../../../../utils/RESOLVER_DATA';
-import MatchStatus from '../../../../values/MatchStatus';
-import { ITeamLayoutPageResolverData } from '../../team-layout/team-layout-page.resolver';
-import TeamMembership from '../../../../models/TeamMembership';
 import TeamMembershipHistory from '../../../../models/TeamMembershipHistory';
 
 @Component({
@@ -27,7 +21,6 @@ import TeamMembershipHistory from '../../../../models/TeamMembershipHistory';
         CoverImageComponent,
         PageDirectivesModule,
         DividerComponent,
-        MatchElementComponent,
         ContentGridDirectivesModule,
     ],
     templateUrl: './team-membership-history-details-page.component.html',

@@ -63,7 +63,7 @@ class Mixins {
         const teamMembershipId = team.executeAddMember({
             id: crypto.randomUUID(),
             activeFrom: DateTime.fromJSDate(team.dateFounded).plus({ minute: 1 }).toJSDate(),
-            activeTo: activeTo,
+            activeTo: activeTo == null ? activeTo : DateTime.fromJSDate(activeTo).plus({ minute: 1 }).toJSDate(),
             player: player,
         });
 

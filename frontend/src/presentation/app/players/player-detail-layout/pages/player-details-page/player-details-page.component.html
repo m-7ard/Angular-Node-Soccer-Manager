@@ -1,1 +1,37 @@
-<p>player-details-page works!</p>
+<!-- Player Details Page -->
+<main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
+    <section appPageSectionDirective class="token-body-section" [appContentGridTrack]="{ contentGridTrack: 'base' }">
+        <li class="token-default-list">
+            <div class="token-default-list__label">Id</div>
+            <div class="token-default-list__value truncate">
+                {{ player.id }}
+            </div>
+        </li>
+        <li class="token-default-list">
+            <div class="token-default-list__label">Name</div>
+            <div class="token-default-list__value truncate">
+                {{ player.name }}
+            </div>
+        </li>
+        <li class="token-default-list">
+            <div class="token-default-list__label">Active Since</div>
+            <div class="token-default-list__value truncate">
+                {{ player.activeSince | date }}
+            </div>
+        </li>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="token-body-section grow"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <div class="token-base-text font-bold">Member</div>
+        <div *ngIf="teams.length === 0" class="token-base-text">
+            There's Nothing Here Yet.
+        </div>
+        <ng-container *ngIf="teams.length > 0">
+            <app-team-element *ngFor="let team of teams;" [team]="team" />
+        </ng-container>
+    </section>
+</main>

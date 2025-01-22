@@ -1,12 +1,12 @@
-import { date, max, min, nullable, number, object, string } from "superstruct";
+import { date, max, min, nonempty, nullable, number, object, size, string } from "superstruct";
 import validateSuperstruct from "api/utils/validateSuperstruct";
 import IListMatchesRequestDTO from "api/DTOs/matches/list/IListMatchesRequestDTO";
 
 const validatorSchema = object({
     scheduledDate: nullable(date()),
-    status: nullable(string()),
+    status: nullable(nonempty(string())),
     limitBy: nullable(max(min(number(), 0), 100)),
-    teamId: nullable(string()),
+    teamId: nullable(nonempty(string())),
 });
 
 function listMatchesValidator(data: IListMatchesRequestDTO) {

@@ -3,35 +3,32 @@ import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../../../models/Team';
 import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
-import MatchEvent from '../../../../../models/MatchEvent';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
-import MatchMapper from '../../../../../mappers/MatchMapper';
 import getRoutableException from '../../../../../utils/getRoutableException';
+import { TeamDataAccessService } from '../../../../../services/data-access/team-data-access.service';
+import TeamMapper from '../../../../../mappers/TeamMapper';
 
-export interface ITeamDetailsPageResolverData {
-    goals: MatchEvent[];
+export interface IPlayerDetailsPageResolverData {
     teams: Team[];
 }
 
 @Injectable({ providedIn: 'root' })
-export class TeamDetailsPageResolver implements Resolve<ITeamDetailsPageResolverData> {
-    constructor(private matchDataAccess: MatchDataAccessService) {}
+export class PlayerDetailsPageResolver implements Resolve<IPlayerDetailsPageResolverData> {
+    constructor(
+        private matchDataAccess: MatchDataAccessService,
+        private teamDataAccess: TeamDataAccessService,
+    ) {}
 
-    resolve(route: ActivatedRouteSnapshot): Observable<ITeamDetailsPageResolverData> {
-        let teamId = route.parent?.paramMap.get('teamId');
-        
-        if (teamId == null) {
-            throw new ClientSideErrorException('Team Details Page: teamId parameter is null.');
+    resolve(route: ActivatedRouteSnapshot): Observable<IPlayerDetailsPageResolverData> {
+        let id = route.parent?.paramMap.get('id');
+
+        if (id == null) {
+            throw new ClientSideErrorException('Player Details Page: id parameter is null.');
         }
 
-        return this.matchDataAccess.listMatches({
-            limitBy: null,
-            scheduledDate: null,
-            status: null,
-            teamId: teamId
-        }).pipe(
+        return this.teamDataAccess.listTeams({ teamMembershipPlayerId: id, limitBy: null, name: null }).pipe(
             map((response) => ({
-                matches: response.matches.map(MatchMapper.apiModelToDomain)
+                teams: response.teams.map(TeamMapper.apiModelToDomain),
             })),
             catchError((error) => {
                 throw getRoutableException(error);

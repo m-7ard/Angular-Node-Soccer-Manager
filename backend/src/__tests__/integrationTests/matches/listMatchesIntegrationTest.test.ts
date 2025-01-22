@@ -27,7 +27,7 @@ let default_request: IListMatchesRequestDTO = {
     limitBy: null,
     scheduledDate: null,
     status: null,
-    teamId: null
+    teamId: null,
 };
 
 beforeAll(async () => {
@@ -71,34 +71,23 @@ describe("List Matches Integration Test;", () => {
         const request = { ...default_request };
         const url = urlWithQuery(BASE_URL, request);
 
-        const response = await supertest(server)
-            .get(`${url}`)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).get(`${url}`).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IListMatchesResponseDTO = response.body;
         expect(body.matches.length).toBe(3);
     });
 
-    test.each([[0, 3]])(
-        "List Matches; scheduledDate; Success;",
-        async (addDays, expectAmount) => {
-            const request = { ...default_request };
-            request.scheduledDate = match_001.matchDates.scheduledDate;
-            request.scheduledDate.setDate(
-                request.scheduledDate.getDate() + addDays,
-            );
+    it("List Matches; scheduledDate; Success;", async () => {
+        const request = { ...default_request };
+        request.scheduledDate = match_001.matchDates.scheduledDate;
 
-            const response = await supertest(server)
-                .get(BASE_URL)
-                .query(request)
-                .set("Content-Type", "application/json");
+        const response = await supertest(server).get(BASE_URL).query(request).set("Content-Type", "application/json");
 
-            expect(response.status).toBe(200);
-            const body: IListMatchesResponseDTO = response.body;
-            expect(body.matches.length).toBe(expectAmount);
-        },
-    );
+        expect(response.status).toBe(200);
+        const body: IListMatchesResponseDTO = response.body;
+        expect(body.matches.length).toBe(3);
+    });
 
     test.each([
         [MatchStatus.COMPLETED, 2],
@@ -111,9 +100,7 @@ describe("List Matches Integration Test;", () => {
 
         const url = urlWithQuery(BASE_URL, request);
 
-        const response = await supertest(server)
-            .get(`${url}`)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).get(`${url}`).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IListMatchesResponseDTO = response.body;
@@ -125,9 +112,7 @@ describe("List Matches Integration Test;", () => {
         request.teamId = team_003.id.value;
         const url = urlWithQuery(BASE_URL, request);
 
-        const response = await supertest(server)
-            .get(`${url}`)
-            .set("Content-Type", "application/json");
+        const response = await supertest(server).get(`${url}`).set("Content-Type", "application/json");
 
         expect(response.status).toBe(200);
         const body: IListMatchesResponseDTO = response.body;

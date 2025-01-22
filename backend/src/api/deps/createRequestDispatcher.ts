@@ -27,6 +27,7 @@ import ScheduleMatchCommandHandler, { ScheduleMatchCommand } from "application/h
 import RecordGoalCommandHandler, { RecordGoalCommand } from "application/handlers/matchEvents/RecordGoalCommandHandler";
 import CreateTeamMembershipHistoryCommandHandler, { CreateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/CreateTeamMembershipHistoryCommandHandler";
 import UpdateTeamMembershipHistoryCommandHandler, { UpdateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/UpdateTeamMembershipHistoryCommandHandler";
+import ReadFullPlayerQueryHandler, { ReadFullPlayerQuery } from "application/handlers/players/ReadFullPlayerQueryHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -53,6 +54,7 @@ function createRequestDispatcher() {
         DeletePlayerCommand,
         new DeletePlayerCommandHandler({ playerRepository: playerRepository, teamRepository: teamRepository, playerExistsValidator: playerExistsValidator }),
     );
+    requestDispatcher.registerHandler(ReadFullPlayerQuery, new ReadFullPlayerQueryHandler({ playerExistsValidator: playerExistsValidator, teamRepository: teamRepository }));
 
     // Teams
     requestDispatcher.registerHandler(CreateTeamCommand, new CreateTeamCommandHandler({ teamRepository: teamRepository }));
@@ -81,14 +83,8 @@ function createRequestDispatcher() {
         new ReadTeamMembershipQueryHandler({ teamExistsValidator: teamExistsValidator, teamMembershipValidatorFactory: teamMembershipExistsValidatorFactory }),
     );
     // Team Membership Histories
-    requestDispatcher.registerHandler(
-        CreateTeamMembershipHistoryCommand,
-        new CreateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }),
-    );
-    requestDispatcher.registerHandler(
-        UpdateTeamMembershipHistoryCommand,
-        new UpdateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }),
-    );
+    requestDispatcher.registerHandler(CreateTeamMembershipHistoryCommand, new CreateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }));
+    requestDispatcher.registerHandler(UpdateTeamMembershipHistoryCommand, new UpdateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }));
 
     // Users
     requestDispatcher.registerHandler(

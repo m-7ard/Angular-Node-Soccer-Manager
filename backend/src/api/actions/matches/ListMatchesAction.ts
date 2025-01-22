@@ -31,13 +31,13 @@ class ListMatchesAction implements IAction<ActionRequest, ActionResponse> {
             });
         }
 
-        const command = new ListMatchesQuery({
+        const query = new ListMatchesQuery({
             scheduledDate: dto.scheduledDate,
             status: dto.status,
             limitBy: dto.limitBy,
             teamId: dto.teamId
         });
-        const result = await this.requestDispatcher.dispatch(command);
+        const result = await this.requestDispatcher.dispatch(query);
 
         if (result.isErr()) {
             return new JsonResponse({

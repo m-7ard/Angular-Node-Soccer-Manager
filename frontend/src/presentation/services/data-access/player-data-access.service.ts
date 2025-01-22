@@ -11,6 +11,8 @@ import IDeletePlayerResponseDTO from '../../contracts/players/delete/IDeletePlay
 import Player from '../../models/Player';
 import IReadPlayerRequestDTO from '../../contracts/players/read/IReadPlayerRequestDTO';
 import IReadPlayerResponseDTO from '../../contracts/players/read/IReadPlayerResponseDTO';
+import IReadFullPlayerRequestDTO from '../../contracts/players/read-full/IReadPlayerRequestDTO';
+import IReadFullPlayerResponseDTO from '../../contracts/players/read-full/IReadPlayerResponseDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -42,6 +44,10 @@ export class PlayerDataAccessService {
 
     read(playerId: Player['id'], request: IReadPlayerRequestDTO) {
         return this.http.get<IReadPlayerResponseDTO>(`${this._baseUrl}/${playerId}`, request);
+    }
+
+    readFull(playerId: Player['id'], request: IReadFullPlayerRequestDTO) {
+        return this.http.get<IReadFullPlayerResponseDTO>(`${this._baseUrl}/${playerId}/full`, request);
     }
 
     delete(playerId: Player['id'], request: IDeletePlayerRequestDTO) {

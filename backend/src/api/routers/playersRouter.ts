@@ -7,6 +7,7 @@ import UpdatePlayerAction from "api/actions/players/UpdatePlayerAction";
 import DeletePlayerAction from "api/actions/players/DeletePlayerAction";
 import ReadPlayerAction from "api/actions/players/ReadPlayerAction";
 import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
+import ReadFullPlayerAction from "api/actions/players/ReadFullPlayerAction";
 
 const playersRouter = Router();
 
@@ -59,6 +60,16 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new ReadPlayerAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: playersRouter,
+    path: "/:playerId/full",
+    method: "GET",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new ReadFullPlayerAction(requestDispatcher);
     },
 });
 
