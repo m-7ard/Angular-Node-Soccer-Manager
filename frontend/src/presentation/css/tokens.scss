@@ -91,7 +91,7 @@
         @apply bg-white;
 
         > * {
-            @apply border-x token-default-border-color;
+            @apply border-x divide-x token-default-border-color;
         }
     }
 
@@ -100,7 +100,7 @@
     }
 
     .token-nav-section-button {
-        @apply shrink-0 border-b-4 mixin-Sbutton-like mixin-Sbutton-base rounded-none;
+        @apply shrink-0 border-b-4 mixin-Sbutton-like mixin-Sbutton-base rounded-none bg-white;
 
         &:not(.active) {
             @apply token-default-border-color;
@@ -113,7 +113,7 @@
     }
 
     .token-breadcrumb-section-button {
-        @apply shrink-0 border-r-4 mixin-Sbutton-like mixin-Sbutton-sm rounded-none;
+        @apply shrink-0 border-r-4 mixin-Sbutton-like mixin-Sbutton-sm rounded-none bg-white;
 
         &:not(.active) {
             @apply token-default-border-color;

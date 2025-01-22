@@ -14,7 +14,7 @@ export const matchDetailRoutes: Routes = [
         component: MatchPageLayoutComponent,
         resolve: { [RESOLVER_DATA_KEY]: MatchPageLayoutResolver },
         runGuardsAndResolvers: 'always',
-        data: { breadcrumb: ':matchId' },
+        data: { breadcrumb: null },
         children: [
             {
                 path: '',

@@ -3,23 +3,23 @@ import { FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
-import IPresentationError from '../../../errors/IPresentationError';
-import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
+import { PlayerDataAccessService } from '../../../../../services/data-access/player-data-access.service';
+import IPresentationError from '../../../../../errors/IPresentationError';
+import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
+import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
 import { CommonModule } from '@angular/common';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
+import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
 import { IUpdatePlayerResolverData } from './update-player-page.resolver';
-import parsers from '../../../utils/parsers';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { ExceptionNoticeService } from '../../../services/exception-notice.service';
-import Player from '../../../models/Player';
-import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
-import { DividerComponent } from '../../../reusables/divider/divider.component';
-import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import parsers from '../../../../../utils/parsers';
+import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
+import { RESOLVER_DATA_KEY } from '../../../../../utils/RESOLVER_DATA';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
+import Player from '../../../../../models/Player';
+import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
+import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
+import { DividerComponent } from '../../../../../reusables/divider/divider.component';
+import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;

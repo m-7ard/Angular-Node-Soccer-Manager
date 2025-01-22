@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import Player from '../../../models/Player';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
-import PlayerMapper from '../../../mappers/PlayerMapper';
-import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
+import Player from '../../../../../models/Player';
+import { PlayerDataAccessService } from '../../../../../services/data-access/player-data-access.service';
+import PlayerMapper from '../../../../../mappers/PlayerMapper';
+import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 
 export interface IUpdatePlayerResolverData {
     player: Player;

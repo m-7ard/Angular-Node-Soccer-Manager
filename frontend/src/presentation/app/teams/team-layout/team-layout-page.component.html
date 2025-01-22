@@ -1,49 +1,6 @@
 <!-- Team Layout Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid class="overflow-hidden">
-    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Team Details
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Team Players
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/update'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Update Team
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships/add'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Add Player
-            </button>
-            <app-divider [isVertical]="true" />
-        </nav>
-    </section>
+    <app-header-navbar [buttons]="buttons" />
     <app-divider />
     <router-outlet></router-outlet>
 </div>

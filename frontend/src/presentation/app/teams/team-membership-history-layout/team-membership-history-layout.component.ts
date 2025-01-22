@@ -10,7 +10,7 @@ import { PageDirectivesModule } from '../../../reusables/page/page.directive.mod
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
-import { FormFieldComponent, HeaderNavbarProps } from '../../../reusables/header-navbar/header-navbar.component';
+import { FormFieldComponent, HeaderNavbarButtons } from '../../../reusables/header-navbar/header-navbar.component';
 import TeamMembershipHistory from '../../../models/TeamMembershipHistory';
 
 @Component({
@@ -56,5 +56,5 @@ export class TeamMembershipHistoryLayoutComponent implements OnInit {
         ];
     }
 
-    navbarProps!: HeaderNavbarProps;
+    navbarProps!: HeaderNavbarButtons;
 }

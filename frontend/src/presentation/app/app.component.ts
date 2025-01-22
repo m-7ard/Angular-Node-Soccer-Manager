@@ -10,6 +10,7 @@ import { ExceptionNoticePopover } from './other/exception-notice-popover.compone
 import { DividerComponent } from '../reusables/divider/divider.component';
 import { ContentGridDirectivesModule } from '../reusables/content-grid/content-grid.directive.module';
 import { PageDirectivesModule } from '../reusables/page/page.directive.module';
+import { BreadcrumbComponent } from './elements/breadcrumb/breadcrumb.component';
 
 @Component({
     selector: 'app-root',
@@ -24,6 +25,7 @@ import { PageDirectivesModule } from '../reusables/page/page.directive.module';
         DividerComponent,
         ContentGridDirectivesModule,
         PageDirectivesModule,
+        BreadcrumbComponent,
     ],
     templateUrl: './app.component.html',
     host: {
@@ -38,52 +40,11 @@ export class AppComponent implements OnInit {
     error: Error | null = null;
     @Input() topBarTemplate!: TemplateRef<any>;
 
-    // BreadCrumb
-    // ----------------------------------------------
-    breadcrumbs: Array<{ label: string; url: string }> = [];
-
-    private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: any[] = []): any[] {
-        const children = route.children;
-
-        for (const child of children) {
-            const routeURL: string = child.snapshot.url.map((segment) => segment.path).join('/');
-            const fullURL = routeURL ? `${url}/${routeURL}` : url;
-
-            if (child.snapshot.data['breadcrumb']) {
-                let label = child.snapshot.data['breadcrumb'];
-
-                if (label == null) {
-                    continue;
-                }
-
-                // Replace placeholders with actual parameters
-                if (child.snapshot.params) {
-                    Object.keys(child.snapshot.params).forEach((key) => {
-                        label = label.replace(`:${key}`, child.snapshot.params[key]);
-                    });
-                }
-
-                breadcrumbs.push({ label, url: fullURL });
-            }
-
-            // Recurse into child routes
-            return this.createBreadcrumbs(child, fullURL, breadcrumbs);
-        }
-
-        return breadcrumbs;
-    }
-    // ----------------------------------------------
-
     constructor(
         readonly authService: AuthService,
         readonly exceptionNoticeService: ExceptionNoticeService,
         private readonly router: Router,
-        private activatedRoute: ActivatedRoute,
-    ) {
-        this.router.events.subscribe(() => {
-            this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-        });
-    }
+    ) {}
 
     ngOnInit(): void {
         this.router.events.subscribe((event) => {

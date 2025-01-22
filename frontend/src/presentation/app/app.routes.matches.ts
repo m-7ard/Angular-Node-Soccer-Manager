@@ -32,6 +32,7 @@ export const matchesRoutes: Routes = [
             },
             {
                 path: ':matchId',
+                data: { breadcrumb: ":matchId" },
                 loadChildren: () => import('./app.routes.match-detail').then(m => m.matchDetailRoutes)
             },
         ],

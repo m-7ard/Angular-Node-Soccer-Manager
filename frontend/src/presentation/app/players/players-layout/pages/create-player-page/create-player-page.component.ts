@@ -3,18 +3,18 @@ import { FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angula
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PlayerDataAccessService } from '../../../services/data-access/player-data-access.service';
-import IPresentationError from '../../../errors/IPresentationError';
-import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
-import { FormFieldComponent } from '../../../reusables/form-field/form-field.component';
+import { PlayerDataAccessService } from '../../../../../services/data-access/player-data-access.service';
+import IPresentationError from '../../../../../errors/IPresentationError';
+import PresentationErrorFactory from '../../../../../errors/PresentationErrorFactory';
+import { FormFieldComponent } from '../../../../../reusables/form-field/form-field.component';
 import { CommonModule } from '@angular/common';
-import { CharFieldComponent } from '../../../reusables/char-field/char-field.component';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
-import { ExceptionNoticeService } from '../../../services/exception-notice.service';
-import { FormErrorsComponent } from '../../../reusables/form-errors/form-errors';
-import { DividerComponent } from '../../../reusables/divider/divider.component';
-import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
+import { CharFieldComponent } from '../../../../../reusables/char-field/char-field.component';
+import { MixinStyledButtonDirective } from '../../../../../reusables/styled-button/styled-button.directive';
+import { ExceptionNoticeService } from '../../../../../services/exception-notice.service';
+import { FormErrorsComponent } from '../../../../../reusables/form-errors/form-errors';
+import { DividerComponent } from '../../../../../reusables/divider/divider.component';
+import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
+import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
 
 interface IFormControls {
     name: FormControl<string>;

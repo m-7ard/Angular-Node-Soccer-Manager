@@ -112,21 +112,7 @@
 </header>
 <app-divider />
 <main class="flex flex-col grow bg-white" appContentGrid>
-    <header
-        [appContentGridTrack]="{ contentGridTrack: 'full' }"
-        appContentGrid
-        class="token-breadcrumb-section"
-    >
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="overflow-x-auto shrink-0">
-            <div
-                *ngFor="let breadcrumb of breadcrumbs"
-                class="token-breadcrumb-section-button"
-                [routerLink]="breadcrumb.url"
-            >
-                {{ breadcrumb.label }}
-            </div>
-        </nav>
-    </header>
+    <app-breadcrumb />
     <app-divider />
     <router-outlet></router-outlet>
 </main>

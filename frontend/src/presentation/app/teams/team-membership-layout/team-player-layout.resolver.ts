@@ -8,7 +8,6 @@ import TeamPlayer from '../../../models/TeamPlayer';
 import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
-import { MatchDataAccessService } from '../../../services/data-access/match-data-access.service';
 
 export interface ITeamPlayerLayoutPageResolverData {
     team: Team;
@@ -16,11 +15,8 @@ export interface ITeamPlayerLayoutPageResolverData {
 }
 
 @Injectable({ providedIn: 'root' })
-export class TeamPlayerLayoutPageResolver implements Resolve<ITeamPlayerLayoutPageResolverData> {
-    constructor(
-        private teamDataAccess: TeamDataAccessService,
-        private matchDataAccess: MatchDataAccessService,
-    ) {}
+export class TeamPlayerLayoutPageResolver implements Resolve<ITeamPlayerLayoutPageResolverData> {    
+    constructor(private teamDataAccess: TeamDataAccessService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<ITeamPlayerLayoutPageResolverData> {
         let teamId = route.paramMap.get('teamId');

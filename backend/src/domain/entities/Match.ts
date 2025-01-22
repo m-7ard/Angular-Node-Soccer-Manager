@@ -8,7 +8,6 @@ import DomainEvent from "domain/domainEvents/DomainEvent";
 import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
 import MatchDates from "domain/valueObjects/Match/MatchDates";
 import TeamId from "domain/valueObjects/Team/TeamId";
-import PlayerId from "domain/valueObjects/Player/PlayerId";
 import Team from "./Team";
 import Player from "./Player";
 

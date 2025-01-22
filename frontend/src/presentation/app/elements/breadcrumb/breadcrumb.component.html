@@ -1,0 +1,54 @@
+<header appContentGrid class="token-breadcrumb-section">
+    <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="overflow-x-auto shrink-0">
+        <ng-container *ngIf="breadcrumbs.length <= 3; else elseBlock">
+            <div
+                *ngFor="let breadcrumb of breadcrumbs"
+                class="token-breadcrumb-section-button basis-1/3 overflow-hidden justify-center"
+                [routerLink]="breadcrumb.url"
+            >
+                <div class="truncate">
+                    {{ breadcrumb.label }}
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #elseBlock>
+            <div
+                class="token-breadcrumb-section-button overflow-hidden justify-center"
+                primeNgPopoverDirective
+                [popover]="op"
+                [positioning]="{ top: '100%', left: '0px' }"
+            >
+                <div class="truncate">...</div>
+            </div>
+            <div
+                class="token-breadcrumb-section-button basis-1/3 grow overflow-hidden justify-center"
+                [routerLink]="breadcrumbs[breadcrumbs.length - 2].url"
+            >
+                <div class="truncate">
+                    {{ breadcrumbs[breadcrumbs.length - 2].label }}
+                </div>
+            </div>
+            <div
+                class="token-breadcrumb-section-button basis-1/3 grow overflow-hidden justify-center"
+                [routerLink]="breadcrumbs[breadcrumbs.length - 1].url"
+            >
+                <div class="truncate">
+                    {{ breadcrumbs[breadcrumbs.length - 1].label }}
+                </div>
+            </div>
+        </ng-template>
+    </nav>
+</header>
+<p-popover #op class="fixed mt-1">
+    <ul
+        class="border token-default-color token-default-shadow divide-y token-default-divide-color max-w-[100vw] overflow-hidden"
+    >
+        <li *ngFor="let breadcrumb of breadcrumbs">
+            <div class="token-breadcrumb-section-button overflow-hidden" (click)="navigate(breadcrumb.url)">
+                <div class="truncate">
+                    {{ breadcrumb.label }}
+                </div>
+            </div>
+        </li>
+    </ul>
+</p-popover>

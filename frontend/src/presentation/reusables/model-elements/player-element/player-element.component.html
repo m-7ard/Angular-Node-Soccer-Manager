@@ -1,0 +1,26 @@
+<!-- Player Element -->
+<div
+    [appMixinStyledCard]="{
+        size: 'mixin-Scard-base',
+        theme: 'theme-Scard-generic-white',
+        hasShadow: true,
+        hasDivide: true,
+        hasBorder: true
+    }"
+    class="token-hover-element"
+    [routerLink]="'/players/' + player.id"
+>
+    <section class="grid gap-3" style="grid-template-columns: auto 1fr" appMixinStyledCardSection>
+        <div class="aspect-square token-default-avatar">
+            <app-cover-image
+                src="https://media.gettyimages.com/id/2156815463/photo/lisbon-portugal-cristiano-ronaldo-of-portugal-poses-for-a-portrait-during-the-portugal.jpg?s=612x612&w=gi&k=20&c=w2qJefWbNVSPSP4L29CjtaeB4R0CiL2VWohDuKpGF_A="
+            />
+        </div>
+        <div>
+            <div class="token-default-title">
+                {{ player.name }}
+            </div>
+            <div class="token-base-text">Country</div>
+        </div>
+    </section>
+</div>

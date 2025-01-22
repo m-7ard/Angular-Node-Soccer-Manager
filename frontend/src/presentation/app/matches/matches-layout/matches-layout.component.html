@@ -1,39 +1,6 @@
 <!-- Matches Layout -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
-            <button
-                class="token-nav-section-button"
-                routerLink="/matches"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                List
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                routerLink="/matches/create"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                Create
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                routerLink="/matches/schedule"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                Schedule
-            </button>
-            <app-divider [isVertical]="true" />
-        </nav>
-    </section>
+    <app-header-navbar [buttons]="buttons" />
     <app-divider />
     <router-outlet />
 </div>
