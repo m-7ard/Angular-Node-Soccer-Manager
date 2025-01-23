@@ -6,6 +6,8 @@ import TeamFactory from "domain/domainFactories/TeamFactory";
 import TeamId from "domain/valueObjects/Team/TeamId";
 import ITeamValidator from "application/interfaces/ITeamValidator";
 import IApplicationError from "application/errors/IApplicationError";
+import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 export type UpdateTeamCommandResult = ICommandResult<IApplicationError[]>;
 
@@ -40,15 +42,15 @@ export default class UpdateTeamCommandHandler implements IRequestHandler<UpdateT
         }
 
         const team = teamExistsResult.value;
+        const canUpdateDateFoundedResult = team.canUpdateDateFounded(command.dateFounded);
+        if (canUpdateDateFoundedResult.isErr()) {
+            return err(ApplicationErrorFactory.createSingleListError({ message: canUpdateDateFoundedResult.error, code: APPLICATION_ERROR_CODES.NotAllowed, path: [] }));
+        }
 
-        const updatedTeam = TeamFactory.CreateExisting({
-            id: team.id,
-            name: command.name,
-            dateFounded: command.dateFounded,
-            teamMemberships: team.teamMemberships
-        })
+        team.name = command.name;
+        team.executeUpdateDateFounded(command.dateFounded);
 
-        await this._teamRepository.updateAsync(updatedTeam);
+        await this._teamRepository.updateAsync(team);
         return ok(undefined);
     }
 }

@@ -129,7 +129,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/memberships/:teamMembershipId/create-history",
+    path: "/:teamId/memberships/:teamMembershipId/histories/create",
     method: "POST",
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);

@@ -74,7 +74,7 @@ describe("Create Team Membership;", () => {
     });
 
     it("Create Team Membership; activeFrom before player; Failure;", async () => {
-        team_001.dateFounded = DateTime.fromJSDate(new Date()).minus({ days: 100 }).toJSDate();
+        team_001.executeUpdateDateFounded(DateTime.fromJSDate(new Date()).minus({ days: 100 }).toJSDate());
         player_001.activeSince = DateTime.fromJSDate(new Date()).minus({ days: 1 }).toJSDate();
 
         const canAddMember = team_001.canAddMember({ id: "1", player: player_001, activeFrom: DateTime.fromJSDate(new Date()).minus({ days: 2 }).toJSDate(), activeTo: null });
@@ -82,7 +82,7 @@ describe("Create Team Membership;", () => {
     });
 
     it("Create Team Membership; activeFrom before team; Failure;", async () => {
-        team_001.dateFounded = DateTime.fromJSDate(new Date()).minus({ days: 1 }).toJSDate();
+        team_001.executeUpdateDateFounded(DateTime.fromJSDate(new Date()).minus({ days: 1 }).toJSDate());
         player_001.activeSince = DateTime.fromJSDate(new Date()).minus({ days: 100 }).toJSDate();
 
         const canAddMember = team_001.canAddMember({ id: "1", player: player_001, activeFrom: DateTime.fromJSDate(new Date()).minus({ days: 2 }).toJSDate(), activeTo: null });

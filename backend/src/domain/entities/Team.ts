@@ -22,14 +22,41 @@ class Team {
     constructor({ id, name, dateFounded, teamMemberships }: { id: TeamId; name: string; dateFounded: Date; teamMemberships: TeamMembership[] }) {
         this.id = id;
         this.name = name;
-        this.dateFounded = dateFounded;
+        this._dateFounded = dateFounded;
         this.teamMemberships = teamMemberships;
     }
 
     public id: TeamId;
     public name: string;
-    public dateFounded: Date;
+    private _dateFounded: Date;
     public teamMemberships: TeamMembership[];
+
+    public get dateFounded() {
+        return this._dateFounded;
+    }
+
+    private set dateFounded(value: Date) {
+        this._dateFounded = value;
+    }
+
+    public canUpdateDateFounded(value: Date): Result<true, string> {
+        const conflictingTeamMembership = this.teamMemberships.find((teamMembership) => teamMembership.teamMembershipDates.activeFrom < value);
+
+        if (conflictingTeamMembership != null) {
+            return err(`Team's date founded (${value}) cannot be greater than one of its Memberships' active from dates (${conflictingTeamMembership.teamMembershipDates.activeFrom}).`);
+        }
+
+        return ok(true);
+    }
+
+    public executeUpdateDateFounded(value: Date) {
+        const canUpdateDateFounded = this.canUpdateDateFounded(value);
+        if (canUpdateDateFounded.isErr()) {
+            throw new Error(canUpdateDateFounded.error);
+        }
+
+        this.dateFounded = value;
+    }
 
     private findMemberByPlayerId(playerId: PlayerId) {
         return this.teamMemberships.find((membership) => membership.playerId.equals(playerId));
@@ -108,8 +135,8 @@ class Team {
         }
 
         // Is membership activeFrom before team was founded
-        if (props.activeFrom < this.dateFounded) {
-            return err(`Team Member's activeFrom (${props.activeFrom}) cannot be before the team's dateFounded (${this.dateFounded}).`);
+        if (props.activeFrom < this._dateFounded) {
+            return err(`Team Member's activeFrom (${props.activeFrom}) cannot be before the team's dateFounded (${this._dateFounded}).`);
         }
 
         // Is membership activeFrom before player was active

@@ -52,7 +52,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/histories/create`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -88,7 +88,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/histories/create`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
@@ -127,7 +127,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
 
         const response = await adminSuperTest({
             agent: supertest(server)
-                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/create-history`)
+                .post(`/api/teams/${team_001.id}/memberships/${team_membership_001.id}/histories/create`)
                 .send(request)
                 .set("Content-Type", "application/json"),
             seed: 1,
