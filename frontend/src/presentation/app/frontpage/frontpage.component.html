@@ -1,104 +1,44 @@
+<!-- Frontpage Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <header appPageSectionDirective>
-        <div class="token-default-title">Matches</div>
-    </header>
-    <app-divider />
-    <nav class="flex flex-col gap-3" appPageSectionDirective>
-        <section class="flex flex-row gap-3 flex-wrap">
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white',
-                    hasShadow: true
-                }"
-                class="shrink-0"
-            >
-                Filter
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white',
-                    hasShadow: true
-                }"
-                class="shrink-0"
-            >
-                Order By
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-white',
-                    hasShadow: true
-                }"
-                class="shrink-0 ml-auto"
-            >
-                Create
-            </button>
-        </section>
-    </nav>
-    <app-divider />
-    <section class="flex flex-col gap-3" appPageSectionDirective>
-        <div>
+    <section
+        appPageSectionDirective
+        class="token-default-flex-col token-body-section grow"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <header>
             <div class="token-default-title">Today's Matches</div>
             <div class="token-default-subtitle">
                 {{ matchesDate | date }}
             </div>
-        </div>
+        </header>
+        <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
+            <app-match-element *ngFor="let match of matches" [match]="match" class="bassi-1/3 grow" />
+        </section>
     </section>
-    <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
-        <div
-            *ngFor="let match of matches"
-            [appMixinStyledCard]="{
-                size: 'mixin-Scard-base',
-                theme: 'theme-Scard-generic-white',
-                hasShadow: true,
-                hasDivide: true,
-                hasBorder: true
-            }"
-            class="basis-1/4 min-w-[250px] grow"
-        >
-            <section appMixinStyledCardSection class="grid gap-4" style="grid-template-columns: 1fr auto auto">
-                <ul class="flex flex-col gap-3 grow justify-center">
-                    <li class="grid items-center gap-3" style="grid-template-columns: auto 1fr auto">
-                        <div class="theme-avatar-any h-6 aspect-square">
-                            <app-cover-image src="" />
-                        </div>
-                        <div class="text-sm truncate">
-                            {{ match.homeTeam.name }}
-                        </div>
-                        <div class="text-sm" *ngIf="match.canScore()">
-                            {{ match.score?.homeTeamScore }}
-                        </div>
-                    </li>
-                    <li class="grid items-center gap-3" style="grid-template-columns: auto 1fr auto">
-                        <div class="theme-avatar-any h-6 aspect-square">
-                            <app-cover-image src="" />
-                        </div>
-                        <div class="text-sm truncate">
-                            {{ match.awayTeam.name }}
-                        </div>
-                        <div class="text-sm" *ngIf="match.canScore()">
-                            {{ match.score?.awayTeamScore }}
-                        </div>
-                    </li>
-                </ul>
-                <app-divider [isVertical]="true" />
-                <ul class="h-full flex flex-col gap-1 justify-center items-center">
-                    <div class="text-sm font-medium break-all">
-                        {{ match.status.label }}
-                    </div>
-                    <div
-                        [appMixinStyledButton]="{
-                            theme: 'theme-Sbutton-generic-white',
-                            size: 'mixin-Sbutton-sm',
-                            isStatic: true
-                        }"
-                    >
-                        {{ match.getStatusDate() | date: "hh:mm" }}
-                    </div>
-                </ul>
-            </section>
-        </div>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="token-default-flex-col token-body-section grow"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <header>
+            <div class="token-default-title">Recently Added Teams</div>
+        </header>
+        <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
+            <app-team-element *ngFor="let team of teams" [team]="team" class="basis-1/3 grow" />
+        </section>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="token-default-flex-col token-body-section grow"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <header>
+            <div class="token-default-title">Recently Added Players</div>
+        </header>
+        <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
+            <app-player-element *ngFor="let player of players" [player]="player" class="bassi-1/3 grow" />
+        </section>
     </section>
 </div>

@@ -14,7 +14,7 @@ export type HeaderNavbarButtons = Array<{ label: string; url: string }>;
         <section appContentGrid class="token-nav-section">
             <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
                 <ng-container *ngFor="let button of buttons; let i = index">
-                    <div>
+                    <div class="flex shrink-0 grow">
                         <button
                             class="token-nav-section-button"
                             [routerLink]="button.url"

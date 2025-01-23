@@ -8,9 +8,7 @@
         <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
             <app-cover-image className="token-default-avatar " />
         </div>
-        <div class="token-default-title">
-            {{ match.score?.homeTeamScore }} : {{ match.score?.awayTeamScore }}
-        </div>
+        <div class="token-default-title">{{ match.score?.homeTeamScore }} : {{ match.score?.awayTeamScore }}</div>
         <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
             <app-cover-image className="token-default-avatar " />
         </div>
@@ -51,17 +49,18 @@
             </span>
         </div>
     </section>
-    <app-divider />
-    <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="token-body-section grow token-default-flex-col">
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-body-section grow token-default-flex-col"
+    >
         <header>
             <div class="token-default-title">Match Events</div>
         </header>
         <app-divider />
         <section class="token-default-flex-col">
-            <div
-                class="token-default-flex-row items-center"
-                *ngFor="let matchEvent of matchEvents"
-            >
+            <div class="token-default-flex-row items-center" *ngFor="let matchEvent of matchEvents">
                 <span
                     *ngIf="matchEvent.teamId === match.homeTeam.id"
                     [appMixinStyledCard]="{
@@ -73,7 +72,7 @@
                     class="grow"
                 >
                     <section class="overflow-hidden items-end flex flex-col" appMixinStyledCardSection>
-                        <div class="token-default-title ">
+                        <div class="token-default-title">
                             {{ matchEvent.type | titlecase }}
                         </div>
                         <div class="token-base-text">
@@ -104,7 +103,7 @@
                     class="grow"
                 >
                     <section class="overflow-hidden" appMixinStyledCardSection>
-                        <div class="token-default-title ">
+                        <div class="token-default-title">
                             {{ matchEvent.type | titlecase }}
                         </div>
                         <div class="token-base-text">

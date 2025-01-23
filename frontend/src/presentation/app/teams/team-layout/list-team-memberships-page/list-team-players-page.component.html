@@ -1,14 +1,11 @@
-<!-- List Team Players Page -->
+<!-- List Team Memberships Page -->
 <header [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
     <section
         appPageSectionDirective
         class="token-default-flex-col token-body-section"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <header>
-            <div class="token-default-title">Active Team Membership</div>
-        </header>
-        <app-divider />
+        <div class="token-default-title">Active Team Membership</div>
         <div class="token-default-flex-row flex-wrap">
             <app-team-player-element
                 *ngFor="let teamPlayer of activeTeamPlayers"
@@ -20,13 +17,10 @@
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
-        class="token-default-flex-col token-body-section grow min-[450px]:max-w-[33%]"
+        class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <header>
-            <div class="token-default-title">Former Team Membership</div>
-        </header>
-        <app-divider />
+        <div class="token-default-title">Former Team Membership</div>
         <div class="token-default-flex-row flex-wrap">
             <app-team-player-element
                 *ngFor="let teamPlayer of inactiveTeamPlayers"

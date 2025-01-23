@@ -7,62 +7,56 @@
     appContentGrid
 >
     <section
+        class="token-default-flex-col token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
         appPageSectionDirective
+    >
+        <header class="token-default-title">Mark Match Completed</header>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
         class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
     >
-        <header>
-            <div class="token-default-title">List Team Memberships</div>
-        </header>
-        <app-divider />
-        <section
-            *ngIf="errors['_'] != null"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-        >
+        <section *ngIf="errors['_'] != null">
             <app-form-errors [errors]="errors['_']"></app-form-errors>
         </section>
-        <fieldset
-            class="token-default-flex-col"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-        >
-            <app-form-field name="endDate" [errors]="errors.endDate">
-                <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                        [type]="'datetime-local'"
-                    />
-                </ng-template>
-            </app-form-field>
-        </fieldset>
-        <app-divider />
-        <footer
-            class="token-default-flex-row justify-end"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-        >
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-white'
-                }"
-                type="reset"
-            >
-                Reset
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-green'
-                }"
-            >
-                Mark Completed
-            </button>
-        </footer>
+        <app-form-field name="endDate" [errors]="errors.endDate">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                    [type]="'datetime-local'"
+                />
+            </ng-template>
+        </app-form-field>
     </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <footer
+        class="token-default-flex-row justify-end token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+    >
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
+            Reset
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Mark Completed
+        </button>
+    </footer>
 </form>

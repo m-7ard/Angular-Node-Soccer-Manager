@@ -1,32 +1,38 @@
 <!-- Team Player Details Page -->
 <main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
-    <section appPageSectionDirective class="token-body-section" [appContentGridTrack]="{ contentGridTrack: 'base' }">
-        <li class="token-default-list">
-            <div class="token-default-list__label">Date Active From</div>
-            <div class="token-default-list__value truncate">
-                {{ teamPlayer.membership.activeFrom | date }}
-            </div>
-        </li>
-        <li class="token-default-list">
-            <div class="token-default-list__label">Date Active To</div>
-            <div class="token-default-list__value truncate">
-                {{ teamPlayer.membership.activeTo == null ? "N/A" : (teamPlayer.membership.activeTo | date) }}
-            </div>
-        </li>
-        <li class="token-default-list">
-            <div class="token-default-list__label">Id</div>
-            <div class="token-default-list__value truncate">
-                {{ teamPlayer.membership.id }}
-            </div>
-        </li>
+    <section
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-default-flex-col flex-wrap token-body-section"
+    >
+        <ul>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Date Active From</div>
+                <div class="token-default-list__value truncate">
+                    {{ teamPlayer.membership.activeFrom | date }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Date Active To</div>
+                <div class="token-default-list__value truncate">
+                    {{ teamPlayer.membership.activeTo == null ? "N/A" : (teamPlayer.membership.activeTo | date) }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Id</div>
+                <div class="token-default-list__value truncate">
+                    {{ teamPlayer.membership.id }}
+                </div>
+            </li>
+        </ul>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
-        class="token-body-section grow"
+        class="token-body-section token-default-flex-col grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <div class="token-base-text font-bold">Effective History</div>
+        <div class="token-default-title">Effective History</div>
         <div *ngIf="teamPlayer.membership.effectiveHistory == null" class="token-base-text">
             There's Nothing Here Yet. Create a history if you want to see something here.
         </div>

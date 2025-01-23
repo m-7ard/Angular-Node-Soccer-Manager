@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CoverImageComponent } from '../../../reusables/cover-image/cover-image.component';
 import { DividerComponent } from '../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../reusables/page/page.directive.module';
-import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../../reusables/styled-card/styled-card.module';
 import Match from '../../../models/Match';
 import MatchEvent from '../../../models/MatchEvent';
@@ -12,6 +10,8 @@ import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import { CommonModule } from '@angular/common';
 import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
 import { MatchStatusSingleton } from '../../../services/match-status-singleton.service';
+import { FormFieldComponent, HeaderNavbarButtons } from '../../../reusables/header-navbar/header-navbar.component';
+import MatchStatus from '../../../values/MatchStatus';
 
 @Component({
     selector: 'app-match-page-layout',
@@ -19,12 +19,11 @@ import { MatchStatusSingleton } from '../../../services/match-status-singleton.s
     imports: [
         RouterModule,
         MixinStyledCardDirectivesModule,
-        CoverImageComponent,
         ContentGridDirectivesModule,
         DividerComponent,
         PageDirectivesModule,
         CommonModule,
-        MixinStyledButtonDirective
+        FormFieldComponent,
     ],
     templateUrl: './match-page-layout.component.html',
 })
@@ -32,13 +31,38 @@ export class MatchPageLayoutComponent implements OnInit {
     match!: Match;
     matchEvents!: MatchEvent[];
 
-    constructor(private activatedRoute: ActivatedRoute, readonly matchStatusService: MatchStatusSingleton) {}
+    buttons!: HeaderNavbarButtons;
+
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        readonly matchStatusService: MatchStatusSingleton,
+    ) {}
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe(data => {
+        this.activatedRoute.data.subscribe((data) => {
             const resolverData: IMatchPageLayoutResolverData = data[RESOLVER_DATA_KEY];
             this.match = resolverData.match;
             this.matchEvents = resolverData.matchEvents;
+
+            this.buttons = [
+                { label: 'Details', url: `/matches/${this.match.id}` },
+            ];
+
+            if (this.match.status.isScorable) {
+                this.buttons.push({ label: 'Record Goal', url: `/matches/${this.match.id}/record-goal` });
+            }
+
+            if (this.match.status === MatchStatus.SCHEDULED) {
+                this.buttons.push({ label: 'Mark In Progress', url: `/matches/${this.match.id}/mark-in-progress` });
+            }
+
+            if (this.match.status === MatchStatus.IN_PROGRESS) {
+                this.buttons.push({ label: 'Mark Completed', url: `/matches/${this.match.id}/mark-completed` });
+            }
+
+            if (this.match.status !== MatchStatus.CANCELLED) {
+                this.buttons.push({ label: 'Mark Cancelled', url: `/matches/${this.match.id}/mark-cancelled` });
+            }
         });
     }
 }

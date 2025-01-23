@@ -1,12 +1,11 @@
 <!-- App -->
 <header class="relative shrink-0 token-header-section" appContentGrid>
-    <nav class="flex flex-row gap-3 overflow-x-auto" [appContentGridTrack]="{ contentGridTrack: 'base' }">
+    <nav class="token-default-flex-row overflow-x-auto" [appContentGridTrack]="{ contentGridTrack: 'base' }">
         <ng-content *ngIf="isAuthenticated; else unauthenticatedBlock">
             <button
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-red',
-                    hasShadow: true
+                    theme: 'theme-Sbutton-generic-red'
                 }"
                 type="button"
                 (mouseup)="authService.logout()"
@@ -21,8 +20,7 @@
                 ariaCurrentWhenActive="page"
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-yellow',
-                    hasShadow: true
+                    theme: 'theme-Sbutton-generic-yellow'
                 }"
                 [routerLinkActiveOptions]="{ exact: true }"
             >
@@ -34,8 +32,7 @@
                 ariaCurrentWhenActive="page"
                 [appMixinStyledButton]="{
                     size: 'mixin-Sbutton-sm',
-                    theme: 'theme-Sbutton-generic-green',
-                    hasShadow: true
+                    theme: 'theme-Sbutton-generic-green'
                 }"
                 [routerLinkActiveOptions]="{ exact: true }"
             >
@@ -49,8 +46,7 @@
             ariaCurrentWhenActive="page"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
+                theme: 'theme-Sbutton-generic-white'
             }"
             [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -62,8 +58,7 @@
             ariaCurrentWhenActive="page"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
+                theme: 'theme-Sbutton-generic-white'
             }"
             [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -75,8 +70,7 @@
             ariaCurrentWhenActive="page"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
+                theme: 'theme-Sbutton-generic-white'
             }"
             [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -88,8 +82,7 @@
             ariaCurrentWhenActive="page"
             [appMixinStyledButton]="{
                 size: 'mixin-Sbutton-sm',
-                theme: 'theme-Sbutton-generic-white',
-                hasShadow: true
+                theme: 'theme-Sbutton-generic-white'
             }"
             [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -111,57 +104,28 @@
     </nav>
 </header>
 <app-divider />
-<main class="flex flex-col grow bg-white" appContentGrid>
+<main class="flex flex-col grow bg-[snow]" appContentGrid>
     <app-breadcrumb />
     <app-divider />
     <router-outlet></router-outlet>
 </main>
 <app-divider class="z-10" />
-<!--
-<footer appContentGrid class="py-3 px-4 bg-gray-100">
-    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" class="flex flex-row gap-y-3 gap-x-6 flex-wrap">
-        <div class="shrink-0 flex flex-col gap-1">
-            <div class="token-default-title">
-                Soccer Team Manager
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                Using Angular & Node
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                Implementing DDD Methodologies
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                Integration Tested API
-            </div> 
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                Implementing Layered Architecture
-            </div>
-        </div>
-        <div class="shrink-0 flex flex-col gap-1">
-            <div class="token-default-title">
-                Made by M-7ard
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                https://github.com/m-7ard
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                https://github.com/m-7ard/Angular-Node-Soccer-Manager
-            </div>
-        </div>
-        <div class="shrink-0 flex flex-col gap-1">
-            <div class="token-default-title">
-                Other Portfolio Project of M-7ard
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                https://github.com/m-7ard/Dotnet-React-Order-Display-System-
-            </div>
-            <div [appMixinStyledButton]="{ theme: 'theme-Sbutton-generic-white', size: 'mixin-Sbutton-sm', isStatic: true }" class="w-fit select-text	">
-                https://github.com/m-7ard/Dotnet-MVC-News-Service
-            </div>
-        </div>
-    </section>
+<footer appContentGrid class="relative shrink-0 token-header-section">
+    <nav class="token-default-flex-row overflow-x-auto" [appContentGridTrack]="{ contentGridTrack: 'base' }">
+        <a
+            [appMixinStyledButton]="{
+                theme: 'theme-Sbutton-generic-yellow',
+                size: 'mixin-Sbutton-sm',
+                hasShadow: true,
+                isSharp: true
+            }"
+            class="grow select-text justify-center"
+            href="https://github.com/m-7ard"
+        >
+            https://github.com/m-7ard
+        </a>
+    </nav>
 </footer>
--->
 <ng-content *ngIf="error != null">
     <app-exception-notice-popover
         [error]="error"

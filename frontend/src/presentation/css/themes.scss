@@ -1,6 +1,6 @@
 @layer components {
     .theme-input-generic-white {
-        @apply border flex flex-grow border-zinc-300;
+        @apply border flex flex-grow border-zinc-200;
 
         > input {
             @apply text-gray-900 bg-white focus:bg-zinc-300;
@@ -42,7 +42,7 @@
 
     .theme-Sbutton-generic-white {
         $root: &;
-        @apply border border-zinc-300 text-gray-800;
+        @apply border border-zinc-200 text-gray-800;
 
         &:not(&.active) {
             @apply bg-white;
@@ -123,7 +123,7 @@
     }
 
     .theme-select-generic-white {
-        @apply border border-zinc-300 divide-y divide-zinc-300;
+        @apply border border-zinc-200 divide-y divide-zinc-200;
         
         [data-role="option"] {
             $root: &;

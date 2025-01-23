@@ -14,21 +14,26 @@ import { MixinStyledCardDirectivesModule } from '../../reusables/styled-card/sty
 import Match from '../../models/Match';
 import { ContentGridDirectivesModule } from '../../reusables/content-grid/content-grid.directive.module';
 import { MatchStatusSingleton } from '../../services/match-status-singleton.service';
+import { MatchElementComponent } from "../../reusables/model-elements/match-element/match-element.component";
+import { PlayerElementComponent } from "../../reusables/model-elements/player-element/player-element.component";
+import { TeamElementComponent } from "../../reusables/model-elements/team-element/team-element.component";
 
 @Component({
     selector: 'app-frontpage',
     standalone: true,
     imports: [
-        CommonModule,
-        RouterModule,
-        MixinStyledButtonDirective,
-        MixinStyledCardDirectivesModule,
-        CoverImageComponent,
-        ZeebraTextComponent,
-        PageDirectivesModule,
-        ContentGridDirectivesModule,
-        DividerComponent
-    ],
+    CommonModule,
+    RouterModule,
+    MixinStyledButtonDirective,
+    MixinStyledCardDirectivesModule,
+    CoverImageComponent,
+    PageDirectivesModule,
+    ContentGridDirectivesModule,
+    DividerComponent,
+    MatchElementComponent,
+    PlayerElementComponent,
+    TeamElementComponent
+],
     templateUrl: './frontpage.component.html',
 })
 export class FrontpageComponent implements OnInit {

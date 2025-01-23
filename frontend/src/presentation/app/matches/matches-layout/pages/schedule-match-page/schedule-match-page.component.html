@@ -7,18 +7,18 @@
     appContentGrid
 >
     <section
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+        class="token-body-section items-center justify-between"
+    >
+        <div class="token-default-title">Schedule Match</div>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
         appPageSectionDirective
         class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <section
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-            class="token-default-flex-row items-center justify-between"
-        >
-            <div class="token-default-title">Schedule Match</div>
-        </section>
-        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
         <section
             *ngIf="errors['_'] != null"
             [appContentGridTrack]="{ contentGridTrack: 'base' }"
@@ -65,28 +65,29 @@
                 </ng-template>
             </app-form-field>
         </fieldset>
-        <footer
-            class="token-default-flex-row justify-end"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        class="token-default-flex-row token-body-section items-center justify-end"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+    >
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
         >
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-white'
-                }"
-                type="reset"
-            >
-                Reset
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-green'
-                }"
-            >
-                Schedule
-            </button>
-        </footer>
+            Reset
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Schedule
+        </button>
     </section>
 </form>

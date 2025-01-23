@@ -11,32 +11,34 @@ import { DividerComponent } from '../../../../../reusables/divider/divider.compo
 import { TeamMembershipHistoryElement } from '../../../../../reusables/model-elements/team-membership-history-element/team-membership-history-element.component';
 import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
 import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled-card/styled-card.module';
-import { TeamElementComponent } from "../../../../../reusables/model-elements/team-element/team-element.component";
+import { TeamElementComponent } from '../../../../../reusables/model-elements/team-element/team-element.component';
 
 @Component({
     selector: 'app-player-details-page',
     standalone: true,
     imports: [
-    CommonModule,
-    MixinStyledCardDirectivesModule,
-    RouterModule,
-    PageDirectivesModule,
-    DividerComponent,
-    ContentGridDirectivesModule,
-    TeamMembershipHistoryElement,
-    TeamElementComponent
-],
+        CommonModule,
+        MixinStyledCardDirectivesModule,
+        RouterModule,
+        PageDirectivesModule,
+        DividerComponent,
+        ContentGridDirectivesModule,
+        TeamMembershipHistoryElement,
+        TeamElementComponent,
+    ],
     templateUrl: './player-details-page.component.html',
 })
 export class PlayerDetailsPageComponent {
-    teams!: Team[];
+    currentTeams!: Team[];
+    formerTeams!: Team[];
     player!: Player;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         const data: IPlayerDetailsPageResolverData = this.activatedRoute.snapshot.data[RESOLVER_DATA_KEY];
-        this.teams = data.teams;
+        this.currentTeams = data.currentTeams;
+        this.formerTeams = data.formerTeams;
 
         const parentData: IPlayerDetailLayoutResolverData =
             this.activatedRoute.snapshot.parent!.data[RESOLVER_DATA_KEY];

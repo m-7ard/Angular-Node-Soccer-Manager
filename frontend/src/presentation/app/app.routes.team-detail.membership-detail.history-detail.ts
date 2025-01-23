@@ -21,7 +21,7 @@ export const teamMembershipHistoryDetailRoutes: Routes = [
             {
                 path: 'update',
                 component: UpdateTeamMembershipHistoryPageComponent,
-                data: { breadcrumb: "History" },
+                data: { breadcrumb: "Update" },
             },
         ],
     },

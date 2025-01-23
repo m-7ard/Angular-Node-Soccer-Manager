@@ -2,19 +2,23 @@
 <main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
     <section
         appPageSectionDirective
-        class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        class="token-default-flex-row flex-wrap token-body-section"
     >
         <div class="token-default-title">Team Membership Histories</div>
-        <app-divider />
-        <ul class="token-default-flex-row flex-wrap">
-            <app-team-membership-history-element
-                *ngFor="let teamMembershipHistory of teamMembershipHistories"
-                [teamMembershipHistory]="teamMembershipHistory"
-                [teamMembership]="teamMembership"
-                class="basis-1/3 grow"
-            />
-            <li *ngIf="teamMembershipHistories.length === 0" class="token-base-text">Nothing To See Here Yet.</li>
-        </ul>
     </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <ul
+        class="token-default-flex-row flex-wrap token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+    >
+        <app-team-membership-history-element
+            *ngFor="let teamMembershipHistory of teamMembershipHistories"
+            [teamMembershipHistory]="teamMembershipHistory"
+            [teamMembership]="teamMembership"
+            class="basis-1/3 grow"
+        />
+        <li *ngIf="teamMembershipHistories.length === 0" class="token-base-text">Nothing To See Here Yet.</li>
+    </ul>
 </main>

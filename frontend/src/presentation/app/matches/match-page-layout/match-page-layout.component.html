@@ -1,59 +1,6 @@
 <!-- Match Layout -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
-    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/matches/' + match.id"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                Details
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/matches/' + match.id + '/record-goal'"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
-                Record Goal
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                *ngIf="match.status === matchStatusService.MatchStatusCls.SCHEDULED"
-                class="token-nav-section-button"
-                [routerLink]="'/matches/' + match.id + '/mark-in-progress'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Mark In Progress
-            </button>
-            <button
-                *ngIf="match.status === matchStatusService.MatchStatusCls.IN_PROGRESS"
-                class="token-nav-section-button"
-                [routerLink]="'/matches/' + match.id + '/mark-completed'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Mark Completed
-            </button>
-            <button
-                *ngIf="match.status !== matchStatusService.MatchStatusCls.CANCELLED"
-                class="token-nav-section-button"
-                [routerLink]="'/matches/' + match.id + '/mark-cancelled'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Mark Cancelled
-            </button>
-        </nav>
-    </section>
+    <app-header-navbar [buttons]="buttons" />
     <app-divider />
     <router-outlet></router-outlet>
 </div>

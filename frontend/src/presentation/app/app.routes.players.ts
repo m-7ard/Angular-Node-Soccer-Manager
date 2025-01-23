@@ -4,9 +4,8 @@ import { RESOLVER_DATA_KEY } from '../utils/RESOLVER_DATA';
 import { CreatePlayerPageComponent } from './players/players-layout/pages/create-player-page/create-player-page.component';
 import { ListPlayersPageComponent } from './players/list-players-page/list-players-page.component';
 import { ListPlayersPageResolver } from './players/list-players-page/list-players-page.resolver';
-import { UpdatePlayerPageComponent } from './players/player-detail-layout/pages/update-player-page/update-player-page.component';
-import { UpdatePlayerPageResolver } from './players/player-detail-layout/pages/update-player-page/update-player-page.resolver';
 import { PlayersLayoutComponent } from './players/players-layout/players-layout.component';
+import { playerDetailRoutes } from './app.routes.player-detail';
 
 export const playersRoutes: Routes = [
     {
@@ -34,14 +33,8 @@ export const playersRoutes: Routes = [
             },
             {
                 path: ':id',
-                component: UpdatePlayerPageComponent,
-                resolve: { [RESOLVER_DATA_KEY]: UpdatePlayerPageResolver },
-                canActivate: [AuthGuard],
                 data: { breadcrumb: ':id' },
-                children: [
-                loadChildren: () => import('./app.routes.match-detail').then(m => m.matchDetailRoutes)
-
-                ]
+                children: playerDetailRoutes,
             },
         ],
     },

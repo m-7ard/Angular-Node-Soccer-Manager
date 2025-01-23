@@ -7,48 +7,56 @@
     appContentGrid
 >
     <section
-        class="token-default-flex-col token-body-section grow"
+        class="token-default-flex-col token-body-section"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
         appPageSectionDirective
     >
         <div class="token-default-title">Mark Match In Progress</div>
-
-        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="token-default-col token-body-section grow"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
         <section *ngIf="errors['_'] != null">
             <app-form-errors [errors]="errors['_']"></app-form-errors>
         </section>
-        <fieldset class="token-default-col">
-            <app-form-field name="startDate" [errors]="errors.startDate" [helperTexts]="startDateHelperTexts">
-                <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                        [type]="'datetime-local'"
-                    />
-                </ng-template>
-            </app-form-field>
-        </fieldset>
-        <footer class="token-default-flex-row justify-end">
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-white'
-                }"
-                type="reset"
-            >
-                Reset
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-green'
-                }"
-            >
-                Mark In Progress
-            </button>
-        </footer>
+        <app-form-field name="startDate" [errors]="errors.startDate" [helperTexts]="startDateHelperTexts">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                    [type]="'datetime-local'"
+                />
+            </ng-template>
+        </app-form-field>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
+        class="token-default-flex-row token-body-section justify-end"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
+            Reset
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Mark In Progress
+        </button>
     </section>
 </form>

@@ -100,7 +100,7 @@
     }
 
     .token-nav-section-button {
-        @apply shrink-0 border-b-4 mixin-Sbutton-like mixin-Sbutton-base rounded-none bg-white;
+        @apply shrink-0 border-b-4 mixin-Sbutton-like mixin-Sbutton-base rounded-none bg-white grow justify-center;
 
         &:not(.active) {
             @apply token-default-border-color;

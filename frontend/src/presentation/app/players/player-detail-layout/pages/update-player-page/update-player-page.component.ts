@@ -20,6 +20,7 @@ import { MixinStyledCardDirectivesModule } from '../../../../../reusables/styled
 import { DividerComponent } from '../../../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../../../reusables/page/page.directive.module';
 import { ContentGridDirectivesModule } from '../../../../../reusables/content-grid/content-grid.directive.module';
+import { IPlayerDetailLayoutResolverData } from '../../player-detail-layout.resolver';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -80,13 +81,11 @@ export class UpdatePlayerPageComponent {
     }
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe((resolverData) => {
-            const data: IUpdatePlayerResolverData = resolverData[RESOLVER_DATA_KEY];
-            this.id = data.id;
-            this.player = data.player;
+        const data: IPlayerDetailLayoutResolverData = this.activatedRoute.snapshot.parent?.data[RESOLVER_DATA_KEY];
+        this.id = data.player.id;
+        this.player = data.player;
 
-            this.form.patchValue(this.initialData);
-        });
+        this.form.patchValue(this.initialData);
     }
 
     onSubmit(): void {

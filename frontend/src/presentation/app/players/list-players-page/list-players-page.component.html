@@ -1,31 +1,29 @@
 <!-- List Players Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
     <section appPageSectionDirective [appContentGridTrack]="{ contentGridTrack: 'base' }" class="token-body-section">
-        <nav class="flex flex-col gap-3">
-            <section class="flex flex-row gap-3 flex-wrap">
-                <div class="token-default-title">Players</div>
-                <button
-                    [appMixinStyledButton]="{
-                        size: 'mixin-Sbutton-sm',
-                        theme: 'theme-Sbutton-generic-white',
-                        hasShadow: true
-                    }"
-                    class="shrink-0 ml-auto"
-                >
-                    Filter
-                </button>
-                <button
-                    [appMixinStyledButton]="{
-                        size: 'mixin-Sbutton-sm',
-                        theme: 'theme-Sbutton-generic-white',
-                        hasShadow: true
-                    }"
-                    class="shrink-0"
-                >
-                    Order By
-                </button>
-            </section>
-        </nav>
+        <header class="token-default-flex-row flex-wrap">
+            <div class="token-default-title">Players</div>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                class="shrink-0 ml-auto"
+            >
+                Filter
+            </button>
+            <button
+                [appMixinStyledButton]="{
+                    size: 'mixin-Sbutton-sm',
+                    theme: 'theme-Sbutton-generic-white',
+                    hasShadow: true
+                }"
+                class="shrink-0"
+            >
+                Order By
+            </button>
+        </header>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
@@ -33,7 +31,7 @@
         appPageSectionDirective
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <div class="flex flex-row gap-3 flex-wrap">
+        <div class="token-default-flex-row flex-wrap">
             <ng-container *ngFor="let player of players">
                 <app-player-element [player]="player" class="min-w-[200px] basis-1/5 grow"></app-player-element>
             </ng-container>

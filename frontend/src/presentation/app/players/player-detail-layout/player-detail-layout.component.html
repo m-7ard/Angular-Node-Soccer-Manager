@@ -1,51 +1,6 @@
 <!-- Team Player Layout Page -->
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid class="overflow-hidden">
-    <section [appContentGridTrack]="{ contentGridTrack: 'full' }" appContentGrid class="token-nav-section">
-        <nav [appContentGridTrack]="{ contentGridTrack: 'base' }" class="flex flex-row overflow-x-auto">
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships/' + teamPlayer.membership.id"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Details
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships/' + teamPlayer.membership.id + '/histories'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Membership Histories
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="'/teams/' + team.id + '/memberships/' + teamPlayer.membership.id + '/update'"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Update
-            </button>
-            <app-divider [isVertical]="true" />
-            <button
-                class="token-nav-section-button"
-                [routerLink]="
-                    '/teams/' + team.id + '/' + teamPlayer.membership.id + '/memberships/' + '/histories' + '/create'
-                "
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-            >
-                Create Membership History
-            </button>
-            <app-divider [isVertical]="true" />
-        </nav>
-    </section>
+    <app-header-navbar [buttons]="buttons" />
     <app-divider />
     <router-outlet></router-outlet>
 </div>

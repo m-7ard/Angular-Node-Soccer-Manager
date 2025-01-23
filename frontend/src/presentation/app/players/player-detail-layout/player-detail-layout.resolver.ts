@@ -12,7 +12,7 @@ export interface IPlayerDetailLayoutResolverData {
 
 @Injectable({ providedIn: 'root' })
 export class PlayerDetailLayoutResolver implements Resolve<IPlayerDetailLayoutResolverData> {
-    constructor(private _playerDataAccess: PlayerDataAccessService) {}
+    constructor(private playerDataAccess: PlayerDataAccessService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<IPlayerDetailLayoutResolverData> {
         const id = route.paramMap.get('id');
@@ -21,7 +21,7 @@ export class PlayerDetailLayoutResolver implements Resolve<IPlayerDetailLayoutRe
             throw new ClientSideErrorException('Update Player Page: id parameter is null.');
         }
 
-        return this._playerDataAccess.read(id, {}).pipe(
+        return this.playerDataAccess.read(id, {}).pipe(
             map((response) => {
                 return {
                     player: PlayerMapper.apiModelToDomain(response.player),

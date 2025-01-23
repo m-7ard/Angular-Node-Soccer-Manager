@@ -2,21 +2,20 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { catchError, map, Observable } from 'rxjs';
 import Team from '../../../../../models/Team';
-import { MatchDataAccessService } from '../../../../../services/data-access/match-data-access.service';
 import ClientSideErrorException from '../../../../../exceptions/ClientSideErrorException';
 import getRoutableException from '../../../../../utils/getRoutableException';
-import { TeamDataAccessService } from '../../../../../services/data-access/team-data-access.service';
 import TeamMapper from '../../../../../mappers/TeamMapper';
+import { PlayerDataAccessService } from '../../../../../services/data-access/player-data-access.service';
 
 export interface IPlayerDetailsPageResolverData {
-    teams: Team[];
+    currentTeams: Team[];
+    formerTeams: Team[];
 }
 
 @Injectable({ providedIn: 'root' })
 export class PlayerDetailsPageResolver implements Resolve<IPlayerDetailsPageResolverData> {
     constructor(
-        private matchDataAccess: MatchDataAccessService,
-        private teamDataAccess: TeamDataAccessService,
+        private playerDataAccess: PlayerDataAccessService,
     ) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<IPlayerDetailsPageResolverData> {
@@ -26,9 +25,10 @@ export class PlayerDetailsPageResolver implements Resolve<IPlayerDetailsPageReso
             throw new ClientSideErrorException('Player Details Page: id parameter is null.');
         }
 
-        return this.teamDataAccess.listTeams({ teamMembershipPlayerId: id, limitBy: null, name: null }).pipe(
+        return this.playerDataAccess.readFull(id, {}).pipe(
             map((response) => ({
-                teams: response.teams.map(TeamMapper.apiModelToDomain),
+                currentTeams: response.currentTeams.map(TeamMapper.apiModelToDomain),
+                formerTeams: response.formerTeams.map(TeamMapper.apiModelToDomain),
             })),
             catchError((error) => {
                 throw getRoutableException(error);

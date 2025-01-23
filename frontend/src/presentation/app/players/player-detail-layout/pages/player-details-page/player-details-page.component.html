@@ -23,15 +23,25 @@
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
+        class="token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <div class="token-base-text font-bold">Current Teams</div>
+        <div *ngIf="currentTeams.length === 0" class="token-base-text">There's Nothing Here Yet.</div>
+        <ng-container *ngIf="currentTeams.length > 0">
+            <app-team-element *ngFor="let team of currentTeams" [team]="team" />
+        </ng-container>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        appPageSectionDirective
         class="token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <div class="token-base-text font-bold">Member</div>
-        <div *ngIf="teams.length === 0" class="token-base-text">
-            There's Nothing Here Yet.
-        </div>
-        <ng-container *ngIf="teams.length > 0">
-            <app-team-element *ngFor="let team of teams;" [team]="team" />
+        <div class="token-base-text font-bold">Former Teams</div>
+        <div *ngIf="formerTeams.length === 0" class="token-base-text">There's Nothing Here Yet.</div>
+        <ng-container *ngIf="formerTeams.length > 0">
+            <app-team-element *ngFor="let team of formerTeams" [team]="team" />
         </ng-container>
     </section>
 </main>

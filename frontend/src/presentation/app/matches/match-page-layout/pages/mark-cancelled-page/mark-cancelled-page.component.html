@@ -7,43 +7,42 @@
     appContentGrid
 >
     <section
+        class="token-default-flex-col token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
         appPageSectionDirective
+    >
+        <header class="token-default-title">Mark Match Cancelled</header>
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
         class="token-default-flex-col token-body-section grow"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
     >
-        <header>
-            <div class="token-default-title">Mark Match Cancelled</div>
-        </header>
-        <app-divider />
-        <section
-            *ngIf="errors['_'] != null"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-        >
-            <app-form-errors [errors]="errors['_']"></app-form-errors>
-        </section>
-        <footer
-            class="flex flex-row gap-3 justify-end"
-            [appContentGridTrack]="{ contentGridTrack: 'base' }"
-            appPageSectionDirective
-        >
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-white'
-                }"
-                type="reset"
-            >
-                Reset
-            </button>
-            <button
-                [appMixinStyledButton]="{
-                    size: 'mixin-Sbutton-base',
-                    theme: 'theme-Sbutton-generic-green'
-                }"
-            >
-                Mark Cancelled
-            </button>
-        </footer>
+        <app-form-errors [errors]="errors['_']"></app-form-errors>
     </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <footer
+        class="token-default-flex-row justify-end"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+    >
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-white'
+            }"
+            type="reset"
+        >
+            Reset
+        </button>
+        <button
+            [appMixinStyledButton]="{
+                size: 'mixin-Sbutton-base',
+                theme: 'theme-Sbutton-generic-green'
+            }"
+        >
+            Mark Cancelled
+        </button>
+    </footer>
 </form>
