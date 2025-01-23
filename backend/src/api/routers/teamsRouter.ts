@@ -15,6 +15,7 @@ import userIsAuthenticatedGuard from "api/guards/userIsAuthenticatedGuard";
 import CreateTeamMembershipHistoryAction from "api/actions/team_membership_histories/CreateTeamMembershipHistoryAction";
 import UpdateTeamMembershipHistoryAction from "api/actions/team_membership_histories/UpdateTeamMembershipHistoryAction";
 import ListTeamMembershipHistoriesAction from "api/actions/team_memberships/ListTeamMembershipHistories";
+import DeleteTeamMembershipHistoryAction from "api/actions/team_membership_histories/DeleteTeamMembershipHistoryAction";
 
 const teamsRouter = Router();
 
@@ -144,6 +145,16 @@ registerAction({
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
         return new UpdateTeamMembershipHistoryAction(requestDispatcher);
+    },
+});
+
+registerAction({
+    router: teamsRouter,
+    path: "/:teamId/memberships/:teamMembershipId/histories/:teamMembershipHistoryId/delete",
+    method: "DELETE",
+    initialiseAction: () => {
+        const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);
+        return new DeleteTeamMembershipHistoryAction(requestDispatcher);
     },
 });
 

@@ -28,6 +28,7 @@ import RecordGoalCommandHandler, { RecordGoalCommand } from "application/handler
 import CreateTeamMembershipHistoryCommandHandler, { CreateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/CreateTeamMembershipHistoryCommandHandler";
 import UpdateTeamMembershipHistoryCommandHandler, { UpdateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/UpdateTeamMembershipHistoryCommandHandler";
 import ReadFullPlayerQueryHandler, { ReadFullPlayerQuery } from "application/handlers/players/ReadFullPlayerQueryHandler";
+import DeleteTeamMembershipHistoryCommandHandler, { DeleteTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/DeleteTeamMembershipHistoryCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -82,9 +83,11 @@ function createRequestDispatcher() {
         ReadTeamMembershipQuery,
         new ReadTeamMembershipQueryHandler({ teamExistsValidator: teamExistsValidator, teamMembershipValidatorFactory: teamMembershipExistsValidatorFactory }),
     );
+
     // Team Membership Histories
     requestDispatcher.registerHandler(CreateTeamMembershipHistoryCommand, new CreateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }));
     requestDispatcher.registerHandler(UpdateTeamMembershipHistoryCommand, new UpdateTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }));
+    requestDispatcher.registerHandler(DeleteTeamMembershipHistoryCommand, new DeleteTeamMembershipHistoryCommandHandler({ teamExistsValidator: teamExistsValidator, teamRepository: teamRepository }));
 
     // Users
     requestDispatcher.registerHandler(

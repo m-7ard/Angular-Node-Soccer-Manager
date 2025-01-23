@@ -2,7 +2,7 @@ import TeamMembershipDates from "domain/valueObjects/TeamMembership/TeamMembersh
 import TeamMembershipHistory from "./TeamMembershipHistory";
 import TeamMembershipHistoryNumber from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryNumber";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
-import { err, ok, Result } from "neverthrow";
+import { Err, err, ok, Result } from "neverthrow";
 import TeamMembershipHistoryFactory from "domain/domainFactories/TeamMembershipHistoryFactory";
 import DomainEvent from "domain/domainEvents/DomainEvent";
 import TeamMembershipHistoryPendingCreationEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingCreationEvent";
@@ -11,6 +11,7 @@ import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 import TeamMembershipHistoryPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingUpdatingEvent";
+import TeamMembershipHistoryPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingDeletionEvent";
 
 interface Props {
     id: TeamMembershipId;
@@ -64,7 +65,7 @@ class TeamMembership implements Props {
                 if (nextHistory == null) {
                     return history;
                 }
-                
+
                 if (nextHistory.dateEffectiveFrom > date) {
                     return history;
                 }
@@ -111,6 +112,22 @@ class TeamMembership implements Props {
         return teamMembershipHistoryId;
     }
 
+    public canRemoveHistory(teamMembershipHistoryId: TeamMembershipHistoryId): Result<boolean, string> {
+        const canFindHistoryByIdResult = this.tryFindHistoryById(teamMembershipHistoryId);
+        if (canFindHistoryByIdResult.isErr()) {
+            return err(canFindHistoryByIdResult.error);
+        }
+
+        return ok(true);
+    }
+
+    public executeRemoveHistory(teamMembershipHistoryId: TeamMembershipHistoryId): void {
+        const teamMembershipHistory = this.executeFindHistoryById(teamMembershipHistoryId);
+
+        this.teamMembershipHistories = this.teamMembershipHistories.filter((history) => history !== teamMembershipHistory);
+        this.domainEvents.push(new TeamMembershipHistoryPendingDeletionEvent(teamMembershipHistory));
+    }
+
     public tryFindHistoryById(id: TeamMembershipHistoryId): Result<TeamMembershipHistory, string> {
         const teamMembershipHistory = this.teamMembershipHistories.find((teamMembershipHistory) => teamMembershipHistory.id.equals(id));
         if (teamMembershipHistory == null) {
@@ -141,7 +158,9 @@ class TeamMembership implements Props {
 
     private tryVerifyHistoryIntegrity(props: { dateEffectiveFrom: Date; number: number; position: string }): Result<true, string> {
         if (!this.teamMembershipDates.isWithinRange(props.dateEffectiveFrom)) {
-            return err(`History's dateEffectiveFrom (${props.dateEffectiveFrom}) must be within the Membership's activeFrom (${this.teamMembershipDates.activeFrom}) and activeTo (${this.teamMembershipDates.activeTo}) date range.`);
+            return err(
+                `History's dateEffectiveFrom (${props.dateEffectiveFrom}) must be within the Membership's activeFrom (${this.teamMembershipDates.activeFrom}) and activeTo (${this.teamMembershipDates.activeTo}) date range.`,
+            );
         }
 
         const numberResult = TeamMembershipHistoryNumber.canCreate(props.number);

@@ -42,6 +42,13 @@ class TeamMembershipHistoryDbEntity implements ITeamMembershipHistorySchema {
                     id = ${this.id} 
         `;
     }
+
+    public getDeleteEntry() {
+        return sql`
+            DELETE FROM ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
+                WHERE id = ${this.id}
+        `
+    }
 }
 
 export default TeamMembershipHistoryDbEntity;

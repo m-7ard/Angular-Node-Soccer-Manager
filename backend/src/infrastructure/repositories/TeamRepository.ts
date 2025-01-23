@@ -14,6 +14,7 @@ import TeamMembershipHistoryPendingUpdatingEvent from "domain/domainEvents/Team/
 import TeamId from "domain/valueObjects/Team/TeamId";
 import TeamMembershipMapper from "infrastructure/mappers/TeamMembershipMapper";
 import TeamDbEntity from "infrastructure/dbEntities/TeamDbEntity";
+import TeamMembershipHistoryPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingDeletionEvent";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
@@ -62,6 +63,14 @@ class TeamRepository implements ITeamRepository {
             } else if (event instanceof TeamMembershipHistoryPendingUpdatingEvent) {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getUpdateEntry();
+
+                await this._db.execute({
+                    statement: sqlEntry.sql,
+                    parameters: sqlEntry.values,
+                });
+            } else if (event instanceof TeamMembershipHistoryPendingDeletionEvent) {
+                const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
+                const sqlEntry = dbEntity.getDeleteEntry();
 
                 await this._db.execute({
                     statement: sqlEntry.sql,
