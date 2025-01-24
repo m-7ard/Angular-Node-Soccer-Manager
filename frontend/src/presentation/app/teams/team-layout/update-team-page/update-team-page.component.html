@@ -35,7 +35,7 @@
         <app-form-field [name]="'dateFounded'" [errors]="errors.dateFounded">
             <ng-template let-name="name">
                 <app-char-field
-                    [type]="'date'"
+                    [type]="'datetime-local'"
                     [formControlName]="name"
                     [options]="{
                         size: 'mixin-char-input-base',

@@ -62,6 +62,6 @@ export class MatchDataAccessService {
     }
 
     delete(matchId: string, request: IDeleteMatchRequestDTO) {
-        return this.http.post<IDeleteMatchResponseDTO>(`${this._baseUrl}/${matchId}/delete`, request);
+        return this.http.delete<IDeleteMatchResponseDTO>(`${this._baseUrl}/${matchId}/delete`, request);
     }
 }

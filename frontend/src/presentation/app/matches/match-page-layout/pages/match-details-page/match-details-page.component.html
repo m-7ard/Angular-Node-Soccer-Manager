@@ -5,20 +5,26 @@
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
         class="grid grid-cols-3 gap-3 token-body-section items-center justify-items-center"
     >
-        <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
+        <div
+            [routerLink]="'/teams/' + match.homeTeam.id"
+            class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square hover:cursor-pointer"
+        >
             <app-cover-image className="token-default-avatar " />
         </div>
         <div class="token-default-title">{{ match.score?.homeTeamScore }} : {{ match.score?.awayTeamScore }}</div>
-        <div class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square">
+        <div
+            [routerLink]="'/teams/' + match.awayTeam.id"
+            class="aspect-square max-h-[80px] max-w-[80px] w-full h-full aspect-square hover:cursor-pointer"
+        >
             <app-cover-image className="token-default-avatar " />
         </div>
-        <div class="token-base-text text-center">
+        <div [routerLink]="'/teams/' + match.homeTeam.id" class="token-base-text text-center hover:cursor-pointer">
             {{ match.homeTeam.name }}
         </div>
         <div class="token-base-text">
             {{ match.status.label }}
         </div>
-        <div class="token-base-text text-center">
+        <div [routerLink]="'/teams/' + match.awayTeam.id" class="token-base-text text-center hover:cursor-pointer">
             {{ match.awayTeam.name }}
         </div>
     </section>
@@ -58,7 +64,6 @@
         <header>
             <div class="token-default-title">Match Events</div>
         </header>
-        <app-divider />
         <section class="token-default-flex-col">
             <div class="token-default-flex-row items-center" *ngFor="let matchEvent of matchEvents">
                 <span

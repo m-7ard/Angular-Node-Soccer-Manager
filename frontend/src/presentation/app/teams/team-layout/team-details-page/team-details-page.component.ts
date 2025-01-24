@@ -16,20 +16,22 @@ import Match from '../../../../models/Match';
 import MatchStatus from '../../../../values/MatchStatus';
 import { MatchElementComponent } from '../../../../reusables/model-elements/match-element/match-element.component';
 import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
+import { TeamPlayerElementComponent } from "../../../../reusables/model-elements/team-player-element/team-player-element.component";
 
 @Component({
     selector: 'app-team-details-page',
     standalone: true,
     imports: [
-        CommonModule,
-        MixinStyledCardDirectivesModule,
-        RouterModule,
-        CoverImageComponent,
-        PageDirectivesModule,
-        DividerComponent,
-        MatchElementComponent,
-        ContentGridDirectivesModule,
-    ],
+    CommonModule,
+    MixinStyledCardDirectivesModule,
+    RouterModule,
+    CoverImageComponent,
+    PageDirectivesModule,
+    DividerComponent,
+    MatchElementComponent,
+    ContentGridDirectivesModule,
+    TeamPlayerElementComponent
+],
     templateUrl: './team-details-page.component.html',
 })
 export class TeamDetailsPageComponent {

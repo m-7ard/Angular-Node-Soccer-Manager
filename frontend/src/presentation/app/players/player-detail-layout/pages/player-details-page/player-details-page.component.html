@@ -1,32 +1,35 @@
 <!-- Player Details Page -->
 <main [appPageDirective]="{ pageSize: 'mixin-page-base', isSubpage: true }" appContentGrid>
     <section appPageSectionDirective class="token-body-section" [appContentGridTrack]="{ contentGridTrack: 'base' }">
-        <li class="token-default-list">
-            <div class="token-default-list__label">Id</div>
-            <div class="token-default-list__value truncate">
-                {{ player.id }}
-            </div>
-        </li>
-        <li class="token-default-list">
-            <div class="token-default-list__label">Name</div>
-            <div class="token-default-list__value truncate">
-                {{ player.name }}
-            </div>
-        </li>
-        <li class="token-default-list">
-            <div class="token-default-list__label">Active Since</div>
-            <div class="token-default-list__value truncate">
-                {{ player.activeSince | date }}
-            </div>
-        </li>
+        <ul>
+            <li class="token-base-text font-bold">Player Data</li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Id</div>
+                <div class="token-default-list__value truncate">
+                    {{ player.id }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Name</div>
+                <div class="token-default-list__value truncate">
+                    {{ player.name }}
+                </div>
+            </li>
+            <li class="token-default-list">
+                <div class="token-default-list__label">Active Since</div>
+                <div class="token-default-list__value truncate">
+                    {{ player.activeSince | date }}
+                </div>
+            </li>
+        </ul>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
-        class="token-body-section"
+        class="token-body-section token-default-flex-col"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <div class="token-base-text font-bold">Current Teams</div>
+        <div class="token-default-title">Current Teams</div>
         <div *ngIf="currentTeams.length === 0" class="token-base-text">There's Nothing Here Yet.</div>
         <ng-container *ngIf="currentTeams.length > 0">
             <app-team-element *ngFor="let team of currentTeams" [team]="team" />
@@ -35,10 +38,10 @@
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
-        class="token-body-section grow"
+        class="token-body-section grow token-default-flex-col"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
-        <div class="token-base-text font-bold">Former Teams</div>
+        <div class="token-default-title">Former Teams</div>
         <div *ngIf="formerTeams.length === 0" class="token-base-text">There's Nothing Here Yet.</div>
         <ng-container *ngIf="formerTeams.length > 0">
             <app-team-element *ngFor="let team of formerTeams" [team]="team" />

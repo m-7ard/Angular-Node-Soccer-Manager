@@ -1,0 +1,3 @@
+interface IDeleteTeamMembershipHistoryRequestDTO {}
+
+export default IDeleteTeamMembershipHistoryRequestDTO;

@@ -9,7 +9,6 @@ import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { IMatchPageLayoutResolverData } from './match-page-layout.resolver';
 import { CommonModule } from '@angular/common';
 import { ContentGridDirectivesModule } from '../../../reusables/content-grid/content-grid.directive.module';
-import { MatchStatusSingleton } from '../../../services/match-status-singleton.service';
 import { FormFieldComponent, HeaderNavbarButtons } from '../../../reusables/header-navbar/header-navbar.component';
 import MatchStatus from '../../../values/MatchStatus';
 
@@ -35,7 +34,6 @@ export class MatchPageLayoutComponent implements OnInit {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        readonly matchStatusService: MatchStatusSingleton,
     ) {}
 
     ngOnInit() {
@@ -46,6 +44,7 @@ export class MatchPageLayoutComponent implements OnInit {
 
             this.buttons = [
                 { label: 'Details', url: `/matches/${this.match.id}` },
+                { label: 'Delete', url: `/matches/${this.match.id}/delete` },
             ];
 
             if (this.match.status.isScorable) {

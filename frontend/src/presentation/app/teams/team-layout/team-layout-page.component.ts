@@ -42,6 +42,7 @@ export class TeamLayoutPageComponent implements OnInit {
             { label: 'Memberships', url: `/teams/${this.team.id}/memberships` },
             { label: 'Update', url: `/teams/${this.team.id}/update` },
             { label: 'Create Membership', url: `/teams/${this.team.id}/memberships/add` },
+            { label: 'Delete', url: `/teams/${this.team.id}/delete` },
         ];
     }
 }

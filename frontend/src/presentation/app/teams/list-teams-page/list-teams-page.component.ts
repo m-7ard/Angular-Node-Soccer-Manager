@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { IListTeamsResolverData } from './list-teams-page.resolver';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import Team from '../../../models/Team';
-import { ListTeamsPageTeamElementComponent } from './list-teams-page-team-element/list-teams-page-team-element.component';
 import { MixinStyledButtonDirective } from '../../../reusables/styled-button/styled-button.directive';
 import { RESOLVER_DATA_KEY } from '../../../utils/RESOLVER_DATA';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,7 +19,6 @@ import { TeamElementComponent } from "../../../reusables/model-elements/team-ele
     standalone: true,
     imports: [
     CommonModule,
-    ListTeamsPageTeamElementComponent,
     RouterModule,
     MixinStyledButtonDirective,
     MixinStyledCardDirectivesModule,

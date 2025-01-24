@@ -23,7 +23,6 @@ import { TeamElementComponent } from '../../../../../reusables/model-elements/te
         PageDirectivesModule,
         DividerComponent,
         ContentGridDirectivesModule,
-        TeamMembershipHistoryElement,
         TeamElementComponent,
     ],
     templateUrl: './player-details-page.component.html',

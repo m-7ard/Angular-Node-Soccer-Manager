@@ -16,15 +16,11 @@ import Player from '../../../models/Player';
     standalone: true,
     imports: [
         CommonModule,
-        FormFieldComponent,
-        CharFieldComponent,
         ReactiveFormsModule,
         CoverImageComponent,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
-        ZeebraTextComponent,
         PanelDirectivesModule,
-        DividerComponent,
     ],
     template: `
         <div
@@ -44,9 +40,6 @@ import Player from '../../../models/Player';
                 <div class="overflow-hidden">
                     <div class="token-card--header--primary-text">
                         {{ player.name }}
-                    </div>
-                    <div class="truncate token-card--header--secondary-text">
-                        <app-zeebra-text></app-zeebra-text>
                     </div>
                 </div>
             </main>

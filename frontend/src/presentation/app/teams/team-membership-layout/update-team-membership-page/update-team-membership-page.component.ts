@@ -20,6 +20,7 @@ import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-ca
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
 import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
+import { ITeamMembershipLayoutPageResolverData } from '../team-membership-layout.resolver';
 
 interface IFormControls {
     activeFrom: FormControl<string>;
@@ -54,17 +55,17 @@ export class UpdateTeamMembershipPageComponent {
 
     teamId: string = null!;
     team: Team = null!;
-
     teamPlayer: TeamPlayer = null!;
-
     teamMembershipId: string = null!;
+
+    public activeDatesHelperTexts!: string[];
 
     private get initialData() {
         const membership = this.teamPlayer.membership;
 
         return {
-            activeFrom: parsers.parseJsDateToInputDate(membership.activeFrom),
-            activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDate(membership.activeTo),
+            activeFrom: parsers.parseJsDateToInputDatetimeLocal(membership.activeFrom),
+            activeTo: membership.activeTo == null ? '' : parsers.parseJsDateToInputDatetimeLocal(membership.activeTo),
         };
     }
 
@@ -86,19 +87,19 @@ export class UpdateTeamMembershipPageComponent {
     }
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe((resolverData) => {
-            const data: IUpdateTeamMembershipResolverData = resolverData[RESOLVER_DATA_KEY];
+        const data: ITeamMembershipLayoutPageResolverData = this.activatedRoute.snapshot.parent?.data[RESOLVER_DATA_KEY];
 
-            this.teamId = data.team.id;
-            this.teamMembershipId = data.teamPlayer.player.id;
+        this.teamId = data.team.id;
+        this.teamMembershipId = data.teamPlayer.player.id;
 
-            const teamPlayer = data.teamPlayer;
+        const teamPlayer = data.teamPlayer;
 
-            this.teamPlayer = teamPlayer;
-            this.team = data.team;
+        this.teamPlayer = teamPlayer;
+        this.team = data.team;
 
-            this.form.patchValue(this.initialData);
-        });
+        this.form.patchValue(this.initialData);
+
+        this.activeDatesHelperTexts = [`Must be greater than Team's date founded (${this.team.dateFounded})`];
     }
 
     onSubmit(): void {

@@ -9,16 +9,16 @@ import TeamPlayerMapper from '../../../mappers/TeamPlayerMapper';
 import getRoutableException from '../../../utils/getRoutableException';
 import ClientSideErrorException from '../../../exceptions/ClientSideErrorException';
 
-export interface ITeamPlayerLayoutPageResolverData {
+export interface ITeamMembershipLayoutPageResolverData {
     team: Team;
     teamPlayer: TeamPlayer;
 }
 
 @Injectable({ providedIn: 'root' })
-export class TeamPlayerLayoutPageResolver implements Resolve<ITeamPlayerLayoutPageResolverData> {    
+export class TeamMembershipLayoutPageResolver implements Resolve<ITeamMembershipLayoutPageResolverData> {    
     constructor(private teamDataAccess: TeamDataAccessService) {}
 
-    resolve(route: ActivatedRouteSnapshot): Observable<ITeamPlayerLayoutPageResolverData> {
+    resolve(route: ActivatedRouteSnapshot): Observable<ITeamMembershipLayoutPageResolverData> {
         let teamId = route.paramMap.get('teamId');
         if (teamId == null) {
             throw new ClientSideErrorException('Team Player Layout: teamId parameter is null.');

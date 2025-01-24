@@ -8,6 +8,8 @@ import { TeamLayoutPageComponent } from './teams/team-layout/team-layout-page.co
 import { TeamLayoutPageResolver } from './teams/team-layout/team-layout-page.resolver';
 import { UpdateTeamPageComponent } from './teams/team-layout/update-team-page/update-team-page.component';
 import { teamMembershipRoutes } from './app.routes.team-detail.membership-detail';
+import { DeleteTeamPageComponent } from './teams/team-layout/delete-team-page/delete-team-page.component';
+import { AuthGuard } from '../guards/auth-guard';
 
 export const teamDetailRoutes: Routes = [
     {
@@ -18,6 +20,12 @@ export const teamDetailRoutes: Routes = [
         data: { breadcrumb: null },
         children: [
             {
+                path: 'delete',
+                component: DeleteTeamPageComponent,
+                data: { breadcrumb: 'Delete' },
+                canActivate: [AuthGuard],
+            },
+            {
                 path: 'memberships',
                 component: ListTeamPlayersPageComponent,
                 data: { breadcrumb: 'Memberships' },
@@ -26,6 +34,7 @@ export const teamDetailRoutes: Routes = [
                 path: 'memberships/add',
                 component: CreateTeamMembershipPageComponent,
                 data: { breadcrumb: 'Create Membership' },
+                canActivate: [AuthGuard],
             },
             {
                 path: '',
@@ -36,12 +45,13 @@ export const teamDetailRoutes: Routes = [
                 path: 'update',
                 component: UpdateTeamPageComponent,
                 data: { breadcrumb: 'Update' },
+                canActivate: [AuthGuard],
             },
         ],
     },
     {
         path: 'memberships',
-        data: { breadcrumb: "Memberships" },
+        data: { breadcrumb: 'Memberships' },
         children: teamMembershipRoutes,
     },
 ];

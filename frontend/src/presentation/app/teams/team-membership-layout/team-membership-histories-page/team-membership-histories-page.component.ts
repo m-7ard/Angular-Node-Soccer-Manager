@@ -20,10 +20,8 @@ import TeamMembership from '../../../../models/TeamMembership';
     CommonModule,
     MixinStyledCardDirectivesModule,
     RouterModule,
-    CoverImageComponent,
     PageDirectivesModule,
     DividerComponent,
-    MatchElementComponent,
     ContentGridDirectivesModule,
     TeamMembershipHistoryElement
 ],
@@ -40,6 +38,4 @@ export class TeamMembershipHistoriesPageComponent implements OnInit {
         this.teamMembershipHistories = data.teamMembershipHistories;
         this.teamMembership = data.teamMembership;
     }
-
-
 }

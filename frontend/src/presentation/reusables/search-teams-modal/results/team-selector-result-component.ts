@@ -17,7 +17,6 @@ import Team from '../../../models/Team';
         CoverImageComponent,
         MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
-        ZeebraTextComponent,
         PanelDirectivesModule,
     ],
     template: `
@@ -38,9 +37,6 @@ import Team from '../../../models/Team';
                 <div class="overflow-hidden">
                     <div class="token-card--header--primary-text">
                         {{ team.name }}
-                    </div>
-                    <div class="truncate token-card--header--secondary-text">
-                        <app-zeebra-text></app-zeebra-text>
                     </div>
                 </div>
             </section>

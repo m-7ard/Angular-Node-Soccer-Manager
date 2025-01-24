@@ -2,7 +2,7 @@
 <div [appPageDirective]="{ pageSize: 'mixin-page-base' }" appContentGrid>
     <section
         appPageSectionDirective
-        class="token-default-flex-col token-body-section grow"
+        class="token-default-flex-col token-body-section"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
         <header>
@@ -12,13 +12,13 @@
             </div>
         </header>
         <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
-            <app-match-element *ngFor="let match of matches" [match]="match" class="bassi-1/3 grow" />
+            <app-match-element *ngFor="let match of matches" [match]="match" class="basis-1/3 grow" />
         </section>
     </section>
     <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
     <section
         appPageSectionDirective
-        class="token-default-flex-col token-body-section grow"
+        class="token-default-flex-col token-body-section"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
         <header>
@@ -38,7 +38,7 @@
             <div class="token-default-title">Recently Added Players</div>
         </header>
         <section class="flex flex-row gap-3 flex-wrap" appPageSectionDirective>
-            <app-player-element *ngFor="let player of players" [player]="player" class="bassi-1/3 grow" />
+            <app-player-element *ngFor="let player of players" [player]="player" class="basis-1/3 grow" />
         </section>
     </section>
 </div>

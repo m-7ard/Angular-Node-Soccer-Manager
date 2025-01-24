@@ -10,25 +10,21 @@
     [routerLink]="url"
 >
     <section appMixinStyledCardSection>
-            <div class="token-base-text">
-                {{ teamMembershipHistory.dateEffectiveFrom | date }}
-            </div>
+        <div class="token-base-text">
+            {{ teamMembershipHistory.dateEffectiveFrom | date: "yyyy-MM-dd HH:mm:ss" }}
+        </div>
     </section>
     <section appMixinStyledCardSection>
         <ul>
             <li class="token-default-list">
-                <div class="token-default-list__label ">
-                    Number
-                </div>
-                <div class="token-default-list__value ">
+                <div class="token-default-list__label">Number</div>
+                <div class="token-default-list__value">
                     {{ teamMembershipHistory.number }}
                 </div>
             </li>
             <li class="token-default-list">
-                <div class="token-default-list__label ">
-                    Position
-                </div>
-                <div class="token-default-list__value ">
+                <div class="token-default-list__label">Position</div>
+                <div class="token-default-list__value">
                     {{ teamMembershipHistory.position.label }}
                 </div>
             </li>

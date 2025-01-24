@@ -4,6 +4,8 @@ import { TeamMembershipHistoryLayoutComponent } from './teams/team-membership-hi
 import { TeamMembershipHistoryLayoutResolver } from './teams/team-membership-history-layout/team-membership-history-layout.resolver';
 import { TeamMembershipHistoryDetailsPageComponent } from './teams/team-membership-history-layout/team-membership-history-details-page/team-membership-history-details-page.component';
 import { UpdateTeamMembershipHistoryPageComponent } from './teams/team-membership-history-layout/update-team-membership-history-page/update-team-membership-history-page.component';
+import { AuthGuard } from '../guards/auth-guard';
+import { DeleteTeamMembershipHistoryPageComponent } from './teams/team-membership-history-layout/delete-team-membership-history-page/delete-team-membership-history-page.component';
 
 export const teamMembershipHistoryDetailRoutes: Routes = [
     {
@@ -21,7 +23,14 @@ export const teamMembershipHistoryDetailRoutes: Routes = [
             {
                 path: 'update',
                 component: UpdateTeamMembershipHistoryPageComponent,
-                data: { breadcrumb: "Update" },
+                data: { breadcrumb: 'Update' },
+                canActivate: [AuthGuard],
+            },
+            {
+                path: 'delete',
+                component: DeleteTeamMembershipHistoryPageComponent,
+                data: { breadcrumb: 'Delete' },
+                canActivate: [AuthGuard],
             },
         ],
     },

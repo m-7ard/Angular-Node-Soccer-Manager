@@ -72,9 +72,11 @@ export class UpdateTeamMembershipHistoryPageComponent {
     teamMembership: TeamMembership = null!;
     teamMembershipHistory: TeamMembershipHistory = null!;
 
+    dateEffectiveFromHelperText: string[] = null!;
+
     private get initialData() {
         return {
-            dateEffectiveFrom: parsers.parseJsDateToInputDate(this.teamMembershipHistory.dateEffectiveFrom),
+            dateEffectiveFrom: parsers.parseJsDateToInputDatetimeLocal(this.teamMembershipHistory.dateEffectiveFrom),
             number: this.teamMembershipHistory.number.toString(),
             position: this.teamMembershipHistory.position.value,
         };
@@ -110,6 +112,16 @@ export class UpdateTeamMembershipHistoryPageComponent {
         this.teamMembershipHistory = data.teamMembershipHistory;
 
         this.form.patchValue(this.initialData);
+
+        this.dateEffectiveFromHelperText = [
+            `Must be greater or equal than Team Membership's active from date (${this.teamMembership.activeFrom})`,
+        ];
+
+        if (this.teamMembership.activeTo != null) {
+            this.dateEffectiveFromHelperText.push(
+                `Must be less than Team Membership's active to date (${this.teamMembership.activeTo})`,
+            );
+        }
     }
 
     onSubmit(): void {

@@ -4,12 +4,8 @@ import { RouterModule } from '@angular/router';
 import { PopoverModule } from 'primeng/popover';
 import TeamPlayer from '../../../models/TeamPlayer';
 import { CoverImageComponent } from '../../cover-image/cover-image.component';
-import { DividerComponent } from '../../divider/divider.component';
 import { PanelDirectivesModule } from '../../panel/panel.directive.module';
-import { PrimeNgPopoverDirective } from '../../prime-ng-popover/prime-ng-popover.directive';
-import { MixinStyledButtonDirective } from '../../styled-button/styled-button.directive';
 import { MixinStyledCardDirectivesModule } from '../../styled-card/styled-card.module';
-import { ZeebraTextComponent } from '../../zeebra-text/zeebra-text.component';
 
 @Component({
     selector: 'app-team-player-element',
@@ -18,12 +14,8 @@ import { ZeebraTextComponent } from '../../zeebra-text/zeebra-text.component';
         CoverImageComponent,
         CommonModule,
         RouterModule,
-        ZeebraTextComponent,
-        MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
-        PrimeNgPopoverDirective,
         PanelDirectivesModule,
-        DividerComponent,
         PopoverModule,
         RouterModule,
     ],

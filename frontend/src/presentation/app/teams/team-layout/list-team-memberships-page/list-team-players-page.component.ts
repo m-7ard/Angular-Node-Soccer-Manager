@@ -17,7 +17,6 @@ import { TeamPlayerElementComponent } from '../../../../reusables/model-elements
     imports: [
         CommonModule,
         RouterModule,
-        MixinStyledButtonDirective,
         MixinStyledCardDirectivesModule,
         PageDirectivesModule,
         ContentGridDirectivesModule,

@@ -27,7 +27,7 @@
                 <app-pick-single-player [formControlName]="name"></app-pick-single-player>
             </ng-template>
         </app-form-field>
-        <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom">
+        <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom" [helperTexts]="activeFromHelperText">
             <ng-template let-name="name">
                 <app-char-field
                     [formControlName]="name"

@@ -19,6 +19,8 @@ import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-ca
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
 import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
+import getRoutableException from '../../../../utils/getRoutableException';
+import { ExceptionNoticeService } from '../../../../services/exception-notice.service';
 
 interface IFormControls {
     name: FormControl<string>;
@@ -55,7 +57,7 @@ export class UpdateTeamPageComponent {
     private get initialData() {
         return {
             name: this.team.name,
-            dateFounded: parsers.parseJsDateToInputDate(this.team.dateFounded),
+            dateFounded: parsers.parseJsDateToInputDatetimeLocal(this.team.dateFounded),
         };
     }
 
@@ -63,6 +65,7 @@ export class UpdateTeamPageComponent {
         private router: Router,
         private teamDataAccess: TeamDataAccessService,
         private activatedRoute: ActivatedRoute,
+        private exceptionNoticeService: ExceptionNoticeService,
     ) {
         this.form = new FormGroup<IFormControls>({
             name: new FormControl('', {
@@ -93,7 +96,12 @@ export class UpdateTeamPageComponent {
             })
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    if (err.status === 400) {
+                        this.errors = PresentationErrorFactory.ApiErrorsToPresentationErrors(err.error);
+                    } else {
+                        this.exceptionNoticeService.dispatchError(new Error(JSON.stringify(err.message)));
+                    }
+
                     return of(null);
                 }),
             )
@@ -102,7 +110,7 @@ export class UpdateTeamPageComponent {
                     if (response === null) {
                         return;
                     }
-                    this.router.navigate(['/teams']);
+                    this.router.navigate([`/teams/${response.id}`]);
                 },
             });
     }

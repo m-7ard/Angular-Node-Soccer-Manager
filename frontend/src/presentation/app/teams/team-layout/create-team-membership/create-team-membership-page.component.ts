@@ -65,6 +65,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
     errors: IErrorSchema = {};
     id: string = null!;
     team: Team = null!;
+    activeFromHelperText: string[] = null!;
 
     constructor(
         private readonly router: Router,
@@ -108,6 +109,7 @@ export class CreateTeamMembershipPageComponent implements OnInit {
         this.team = data.team;
 
         this.id = id;
+        this.activeFromHelperText = [`Must be greater than Team's date founded (${this.team.dateFounded})`];
     }
 
     onReset() {

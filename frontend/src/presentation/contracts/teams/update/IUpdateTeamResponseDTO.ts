@@ -1,5 +1,5 @@
-interface ICreateTeamResponseDTO {
+interface IUpdateTeamResponseDTO {
     id: string;
 }
 
-export default ICreateTeamResponseDTO;
+export default IUpdateTeamResponseDTO;
