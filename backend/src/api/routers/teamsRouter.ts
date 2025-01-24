@@ -97,7 +97,7 @@ registerAction({
 
 registerAction({
     router: teamsRouter,
-    path: "/:teamId/delete-membership/:teamMembershipId",
+    path: "/:teamId/memberships/:teamMembershipId/delete",
     method: "DELETE",
     guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {

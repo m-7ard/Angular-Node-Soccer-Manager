@@ -107,7 +107,7 @@ registerAction({
 registerAction({
     router: matchesRouter,
     path: "/:matchId/delete",
-    method: "POST",
+    method: "DELETE",
     guards: [userIsAuthenticatedGuard],
     initialiseAction: () => {
         const requestDispatcher = diContainer.resolve(DI_TOKENS.REQUEST_DISPATCHER);

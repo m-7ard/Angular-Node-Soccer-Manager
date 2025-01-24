@@ -29,6 +29,7 @@ import CreateTeamMembershipHistoryCommandHandler, { CreateTeamMembershipHistoryC
 import UpdateTeamMembershipHistoryCommandHandler, { UpdateTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/UpdateTeamMembershipHistoryCommandHandler";
 import ReadFullPlayerQueryHandler, { ReadFullPlayerQuery } from "application/handlers/players/ReadFullPlayerQueryHandler";
 import DeleteTeamMembershipHistoryCommandHandler, { DeleteTeamMembershipHistoryCommand } from "application/handlers/team_membership_histories/DeleteTeamMembershipHistoryCommandHandler";
+import DeleteMatchCommandHandler, { DeleteMatchCommand } from "application/handlers/matches/DeleteMatchCommandHandler";
 
 function createRequestDispatcher() {
     const requestDispatcher = new RequestDispatcher();
@@ -62,7 +63,7 @@ function createRequestDispatcher() {
     requestDispatcher.registerHandler(ListTeamsQuery, new ListTeamsQueryHandler({ teamRepository: teamRepository }));
     requestDispatcher.registerHandler(ReadTeamQuery, new ReadTeamQueryHandler({ teamExistsValidator: teamExistsValidator }));
     requestDispatcher.registerHandler(UpdateTeamCommand, new UpdateTeamCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator }));
-    requestDispatcher.registerHandler(DeleteTeamCommand, new DeleteTeamCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator }));
+    requestDispatcher.registerHandler(DeleteTeamCommand, new DeleteTeamCommandHandler({ teamRepository: teamRepository, teamExistsValidator: teamExistsValidator, matchRepository: matchRepository }));
 
     // Team Memberships
     requestDispatcher.registerHandler(
@@ -112,6 +113,7 @@ function createRequestDispatcher() {
         RecordGoalCommand,
         new RecordGoalCommandHandler({ matchRepository: matchRepository, matchExistsValidator: matchExistsValidator, addGoalServiceFactory: addGoalServiceFactory }),
     );
+    requestDispatcher.registerHandler(DeleteMatchCommand, new DeleteMatchCommandHandler({ matchRepository: matchRepository, matchExistsValidator: matchExistsValidator }));
 
     return requestDispatcher;
 }

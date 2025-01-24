@@ -50,7 +50,7 @@ describe("Delete TeamMembership Integration Test;", () => {
         const response = await adminSuperTest({
             agent: supertest(server)
                 .delete(
-                    `/api/teams/${team_001.id}/delete-membership/${teamMembership_001.id}`,
+                    `/api/teams/${team_001.id}/memberships/${teamMembership_001.id}/delete`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -72,7 +72,7 @@ describe("Delete TeamMembership Integration Test;", () => {
         const response = await adminSuperTest({
             agent: supertest(server)
                 .delete(
-                    `/api/teams/${INVALID_TEAM_ID}/delete-membership/${teamMembership_001.id}`,
+                    `/api/teams/${INVALID_TEAM_ID}/memberships/${teamMembership_001.id}/delete`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),
@@ -92,7 +92,7 @@ describe("Delete TeamMembership Integration Test;", () => {
         const response = await adminSuperTest({
             agent: supertest(server)
                 .delete(
-                    `/api/teams/${team_001.id}/delete-membership/${INVALID_ID}`,
+                    `/api/teams/${team_001.id}/memberships/${INVALID_ID}/delete`,
                 )
                 .send(request)
                 .set("Content-Type", "application/json"),

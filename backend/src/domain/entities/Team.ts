@@ -71,7 +71,6 @@ class Team {
     }
 
     public findMemberById(teamMembershipId: TeamMembershipId) {
-        console.log(this.teamMemberships);
         return this.teamMemberships.find((membership) => membership.id.equals(teamMembershipId));
     }
 

@@ -8,7 +8,6 @@ import { Request } from "express";
 import IDeleteMatchRequestDTO from "api/DTOs/matches/delete/IDeleteMatchRequestDTO";
 import IDeleteMatchResponseDTO from "api/DTOs/matches/delete/IDeleteMatchResponseDTO";
 import { DeleteMatchCommand } from "application/handlers/matches/DeleteMatchCommandHandler";
-import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import APPLICATION_SERVICE_CODES from "application/errors/APPLICATION_SERVICE_CODES";
 
 type ActionRequest = { dto: IDeleteMatchRequestDTO; matchId: string };
@@ -42,7 +41,7 @@ class DeleteMatchAction implements IAction<ActionRequest, ActionResponse> {
         }
 
         return new JsonResponse({
-            status: StatusCodes.CREATED,
+            status: StatusCodes.OK,
             body: {},
         });
     }

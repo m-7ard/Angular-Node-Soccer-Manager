@@ -4,6 +4,8 @@ import { err, ok } from "neverthrow";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import MatchExistsValidator from "application/services/MatchExistsValidator";
 import IApplicationError from "application/errors/IApplicationError";
+import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
+import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 
 type CommandProps = {
     id: string;
@@ -37,6 +39,9 @@ export default class DeleteMatchCommandHandler implements IRequestHandler<Delete
         }
 
         const match = matchExistsResult.value;
+        if (match.events.length) {
+            return err(ApplicationErrorFactory.createSingleListError({ message: `Cannot delete match while it has Match Events associated with it.`, code: APPLICATION_ERROR_CODES.NotAllowed, path: [] }))
+        }
 
         await this._matchRepository.deleteAsync(match);
         return ok(undefined);

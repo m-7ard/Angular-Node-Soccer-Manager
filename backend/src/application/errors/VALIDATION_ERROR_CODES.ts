@@ -1,6 +1,5 @@
 const APPLICATION_ERROR_CODES = {
     StateMismatch: "StateMismatch",
-    ModelDoesNotExist: "ModelDoesNotExist",
     IntegrityError: "IntegrityError",
     ModelAlreadyExists: "ModelAlreadyExists",
     OperationFailed: "OperationFailed",
