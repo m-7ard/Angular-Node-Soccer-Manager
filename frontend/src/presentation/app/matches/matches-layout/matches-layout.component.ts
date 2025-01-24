@@ -29,7 +29,6 @@ import { FormFieldComponent, HeaderNavbarButtons } from '../../../reusables/head
 export class MatchesLayoutComponent {
     public readonly buttons: HeaderNavbarButtons = [
         { label: 'List', url: '/matches' },
-        { label: 'Create', url: '/matches/create' },
         { label: 'Schedule', url: '/matches/schedule' },
     ];
 }
