@@ -8,62 +8,70 @@
 >
     <section
         appPageSectionDirective
-        class="token-default-flex-col token-body-section grow"
+        class="token-default-flex-col token-body-section"
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
     >
         <header>
             <div class="token-default-title">Register User</div>
         </header>
-        <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    </section>
+    <app-divider [appContentGridTrack]="{ contentGridTrack: 'base' }" />
+    <section
+        class="token-default-flex-col grow token-body-section"
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+        appPageSectionDirective
+    >
         <section *ngIf="errors['_'] != null">
             <app-form-errors [errors]="errors['_']"></app-form-errors>
         </section>
-        <fieldset class="flex flex-col gap-3">
-            <app-form-field [name]="'email'" [errors]="errors.email">
-                <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                    ></app-char-field>
-                </ng-template>
-            </app-form-field>
-            <app-form-field [name]="'password'" [errors]="errors.password">
-                <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                        type="password"
-                    ></app-char-field>
-                </ng-template>
-            </app-form-field>
-            <app-form-field [name]="'name'" [errors]="errors.name">
-                <ng-template let-name="name">
-                    <app-char-field
-                        [formControlName]="name"
-                        [options]="{
-                            size: 'mixin-char-input-base',
-                            theme: 'theme-input-generic-white'
-                        }"
-                    ></app-char-field>
-                </ng-template>
-            </app-form-field>
-        </fieldset>
-        <footer class="token-default-flex-row justify-end">
-            <button
-                [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-white' }"
-                type="reset"
-            >
-                Reset
-            </button>
-            <button [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-green' }">
-                Register User
-            </button>
-        </footer>
+        <app-form-field [name]="'email'" [errors]="errors.email">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                ></app-char-field>
+            </ng-template>
+        </app-form-field>
+        <app-form-field [name]="'password'" [errors]="errors.password">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                    type="password"
+                ></app-char-field>
+            </ng-template>
+        </app-form-field>
+        <app-form-field [name]="'name'" [errors]="errors.name">
+            <ng-template let-name="name">
+                <app-char-field
+                    [formControlName]="name"
+                    [options]="{
+                        size: 'mixin-char-input-base',
+                        theme: 'theme-input-generic-white'
+                    }"
+                ></app-char-field>
+            </ng-template>
+        </app-form-field>
+    </section>
+    <section
+        class="token-default-flex-row justify-end token-body-section"
+        appPageSectionDirective
+        [appContentGridTrack]="{ contentGridTrack: 'base' }"
+    >
+        <button
+            [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-white' }"
+            type="reset"
+        >
+            Reset
+        </button>
+        <button [appMixinStyledButton]="{ size: 'mixin-Sbutton-base', theme: 'theme-Sbutton-generic-green' }">
+            Register User
+        </button>
     </section>
 </form>
