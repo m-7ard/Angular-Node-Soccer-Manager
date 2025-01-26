@@ -25,7 +25,7 @@ class MatchDbEntity implements IMatchSchema {
     events: MatchEventDbEntity[] = [];
 
     public async loadMatchEvents(db: IDatabaseService): Promise<void> {
-        const matchEvents = await db.query<IMatchEventSchema>({ statement: `SELECT * FROM ${MatchEventDbEntity.TABLE_NAME} WHERE match_id = '${this.id}'` });
+        const matchEvents = await db.queryRows<IMatchEventSchema>({ statement: `SELECT * FROM ${MatchEventDbEntity.TABLE_NAME} WHERE match_id = '${this.id}'` });
         this.events = matchEvents.map((row) => MatchEventMapper.schemaToDbEntity(row));
     }
 

@@ -19,7 +19,7 @@ class PlayerRepository implements IPlayerRepository {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getDeleteStatement();
 
-        const headers = await this._db.execute({
+        const headers = await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -31,7 +31,7 @@ class PlayerRepository implements IPlayerRepository {
 
     async getByIdAsync(id: PlayerId): Promise<Player | null> {
         const sqlEntry = PlayerDbEntity.getByIdStatement(id.value);
-        const [player] = await this._db.execute<PlayerDbEntity | null>({
+        const [player] = await this._db.executeRows<PlayerDbEntity | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -43,7 +43,7 @@ class PlayerRepository implements IPlayerRepository {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getInsertStatement();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -55,7 +55,7 @@ class PlayerRepository implements IPlayerRepository {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getUpdateStatement();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -74,7 +74,7 @@ class PlayerRepository implements IPlayerRepository {
             query = query.limit(criteria.limitBy);
         }
 
-        const rows = await this._db.query<IPlayerSchema>({
+        const rows = await this._db.queryRows<IPlayerSchema>({
             statement: query.toString(),
         });
         const players = rows.map(PlayerMapper.schemaToDbEntity);

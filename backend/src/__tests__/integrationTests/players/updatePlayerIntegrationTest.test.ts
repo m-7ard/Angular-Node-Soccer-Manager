@@ -49,7 +49,7 @@ describe("Update Player Integration Test;", () => {
 
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty("id");
-        const [row] = await db.query<IPlayerSchema | null>({
+        const [row] = await db.queryRows<IPlayerSchema | null>({
             statement: `SELECT * FROM player WHERE id = ${player_001.id}`,
         });
         expect(row).not.toBeNull();

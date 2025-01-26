@@ -1,5 +1,5 @@
 import getMigrations from "api/utils/getMigrations";
-import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
+import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
 
 describe("SQL Migrations;", () => {
     it("getMigrations; Migrations Exist; Success;", async () => {
@@ -20,7 +20,7 @@ describe("SQL Migrations;", () => {
         await db.initialise(migrations);
 
         const lookForTable = async (name: string) => {
-            const result = await db.query<number>({
+            const result = await db.queryRows<number>({
                 statement: `SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'football_manager') 
                 AND (TABLE_NAME = '${name}');
             `,

@@ -25,7 +25,7 @@ class MatchRepository implements IMatchRepository {
                 const dbEntity = MatchEventMapper.domainToDbEntity(matchEvent);
                 const sqlEntry = dbEntity.getInsertStatement();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -40,7 +40,7 @@ class MatchRepository implements IMatchRepository {
             const dbEntity = MatchEventMapper.domainToDbEntity(match.events[i]);
             const sqlEntry = dbEntity.getDeleteStatement();
 
-            const headers = await this._db.execute({
+            const headers = await this._db.executeHeaders({
                 statement: sqlEntry.sql,
                 parameters: sqlEntry.values,
             });
@@ -53,7 +53,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getDeleteEntry();
 
-        const headers = await this._db.execute({
+        const headers = await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -65,7 +65,7 @@ class MatchRepository implements IMatchRepository {
 
     async getByIdAsync(id: string): Promise<Match | null> {
         const sqlEntry = MatchDbEntity.getByIdStatement(id);
-        const [row] = await this._db.execute<IMatchSchema | null>({
+        const [row] = await this._db.executeRows<IMatchSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -84,7 +84,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -119,7 +119,7 @@ class MatchRepository implements IMatchRepository {
 
         const queryString = query.toString();
 
-        const rows = await this._db.query<IMatchSchema>({
+        const rows = await this._db.queryRows<IMatchSchema>({
             statement: queryString,
         });
         const matches = rows.map(MatchMapper.schemaToDbEntity);
@@ -135,7 +135,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getUpdateEntry();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });

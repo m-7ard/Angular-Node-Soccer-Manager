@@ -19,10 +19,11 @@ import PlayerExistsValidator from "application/services/PlayerExistsValidator";
 import TeamExistsValidator from "application/services/TeamExistsValidator";
 import MatchExistsValidator from "application/services/MatchExistsValidator";
 import UserExistsValidator from "application/services/UserExistsValidator";
-import AddGoalService, { AddGoalServiceFactory } from "application/services/CanAddGoalValidator";
+import { AddGoalServiceFactory } from "application/services/CanAddGoalValidator";
 import { TeamMembershipExistsValidatorFactory } from "application/services/TeamMembershipValidator";
+import path from "path";
 
-export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService }) {
+export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService; mode: "PRODUCTION" | "DEVELOPMENT" }) {
     const { database } = config;
     const app = express();
     app.options("*", cors());
@@ -81,5 +82,17 @@ export default function createApplication(config: { port: number; middleware: Ar
     app.use("/media", express.static("media"));
     app.use("/static", express.static("static"));
     app.use(errorLogger);
+
+    const DIST_DIR = process.cwd();
+    const STATIC_DIR = `${DIST_DIR}/src/api/static/`;
+
+    if (config.mode === "PRODUCTION") {
+        app.use(express.static(STATIC_DIR));
+
+        app.get("*", (req, res) => {
+            res.sendFile(path.join(STATIC_DIR, "index.html"));
+        });
+    }
+
     return app;
 }

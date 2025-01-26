@@ -36,7 +36,7 @@ describe("Delete Player Integration Test;", () => {
 
         expect(response.status).toBe(200);
 
-        const [row] = await db.query<IPlayerSchema | null>({ statement: `SELECT * FROM player WHERE id = ${player_001.id}` });
+        const [row] = await db.queryRows<IPlayerSchema | null>({ statement: `SELECT * FROM player WHERE id = ${player_001.id}` });
         expect(row == null).toBe(true);
     });
 

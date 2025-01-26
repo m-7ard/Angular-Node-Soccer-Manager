@@ -44,7 +44,7 @@ describe("Delete Team Integration Test;", () => {
         });
         expect(response.status).toBe(200);
 
-        const [row] = await db.query<ITeamSchema | null>({
+        const [row] = await db.queryRows<ITeamSchema | null>({
             statement: `SELECT * FROM team WHERE id = ${team_001.id}`,
         });
         expect(row == null).toBe(true);

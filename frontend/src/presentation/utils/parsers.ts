@@ -7,7 +7,7 @@ const parsers = {
         return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
     },
     parseJsDateToInputDatetimeLocal: (date: Date): string => {
-        return DateTime.fromJSDate(date).toFormat("yyyy-MM-dd'T'HH:mm");
+        return DateTime.fromJSDate(date).toFormat("yyyy-MM-dd'T'HH:mm:ss");
     },
 };
 

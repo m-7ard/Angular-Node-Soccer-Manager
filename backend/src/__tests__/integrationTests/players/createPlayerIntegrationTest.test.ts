@@ -41,7 +41,7 @@ describe("Create Player Integration Test;", () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
-        const rows = await db.query<IPlayerSchema>({ statement: "SELECT * FROM player" });
+        const rows = await db.queryRows<IPlayerSchema>({ statement: "SELECT * FROM player" });
         expect(rows.length).toBe(1);
     });
 

@@ -19,7 +19,6 @@ import { MixinStyledCardDirectivesModule } from '../../../../reusables/styled-ca
 import { DividerComponent } from '../../../../reusables/divider/divider.component';
 import { PageDirectivesModule } from '../../../../reusables/page/page.directive.module';
 import { ContentGridDirectivesModule } from '../../../../reusables/content-grid/content-grid.directive.module';
-import getRoutableException from '../../../../utils/getRoutableException';
 import { ExceptionNoticeService } from '../../../../services/exception-notice.service';
 
 interface IFormControls {

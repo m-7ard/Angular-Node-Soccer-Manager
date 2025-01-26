@@ -63,7 +63,7 @@ describe("Update TeamMembership Integration Test;", () => {
         });
 
         expect(response.status).toBe(200);
-        const [row] = await db.query<ITeamMembershipSchema>({
+        const [row] = await db.queryRows<ITeamMembershipSchema>({
             statement: "SELECT * FROM team_membership",
         });
         expect(row.active_to).not.toBeNull();

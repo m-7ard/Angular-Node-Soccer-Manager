@@ -28,7 +28,7 @@
         <section *ngIf="errors['_'] != null">
             <app-form-errors [errors]="errors['_']"></app-form-errors>
         </section>
-        <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom"  [helperTexts]="activeDatesHelperTexts">
+        <app-form-field [name]="'activeFrom'" [errors]="errors.activeFrom" [helperTexts]="activeDatesHelperTexts">
             <ng-template let-name="name">
                 <app-char-field
                     [formControlName]="name"
@@ -36,7 +36,8 @@
                         size: 'mixin-char-input-base',
                         theme: 'theme-input-generic-white'
                     }"
-                    [type]="'datetime-local'"
+                    type="datetime-local"
+                    step="1"
                 ></app-char-field>
             </ng-template>
         </app-form-field>
@@ -48,7 +49,8 @@
                         size: 'mixin-char-input-base',
                         theme: 'theme-input-generic-white'
                     }"
-                    [type]="'datetime-local'"
+                    type="datetime-local"
+                    step="1"
                 ></app-char-field>
             </ng-template>
         </app-form-field>

@@ -1,1 +1,0 @@
-- adding auth guards to the api routes

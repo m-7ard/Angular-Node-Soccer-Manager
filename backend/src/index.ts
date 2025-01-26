@@ -11,10 +11,11 @@ import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
-import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
+import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
 
 const hostname = "127.0.0.1";
-const port = 3000;
+const environment = (process.env.NODE_ENV || 'DEVELOPMENT') as "DEVELOPMENT" | "PRODUCTION";
+const port = process.env.PORT == null ? 4200 : parseInt(process.env.PORT);
 
 async function main() {
     const db = new MySQLDatabaseService({
@@ -28,9 +29,10 @@ async function main() {
     await db.initialise(migrations);
 
     const app = createApplication({
-        port: 3000,
+        port: port,
         middleware: [responseLogger],
         database: db,
+        mode: environment
     });
 
     const server = app.listen(port, hostname, () => {

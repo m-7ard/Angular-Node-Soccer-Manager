@@ -41,7 +41,7 @@ describe("Create Team Integration Test;", () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
-        const rows = await db.query<ITeamSchema>({ statement: "SELECT * FROM team" });
+        const rows = await db.queryRows<ITeamSchema>({ statement: "SELECT * FROM team" });
         expect(rows.length).toBe(1);
     });
 

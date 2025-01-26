@@ -13,7 +13,7 @@ class TeamDbEntity implements ITeamSchema {
     }
 
     public async loadTeamMemberships(db: IDatabaseService): Promise<void> {
-        const teamMemberships = await db.query<ITeamMembershipSchema>({ statement: `SELECT * FROM ${TeamMembershipDbEntity.TABLE_NAME} WHERE team_id = '${this.id}'` });
+        const teamMemberships = await db.queryRows<ITeamMembershipSchema>({ statement: `SELECT * FROM ${TeamMembershipDbEntity.TABLE_NAME} WHERE team_id = '${this.id}'` });
         this.team_memberships = teamMemberships.map((row) => TeamMembershipMapper.schemaToDbEntity(row));
     }
 

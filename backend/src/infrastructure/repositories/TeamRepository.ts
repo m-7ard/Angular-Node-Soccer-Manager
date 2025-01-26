@@ -32,7 +32,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipMapper.domainToDbEntity(teamMembership);
                 const sqlEntry = dbEntity.getInsertEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -40,7 +40,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getDeleteEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -48,7 +48,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getUpdateEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -56,7 +56,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getInsertEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -64,7 +64,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getUpdateEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -72,7 +72,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getDeleteEntry();
 
-                await this._db.execute({
+                await this._db.executeRows({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -84,7 +84,7 @@ class TeamRepository implements ITeamRepository {
 
     async getByIdAsync(id: TeamId): Promise<Team | null> {
         const sqlEntry = TeamDbEntity.getByIdStatement(id.value);
-        const [row] = await this._db.execute<ITeamSchema | null>({
+        const [row] = await this._db.executeRows<ITeamSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -108,7 +108,7 @@ class TeamRepository implements ITeamRepository {
         const dbEntity = TeamMapper.domainToDbEntity(team);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -120,7 +120,7 @@ class TeamRepository implements ITeamRepository {
         const dbEntity = TeamMapper.domainToDbEntity(team);
         const sqlEntry = dbEntity.getUpdateEntry();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -147,7 +147,7 @@ class TeamRepository implements ITeamRepository {
             query = query.limit(criteria.limitBy);
         }
 
-        const rows = await this._db.query<ITeamSchema>({
+        const rows = await this._db.queryRows<ITeamSchema>({
             statement: query.toString(),
         });
         const teams = rows.map(TeamMapper.schemaToDbEntity);
@@ -170,7 +170,7 @@ class TeamRepository implements ITeamRepository {
             const dbEntity = TeamMembershipMapper.domainToDbEntity(teamMembership);
             const sqlEntry = dbEntity.getDeleteEntry();
 
-            const headers = await this._db.execute({
+            const headers = await this._db.executeHeaders({
                 statement: sqlEntry.sql,
                 parameters: sqlEntry.values,
             });
@@ -183,7 +183,7 @@ class TeamRepository implements ITeamRepository {
         const dbEntity = TeamMapper.domainToDbEntity(team);
         const sqlEntry = dbEntity.getDeleteEntry();
 
-        const headers = await this._db.execute({
+        const headers = await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });

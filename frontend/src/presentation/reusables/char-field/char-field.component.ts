@@ -31,6 +31,7 @@ export class CharFieldComponent implements ControlValueAccessor {
 
     writeValue(obj: string): void {
         this.value = obj;
+        console.log(this.step)
     }
 
     registerOnChange(fn: (value: string) => void): void {
@@ -60,6 +61,7 @@ export class CharFieldComponent implements ControlValueAccessor {
         theme: 'theme-input-generic-white',
     };
     @Input() type?: string = 'text';
+    @Input() step?: string;
     @Input() autocomplete?: boolean = false;
     @Input() disabled?: boolean = false;
     @Input() placeholder?: string;

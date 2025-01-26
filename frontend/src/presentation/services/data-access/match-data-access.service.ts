@@ -16,12 +16,13 @@ import IMarkMatchCancelledRequestDTO from '../../contracts/matches/markMatchCanc
 import IMarkMatchCancelledResponseDTO from '../../contracts/matches/markMatchCancelled/IMarkMatchCancelledResponseDTO';
 import IRecordGoalRequestDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalRequestDTO';
 import IRecordGoalResponseDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalResponseDTO';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class MatchDataAccessService {
-    private readonly _baseUrl = `http://127.0.0.1:3000/api/matches`;
+    private readonly _baseUrl = `${environment}/api/matches`;
     constructor(private http: HttpClient) {}
 
     listMatches(request: IListMatchesRequestDTO) {

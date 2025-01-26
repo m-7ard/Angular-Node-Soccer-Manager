@@ -58,7 +58,7 @@ describe("Delete TeamMembership Integration Test;", () => {
         });
 
         expect(response.status).toBe(200);
-        const rows = await db.query<ITeamMembershipSchema>({
+        const rows = await db.queryRows<ITeamMembershipSchema>({
             statement: "SELECT * FROM team_membership",
         });
         expect(rows.length).toBe(0);

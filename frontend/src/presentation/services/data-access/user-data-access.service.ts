@@ -5,12 +5,13 @@ import IRegisterUserResponseDTO from '../../contracts/users/register/IRegisterUs
 import ILoginUserResponseDTO from '../../contracts/users/login/ILoginUserResponseDTO';
 import ICurrentUserResponseDTO from '../../contracts/users/get-current/ICurrentUserResponseDTO';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserDataAccessService {
-    private readonly _baseUrl = `http://127.0.0.1:3000/api/users`;
+    private readonly _baseUrl = `${environment.apiUrl}/api/users`;
     constructor(private http: HttpClient) {}
 
     register(request: IRegisterUserRequestDTO) {

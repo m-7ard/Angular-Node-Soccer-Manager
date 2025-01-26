@@ -6,7 +6,7 @@ import IDatabaseService from "api/interfaces/IDatabaseService";
 import responseLogger from "api/middleware/responseLogger";
 import getMigrations from "api/utils/getMigrations";
 import { Server } from "http";
-import MySQLDatabaseService from "infrastructure/MySQLDatabaseService";
+import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
 
 const jestConsole = console;
 
@@ -22,9 +22,10 @@ export async function setUpIntegrationTest() {
     });
 
     const app = createApplication({
-        port: 3000,
+        port: 4200,
         middleware: [responseLogger],
         database: db,
+        mode: "DEVELOPMENT"
     });
 
     server = app.listen();

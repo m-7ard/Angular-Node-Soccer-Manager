@@ -62,7 +62,7 @@ describe("Delete Match Integration Test;", () => {
         });
 
         expect(response.status).toBe(200);
-        const matches = await db.query<IMatchSchema>({ statement: `SELECT * FROM ${MatchDbEntity.TABLE_NAME}` });
+        const matches = await db.queryRows<IMatchSchema>({ statement: `SELECT * FROM ${MatchDbEntity.TABLE_NAME}` });
         expect(matches.length).toBe(0);
     });
 

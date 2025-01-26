@@ -13,12 +13,13 @@ import IReadPlayerRequestDTO from '../../contracts/players/read/IReadPlayerReque
 import IReadPlayerResponseDTO from '../../contracts/players/read/IReadPlayerResponseDTO';
 import IReadFullPlayerRequestDTO from '../../contracts/players/read-full/IReadPlayerRequestDTO';
 import IReadFullPlayerResponseDTO from '../../contracts/players/read-full/IReadPlayerResponseDTO';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PlayerDataAccessService {
-    private readonly _baseUrl = `http://127.0.0.1:3000/api/players`;
+    private readonly _baseUrl = `${environment}/api/players`;
     constructor(private http: HttpClient) {}
 
     listPlayers(request: IListPlayersRequestDTO) {

@@ -49,7 +49,7 @@ describe("Update Team Integration Test;", () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty("id");
 
-        const [row] = await db.query<ITeamSchema>({
+        const [row] = await db.queryRows<ITeamSchema>({
             statement: `SELECT * FROM team WHERE id = ${team_001.id}`,
         });
         expect(row.name).toBe(request.name);

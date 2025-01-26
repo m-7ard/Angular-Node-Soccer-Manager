@@ -22,12 +22,13 @@ import IUpdateTeamResponseDTO from '../../contracts/teams/update/IUpdateTeamResp
 import IDeleteTeamMembershipHistoryRequestDTO from '../../contracts/teamMembershipHistories/delete/IDeleteTeamMembershipHistoryRequestDTO';
 import IDeleteTeamMembershipHistoryResponseDTO from '../../contracts/teamMembershipHistories/delete/IDeleteTeamMembershipHistoryResponseDTO';
 import IDeleteTeamRequestDTO from '../../contracts/teams/delete/IDeleteTeamRequestDTO';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TeamDataAccessService {
-    private readonly _baseUrl = `http://127.0.0.1:3000/api/teams`;
+    private readonly _baseUrl = `${environment.apiUrl}/api/teams`;
     constructor(private http: HttpClient) {}
 
     createTeam(request: ICreateTeamRequestDTO) {

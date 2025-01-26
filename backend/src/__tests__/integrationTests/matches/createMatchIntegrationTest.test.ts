@@ -15,7 +15,7 @@ let home_team: Team;
 let default_request: ICreateMatchRequestDTO;
 
 const wasCreated = async () => {
-    const rows = await db.query<IMatchSchema>({
+    const rows = await db.queryRows<IMatchSchema>({
         statement: "SELECT * FROM matches",
     });
     expect(rows.length).toBe(1);

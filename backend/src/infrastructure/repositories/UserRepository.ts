@@ -16,7 +16,7 @@ class UserRepository implements IUserRepository {
     async getByEmailAsync(email: string): Promise<User | null> {
         const sqlEntry = sql`SELECT * FROM users WHERE email = ${email}`;
 
-        const [row] = await this._db.execute<IUserSchema | null>({
+        const [row] = await this._db.executeRows<IUserSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -33,7 +33,7 @@ class UserRepository implements IUserRepository {
         const dbEntity = UserMapper.domainToDbEntity(user);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.execute({
+        await this._db.executeRows({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -46,7 +46,7 @@ class UserRepository implements IUserRepository {
     async getByIdAsync(id: string): Promise<User | null> {
         const sqlEntry = UserDbEntity.getByIdStatement(id);
 
-        const [row] = await this._db.execute<IUserSchema | null>({
+        const [row] = await this._db.executeRows<IUserSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });

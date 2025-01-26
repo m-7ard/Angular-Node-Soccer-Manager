@@ -27,7 +27,7 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema {
     public player: PlayerDbEntity | null = null;
 
     public async loadTeamMembershipHistories(db: IDatabaseService): Promise<void> {
-        const teamMembershipHistories = await db.query<ITeamMembershipHistorySchema>({ statement: `SELECT * FROM ${TeamMembershipHistoryDbEntity.TABLE_NAME} WHERE team_membership_id = '${this.id}'` });
+        const teamMembershipHistories = await db.queryRows<ITeamMembershipHistorySchema>({ statement: `SELECT * FROM ${TeamMembershipHistoryDbEntity.TABLE_NAME} WHERE team_membership_id = '${this.id}'` });
         this.team_membership_histories = teamMembershipHistories.map((row) => TeamMembershipHistoryMapper.schemaToDbEntity(row));
     }
 
