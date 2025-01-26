@@ -4,16 +4,18 @@ import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";
 import MatchMapper from "infrastructure/mappers/MatchMapper";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
-import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import MatchEventPendingCreationEvent from "domain/domainEvents/Match/MatchEventPendingCreationEvent";
 import MatchEventMapper from "infrastructure/mappers/MatchEventMapper";
 import MatchDbEntity from "infrastructure/dbEntities/MatchDbEntity";
+import { Knex } from "knex";
 
 class MatchRepository implements IMatchRepository {
-    private readonly _db: IDatabaseService;
+    private readonly db: IDatabaseService;
+    private readonly queryBuilder: Knex;
 
-    constructor(db: IDatabaseService) {
-        this._db = db;
+    constructor(db: IDatabaseService, queryBuiler: Knex) {
+        this.db = db;
+        this.queryBuilder = queryBuiler;
     }
 
     private async persistDomainEvents(match: Match) {
@@ -25,7 +27,7 @@ class MatchRepository implements IMatchRepository {
                 const dbEntity = MatchEventMapper.domainToDbEntity(matchEvent);
                 const sqlEntry = dbEntity.getInsertStatement();
 
-                await this._db.executeRows({
+                await this.db.executeHeaders({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -40,7 +42,7 @@ class MatchRepository implements IMatchRepository {
             const dbEntity = MatchEventMapper.domainToDbEntity(match.events[i]);
             const sqlEntry = dbEntity.getDeleteStatement();
 
-            const headers = await this._db.executeHeaders({
+            const headers = await this.db.executeHeaders({
                 statement: sqlEntry.sql,
                 parameters: sqlEntry.values,
             });
@@ -53,7 +55,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getDeleteEntry();
 
-        const headers = await this._db.executeHeaders({
+        const headers = await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -65,7 +67,7 @@ class MatchRepository implements IMatchRepository {
 
     async getByIdAsync(id: string): Promise<Match | null> {
         const sqlEntry = MatchDbEntity.getByIdStatement(id);
-        const [row] = await this._db.executeRows<IMatchSchema | null>({
+        const [row] = await this.db.executeRows<IMatchSchema | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -75,7 +77,7 @@ class MatchRepository implements IMatchRepository {
         }
 
         const match = MatchMapper.schemaToDbEntity(row);
-        await match.loadMatchEvents(this._db);
+        await match.loadMatchEvents(this.db);
 
         return match == null ? null : MatchMapper.dbEntityToDomain(match);
     }
@@ -84,7 +86,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.executeRows({
+        await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -93,7 +95,7 @@ class MatchRepository implements IMatchRepository {
     }
 
     async filterAllAsync(criteria: FilterAllMatchesCriteria): Promise<Match[]> {
-        let query = knexQueryBuilder<IMatchSchema>("matches");
+        let query = this.queryBuilder<IMatchSchema>("matches");
 
         if (criteria.scheduledDate != null) {
             const startOfDay = new Date(criteria.scheduledDate);
@@ -119,13 +121,13 @@ class MatchRepository implements IMatchRepository {
 
         const queryString = query.toString();
 
-        const rows = await this._db.queryRows<IMatchSchema>({
+        const rows = await this.db.queryRows<IMatchSchema>({
             statement: queryString,
         });
         const matches = rows.map(MatchMapper.schemaToDbEntity);
 
         for (const match of matches) {
-            await match.loadMatchEvents(this._db);
+            await match.loadMatchEvents(this.db);
         }
 
         return matches.map(MatchMapper.dbEntityToDomain);
@@ -135,7 +137,7 @@ class MatchRepository implements IMatchRepository {
         const dbEntity = MatchMapper.domainToDbEntity(match);
         const sqlEntry = dbEntity.getUpdateEntry();
 
-        await this._db.executeRows({
+        await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });

@@ -24,19 +24,18 @@ class UserDbEntity implements IUserSchema {
 
     public getInsertEntry() {
         return sql`
-            INSERT INTO ${raw(UserDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    name = ${this.name},
-                    email = ${this.email},
-                    hashed_password = ${this.hashed_password},
-                    date_created = ${this.date_created},
-                    is_admin = ${this.is_admin}
+            INSERT INTO ${raw(UserDbEntity.TABLE_NAME)} 
+            (id, name, email, hashed_password, date_created, is_admin)
+            VALUES 
+            (${this.id}, ${this.name}, ${this.email}, ${this.hashed_password}, ${this.date_created}, ${this.is_admin})
         `;
     }
 
     public static getByIdStatement(id: UserDbEntity["id"]) {
-        return sql`SELECT * FROM ${raw(UserDbEntity.TABLE_NAME)} WHERE id = ${id}`;
+        return sql`
+            SELECT * FROM ${raw(UserDbEntity.TABLE_NAME)} 
+            WHERE id = ${id}
+        `;
     }
 }
 

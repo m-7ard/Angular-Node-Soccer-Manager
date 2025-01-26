@@ -18,36 +18,35 @@ class PlayerDbEntity implements IPlayerSchema {
 
     public getDeleteStatement() {
         return sql`
-            DELETE FROM ${raw(PlayerDbEntity.TABLE_NAME)} WHERE
-                id = ${this.id}
+            DELETE FROM ${raw(PlayerDbEntity.TABLE_NAME)} 
+            WHERE id = ${this.id}
         `;
     }
 
     public getInsertStatement() {
         return sql`
-            INSERT INTO ${raw(PlayerDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    name = ${this.name},
-                    active_since = ${this.active_since}
+            INSERT INTO ${raw(PlayerDbEntity.TABLE_NAME)} 
+            (id, name, active_since) 
+            VALUES 
+            (${this.id}, ${this.name}, ${this.active_since})
         `;
     }
 
     public getUpdateStatement() {
         return sql`
-            UPDATE ${raw(PlayerDbEntity.TABLE_NAME)}
-                SET
-                    name = ${this.name},
-                    active_since = ${this.active_since}
-                WHERE
-                    id = ${this.id}
+            UPDATE ${raw(PlayerDbEntity.TABLE_NAME)} 
+            SET
+                name = ${this.name},
+                active_since = ${this.active_since}
+            WHERE
+                id = ${this.id}
         `;
     }
 
     public static getByIdStatement(id: PlayerDbEntity["id"]) {
         return sql`
-            SELECT * FROM ${raw(PlayerDbEntity.TABLE_NAME)} WHERE
-                id = ${id}
+            SELECT * FROM ${raw(PlayerDbEntity.TABLE_NAME)} 
+            WHERE id = ${id}
         `;
     }
 }

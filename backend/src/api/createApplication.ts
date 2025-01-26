@@ -22,8 +22,14 @@ import UserExistsValidator from "application/services/UserExistsValidator";
 import { AddGoalServiceFactory } from "application/services/CanAddGoalValidator";
 import { TeamMembershipExistsValidatorFactory } from "application/services/TeamMembershipValidator";
 import path from "path";
+import knex from "knex";
 
-export default function createApplication(config: { port: number; middleware: Array<(req: Request, res: Response, next: NextFunction) => void>; database: IDatabaseService; mode: "PRODUCTION" | "DEVELOPMENT" }) {
+export default function createApplication(config: {
+    port: number;
+    middleware: Array<(req: Request, res: Response, next: NextFunction) => void>;
+    database: IDatabaseService;
+    mode: "PRODUCTION" | "DEVELOPMENT";
+}) {
     const { database } = config;
     const app = express();
     app.options("*", cors());
@@ -33,19 +39,22 @@ export default function createApplication(config: { port: number; middleware: Ar
     // Database
     diContainer.register(DI_TOKENS.DATABASE, database);
 
+    // Query Builder
+    const queryBuilder = knex({ client: database.__type });
+    diContainer.register(DI_TOKENS.QUERY_BUILDER, queryBuilder);
+
     // Services
     diContainer.register(DI_TOKENS.JWT_TOKEN_SERVICE, new JsonWebTokenService("super_secret_key"));
     diContainer.register(DI_TOKENS.PASSWORD_HASHER, new BcryptPasswordHasher());
     diContainer.registerFactory(DI_TOKENS.API_MODEL_SERVICE, (diContainer) => {
-        const db = diContainer.resolve(DI_TOKENS.DATABASE);
-        return new ApiModelService(db);
+        return new ApiModelService(diContainer.resolve(DI_TOKENS.PLAYER_REPOSITORY), diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY));
     });
 
     // Repositories
-    diContainer.register(DI_TOKENS.TEAM_REPOSITORY, new TeamRepository(database));
-    diContainer.register(DI_TOKENS.PLAYER_REPOSITORY, new PlayerRepository(database));
+    diContainer.register(DI_TOKENS.TEAM_REPOSITORY, new TeamRepository(database, queryBuilder));
+    diContainer.register(DI_TOKENS.PLAYER_REPOSITORY, new PlayerRepository(database, queryBuilder));
     diContainer.register(DI_TOKENS.USER_REPOSITORY, new UserRepository(database));
-    diContainer.register(DI_TOKENS.MATCH_REPOSITORY, new MatchRepository(database));
+    diContainer.register(DI_TOKENS.MATCH_REPOSITORY, new MatchRepository(database, queryBuilder));
 
     // Application Services
     diContainer.registerFactory(DI_TOKENS.PLAYER_EXISTS_VALIDATOR, (container) => new PlayerExistsValidator(container.resolve(DI_TOKENS.PLAYER_REPOSITORY)));
@@ -67,12 +76,6 @@ export default function createApplication(config: { port: number; middleware: Ar
     config.middleware.forEach((middleware) => {
         app.use(middleware);
     });
-
-    // const router = Router();
-    // router.get("/", (req, res) => {
-    //     res.status(200).json()
-    // });
-    // app.use(router);
 
     app.use("/api/teams/", teamsRouter);
     app.use("/api/players/", playersRouter);

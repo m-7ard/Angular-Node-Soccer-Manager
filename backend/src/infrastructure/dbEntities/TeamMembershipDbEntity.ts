@@ -35,34 +35,31 @@ class TeamMembershipDbEntity implements ITeamMembershipSchema {
 
     public getInsertEntry() {
         return sql`
-            INSERT INTO ${raw(TeamMembershipDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    team_id = ${this.team_id},
-                    player_id = ${this.player_id},
-                    active_from = ${this.active_from},
-                    active_to = ${this.active_to}
-        `
+            INSERT INTO ${raw(TeamMembershipDbEntity.TABLE_NAME)} 
+            (id, team_id, player_id, active_from, active_to)
+            VALUES 
+            (${this.id}, ${this.team_id}, ${this.player_id}, ${this.active_from}, ${this.active_to})
+        `;
     }
-    
+    // Cross-compatible UPDATE query
     public getUpdateEntry() {
         return sql`
-            UPDATE ${raw(TeamMembershipDbEntity.TABLE_NAME)}
-                SET 
-                    team_id = ${this.team_id},
-                    player_id = ${this.player_id},
-                    active_from = ${this.active_from},
-                    active_to = ${this.active_to}
-                WHERE
-                    id = ${this.id}
-        `
+            UPDATE ${raw(TeamMembershipDbEntity.TABLE_NAME)} 
+            SET 
+                team_id = ${this.team_id},
+                player_id = ${this.player_id},
+                active_from = ${this.active_from},
+                active_to = ${this.active_to}
+            WHERE
+                id = ${this.id}
+        `;
     }
 
     public getDeleteEntry() {
         return sql`
             DELETE FROM ${raw(TeamMembershipDbEntity.TABLE_NAME)}
-                WHERE id = ${this.id}
-        `
+            WHERE id = ${this.id}
+        `;
     }
 }
 

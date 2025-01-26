@@ -18,8 +18,6 @@ class MatchFactory {
             status: props.status,
             score: null,
             events: [],
-            createdAt: new Date(),
-            updatedAt: new Date(),
         });
     }
 
@@ -32,8 +30,6 @@ class MatchFactory {
         status: Match["status"];
         score: Match["score"];
         events: Match["events"];
-        createdAt: Match["createdAt"];
-        updatedAt: Match["updatedAt"];
     }) {
         return new Match({
             id: props.id,
@@ -44,8 +40,6 @@ class MatchFactory {
             status: props.status,
             score: props.score,
             events: props.events,
-            createdAt: props.createdAt,
-            updatedAt: props.updatedAt,
         });
     }
 }

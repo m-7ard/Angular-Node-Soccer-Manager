@@ -11,6 +11,4 @@ export default interface IMatchSchema {
     status: string;
     home_team_score: number | null;
     away_team_score: number | null;
-    created_at: Date;
-    updated_at: Date;
 }

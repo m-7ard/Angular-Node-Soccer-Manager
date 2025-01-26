@@ -20,8 +20,6 @@ type MatchProps = {
     status: MatchStatus;
     score: MatchScore | null;
     events: MatchEvent[];
-    createdAt: Date;
-    updatedAt: Date;
 };
 
 class Match {
@@ -35,8 +33,6 @@ class Match {
     public status: MatchStatus;
     public score: MatchScore | null;
     public events: MatchEvent[];
-    public createdAt: Date;
-    public updatedAt: Date;
 
     public domainEvents: DomainEvent[] = [];
     clearEvents = () => {
@@ -51,10 +47,7 @@ class Match {
         this.matchDates = props.matchDates;
         this.status = props.status;
         this.score = props.score;
-        this.createdAt = props.createdAt;
         this.events = props.events.sort(((a, b) => a.dateOccured.getTime() - b.dateOccured.getTime()));
-        this.updatedAt = props.updatedAt;
-        this.updatedAt = props.updatedAt;
     }
 
     private isValidStatusTransitions = (newStatus: MatchStatus) => {

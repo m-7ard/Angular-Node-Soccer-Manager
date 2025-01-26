@@ -20,34 +20,31 @@ class TeamMembershipHistoryDbEntity implements ITeamMembershipHistorySchema {
 
     public getInsertEntry() {
         return sql`
-            INSERT INTO ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    team_membership_id = ${this.team_membership_id},
-                    date_effective_from = ${this.date_effective_from},
-                    number = ${this.number},
-                    position = ${this.position}
+            INSERT INTO ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)} 
+            (id, team_membership_id, date_effective_from, number, position)
+            VALUES 
+            (${this.id}, ${this.team_membership_id}, ${this.date_effective_from}, ${this.number}, ${this.position})
         `;
     }
 
     public getUpdateEntry() {
         return sql`
-            UPDATE ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
-                SET 
-                    team_membership_id = ${this.team_membership_id},
-                    date_effective_from = ${this.date_effective_from},
-                    number = ${this.number},
-                    position = ${this.position}
-                WHERE
-                    id = ${this.id} 
+            UPDATE ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)} 
+            SET 
+                team_membership_id = ${this.team_membership_id},
+                date_effective_from = ${this.date_effective_from},
+                number = ${this.number},
+                position = ${this.position}
+            WHERE
+                id = ${this.id}
         `;
     }
 
     public getDeleteEntry() {
         return sql`
             DELETE FROM ${raw(TeamMembershipHistoryDbEntity.TABLE_NAME)}
-                WHERE id = ${this.id}
-        `
+            WHERE id = ${this.id}
+        `;
     }
 }
 

@@ -16,6 +16,7 @@ import UserExistsValidator from "application/services/UserExistsValidator";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
 import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
+import { Knex } from "knex";
 
 type TokenType<T> = T extends { __service: infer S } ? S : never;
 
@@ -31,6 +32,7 @@ const makeToken = <Service>(literal: string) => literal as string & { __service:
 
 export const DI_TOKENS = {
     DATABASE: makeToken<IDatabaseService>("DATABASE"),
+    QUERY_BUILDER: makeToken<Knex>("QUERY_BUILDER"),
     REQUEST_DISPATCHER: makeToken<IRequestDispatcher>("REQUEST_DISPATCHER"),
     PASSWORD_HASHER: makeToken<IPasswordHasher>("PASSWORD_HASHER"),
     JWT_TOKEN_SERVICE: makeToken<IJwtTokenService>("JWT_TOKEN_SERVICE"),

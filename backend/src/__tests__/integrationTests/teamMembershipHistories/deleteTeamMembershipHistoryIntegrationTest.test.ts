@@ -17,6 +17,7 @@ import TeamMembership from "domain/entities/TeamMembership";
 import TeamMembershipHistory from "domain/entities/TeamMembershipHistory";
 import IDeleteTeamMembershipHistoryResponseDTO from "api/DTOs/teamMembershipHistories/delete/IDeleteTeamMembershipHistoryResponseDTO";
 import IDeleteTeamMembershipRequestDTO from "api/DTOs/teamMemberships/delete/IDeleteTeamMembershipRequestDTO";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 
 let team_001: Team;
 let player_001: Player;
@@ -63,7 +64,7 @@ describe("Delete TeamMembershipHistory Integration Test;", () => {
 
         expect(response.status).toBe(200);
         const body: IDeleteTeamMembershipHistoryResponseDTO = response.body;
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         const team = (await repo.getByIdAsync(team_001.id))!;
         const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId))!;
         expect(teamMembership.teamMembershipHistories.length).toBe(0);

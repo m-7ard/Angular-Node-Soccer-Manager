@@ -21,8 +21,6 @@ class MatchMapper {
             status: source.status,
             home_team_score: source.home_team_score,
             away_team_score: source.away_team_score,
-            created_at: source.created_at,
-            updated_at: source.updated_at,
         });
     }
 
@@ -38,8 +36,6 @@ class MatchMapper {
             status: source.status.value,
             away_team_score: source.score?.awayTeamScore ?? null,
             home_team_score: source.score?.homeTeamScore ?? null,
-            created_at: source.createdAt,
-            updated_at: source.updatedAt,
         });
     }
 
@@ -63,8 +59,6 @@ class MatchMapper {
                 awayTeamScore: source.away_team_score,
                 homeTeamScore: source.home_team_score
             }),
-            createdAt: source.created_at,
-            updatedAt: source.updated_at,
             events: source.events.map(MatchEventMapper.dbEntityToDomain)
         });
 

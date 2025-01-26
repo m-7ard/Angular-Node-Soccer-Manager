@@ -10,7 +10,6 @@ import Mixins from "../../../__utils__/integrationTests/Mixins";
 import Team from "domain/entities/Team";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import Match from "domain/entities/Match";
-import IReadMatchResponseDTO from "api/DTOs/matches/read/IReadMatchResponseDTO";
 import Player from "domain/entities/Player";
 import TeamMembership from "domain/entities/TeamMembership";
 import IMatchSchema from "infrastructure/dbSchemas/IMatchSchema";

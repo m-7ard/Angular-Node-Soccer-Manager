@@ -12,8 +12,6 @@ class MatchEventDbEntity implements IMatchEventSchema {
     date_occured: Date;
     secondary_player_id: string | null;
     description: string;
-    created_at: Date;
-    updated_at: Date;
 
     match: MatchEventDbEntity = null!;
     player: PlayerDbEntity = null!;
@@ -29,8 +27,6 @@ class MatchEventDbEntity implements IMatchEventSchema {
         dateOccured: Date;
         secondary_player_id: string | null;
         description: string;
-        created_at: Date;
-        updated_at: Date;
     }) {
         this.id = props.id;
         this.match_id = props.match_id;
@@ -40,31 +36,23 @@ class MatchEventDbEntity implements IMatchEventSchema {
         this.date_occured = props.dateOccured;
         this.secondary_player_id = props.secondary_player_id;
         this.description = props.description;
-        this.created_at = props.created_at;
-        this.updated_at = props.updated_at;
     }
 
     public static readonly TABLE_NAME = "match_events";
 
     public getInsertStatement() {
         return sql`
-            INSERT INTO ${raw(MatchEventDbEntity.TABLE_NAME)}
-                SET
-                    id = ${this.id},
-                    match_id = ${this.match_id},
-                    player_id = ${this.player_id},
-                    team_id = ${this.team_id},
-                    type = ${this.type},
-                    date_occured = ${this.date_occured},
-                    secondary_player_id = ${this.secondary_player_id},
-                    description = ${this.description}
+            INSERT INTO ${raw(MatchEventDbEntity.TABLE_NAME)} 
+            (id, match_id, player_id, team_id, type, date_occured, secondary_player_id, description)
+            VALUES 
+            (${this.id}, ${this.match_id}, ${this.player_id}, ${this.team_id}, ${this.type}, ${this.date_occured}, ${this.secondary_player_id}, ${this.description})
         `;
     }
 
     public getDeleteStatement() {
         return sql`
-            DELETE FROM ${raw(MatchEventDbEntity.TABLE_NAME)} WHERE
-                id = ${this.id}
+            DELETE FROM ${raw(MatchEventDbEntity.TABLE_NAME)} 
+            WHERE id = ${this.id}
         `;
     }
 }

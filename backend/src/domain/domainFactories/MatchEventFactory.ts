@@ -20,8 +20,6 @@ class MatchEventFactory {
             dateOccured: props.dateOccured,
             secondaryPlayerId: props.secondaryPlayerId,
             description: props.description,
-            createdAt: new Date(),
-            updatedAt: new Date(),
         });
     }
 
@@ -34,8 +32,6 @@ class MatchEventFactory {
         dateOccured: MatchEvent["dateOccured"];
         secondaryPlayerId: MatchEvent["secondaryPlayerId"];
         description: MatchEvent["description"];
-        createdAt: MatchEvent["createdAt"];
-        updatedAt: MatchEvent["updatedAt"];
     }) {
         return new MatchEvent({
             id: props.id,
@@ -46,8 +42,6 @@ class MatchEventFactory {
             dateOccured: props.dateOccured,
             secondaryPlayerId: props.secondaryPlayerId,
             description: props.description,
-            createdAt: props.createdAt,
-            updatedAt: props.updatedAt,
         });
     }
 }

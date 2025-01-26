@@ -11,14 +11,13 @@ import Team from "domain/entities/Team";
 import Player from "domain/entities/Player";
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
-import TeamRepository from "infrastructure/repositories/TeamRepository";
 import TeamMembershipId from "domain/valueObjects/TeamMembership/TeamMembershipId";
 import TeamMembership from "domain/entities/TeamMembership";
 import { DateTime } from "luxon";
-import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 import IUpdateTeamMembershipHistoryRequestDTO from "api/DTOs/teamMembershipHistories/update/IUpdateTeamMembershipHistoryRequestDTO";
 import TeamMembershipHistory from "domain/entities/TeamMembershipHistory";
 import IUpdateTeamMembershipHistoryResponseDTO from "api/DTOs/teamMembershipHistories/update/IUpdateTeamMembershipHistoryResponseDTO";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 
 let team_001: Team;
 let player_001: Player;
@@ -69,7 +68,7 @@ describe("Update TeamMembershipHistory Integration Test;", () => {
 
         expect(response.status).toBe(201);
         const body: IUpdateTeamMembershipHistoryResponseDTO = response.body;
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         const team = (await repo.getByIdAsync(team_001.id))!;
         const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId))!;
         expect(teamMembership.teamMembershipHistories.length).toBe(1);
@@ -84,7 +83,7 @@ describe("Update TeamMembershipHistory Integration Test;", () => {
             activeFrom: new Date(),
             activeTo: DateTime.fromJSDate(team_membership_history_001.dateEffectiveFrom).plus({ minute: 1 }).toJSDate(),
         });
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         await repo.updateAsync(team_001);
 
         const request: IUpdateTeamMembershipHistoryRequestDTO = {

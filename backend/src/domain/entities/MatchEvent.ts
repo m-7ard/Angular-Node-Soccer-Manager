@@ -12,8 +12,6 @@ type MatchEventProps = {
     dateOccured: Date;
     secondaryPlayerId: PlayerId | null;
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
 };
 
 class MatchEvent {
@@ -27,8 +25,6 @@ class MatchEvent {
     public dateOccured: Date;
     public secondaryPlayerId: PlayerId | null;
     public description: string;
-    public createdAt: Date;
-    public updatedAt: Date;
 
     constructor(props: MatchEventProps) {
         this.id = props.id;
@@ -39,8 +35,6 @@ class MatchEvent {
         this.dateOccured = props.dateOccured;
         this.secondaryPlayerId = props.secondaryPlayerId;
         this.description = props.description;
-        this.createdAt = props.createdAt;
-        this.updatedAt = props.updatedAt;
     }
 }
 

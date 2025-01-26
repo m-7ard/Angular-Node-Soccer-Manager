@@ -1,6 +1,7 @@
 import { adminSuperTest } from "__utils__/integrationTests/authSupertest";
 import { db, setUpIntegrationTest, disposeIntegrationTest, resetIntegrationTest, server } from "__utils__/integrationTests/integrationTest.setup";
 import Mixins from "__utils__/integrationTests/Mixins";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 import ICreateMatchRequestDTO from "api/DTOs/matches/create/ICreateMatchRequestDTO";
 import ICreateMatchResponseDTO from "api/DTOs/matches/create/ICreateMatchResponseDTO";
 import Team from "domain/entities/Team";
@@ -140,7 +141,7 @@ describe("Create Match Integration Test - Happy Paths", () => {
 
         const body: ICreateMatchResponseDTO = response.body;
 
-        const repo = new MatchRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.MATCH_REPOSITORY);
         const match = await repo.getByIdAsync(body.id)!;
         expect(match?.score).not.toBeNull();
         expect(match?.score?.awayTeamScore).toBe(2);

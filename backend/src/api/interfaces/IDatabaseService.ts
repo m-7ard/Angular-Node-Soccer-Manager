@@ -1,6 +1,7 @@
 export type TResultHeader = { affectedRows: number; }
 
 interface IDatabaseService {
+    __type: string;
     initialise(migrations: string[]): Promise<void>;
     dispose(): Promise<void>;
     queryRows<T>(args: { statement: string }): Promise<T[]>;

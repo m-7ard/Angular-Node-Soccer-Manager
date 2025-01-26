@@ -16,8 +16,6 @@ class MatchEventMapper {
             dateOccured: source.date_occured,
             secondary_player_id: source.secondary_player_id,
             description: source.description,
-            created_at: source.created_at,
-            updated_at: source.updated_at,
         });
     }
 
@@ -31,8 +29,6 @@ class MatchEventMapper {
             dateOccured: source.dateOccured,
             secondary_player_id: source.secondaryPlayerId == null ? null : source.secondaryPlayerId.value,
             description: source.description,
-            created_at: source.createdAt,
-            updated_at: source.updatedAt,
         });
     }
 
@@ -46,8 +42,6 @@ class MatchEventMapper {
             dateOccured: source.date_occured,
             secondaryPlayerId: source.secondary_player_id == null ? null : PlayerId.executeCreate(source.secondary_player_id),
             description: source.description,
-            createdAt: source.created_at,
-            updatedAt: source.updated_at,
         });
     }
 }

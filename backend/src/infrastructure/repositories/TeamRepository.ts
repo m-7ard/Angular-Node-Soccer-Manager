@@ -4,7 +4,6 @@ import ITeamRepository from "../../application/interfaces/ITeamRepository";
 import Team from "domain/entities/Team";
 import ITeamSchema from "infrastructure/dbSchemas/ITeamSchema";
 import TeamMapper from "infrastructure/mappers/TeamMapper";
-import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import TeamMembershipPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipPendingDeletionEvent";
 import TeamMembershipPendingUpdatingEvent from "domain/domainEvents/Team/TeamMembershipPendingUpdatingEvent";
@@ -15,12 +14,15 @@ import TeamId from "domain/valueObjects/Team/TeamId";
 import TeamMembershipMapper from "infrastructure/mappers/TeamMembershipMapper";
 import TeamDbEntity from "infrastructure/dbEntities/TeamDbEntity";
 import TeamMembershipHistoryPendingDeletionEvent from "domain/domainEvents/Team/TeamMembershipHistoryPendingDeletionEvent";
+import { Knex } from "knex";
 
 class TeamRepository implements ITeamRepository {
     private readonly _db: IDatabaseService;
+    private readonly queryBuiler: Knex;
 
-    constructor(db: IDatabaseService) {
+    constructor(db: IDatabaseService, queryBuiler: Knex) {
         this._db = db;
+        this.queryBuiler = queryBuiler;
     }
 
     private async persistDomainEvents(team: Team) {
@@ -32,7 +34,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipMapper.domainToDbEntity(teamMembership);
                 const sqlEntry = dbEntity.getInsertEntry();
 
-                await this._db.executeRows({
+                await this._db.executeHeaders({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -40,7 +42,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getDeleteEntry();
 
-                await this._db.executeRows({
+                await this._db.executeHeaders({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -56,7 +58,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getInsertEntry();
 
-                await this._db.executeRows({
+                await this._db.executeHeaders({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -72,7 +74,7 @@ class TeamRepository implements ITeamRepository {
                 const dbEntity = TeamMembershipHistoryMapper.domainToDbEntity(event.payload);
                 const sqlEntry = dbEntity.getDeleteEntry();
 
-                await this._db.executeRows({
+                await this._db.executeHeaders({
                     statement: sqlEntry.sql,
                     parameters: sqlEntry.values,
                 });
@@ -108,7 +110,7 @@ class TeamRepository implements ITeamRepository {
         const dbEntity = TeamMapper.domainToDbEntity(team);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.executeRows({
+        await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -120,7 +122,7 @@ class TeamRepository implements ITeamRepository {
         const dbEntity = TeamMapper.domainToDbEntity(team);
         const sqlEntry = dbEntity.getUpdateEntry();
 
-        await this._db.executeRows({
+        await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -129,7 +131,7 @@ class TeamRepository implements ITeamRepository {
     }
 
     async filterAllAsync(criteria: FilterAllTeamsCriteria): Promise<Team[]> {
-        let query = knexQueryBuilder<ITeamSchema>("team");
+        let query = this.queryBuiler<ITeamSchema>("team");
 
         if (criteria.name != null) {
             query.whereILike("team.name", `%${criteria.name}%`);

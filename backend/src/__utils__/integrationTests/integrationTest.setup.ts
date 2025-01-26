@@ -7,6 +7,7 @@ import responseLogger from "api/middleware/responseLogger";
 import getMigrations from "api/utils/getMigrations";
 import { Server } from "http";
 import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
+import SqliteDatabaseService from "infrastructure/services/SqliteDatabaseService";
 
 const jestConsole = console;
 

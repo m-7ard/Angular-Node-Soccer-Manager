@@ -18,6 +18,7 @@ import ICreateTeamMembershipHistoryResponseDTO from "api/DTOs/teamMembershipHist
 import TeamMembership from "domain/entities/TeamMembership";
 import { DateTime } from "luxon";
 import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 
 let team_001: Team;
 let player_001: Player;
@@ -60,7 +61,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
 
         expect(response.status).toBe(201);
         const body: ICreateTeamMembershipHistoryResponseDTO = response.body;
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         const team = (await repo.getByIdAsync(team_001.id))!;
         const teamMembership = team.findMemberById(TeamMembershipId.executeCreate(body.teamMembershipId))!;
         expect(teamMembership.teamMembershipHistories.length).toBe(1);
@@ -75,7 +76,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
             number: 1,
             position: TeamMembershipHistoryPosition.GOALKEEPER.value,
         });
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         await repo.updateAsync(team_001);
 
         const request: ICreateTeamMembershipHistoryRequestDTO = {
@@ -114,7 +115,7 @@ describe("Create TeamMembershipHistory Integration Test;", () => {
             activeFrom: new Date(),
             activeTo: new Date(),
         });
-        const repo = new TeamRepository(db);
+        const repo = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);
         await repo.updateAsync(team_001);
 
         const request: ICreateTeamMembershipHistoryRequestDTO = {

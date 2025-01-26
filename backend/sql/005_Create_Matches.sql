@@ -9,8 +9,6 @@ CREATE TABLE matches (
     status VARCHAR(50) NOT NULL,
     home_team_score INT NULL,
     away_team_score INT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (home_team_id) REFERENCES team(id),
     FOREIGN KEY (away_team_id) REFERENCES team(id)
 );

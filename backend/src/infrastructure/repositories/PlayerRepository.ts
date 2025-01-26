@@ -3,23 +3,25 @@ import IDatabaseService from "../../api/interfaces/IDatabaseService";
 import IPlayerRepository from "../../application/interfaces/IPlayerRepository";
 import PlayerMapper from "infrastructure/mappers/PlayerMapper";
 import PlayerDbEntity from "infrastructure/dbEntities/PlayerDbEntity";
-import knexQueryBuilder from "api/deps/knexQueryBuilder";
 import IPlayerSchema from "infrastructure/dbSchemas/IPlayerSchema";
 import FilterAllPlayersCriteria from "infrastructure/contracts/FilterAllPlayersCriteria";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
+import { Knex } from "knex";
 
 class PlayerRepository implements IPlayerRepository {
-    private readonly _db: IDatabaseService;
+    private readonly db: IDatabaseService;
+    private readonly queryBuiler: Knex;
 
-    constructor(db: IDatabaseService) {
-        this._db = db;
+    constructor(db: IDatabaseService, queryBuiler: Knex) {
+        this.db = db;
+        this.queryBuiler = queryBuiler;
     }
 
     async deleteAsync(player: Player): Promise<void> {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getDeleteStatement();
 
-        const headers = await this._db.executeHeaders({
+        const headers = await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -31,7 +33,7 @@ class PlayerRepository implements IPlayerRepository {
 
     async getByIdAsync(id: PlayerId): Promise<Player | null> {
         const sqlEntry = PlayerDbEntity.getByIdStatement(id.value);
-        const [player] = await this._db.executeRows<PlayerDbEntity | null>({
+        const [player] = await this.db.executeRows<PlayerDbEntity | null>({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -43,7 +45,7 @@ class PlayerRepository implements IPlayerRepository {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getInsertStatement();
 
-        await this._db.executeRows({
+        await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -55,7 +57,7 @@ class PlayerRepository implements IPlayerRepository {
         const dbEntity = PlayerMapper.domainToDbEntity(player);
         const sqlEntry = dbEntity.getUpdateStatement();
 
-        await this._db.executeRows({
+        await this.db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });
@@ -64,7 +66,7 @@ class PlayerRepository implements IPlayerRepository {
     }
 
     async findAllAsync(criteria: FilterAllPlayersCriteria): Promise<Player[]> {
-        let query = knexQueryBuilder<IPlayerSchema>("player");
+        let query = this.queryBuiler<IPlayerSchema>("player");
 
         if (criteria.name != null) {
             query = query.whereILike("name", `%${criteria.name}%`);
@@ -74,7 +76,7 @@ class PlayerRepository implements IPlayerRepository {
             query = query.limit(criteria.limitBy);
         }
 
-        const rows = await this._db.queryRows<IPlayerSchema>({
+        const rows = await this.db.queryRows<IPlayerSchema>({
             statement: query.toString(),
         });
         const players = rows.map(PlayerMapper.schemaToDbEntity);

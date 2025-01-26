@@ -14,20 +14,15 @@ import Team from "domain/entities/Team";
 import TeamMembership from "domain/entities/TeamMembership";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
-import PlayerRepository from "infrastructure/repositories/PlayerRepository";
-import TeamRepository from "infrastructure/repositories/TeamRepository";
 
 class ApiModelService implements IApiModelService {
-    private readonly playerRepository: IPlayerRepository;
-    private readonly teamRepository: ITeamRepository;
-
     private readonly playerCache = new Map<Player["id"], Player | null>();
     private readonly teamCache = new Map<Team["id"], Team | null>();
 
-    constructor(private readonly db: IDatabaseService) {
-        this.playerRepository = new PlayerRepository(db);
-        this.teamRepository = new TeamRepository(db);
-    }
+    constructor(
+        private readonly playerRepository: IPlayerRepository,
+        private readonly teamRepository: ITeamRepository,
+    ) {}
 
     private async getPlayerFromCacheOrDb(playerId: PlayerId): Promise<Player | null> {
         if (this.playerCache.has(playerId)) {
@@ -125,15 +120,15 @@ class ApiModelService implements IApiModelService {
 
     async createMatchParticipantsApiModel(match: Match): Promise<IMatchParticipantsApiModel> {
         const homeTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
-        if (homeTeam == null) throw new Error("Home Team doesn't exist.")
+        if (homeTeam == null) throw new Error("Home Team doesn't exist.");
 
         const awayTeam = await this.getTeamFromCacheOrDb(match.homeTeamId);
-        if (awayTeam == null) throw new Error("Away Team doesn't exist.")
+        if (awayTeam == null) throw new Error("Away Team doesn't exist.");
 
         return {
             awayTeamPlayers: awayTeam.teamMemberships.map((teamMembership) => ApiModelMapper.createMatchTeamPlayerApiModel(match, teamMembership)),
-            homeTeamPlayers: homeTeam.teamMemberships.map((teamMembership) => ApiModelMapper.createMatchTeamPlayerApiModel(match, teamMembership))
-        }
+            homeTeamPlayers: homeTeam.teamMemberships.map((teamMembership) => ApiModelMapper.createMatchTeamPlayerApiModel(match, teamMembership)),
+        };
     }
 }
 

@@ -11,7 +11,5 @@ export default interface IMatchEventSchema {
     date_occured: Date;
     secondary_player_id: IPlayerSchema["id"] | null;
     description: string;
-    created_at: Date;
-    updated_at: Date;
 }
 

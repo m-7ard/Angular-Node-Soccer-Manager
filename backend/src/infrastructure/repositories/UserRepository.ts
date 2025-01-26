@@ -33,7 +33,7 @@ class UserRepository implements IUserRepository {
         const dbEntity = UserMapper.domainToDbEntity(user);
         const sqlEntry = dbEntity.getInsertEntry();
 
-        await this._db.executeRows({
+        await this._db.executeHeaders({
             statement: sqlEntry.sql,
             parameters: sqlEntry.values,
         });

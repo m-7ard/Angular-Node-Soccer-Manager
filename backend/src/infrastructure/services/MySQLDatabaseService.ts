@@ -4,6 +4,7 @@ import IDatabaseService, { TResultHeader } from "../../api/interfaces/IDatabaseS
 class MySQLDatabaseService implements IDatabaseService {
     private _pool: mysql.Pool;
     private readonly _config: mysql.PoolOptions;
+    public readonly __type = "mysql2";
 
     constructor(config: mysql.PoolOptions) {
         this._pool = mysql.createPool(config);

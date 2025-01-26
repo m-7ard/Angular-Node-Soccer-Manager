@@ -27,35 +27,37 @@ class TeamDbEntity implements ITeamSchema {
 
     public getInsertEntry() {
         return sql`
-            INSERT INTO ${raw(TeamDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    name = ${this.name},
-                    date_founded = ${this.date_founded}
+            INSERT INTO ${raw(TeamDbEntity.TABLE_NAME)} 
+            (id, name, date_founded)
+            VALUES 
+            (${this.id}, ${this.name}, ${this.date_founded})
         `;
     }
 
     public getUpdateEntry() {
         return sql`
-            UPDATE ${raw(TeamDbEntity.TABLE_NAME)}
-                SET 
-                    id = ${this.id},
-                    name = ${this.name},
-                    date_founded = ${this.date_founded}
-                WHERE
-                    id = ${this.id}
+            UPDATE ${raw(TeamDbEntity.TABLE_NAME)} 
+            SET 
+                name = ${this.name},
+                date_founded = ${this.date_founded}
+            WHERE
+                id = ${this.id}
         `;
     }
 
     public getDeleteEntry() {
         return sql`
-            DELETE FROM ${raw(TeamDbEntity.TABLE_NAME)} WHERE
-                id = ${this.id}
+            DELETE FROM ${raw(TeamDbEntity.TABLE_NAME)} 
+            WHERE id = ${this.id}
         `;
     }
 
     public static getByIdStatement(id: TeamDbEntity["id"]) {
-        return sql`SELECT * FROM ${raw(TeamDbEntity.TABLE_NAME)} WHERE ${raw(TeamDbEntity.TABLE_NAME)}.id = ${id}`;
+        return sql`
+            SELECT * 
+            FROM ${raw(TeamDbEntity.TABLE_NAME)} 
+            WHERE ${raw(TeamDbEntity.TABLE_NAME)}.id = ${id}
+        `;
     }
 }
 
