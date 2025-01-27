@@ -19,8 +19,8 @@
                     "options": {
                         "fileReplacements": [
                             {
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.docker.ts"
+                                "replace": "src/presentation/environments/environment.ts",
+                                "with": "src/presentation/environments/environment.docker.ts"
                             }
                         ],
                         "outputPath": "dist/frontend",

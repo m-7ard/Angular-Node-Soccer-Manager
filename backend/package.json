@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
+    "build": "tsc",
     "test": "jest --detectOpenHandles --forceExit --runInBand",
     "test:coverage": "jest --coverage --runInBand",
     "lint": "eslint ."

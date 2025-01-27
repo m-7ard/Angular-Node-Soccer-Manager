@@ -19,7 +19,7 @@ const port = process.env.PORT == null ? 4200 : parseInt(process.env.PORT);
 
 async function main() {
     const db = new MySQLDatabaseService({
-        host: "127.0.0.1",
+        host: "mysql", // Changed from 127.0.0.1 to service name
         port: 3306,
         user: "root",
         password: "adminword",
