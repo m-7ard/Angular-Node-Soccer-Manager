@@ -3,12 +3,12 @@
     <section
         appPageSectionDirective
         [appContentGridTrack]="{ contentGridTrack: 'base' }"
-        class="token-default-flex-col flex-wrap token-body-section"
+        class=" token-body-section"
     >
-        <ul >
+        <ul class="overflow-hidden">
             <li class="token-base-text font-bold">Membership Data</li>
             <li  class="token-default-list">
-                <div class="token-default-list__label">Date Active From</div>
+                <div class="token-default-list__label shirnk-0">Date Active From</div>
                 <div class="token-default-list__value truncate">
                     {{ teamPlayer.membership.activeFrom | date: "yyyy-MM-dd HH:mm:ss" }}
                 </div>

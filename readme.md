@@ -17,10 +17,12 @@
 git clone https://github.com/m-7ard/Angular-Node-Soccer-Manager.git
 ```
 
-2. Database Configuration
-In the "backend" folder, go to `index.ts`, and fill in your MySQL database access data.
+2.a Launch (Docker)
+```bash
+    >> docker compose up
+```
 
-3. Backend Setup
+2.b Launch (Manually)
 ```bash
 # Navigate to backend directory
 cd backend
@@ -29,13 +31,6 @@ npm run test  # Optional
 npm run dev   # Start server
 ```
 
-4. Frontend Setup
-```bash
-# Navigate to frontend directory
-cd frontend
-npm install
-ng serve
-```
 
 ## Features
 

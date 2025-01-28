@@ -20,7 +20,7 @@
     }
 
     .token-default-list {
-        @apply text-base flex flex-row justify-between items-center gap-3;
+        @apply text-base flex flex-row max-[440px]:flex-col justify-between min-[440px]:items-center gap-x-3;
     }
 
     .token-default-list__label {
