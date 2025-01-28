@@ -20,8 +20,7 @@
     - [Domain Models & Value Objects](#domain-models--value-objects)
     - [Domain Events & Repositories](#domain-events--repositories)
     - [Api Models & Api Model Service](#api-models--api-model-service)
-  - [Integration Testing](#integration-testing)
-    - [Overview](#overview)
+  - [Integration Test Setup Documentation](#integration-testing-setup-documentation)
     - [Key Functions](#key-functions)
     - [Usage Example](#usage-example)
 - [Frontend Documentation](#frontend-documentation)
@@ -29,11 +28,11 @@
   - [Authentication Interceptor](#authentication-interceptor-documentation)
   - [Components & Features](#frontend-components--other-features)
     - [Mixin Elements](#mixin-elements)
-    - [Layout Elements](#layout-elements)
+    - [Layout Directives](#layout-directives)
     - [Dynamic Results Elements](#dynamic-results-elements)
     - [Auth Guards](#auth-guards)
-    - [Error Handling](#global-error-handling-and-routable-exceptions)
-    - [Child Routes & Layouts](#child-routes-and-layout-pages)
+    - [Global Error handling & Routable Exceptions](#global-error-handling--routable-exceptions)
+    - [Child Routes & Layouts](#child-routes---layouts)
 
 ## Run Locally
 
@@ -80,7 +79,7 @@ git clone https://github.com/m-7ard/Angular-Node-Soccer-Manager.git
 
 #### Core Interfaces and Classes
 
-##### 1. `IAction` Interface
+##### IAction Interface
 
 This project uses **Actions** as an abstraction to encapsulate request handling logic in a clean and reusable way. Each Action is responsible for:
 
@@ -97,7 +96,7 @@ interface IAction<ActionReq, ActionRes = IActionResponse> {
 }
 ```
 
-##### 2. `IActionResponse` Interface
+##### IActionResponse Interface
 
 Defines a response returned by an action:
 
@@ -107,7 +106,7 @@ export interface IActionResponse {
 }
 ```
 
-##### 3. `JsonResponse` Class
+##### JsonResponse Class
 
 A concrete implementation of `IActionResponse` that formats responses as JSON:
 
@@ -181,7 +180,7 @@ class CreatePlayerAction implements IAction<ActionRequest, ActionResponse> {
 }
 ```
 
-##### 4. `registerAction` Utility
+##### registerAction Utility
 
 Simplifies the wiring of actions and routes:
 
@@ -203,7 +202,7 @@ function registerAction({
 }
 ```
 
-##### 5. `Dependency Injection System`
+##### Dependency Injection System
 
 Registers and manages dependencies in a Map, it leverages Typescript's branded types to use DI tokens to automatically get the interface of each service we're registering or resolving:
 
@@ -279,7 +278,7 @@ export class DIContainer {
 const diContainer = new DIContainer();
 ```
 
-##### 6. `Multi-Environment Application startup service`
+##### Multi-Environment Application startup service
 
 Instead of using a single file to manage our server, we use a function that takes a config to start our server, effectively letting us create different environments for testing, production and development purposes without having to change the implementation of any of our existing infrastructure:
 
@@ -335,7 +334,8 @@ export default function createApplication(config: {
     return app;
 }
 ```
-##### 7. `Request Dispatcher (CQRS)`
+
+##### 7. Request Dispatcher (CQRS)
 
 In order to communicate with our application layer, a CQRS solution is implemented that uses a request dispatcher inspired by the .Net MediatR libary --- It uses an IRequest interface that is then used in ICommand and IQuery interfaces to declare the application contracts that will then be dispached through a RequestDispatcher class:
 
@@ -489,7 +489,7 @@ function createRequestDispatcher() {
 }
 ```
 
-##### 8. `Application Layer Validator / Services`
+##### 8. Application Layer Validator / Services
 
 The application layer makes use of reusable Validators, Validator Factories and Services that will may takes Value Objects to enforce input and are able to be injected into our request handlers.
 
@@ -600,7 +600,7 @@ export class AddGoalServiceFactory implements IAddGoalServiceFactory {
 }
 ```
 
-##### 9. `IDatabaseService`
+##### 9. IDatabaseService
 
 An interface that all database services must implement, this is currently implemented only by MySQLDatabaseService. These classes are in charge of initialising, querying and disposing of the database.
 
@@ -671,7 +671,7 @@ class MySQLDatabaseService implements IDatabaseService {
 }
 ```
 
-##### 10. `Database Models and Schema Interfaces`
+##### 10. Database Models and Schema Interfaces
 
 Each database table has a Schema Interface representing its database column types and a Database Model, representing its in memory representation, transforming database column types to desired TS types. Database Models are additionally responsible for loading their FK related values through load____ methods where ____ is the model that is being loaded.
 
@@ -740,7 +740,7 @@ class TeamDbEntity implements ITeamSchema {
 }
 ```
 
-##### 11. `Domain Models & Value Objects`
+##### Domain Models & Value Objects
 
 This application conforms to Domain Driven Design (DDD), implementing Domain Aggregates that manage its subdomains through a common interface; The Aggregates and Domains feature methods that will check whether an action can be undertaken, in the format can____, which will return a result object that either returns a value or string error and methods that will execute the action, in the format execute____, that will call its corresponding can____ method and will throw an Error with a message obtained from the can____ method in the case of failure. It will also occasionally feature try____ methods that will perform an action or return a string in the case of failure. 
 
@@ -1138,7 +1138,7 @@ class TeamMembershipDates {
 }
 ```
 
-##### 12. `Domain Events & Repositories`
+##### Domain Events & Repositories
 
 To persist aggregates, the application uses Repositories, and in order for each aggreagte to persist its subdomain and/or changes, it uses domain events. Aggregates will pull domain events through the usage of aggregate methods. 
 
@@ -1324,7 +1324,7 @@ class TeamRepository implements ITeamRepository {
 }
 ```
 
-##### 13. `Api Models & Api Model Service`
+##### Api Models & Api Model Service
 
 Instead of returning a raw Domain Model and leaking business data, the Api returns Api models; these Api models are constructed with the help of a IApiModelService implementation that utilises caching to avoid unecessary db calls.
 
@@ -1684,7 +1684,7 @@ export class AuthService {
 
 ### Frontend Components & Other Features
 
-##### 1. `Mixin` Elements
+##### Mixin Elements
 
 The Application uses "Mixin" elements that can be readily composed through the use of directives.
 ```ts
@@ -1767,7 +1767,7 @@ export class MixinStyledButtonDirective implements OnChanges {
 }
 ```
 
-##### 2. `Layout` Elements
+##### Layout Directives
 
 In order to enforce consistent site layouts, we make use of directives such as ContentGridDirective or PageDirective to automatically attach all the necessary classes and attributes for the design to work
 
@@ -1814,7 +1814,7 @@ export class PageDirective implements OnInit {
 
 ```
 
-##### 3. `Dynamic Results` Elements
+##### Dynamic Results Elements
 
 The app makes use of Dynamic Elements through the use of Angular's *ngComponentOutlet directive, making it possible to make Search/Result forms that will take their own custom Result elements that can accomplish different goals without having to write two separate forms. 
 
@@ -1946,7 +1946,7 @@ export class TeamSelectResultComponent {
 }
 ```
 
-##### 4. Auth Guards
+##### Auth Guards
 
 Usage of auth guards to restrict access to certain parts of the site
 
@@ -1977,7 +1977,7 @@ export class AuthGuard implements CanActivate {
 
 ```
 
-##### 5. Global Error handling and Routable Exceptions
+##### Global Error handling and Routable Exceptions
 
 Usage of global error handling to catch errors while loading data and being able to display error pages accordingly; e.g. a 404 occurs, prompting a NotFound site.
 
@@ -2015,9 +2015,9 @@ export class GlobalErrorHandler implements ErrorHandler {
 }
 ```
 
-##### 6. Child Routes and Layout Pages
+##### Child Routes & Layouts
 
-The application uses child/nested routes and layout pages to create a better user experience.
+The application uses child/nested routes and layouts to create a better user experience.
 
 ```ts
 class TeamLayoutPageComponent implements OnInit {
