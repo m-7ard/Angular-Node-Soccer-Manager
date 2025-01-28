@@ -335,7 +335,7 @@ export default function createApplication(config: {
 }
 ```
 
-##### 7. Request Dispatcher (CQRS)
+##### Request Dispatcher (CQRS)
 
 In order to communicate with our application layer, a CQRS solution is implemented that uses a request dispatcher inspired by the .Net MediatR libary --- It uses an IRequest interface that is then used in ICommand and IQuery interfaces to declare the application contracts that will then be dispached through a RequestDispatcher class:
 
@@ -489,7 +489,7 @@ function createRequestDispatcher() {
 }
 ```
 
-##### 8. Application Layer Validator / Services
+##### Application Layer Validator / Services
 
 The application layer makes use of reusable Validators, Validator Factories and Services that will may takes Value Objects to enforce input and are able to be injected into our request handlers.
 
@@ -600,7 +600,7 @@ export class AddGoalServiceFactory implements IAddGoalServiceFactory {
 }
 ```
 
-##### 9. IDatabaseService
+##### IDatabaseService
 
 An interface that all database services must implement, this is currently implemented only by MySQLDatabaseService. These classes are in charge of initialising, querying and disposing of the database.
 
@@ -671,7 +671,7 @@ class MySQLDatabaseService implements IDatabaseService {
 }
 ```
 
-##### 10. Database Models and Schema Interfaces
+##### Database Models and Schema Interfaces
 
 Each database table has a Schema Interface representing its database column types and a Database Model, representing its in memory representation, transforming database column types to desired TS types. Database Models are additionally responsible for loading their FK related values through load____ methods where ____ is the model that is being loaded.
 
