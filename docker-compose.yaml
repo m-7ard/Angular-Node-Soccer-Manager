@@ -3,7 +3,7 @@ services:
         image: mysql:8.0
         environment:
             MYSQL_ROOT_PASSWORD: adminword
-            MYSQL_DATABASE: your_database_name
+            MYSQL_DATABASE: soocer_manager
         ports:
             - "3306:3306"
         volumes:
@@ -20,9 +20,6 @@ services:
             dockerfile: Dockerfile
         ports:
             - "3000:3000"
-        environment:
-            - NODE_ENV=PRODCUTION
-            - PORT=3000
         depends_on:
             mysql:
                 condition: service_healthy

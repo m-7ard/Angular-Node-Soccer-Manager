@@ -25,10 +25,10 @@ import path from "path";
 import knex from "knex";
 
 export default function createApplication(config: {
-    port: number;
+    port: 3000 | 4200;
     middleware: Array<(req: Request, res: Response, next: NextFunction) => void>;
     database: IDatabaseService;
-    mode: "PRODUCTION" | "DEVELOPMENT";
+    mode: "PRODUCTION" | "DEVELOPMENT" | "DOCKER";
 }) {
     const { database } = config;
     const app = express();

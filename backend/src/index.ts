@@ -14,13 +14,15 @@ import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHis
 import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
 import { assert, literal, union } from "superstruct";
 
-const hostname = "127.0.0.1";
+if (global.crypto == null) {
+    global.crypto = require('crypto');
+}
 
 async function main() {
     // Get environment file
     const environment = process.env.NODE_ENV;
     console.log(environment);
-    const environmentValidator = union([literal("DEVELOPMENT"), literal("PRODUCTION")]);
+    const environmentValidator = union([literal("DEVELOPMENT"), literal("PRODUCTION"), literal("DOCKER")]);
     assert(environment, environmentValidator);
     require("dotenv").config({
         path: `${process.cwd()}/.env.${environment}`,
@@ -30,8 +32,16 @@ async function main() {
     const portValidator = union([literal(4200), literal(3000)]);
     assert(port, portValidator);
 
+    const host = process.env.HOST;
+    const hostValidator = union([literal("127.0.0.1"), literal("0.0.0.0")]);
+    assert(host, hostValidator);
+
+    const databaseHost = process.env.DATABASE_HOST;
+    const databaseHostValidator = union([literal("127.0.0.1"), literal("mysql")]);
+    assert(databaseHost, databaseHostValidator);
+
     const db = new MySQLDatabaseService({
-        host: "127.0.0.1", // Changed from 127.0.0.1 to service name
+        host: databaseHost,
         port: 3306,
         user: "root",
         password: "adminword",
@@ -47,8 +57,8 @@ async function main() {
         mode: environment,
     });
 
-    const server = app.listen(port, hostname, () => {
-        console.log(`Server running at http://${hostname}:${port}/`);
+    const server = app.listen(port, host, () => {
+        console.log(`Server running at http://${host}:${port}/`);
     });
 
     const teamRepository = diContainer.resolve(DI_TOKENS.TEAM_REPOSITORY);

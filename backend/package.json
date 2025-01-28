@@ -6,8 +6,10 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=DEVELOPMENT tsx watch ./src/index.ts",
         "clean": "rimraf dist",
-        "export": "pkgroll --env.NODE_ENV=DEVELOPMENT",
+
+        "export:dev": "pkgroll --env.NODE_ENV=DEVELOPMENT",
         "export:prod": "pkgroll --env.NODE_ENV=PRODUCTION",
+        "export:docker": "pkgroll --env.NODE_ENV=DOCKER",
         "test": "jest --detectOpenHandles --forceExit --runInBand",
         "test:coverage": "jest --coverage --runInBand",
         "lint": "eslint ."

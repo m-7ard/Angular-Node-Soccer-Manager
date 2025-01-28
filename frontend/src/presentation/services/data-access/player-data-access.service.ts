@@ -20,7 +20,9 @@ import { environment } from '../../environments/environment';
 })
 export class PlayerDataAccessService {
     private readonly _baseUrl = `${environment.apiUrl}/api/players`;
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        console.log(this._baseUrl)
+    }
 
     listPlayers(request: IListPlayersRequestDTO) {
         const url = new URL(`${this._baseUrl}/`);
