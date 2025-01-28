@@ -5,8 +5,6 @@
   - [Setup](#setup)
 - [Features](#features)
 - [Backend Documentation](#backend-documentation)
-  - [Actions and Related Components](#actions-and-related-components)
-    - [Overview](#overview)
     - [Core Interfaces and Classes](#core-interfaces-and-classes)
       - [IAction Interface](#iaction-interface)
       - [IActionResponse Interface](#iactionresponse-interface)
@@ -79,9 +77,9 @@ git clone https://github.com/m-7ard/Angular-Node-Soccer-Manager.git
 
 ## Backend Documentation
 
-### Actions and Related Components Documentation
+#### Core Interfaces and Classes
 
-#### Overview
+##### 1. `IAction` Interface
 
 This project uses **Actions** as an abstraction to encapsulate request handling logic in a clean and reusable way. Each Action is responsible for:
 
@@ -90,12 +88,6 @@ This project uses **Actions** as an abstraction to encapsulate request handling 
 3. Generating an appropriate response
 
 The overall structure promotes separation of concerns, testability, and scalability.
-
-#### Core Interfaces and Classes
-
-##### 1. `IAction` Interface
-
-Defines the contract for all actions:
 
 ```typescript
 interface IAction<ActionReq, ActionRes = IActionResponse> {
@@ -1455,10 +1447,6 @@ class ApiModelService implements IApiModelService {
 ```
 
 ### Integration Test Setup Documentation
-
-#### Overview
-
-Provides utilities to initialize, manage, and clean up integration tests.
 
 #### Key Functions
 
