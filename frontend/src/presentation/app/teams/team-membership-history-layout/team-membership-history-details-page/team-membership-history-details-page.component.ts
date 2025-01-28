@@ -18,7 +18,6 @@ import TeamMembershipHistory from '../../../../models/TeamMembershipHistory';
         CommonModule,
         MixinStyledCardDirectivesModule,
         RouterModule,
-        CoverImageComponent,
         PageDirectivesModule,
         DividerComponent,
         ContentGridDirectivesModule,

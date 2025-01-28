@@ -19,7 +19,7 @@ import PlayerExistsValidator from "application/services/PlayerExistsValidator";
 import TeamExistsValidator from "application/services/TeamExistsValidator";
 import MatchExistsValidator from "application/services/MatchExistsValidator";
 import UserExistsValidator from "application/services/UserExistsValidator";
-import { AddGoalServiceFactory } from "application/services/CanAddGoalValidator";
+import { AddGoalServiceFactory } from "application/services/AddGoalService";
 import { TeamMembershipExistsValidatorFactory } from "application/services/TeamMembershipValidator";
 import path from "path";
 import knex from "knex";
