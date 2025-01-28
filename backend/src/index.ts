@@ -12,14 +12,26 @@ import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
 import TeamMembershipHistoryPosition from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryPosition";
 import MySQLDatabaseService from "infrastructure/services/MySQLDatabaseService";
+import { assert, literal, union } from "superstruct";
 
 const hostname = "127.0.0.1";
-const environment = (process.env.NODE_ENV || 'DEVELOPMENT') as "DEVELOPMENT" | "PRODUCTION";
-const port = process.env.PORT == null ? 4200 : parseInt(process.env.PORT);
 
 async function main() {
+    // Get environment file
+    const environment = process.env.NODE_ENV;
+    console.log(environment);
+    const environmentValidator = union([literal("DEVELOPMENT"), literal("PRODUCTION")]);
+    assert(environment, environmentValidator);
+    require("dotenv").config({
+        path: `${process.cwd()}/.env.${environment}`,
+    });
+
+    const port = process.env.PORT == null ? null : parseInt(process.env.PORT);
+    const portValidator = union([literal(4200), literal(3000)]);
+    assert(port, portValidator);
+
     const db = new MySQLDatabaseService({
-        host: "mysql", // Changed from 127.0.0.1 to service name
+        host: "127.0.0.1", // Changed from 127.0.0.1 to service name
         port: 3306,
         user: "root",
         password: "adminword",
@@ -32,7 +44,7 @@ async function main() {
         port: port,
         middleware: [responseLogger],
         database: db,
-        mode: environment
+        mode: environment,
     });
 
     const server = app.listen(port, hostname, () => {

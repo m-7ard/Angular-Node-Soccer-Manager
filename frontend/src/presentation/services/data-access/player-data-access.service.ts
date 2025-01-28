@@ -19,7 +19,7 @@ import { environment } from '../../environments/environment';
     providedIn: 'root',
 })
 export class PlayerDataAccessService {
-    private readonly _baseUrl = `${environment}/api/players`;
+    private readonly _baseUrl = `${environment.apiUrl}/api/players`;
     constructor(private http: HttpClient) {}
 
     listPlayers(request: IListPlayersRequestDTO) {

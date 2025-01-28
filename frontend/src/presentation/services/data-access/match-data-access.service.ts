@@ -22,7 +22,7 @@ import { environment } from '../../environments/environment';
     providedIn: 'root',
 })
 export class MatchDataAccessService {
-    private readonly _baseUrl = `${environment}/api/matches`;
+    private readonly _baseUrl = `${environment.apiUrl}/api/matches`;
     constructor(private http: HttpClient) {}
 
     listMatches(request: IListMatchesRequestDTO) {

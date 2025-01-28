@@ -36,7 +36,7 @@ class CurrentUserAction implements IAction<ActionRequest, ActionResponse> {
             const [firstError] = result.error;
             if (firstError.code === APPLICATION_ERROR_CODES.OperationFailed) {
                 return new JsonResponse({
-                    status: StatusCodes.INTERNAL_SERVER_ERROR,
+                    status: StatusCodes.BAD_REQUEST,
                     body: ApiErrorFactory.mapApplicationErrors(result.error),
                 });
             }

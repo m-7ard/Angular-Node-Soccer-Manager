@@ -20,7 +20,7 @@
                         "fileReplacements": [
                             {
                                 "replace": "src/presentation/environments/environment.ts",
-                                "with": "src/presentation/environments/environment.docker.ts"
+                                "with": "src/presentation/environments/environment.PRODUCTION.ts"
                             }
                         ],
                         "outputPath": "dist/frontend",
