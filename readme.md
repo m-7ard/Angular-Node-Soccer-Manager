@@ -21,7 +21,7 @@
     - [Domain Events & Repositories](#domain-events--repositories)
     - [Api Models & Api Model Service](#api-models--api-model-service)
   - [Integration Testing](#integration-testing)
-    - [Overview](#integration-test-overview)
+    - [Overview](#overview)
     - [Key Functions](#key-functions)
     - [Usage Example](#usage-example)
 - [Frontend Documentation](#frontend-documentation)
