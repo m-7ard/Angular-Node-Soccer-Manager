@@ -23,6 +23,7 @@ import IDeleteTeamMembershipHistoryRequestDTO from '../../contracts/teamMembersh
 import IDeleteTeamMembershipHistoryResponseDTO from '../../contracts/teamMembershipHistories/delete/IDeleteTeamMembershipHistoryResponseDTO';
 import IDeleteTeamRequestDTO from '../../contracts/teams/delete/IDeleteTeamRequestDTO';
 import { environment } from '../../environments/environment';
+import urlWithQuery from '../../utils/urlWithQuery';
 
 @Injectable({
     providedIn: 'root',
@@ -59,16 +60,8 @@ export class TeamDataAccessService {
     }
 
     listTeams(request: IListTeamsRequestDTO) {
-        const url = new URL(`${this._baseUrl}/`);
-        Object.entries(request).forEach(([key, val]) => {
-            if (val == null) {
-                return;
-            }
-
-            url.searchParams.append(key, val);
-        });
-
-        return this.http.get<IListTeamsResponseDTO>(url.toString());
+        const url = urlWithQuery(this._baseUrl, request);
+        return this.http.get<IListTeamsResponseDTO>(url);
     }
 
     readTeam(teamId: string) {
@@ -96,16 +89,8 @@ export class TeamDataAccessService {
         teamMembershipId: string,
         request: IListTeamMembershipHistoriesRequestDTO,
     ) {
-        const url = new URL(`${this._baseUrl}/${teamId}/memberships/${teamMembershipId}/histories`);
-        Object.entries(request).forEach(([key, val]) => {
-            if (val == null) {
-                return;
-            }
-
-            url.searchParams.append(key, val);
-        });
-
-        return this.http.get<IListTeamMembershipHistoriesResponseDTO>(url.toString());
+        const url = urlWithQuery(`${this._baseUrl}/${teamId}/memberships/${teamMembershipId}/histories`, request);
+        return this.http.get<IListTeamMembershipHistoriesResponseDTO>(url);
     }
 
     createTeamMembershipHistory(

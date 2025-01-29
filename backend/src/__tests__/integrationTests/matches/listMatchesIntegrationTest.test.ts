@@ -12,6 +12,9 @@ import IListMatchesRequestDTO from "api/DTOs/matches/list/IListMatchesRequestDTO
 import urlWithQuery from "__utils__/integrationTests/urlWithQuery";
 import IListMatchesResponseDTO from "api/DTOs/matches/list/IListMatchesResponseDTO";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
+import MatchDates from "domain/valueObjects/Match/MatchDates";
+import { DateTime } from "luxon";
+import diContainer, { DI_TOKENS } from "api/deps/diContainer";
 
 const BASE_URL = "/api/matches/";
 
@@ -110,6 +113,24 @@ describe("List Matches Integration Test;", () => {
     it("List Matches; By Team Id; Success;", async () => {
         const request = { ...default_request };
         request.teamId = team_003.id.value;
+        const url = urlWithQuery(BASE_URL, request);
+
+        const response = await supertest(server).get(`${url}`).set("Content-Type", "application/json");
+
+        expect(response.status).toBe(200);
+        const body: IListMatchesResponseDTO = response.body;
+        expect(body.matches.length).toBe(1);
+    });
+
+    it("List Matches; By Scheduled Date; Success;", async () => {
+        const request = { ...default_request };
+
+        match_001.matchDates = MatchDates.executeCreate({ scheduledDate: DateTime.fromJSDate(new Date()).plus({ days: 1 }).toJSDate(), startDate: null, endDate: null });
+        const repo = diContainer.resolve(DI_TOKENS.MATCH_REPOSITORY);
+        await repo.updateAsync(match_001);
+
+        request.scheduledDate = match_001.matchDates.scheduledDate;
+
         const url = urlWithQuery(BASE_URL, request);
 
         const response = await supertest(server).get(`${url}`).set("Content-Type", "application/json");

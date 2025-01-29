@@ -41,7 +41,7 @@ export class FrontpageResolver implements Resolve<IFrontpageResolverData> {
             );
 
         const matchesRequest = this.matchDataAccess
-            .listMatches({ limitBy: 24, status: null, scheduledDate: null, teamId: null })
+            .listMatches({ limitBy: 24, status: null, scheduledDate: new Date(), teamId: null })
             .pipe(
                 map((response) => {
                     return response.matches.map(MatchMapper.apiModelToDomain);

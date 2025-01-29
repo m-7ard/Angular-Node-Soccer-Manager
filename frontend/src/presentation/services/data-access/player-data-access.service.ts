@@ -14,6 +14,7 @@ import IReadPlayerResponseDTO from '../../contracts/players/read/IReadPlayerResp
 import IReadFullPlayerRequestDTO from '../../contracts/players/read-full/IReadPlayerRequestDTO';
 import IReadFullPlayerResponseDTO from '../../contracts/players/read-full/IReadPlayerResponseDTO';
 import { environment } from '../../environments/environment';
+import urlWithQuery from '../../utils/urlWithQuery';
 
 @Injectable({
     providedIn: 'root',
@@ -25,15 +26,7 @@ export class PlayerDataAccessService {
     }
 
     listPlayers(request: IListPlayersRequestDTO) {
-        const url = new URL(`${this._baseUrl}/`);
-        Object.entries(request).forEach(([key, val]) => {
-            if (val == null) {
-                return;
-            }
-
-            url.searchParams.append(key, val);
-        });
-
+        const url = urlWithQuery(this._baseUrl, request);
         return this.http.get<IListPlayersResponseDTO>(url.toString());
     }
 

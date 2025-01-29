@@ -72,7 +72,7 @@ describe("Current User Integration Test;", () => {
             .send(request)
             .set("Authorization", `Bearer invalidToken`)
             .set("Content-Type", "application/json");
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
         const body: IApiError[] = response.body;
         expect(body[0].code).toBe(API_ERROR_CODES.APPLICATION_ERROR);
     });

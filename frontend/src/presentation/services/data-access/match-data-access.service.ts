@@ -17,6 +17,7 @@ import IMarkMatchCancelledResponseDTO from '../../contracts/matches/markMatchCan
 import IRecordGoalRequestDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalRequestDTO';
 import IRecordGoalResponseDTO from '../../contracts/matchEvents/recordGoal/IRecordGoalResponseDTO';
 import { environment } from '../../environments/environment';
+import urlWithQuery from '../../utils/urlWithQuery';
 
 @Injectable({
     providedIn: 'root',
@@ -26,16 +27,8 @@ export class MatchDataAccessService {
     constructor(private http: HttpClient) {}
 
     listMatches(request: IListMatchesRequestDTO) {
-        const url = new URL(`${this._baseUrl}/`);
-        Object.entries(request).forEach(([key, val]) => {
-            if (val == null) {
-                return;
-            }
-
-            url.searchParams.append(key, val);
-        });
-
-        return this.http.get<IListMatchesResponseDTO>(url.toString());
+        const url = urlWithQuery(this._baseUrl, request);
+        return this.http.get<IListMatchesResponseDTO>(url);
     }
 
     readMatch(matchId: string, request: IReadMatchRequestDTO) {
