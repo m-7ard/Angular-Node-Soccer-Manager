@@ -31,7 +31,6 @@ export class CharFieldComponent implements ControlValueAccessor {
 
     writeValue(obj: string): void {
         this.value = obj;
-        console.log(this.step)
     }
 
     registerOnChange(fn: (value: string) => void): void {

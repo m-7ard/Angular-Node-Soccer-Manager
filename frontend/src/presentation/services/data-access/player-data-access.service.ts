@@ -21,9 +21,7 @@ import urlWithQuery from '../../utils/urlWithQuery';
 })
 export class PlayerDataAccessService {
     private readonly _baseUrl = `${environment.apiUrl}/api/players`;
-    constructor(private http: HttpClient) {
-        console.log(this._baseUrl)
-    }
+    constructor(private http: HttpClient) {}
 
     listPlayers(request: IListPlayersRequestDTO) {
         const url = urlWithQuery(this._baseUrl, request);

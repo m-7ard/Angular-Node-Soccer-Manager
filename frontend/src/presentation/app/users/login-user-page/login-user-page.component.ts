@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import IPresentationError from '../../../errors/IPresentationError';
 import PresentationErrorFactory from '../../../errors/PresentationErrorFactory';
@@ -48,6 +48,7 @@ export class LoginUserPageComponent {
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private exceptionNoticeService: ExceptionNoticeService,
     ) {
@@ -90,13 +91,13 @@ export class LoginUserPageComponent {
                 }),
             )
             .subscribe({
-                next: (response) => {
-                    if (response === null) {
-                        return;
-                    }
-
-                    this.router.navigate(['/']);
+                next: (user) => {
+                    const nextUrl = this.activatedRoute.snapshot.queryParams['next'] || '/';
+                    this.router.navigate([nextUrl]);
                 },
+                error: () => {
+                    // Error already handled in catchError
+                }
             });
     }
 }

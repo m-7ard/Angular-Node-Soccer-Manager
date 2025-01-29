@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, catchError, map, switchMap } from 'rxjs/operators';
 import User from '../models/User';
 import { UserDataAccessService } from './data-access/user-data-access.service';
 import ILoginUserRequestDTO from '../contracts/users/login/ILoginUserRequestDTO';
 import UserMapper from '../mappers/UserMapper';
 import IRegisterUserRequestDTO from '../contracts/users/register/IRegisterUserRequestDTO';
 import IRegisterUserResponseDTO from '../contracts/users/register/IRegisterUserResponseDTO';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -18,7 +19,10 @@ export class AuthService {
     private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
     public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-    constructor(private userDataAccess: UserDataAccessService) {
+    constructor(
+        private userDataAccess: UserDataAccessService,
+        private router: Router,
+    ) {
         this.loadCurrentUser().subscribe();
     }
 
@@ -28,11 +32,9 @@ export class AuthService {
 
     login(request: ILoginUserRequestDTO) {
         return this.userDataAccess.login(request).pipe(
-            tap({
-                next: (response) => {
-                    localStorage.setItem('auth_token', response.token);
-                    this.loadCurrentUser().subscribe();
-                },
+            switchMap((response) => {
+                localStorage.setItem('auth_token', response.token);
+                return this.loadCurrentUser();
             }),
         );
     }
@@ -66,6 +68,7 @@ export class AuthService {
         localStorage.removeItem('auth_token');
         this.currentUserSubject.next(null);
         this.isAuthenticatedSubject.next(false);
+        this.router.navigate(['/']);
     }
 
     getCurrentUser(): User | null {
