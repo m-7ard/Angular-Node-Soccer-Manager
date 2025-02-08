@@ -1,7 +1,8 @@
 import { err, ok, Result } from "neverthrow";
+import IValueObject from "../IValueObject";
 
-class PlayerId {
-    private readonly __type: "PLAYER_ID" = null!;
+class PlayerId implements IValueObject {
+    readonly __type: "PLAYER_ID" = null!;
 
     public value: string;
 
@@ -12,8 +13,8 @@ class PlayerId {
     public static canCreate(value: string): Result<true, string> {
         if (value.length === 0 || value.length >= 255) {
             return err("Team id must be between 1 and 255 long");
-        } 
-        
+        }
+
         return ok(true);
     }
 
@@ -27,8 +28,8 @@ class PlayerId {
         return matchDates;
     }
 
-    public equals(other: PlayerId) {
-        return other.value === this.value;
+    public equals(other: unknown) {
+        return other instanceof PlayerId ? other.value === this.value : false;
     }
 
     toString() {

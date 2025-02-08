@@ -16,7 +16,6 @@ import MatchScore from "domain/valueObjects/Match/MatchScore";
 import MatchStatus from "domain/valueObjects/Match/MatchStatus";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import TeamId from "domain/valueObjects/Team/TeamId";
-import TeamMembershipHistoryId from "domain/valueObjects/TeamMembershipHistory/TeamMembershipHistoryId";
 import { DateTime } from "luxon";
 
 class Mixins {

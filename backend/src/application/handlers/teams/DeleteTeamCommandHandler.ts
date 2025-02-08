@@ -9,7 +9,6 @@ import APPLICATION_ERROR_CODES from "application/errors/VALIDATION_ERROR_CODES";
 import ApplicationErrorFactory from "application/errors/ApplicationErrorFactory";
 import IMatchRepository from "application/interfaces/IMatchRepository";
 import FilterAllMatchesCriteria from "infrastructure/contracts/FilterAllMatchesCriteria";
-import MatchRepository from "infrastructure/repositories/MatchRepository";
 
 export type DeleteTeamCommandResult = ICommandResult<IApplicationError[]>;
 

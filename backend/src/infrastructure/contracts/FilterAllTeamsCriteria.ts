@@ -12,4 +12,12 @@ export default class FilterAllTeamsCriteria {
     public name: string | null;
     public teamMembershipPlayerId: TeamMembership["playerId"] | null;
     public limitBy: number | null;
+
+    public equals(other: FilterAllTeamsCriteria) {
+        return (
+            this.name === other.name &&
+            this.teamMembershipPlayerId?.equals(other.teamMembershipPlayerId) &&
+            this.limitBy === other.limitBy
+        )
+    } 
 }

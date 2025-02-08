@@ -88,12 +88,12 @@ export default function createApplication(config: {
 
     const DIST_DIR = process.cwd();
     const STATIC_DIR = path.join(DIST_DIR, "static");
+    
+    app.use(express.static(STATIC_DIR));
 
-        app.use(express.static(STATIC_DIR));
-
-        app.get("*", (req, res) => {
-            res.sendFile(path.join(STATIC_DIR, "index.html"));
-        });
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(STATIC_DIR, "index.html"));
+    });
 
     return app;
 }

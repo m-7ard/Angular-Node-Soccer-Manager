@@ -2,7 +2,7 @@ import { IRequestHandler } from "../IRequestHandler";
 import IQuery, { IQueryResult } from "../IQuery";
 import Team from "../../../domain/entities/Team";
 import ITeamRepository from "../../interfaces/ITeamRepository";
-import { err, ok } from "neverthrow";
+import { ok } from "neverthrow";
 import FilterAllTeamsCriteria from "infrastructure/contracts/FilterAllTeamsCriteria";
 import PlayerId from "domain/valueObjects/Player/PlayerId";
 import IApplicationError from "application/errors/IApplicationError";
@@ -13,13 +13,13 @@ export class ListTeamsQuery implements IQuery<ListTeamsQueryResult> {
     __returnType: ListTeamsQueryResult = null!;
 
     constructor(props: {
-        name: string | null;
-        teamMembershipPlayerId: string | null;
-        limitBy: number | null;
+        name?: string | null;
+        teamMembershipPlayerId?: string | null;
+        limitBy?: number | null;
     }) {
-        this.name = props.name;
-        this.teamMembershipPlayerId = props.teamMembershipPlayerId;
-        this.limitBy = props.limitBy;
+        this.name = props.name ?? null;
+        this.teamMembershipPlayerId = props.teamMembershipPlayerId ?? null;
+        this.limitBy = props.limitBy ?? null;
     }
 
     public name: string | null;
